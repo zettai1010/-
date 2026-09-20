@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>光ノ館</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090909;color:#eee;font-family:"Yu Gothic",Meiryo,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.machine{width:min(760px,94vw);padding:28px 24px 34px;background:linear-gradient(#171717,#080808);border:3px solid #333;border-radius:18px;box-shadow:0 18px 60px #000}
+h1{text-align:center;margin:0 0 5px;font-size:30px;letter-spacing:.25em}
+.sub{text-align:center;color:#999;font-size:13px}
+.lamp-wrap{text-align:left;margin:22px 0 16px}
+.lamp{width:110px;height:110px;margin:0 0 0 18px;border-radius:50%;border:7px solid #222;background:#101010;display:grid;place-items:center;font-weight:bold;font-size:18px;box-shadow:inset 0 0 18px #000}
+.lamp.on{background:#fff36b;color:#382d00;border-color:#fff8a0;box-shadow:0 0 18px #fff36b,0 0 55px #ffdf00,inset 0 0 20px #fff}
+.lamp-text{margin-top:8px;font-size:13px;color:#777}
+.reels{display:flex;gap:12px;justify-content:center;margin:0}
+.reel{width:150px;height:170px;background:#f7f7f7;color:#111;border:5px solid #333;border-radius:8px;display:grid;place-items:center;font-size:58px;font-weight:bold;box-shadow:inset 0 0 18px #777}
+button{display:block;margin:15px auto 0;padding:15px 65px;border:2px solid #777;border-radius:9px;background:#222;color:#fff;font-size:20px;font-weight:bold;cursor:pointer}
+button:hover{background:#333}
+button:disabled{opacity:.45;cursor:not-allowed}
+.info{display:flex;justify-content:center;gap:40px;margin-top:22px;color:#bbb}
+.message{text-align:center;min-height:55px;margin-top:20px;font-size:21px}
+.big{font-size:32px;color:#fff36b;text-shadow:0 0 18px #ffd900}
+.shake{animation:shake .42s}
+@keyframes shake{0%,100%{transform:translate(0)}20%{transform:translate(-7px,3px)}40%{transform:translate(6px,-3px)}60%{transform:translate(-5px,2px)}80%{transform:translate(4px,-2px)}}
+</style>
+</head>
+<body>
+<main class="machine" id="machine">
+  <h1>光ノ館</h1>
+  <div class="sub">JUGGLER STYLE • FREE PLAY</div>
+
+  <div class="lamp-wrap">
+    <div class="lamp" id="lamp">GOGO!</div>
+    <div class="lamp-text" style="margin-left:18px">ランプが光れば……</div>
+  </div>
+
+  <div class="reels">
+  </div>
+
+  <button id="start">START</button>
+
+  <div class="info">
+    <span>COIN：<b id="coins">10000</b></span>
+    <span>GAME：<b id="games">0</b></span>
+  </div>
+
+  <div class="message" id="message">レバーを叩いてください。</div>
+</main>
+
+<script>
+const symbols=["7","BAR","🍒","🔔","★","🍋"];
+const reels=[r1,r2,r3];
+let coins=10000,games=0,busy=false,hit=false;
+
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function update(){coinsEl.textContent=coins.toLocaleString();gamesEl.textContent=games}
+const coinsEl=document.getElementById("coins"), gamesEl=document.getElementById("games");
+const lamp=document.getElementById("lamp"), message=document.getElementById("message");
+const start=document.getElementById("start"), machine=document.getElementById("machine");
+
+async function play(){
+ if(busy||coins<3)return;
+ busy=true;start.disabled=true;games++;coins-=3;update();
+ lamp.classList.remove("on");hit=false;
+ message.textContent="……。";
+
+ // 毎ゲーム、低確率でボーナスフラグ
+ hit=Math.random()<0.075;
+
+ const timers=reels.map((el)=>setInterval(()=>el.textContent=symbols[Math.floor(Math.random()*symbols.length)],65));
+ await sleep(700);clearInterval(timers[0]);
+ await sleep(380);clearInterval(timers[1]);
+ await sleep(380);clearInterval(timers[2]);
+
+ let result;
+ if(hit){
+   result=Math.random()<0.55?["7","7","7"]:["BAR","BAR","BAR"];
+ }else{
+   result=[symbols[Math.floor(Math.random()*symbols.length)],symbols[Math.floor(Math.random()*symbols.length)],symbols[Math.floor(Math.random()*symbols.length)]];
+   if(result[0]===result[1]&&result[1]===result[2]) result[2]="🍋";
+ }
+ reels.forEach((el,i)=>el.textContent=result[i]);
+
+ await sleep(250);
+
+ if(hit){
+   lamp.classList.add("on");
+   message.innerHTML='<span class="big">GOGO! BONUS!</span><br>「ペカッ！」';
+   coins+=1200;
+   machine.classList.remove("shake");void machine.offsetWidth;machine.classList.add("shake");
+ }else if(result[0]===result[1]&&result[1]===result[2]){
+   coins+=300;message.textContent="BIG WIN！ +300 COIN";
+ }else{
+   message.textContent="ハズレ……。";
+ }
+ update();
+ busy=false;start.disabled=false;
+}
+start.addEventListener("click",play);
+update();
+</script>
+</body>
+</html>
