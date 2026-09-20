@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>777 SLOT</title>
+  <title>777 CASINO SLOT</title>
 
   <style>
     * {
@@ -16,210 +17,28 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #111, #300000, #111);
-      color: white;
+
+      background:
+        radial-gradient(circle at center, #500000 0%, #180000 50%, #030303 100%);
+
       font-family: Arial, sans-serif;
-    }
-
-    .game {
-      text-align: center;
-      background: #222;
-      padding: 30px;
-      border: 3px solid gold;
-      border-radius: 20px;
-      box-shadow: 0 0 30px gold;
-      width: 400px;
-    }
-
-    h1 {
-      color: gold;
-      text-shadow: 0 0 10px red;
-      margin-top: 0;
-    }
-
-    .slot {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 25px 0;
-    }
-
-    .reel {
-      width: 90px;
-      height: 110px;
-      background: white;
-      color: black;
-      border: 5px solid gold;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 60px;
-      font-weight: bold;
-    }
-
-    button {
-      padding: 15px 50px;
-      font-size: 24px;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      background: red;
       color: white;
-      cursor: pointer;
-      box-shadow: 0 5px 0 #800000;
+      overflow: hidden;
     }
 
-    button:hover {
-      background: #ff3333;
-    }
+    /* 全体 */
+    .game {
+      width: 450px;
+      padding: 30px;
 
-    button:active {
-      transform: translateY(5px);
-      box-shadow: none;
-    }
+      text-align: center;
 
-    button:disabled {
-      background: #555;
-      box-shadow: none;
-      cursor: not-allowed;
-    }
+      background:
+        linear-gradient(145deg, #650000, #160000 50%, #650000);
 
-    #message {
-      margin-top: 20px;
-      min-height: 30px;
-      font-size: 20px;
-      font-weight: bold;
-    }
+      border: 8px solid #d4af37;
+      border-radius: 28px;
 
-    #coins {
-      color: #00ff88;
-      font-size: 22px;
-      margin: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="game">
-    <h1>🎰 777 SLOT 🎰</h1>
-
-    <div id="coins">コイン：100</div>
-
-    <div class="slot">
-      <div class="reel" id="reel1">7</div>
-      <div class="reel" id="reel2">7</div>
-      <div class="reel" id="reel3">7</div>
-    </div>
-
-    <button id="startButton">START</button>
-
-    <div id="message">STARTを押してね！</div>
-  </div>
-
-  <script>
-    const reel1 = document.getElementById("reel1");
-    const reel2 = document.getElementById("reel2");
-    const reel3 = document.getElementById("reel3");
-    const startButton = document.getElementById("startButton");
-    const message = document.getElementById("message");
-    const coinsText = document.getElementById("coins");
-
-    const symbols = ["🍒", "🍋", "🔔", "⭐", "7"];
-
-    let coins = 100;
-    let spinning = false;
-
-    function updateCoins() {
-      coinsText.textContent = "コイン：" + coins;
-    }
-
-    function randomSymbol() {
-      return symbols[Math.floor(Math.random() * symbols.length)];
-    }
-
-    function spinReel(reel, duration) {
-      return new Promise((resolve) => {
-        const interval = setInterval(() => {
-          reel.textContent = randomSymbol();
-        }, 80);
-
-        setTimeout(() => {
-          clearInterval(interval);
-          reel.textContent = randomSymbol();
-          resolve();
-        }, duration);
-      });
-    }
-
-    async function startGame() {
-
-      // 回転中なら何もしない
-      if (spinning) return;
-
-      // コイン不足
-      if (coins <= 0) {
-        message.textContent = "コインがなくなった！";
-        return;
-      }
-
-      spinning = true;
-      startButton.disabled = true;
-
-      // 1回につき1コイン
-      coins--;
-      updateCoins();
-
-      message.textContent = "回転中... 🎰";
-
-      // 3つのリールを順番に止める
-      await Promise.all([
-        spinReel(reel1, 1200),
-        spinReel(reel2, 1700),
-        spinReel(reel3, 2200)
-      ]);
-
-      const a = reel1.textContent;
-      const b = reel2.textContent;
-      const c = reel3.textContent;
-
-      if (a === b && b === c) {
-
-        if (a === "7") {
-          coins += 100;
-          message.textContent = "🎉 JACKPOT!! +100コイン 🎉";
-        } else {
-          coins += 20;
-          message.textContent = "🎉 大当たり！ +20コイン！";
-        }
-
-      } else if (a === b || b === c || a === c) {
-
-        coins += 5;
-        message.textContent = "✨ ちょっと当たり！ +5コイン";
-
-      } else {
-
-        message.textContent = "残念！もう一回！";
-      }
-
-      updateCoins();
-
-      // 回転終了 → もう一度押せるようにする
-      spinning = false;
-      startButton.disabled = false;
-
-      if (coins <= 0) {
-        startButton.disabled = true;
-        message.textContent = "コインがなくなった！";
-      }
-    }
-
-    startButton.addEventListener("click", startGame);
-
-    updateCoins();
-  </script>
-
-</body>
-</html>
+      box-shadow:
+        0 0 0 4px #
+```
