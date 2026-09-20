@@ -1,44 +1,342 @@
-```html
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>777 CASINO SLOT</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>777 CASINO SLOT</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, #550000, #180000 55%, #030303);
+  font-family: Arial, sans-serif;
+  color: white;
+}
 
-      background:
-        radial-gradient(circle at center, #500000 0%, #180000 50%, #030303 100%);
+.game {
+  width: 450px;
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(145deg, #650000, #160000, #650000);
+  border: 8px solid #d4af37;
+  border-radius: 28px;
+  box-shadow:
+    0 0 0 4px #654d00,
+    0 0 40px rgba(255,215,0,0.8),
+    inset 0 0 30px #000;
+}
 
-      font-family: Arial, sans-serif;
-      color: white;
-      overflow: hidden;
-    }
+h1 {
+  margin: 0 0 15px;
+  color: #ffd700;
+  font-size: 40px;
+  letter-spacing: 5px;
+  text-shadow:
+    0 3px 0 #6b0000,
+    0 0 10px red,
+    0 0 25px gold;
+}
 
-    /* 全体 */
-    .game {
-      width: 450px;
-      padding: 30px;
+#coins {
+  display: inline-block;
+  padding: 8px 25px;
+  margin-bottom: 20px;
+  background: #050505;
+  border: 3px solid #d4af37;
+  border-radius: 25px;
+  color: #00ff88;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: inset 0 0 12px #000, 0 0 8px gold;
+}
 
-      text-align: center;
+.slot {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  background: linear-gradient(#222, #050505);
+  border: 6px solid #d4af37;
+  border-radius: 20px;
+  box-shadow:
+    inset 0 0 25px #000,
+    0 0 20px rgba(255,215,0,0.6);
+}
 
-      background:
-        linear-gradient(145deg, #650000, #160000 50%, #650000);
+.reel {
+  width: 105px;
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    90deg,
+    #888,
+    #fff 12%,
+    #ddd 50%,
+    #fff 88%,
+    #777
+  );
+  color: #111;
+  border: 5px solid #d4af37;
+  border-radius: 12px;
+  font-size: 65px;
+  font-weight: bold;
+  box-shadow:
+    inset 0 0 18px #555,
+    0 5px 10px #000;
+}
 
-      border: 8px solid #d4af37;
-      border-radius: 28px;
+#start {
+  width: 240px;
+  height: 70px;
+  margin-top: 25px;
+  border: 4px solid #ffd700;
+  border-radius: 40px;
+  background: linear-gradient(#ff5555, #b00000);
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  cursor: pointer;
+  box-shadow:
+    0 7px 0 #650000,
+    0 0 20px red;
+}
 
-      box-shadow:
-        0 0 0 4px #
-```
+#start:hover {
+  transform: scale(1.05);
+}
+
+#start:active {
+  transform: translateY(6px);
+}
+
+#start:disabled {
+  background: #444;
+  border-color: #777;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#result {
+  min-height: 45px;
+  margin-top: 20px;
+  color: #ffd700;
+  font-size: 22px;
+  font-weight: bold;
+  text-shadow: 0 0 8px red, 0 0 15px gold;
+}
+
+.spinning {
+  animation: shake 0.08s infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+.jackpot {
+  animation: jackpot 0.5s infinite alternate;
+}
+
+@keyframes jackpot {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@media (max-width: 500px) {
+  .game {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .reel {
+    width: 80px;
+    height: 105px;
+    font-size: 50px;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="game">
+
+<h1>🎰 777 🎰</h1>
+
+<div id="coins">
+💰 コイン：100
+</div>
+
+<div class="slot">
+
+<div class="reel" id="reel1">7</div>
+<div class="reel" id="reel2">7</div>
+<div class="reel" id="reel3">7</div>
+
+</div>
+
+<button id="start">START</button>
+
+<div id="result">
+STARTを押してね！
+</div>
+
+</div>
+
+<script>
+
+const symbols = [
+  "🍒",
+  "🍋",
+  "🔔",
+  "⭐",
+  "🍊",
+  "💎",
+  "7"
+];
+
+const reel1 = document.getElementById("reel1");
+const reel2 = document.getElementById("reel2");
+const reel3 = document.getElementById("reel3");
+
+const startButton = document.getElementById("start");
+const result = document.getElementById("result");
+const coinsText = document.getElementById("coins");
+
+let coins = 100;
+let spinning = false;
+
+function randomSymbol() {
+  return symbols[Math.floor(Math.random() * symbols.length)];
+}
+
+function updateCoins() {
+  coinsText.textContent = "💰 コイン：" + coins;
+}
+
+function spinReel(reel, time) {
+
+  return new Promise(function(resolve) {
+
+    reel.classList.add("spinning");
+
+    const timer = setInterval(function() {
+      reel.textContent = randomSymbol();
+    }, 70);
+
+    setTimeout(function() {
+
+      clearInterval(timer);
+
+      const finalSymbol = randomSymbol();
+
+      reel.textContent = finalSymbol;
+
+      reel.classList.remove("spinning");
+
+      resolve(finalSymbol);
+
+    }, time);
+
+  });
+
+}
+
+startButton.addEventListener("click", async function() {
+
+  if (spinning) {
+    return;
+  }
+
+  if (coins <= 0) {
+    result.textContent = "💸 コインがなくなった！";
+    return;
+  }
+
+  spinning = true;
+  startButton.disabled = true;
+
+  coins--;
+  updateCoins();
+
+  result.textContent = "🎰 回転中...";
+  result.classList.remove("jackpot");
+
+  const a = await spinReel(reel1, 1200);
+  const b = await spinReel(reel2, 1700);
+  const c = await spinReel(reel3, 2200);
+
+  if (a === "7" && b === "7" && c === "7") {
+
+    coins += 100;
+
+    result.textContent = "🎉🎉 JACKPOT!! +100 🎉🎉";
+
+    result.classList.add("jackpot");
+
+  } else if (a === b && b === c) {
+
+    coins += 20;
+
+    result.textContent = "🎉 大当たり！ +20コイン！";
+
+  } else if (a === b || a === c || b === c) {
+
+    coins += 5;
+
+    result.textContent = "✨ 2つ一致！ +5コイン！";
+
+  } else {
+
+    result.textContent =
+      "💦 ハズレ！ " + a + " " + b + " " + c;
+
+  }
+
+  updateCoins();
+
+  spinning = false;
+  startButton.disabled = false;
+
+  if (coins <= 0) {
+
+    startButton.disabled = true;
+
+    result.textContent = "💸 コインがなくなった！";
+
+  }
+
+});
+
+updateCoins();
+
+</script>
+
+</body>
+</html>
