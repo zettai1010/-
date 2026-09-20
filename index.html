@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -7,405 +6,268 @@
 <title>777 CASINO SLOT</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
 body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: radial-gradient(
-    circle,
-    #550000,
-    #180000 55%,
-    #030303
-  );
-
-  font-family: Arial, sans-serif;
-  color: white;
-}
-
-.game {
-  width: 450px;
-  padding: 30px;
-  text-align: center;
-
-  background: linear-gradient(
-    145deg,
-    #650000,
-    #160000,
-    #650000
-  );
-
-  border: 8px solid #d4af37;
-  border-radius: 28px;
-
-  box-shadow:
-    0 0 0 4px #654d00,
-    0 0 40px rgba(255,215,0,0.8),
-    inset 0 0 30px #000;
+    margin: 0;
+    background: radial-gradient(circle, #333, #050505);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
 h1 {
-  margin: 0 0 15px;
-
-  color: #ffd700;
-
-  font-size: 40px;
-  letter-spacing: 5px;
-
-  text-shadow:
-    0 3px 0 #6b0000,
-    0 0 10px red,
-    0 0 25px gold;
+    color: gold;
+    font-size: 42px;
+    text-shadow: 0 0 15px red;
 }
 
-#coins {
-  display: inline-block;
-
-  padding: 8px 25px;
-  margin-bottom: 20px;
-
-  background: #050505;
-
-  border: 3px solid #d4af37;
-  border-radius: 25px;
-
-  color: #00ff88;
-
-  font-size: 22px;
-  font-weight: bold;
+.casino {
+    width: 420px;
+    margin: 30px auto;
+    padding: 25px;
+    background: linear-gradient(#b00000, #500000);
+    border: 8px solid gold;
+    border-radius: 25px;
+    box-shadow: 0 0 30px gold;
 }
 
-.slot {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-
-  padding: 20px;
-
-  background: #050505;
-
-  border: 6px solid #d4af37;
-  border-radius: 20px;
-
-  box-shadow:
-    inset 0 0 25px #000,
-    0 0 20px rgba(255,215,0,0.6);
+.reels {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 25px 0;
 }
 
 .reel {
-  width: 105px;
-  height: 125px;
+    width: 100px;
+    height: 110px;
+    background: white;
+    color: black;
+    border: 6px solid #aaa;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+    box-shadow: inset 0 0 15px #555;
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: linear-gradient(
-    90deg,
-    #888,
-    #fff 12%,
-    #ddd 50%,
-    #fff 88%,
-    #777
-  );
-
-  color: #111;
-
-  border: 5px solid #d4af37;
-  border-radius: 12px;
-
-  font-size: 65px;
-  font-weight: bold;
-
-  box-shadow:
-    inset 0 0 18px #555,
-    0 5px 10px #000;
+button {
+    padding: 15px 30px;
+    margin: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 12px;
+    border: 3px solid gold;
+    cursor: pointer;
 }
 
 #start {
-  width: 240px;
-  height: 70px;
-
-  margin-top: 25px;
-
-  border: 4px solid #ffd700;
-  border-radius: 40px;
-
-  background: linear-gradient(
-    #ff5555,
-    #b00000
-  );
-
-  color: white;
-
-  font-size: 28px;
-  font-weight: bold;
-
-  letter-spacing: 4px;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 7px 0 #650000,
-    0 0 20px red;
+    background: red;
+    color: white;
+    box-shadow: 0 0 15px red;
 }
 
-#start:hover {
-  background: linear-gradient(
-    #ff7777,
-    #d00000
-  );
-
-  transform: scale(1.04);
+#settingButton {
+    background: #222;
+    color: gold;
 }
 
-#start:active {
-  transform: translateY(6px);
+#coins {
+    font-size: 25px;
+    color: gold;
+}
 
-  box-shadow:
-    0 1px 0 #650000;
+#setting {
+    font-size: 22px;
+    margin: 10px;
 }
 
 #result {
-  min-height: 45px;
-
-  margin-top: 20px;
-
-  color: #ffd700;
-
-  font-size: 22px;
-  font-weight: bold;
-
-  text-shadow:
-    0 0 8px red,
-    0 0 15px gold;
+    font-size: 22px;
+    min-height: 35px;
 }
 
 .jackpot {
-  animation: jackpot 0.25s infinite alternate;
+    animation: jackpot 0.3s infinite alternate;
 }
 
 @keyframes jackpot {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.12);
-  }
-}
-
-@media (max-width: 500px) {
-
-  .game {
-    width: 95%;
-    padding: 20px;
-  }
-
-  .reel {
-    width: 80px;
-    height: 105px;
-    font-size: 50px;
-  }
-
-  #start {
-    width: 210px;
-  }
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.2);
+    }
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="game">
+<h1>🎰 777 CASINO 🎰</h1>
 
-<h1>🎰 777 🎰</h1>
+<div class="casino">
 
-<div id="coins">
-💰 コイン：100
-</div>
+    <div id="coins">💰 コイン：100</div>
 
-<div class="slot">
+    <div id="setting">
+        ⚙️ 設定：<span id="settingNumber">1</span>
+    </div>
 
-<div class="reel" id="reel1">7</div>
-<div class="reel" id="reel2">7</div>
-<div class="reel" id="reel3">7</div>
+    <button id="settingButton">設定変更</button>
 
-</div>
+    <div class="reels">
+        <div class="reel" id="reel1">7</div>
+        <div class="reel" id="reel2">7</div>
+        <div class="reel" id="reel3">7</div>
+    </div>
 
-<button id="start">
-START
-</button>
+    <button id="start">START</button>
 
-<div id="result">
-STARTを押してね！
-</div>
+    <div id="result">スタートを押してね！</div>
 
 </div>
 
 <script>
 
-const symbols = [
-  "🍒",
-  "🍋",
-  "🔔",
-  "⭐",
-  "🍊",
-  "💎",
-  "7"
-];
-
-const reel1 =
-  document.getElementById("reel1");
-
-const reel2 =
-  document.getElementById("reel2");
-
-const reel3 =
-  document.getElementById("reel3");
-
-const startButton =
-  document.getElementById("start");
-
-const result =
-  document.getElementById("result");
-
-const coinsText =
-  document.getElementById("coins");
+const symbols = ["🍒", "🍋", "🔔", "⭐", "🍊", "💎", "7"];
 
 let coins = 100;
+let setting = 1;
+
+/*
+設定ごとの当たりやすさ
+
+設定1 → かなり低い
+設定2 → 低い
+設定3 → 普通
+設定4 → やや高い
+設定5 → 高い
+設定6 → かなり高い
+*/
+
+const settingRates = {
+    1: 0.001,
+    2: 0.002,
+    3: 0.003,
+    4: 0.005,
+    5: 0.008,
+    6: 0.012
+};
+
+const coinsElement = document.getElementById("coins");
+const settingNumber = document.getElementById("settingNumber");
+const result = document.getElementById("result");
+
+const reel1 = document.getElementById("reel1");
+const reel2 = document.getElementById("reel2");
+const reel3 = document.getElementById("reel3");
+
+const startButton = document.getElementById("start");
+const settingButton = document.getElementById("settingButton");
 
 
-/* ランダムな絵柄 */
+// ランダムな図柄
 function randomSymbol() {
-
-  return symbols[
-    Math.floor(
-      Math.random() * symbols.length
-    )
-  ];
-
+    return symbols[Math.floor(Math.random() * symbols.length)];
 }
 
 
-/* コイン表示 */
-function updateCoins() {
+// 設定変更
+settingButton.addEventListener("click", function() {
 
-  coinsText.textContent =
-    "💰 コイン：" + coins;
+    setting++;
 
-}
+    if (setting > 6) {
+        setting = 1;
+    }
+
+    settingNumber.textContent = setting;
+
+    result.textContent = "⚙️ 設定" + setting + "に変更しました！";
+
+});
 
 
-/* スロット */
+// スロット
 function play() {
 
-  /* コインがない */
-  if (coins <= 0) {
+    if (coins <= 0) {
+        result.textContent = "💸 コインがありません！";
+        return;
+    }
 
-    result.textContent =
-      "💸 コインがなくなった！";
+    coins--;
 
-    return;
+    // まず普通にランダム
+    let a = randomSymbol();
+    let b = randomSymbol();
+    let c = randomSymbol();
 
-  }
+    /*
+    設定による777抽選
 
+    設定が高いほど777が出やすい
+    */
+    if (Math.random() < settingRates[setting]) {
+        a = "7";
+        b = "7";
+        c = "7";
+    }
 
-  /* 1回1コイン */
-  coins--;
+    // リール表示
+    reel1.textContent = a;
+    reel2.textContent = b;
+    reel3.textContent = c;
 
+    // 結果判定
 
-  /* 3つを一瞬で決定 */
-  const a = randomSymbol();
-  const b = randomSymbol();
-  const c = randomSymbol();
+    if (a === "7" && b === "7" && c === "7") {
 
+        coins += 100;
 
-  /* リール表示 */
-  reel1.textContent = a;
-  reel2.textContent = b;
-  reel3.textContent = c;
+        result.textContent = "🎉🎉 JACKPOT!! +100 🎉🎉";
 
+        reel1.classList.add("jackpot");
+        reel2.classList.add("jackpot");
+        reel3.classList.add("jackpot");
 
-  /* 結果 */
-  if (
-    a === "7" &&
-    b === "7" &&
-    c === "7"
-  ) {
+        setTimeout(() => {
+            reel1.classList.remove("jackpot");
+            reel2.classList.remove("jackpot");
+            reel3.classList.remove("jackpot");
+        }, 1000);
 
-    coins += 100;
+    } 
+    
+    else if (a === b && b === c) {
 
-    result.textContent =
-      "🎉🎉 JACKPOT!! +100 🎉🎉";
+        coins += 20;
 
-    result.classList.add("jackpot");
+        result.textContent = "🔥 3つ揃った！ +20";
 
-  }
+    } 
+    
+    else if (a === b || b === c || a === c) {
 
-  else if (
-    a === b &&
-    b === c
-  ) {
+        coins += 5;
 
-    coins += 20;
+        result.textContent = "✨ 2つ揃った！ +5";
 
-    result.textContent =
-      "🎉 大当たり！ +20コイン！";
+    } 
+    
+    else {
 
-    result.classList.remove("jackpot");
+        result.textContent = "💦 ハズレ！";
 
-  }
+    }
 
-  else if (
-    a === b ||
-    a === c ||
-    b === c
-  ) {
-
-    coins += 5;
-
-    result.textContent =
-      "✨ 2つ一致！ +5コイン！";
-
-    result.classList.remove("jackpot");
-
-  }
-
-  else {
-
-    result.textContent =
-      "💦 ハズレ！ " +
-      a + " " +
-      b + " " +
-      c;
-
-    result.classList.remove("jackpot");
-
-  }
-
-
-  updateCoins();
-
+    coinsElement.textContent = "💰 コイン：" + coins;
 }
 
 
-/* ボタン */
-startButton.addEventListener(
-  "click",
-  play
-);
-
-
-/* 初期表示 */
-updateCoins();
+// START
+startButton.addEventListener("click", play);
 
 </script>
 
