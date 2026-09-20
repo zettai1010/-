@@ -51,7 +51,11 @@ button:disabled{opacity:.45;cursor:not-allowed}
 
 <script>
 const symbols=["7","BAR","🍒","🔔","★","🍋"];
-const reels=[r1,r2,r3];
+const reels=[
+  document.getElementById("r1"),
+  document.getElementById("r2"),
+  document.getElementById("r3")
+];
 let coins=10000,games=0,busy=false,hit=false;
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
