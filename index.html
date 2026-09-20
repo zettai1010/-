@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>777 CASINO SLOT</title>
 
 <style>
+
 body {
     margin: 0;
     background: radial-gradient(circle, #333, #050505);
@@ -40,24 +42,32 @@ h1 {
 .reel {
     width: 100px;
     height: 110px;
+
     background: white;
     color: black;
+
     border: 6px solid #aaa;
     border-radius: 12px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-size: 55px;
+
     box-shadow: inset 0 0 15px #555;
 }
 
 button {
     padding: 15px 30px;
     margin: 8px;
+
     font-size: 22px;
     font-weight: bold;
+
     border-radius: 12px;
     border: 3px solid gold;
+
     cursor: pointer;
 }
 
@@ -87,187 +97,493 @@ button {
     min-height: 35px;
 }
 
-.jackpot {
-    animation: jackpot 0.3s infinite alternate;
+
+/* =========================
+   777 JACKPOT 演出
+========================= */
+
+#jackpotEffect {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(255, 215, 0, 0.25);
+
+    z-index: 999;
+
+    pointer-events: none;
 }
 
-@keyframes jackpot {
+#jackpotEffect.show {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    animation: flash 0.15s infinite alternate;
+}
+
+.jackpotText {
+    font-size: 80px;
+
+    font-weight: bold;
+
+    color: gold;
+
+    text-shadow:
+        0 0 10px red,
+        0 0 30px red,
+        0 0 60px gold;
+
+    animation: jackpotBig 0.5s infinite alternate;
+}
+
+@keyframes flash {
+
+    from {
+        background: rgba(255, 0, 0, 0.15);
+    }
+
+    to {
+        background: rgba(255, 215, 0, 0.5);
+    }
+
+}
+
+@keyframes jackpotBig {
+
     from {
         transform: scale(1);
     }
+
     to {
-        transform: scale(1.2);
+        transform: scale(1.3);
     }
+
 }
+
+
+/* 777のリールも光らせる */
+
+.jackpotReel {
+    animation: reelFlash 0.2s infinite alternate;
+}
+
+@keyframes reelFlash {
+
+    from {
+        box-shadow:
+            0 0 10px gold,
+            inset 0 0 15px #555;
+    }
+
+    to {
+        box-shadow:
+            0 0 50px red,
+            0 0 80px gold,
+            inset 0 0 15px #555;
+    }
+
+}
+
 </style>
 </head>
 
+
 <body>
+
 
 <h1>🎰 777 CASINO 🎰</h1>
 
+
 <div class="casino">
 
-    <div id="coins">💰 コイン：100</div>
+
+    <div id="coins">
+        💰 コイン：100
+    </div>
+
 
     <div id="setting">
-        ⚙️ 設定：<span id="settingNumber">1</span>
+        ⚙️ 設定：
+        <span id="settingNumber">1</span>
     </div>
 
-    <button id="settingButton">設定変更</button>
+
+    <button id="settingButton">
+        設定変更
+    </button>
+
 
     <div class="reels">
-        <div class="reel" id="reel1">7</div>
-        <div class="reel" id="reel2">7</div>
-        <div class="reel" id="reel3">7</div>
+
+        <div class="reel" id="reel1">
+            7
+        </div>
+
+        <div class="reel" id="reel2">
+            7
+        </div>
+
+        <div class="reel" id="reel3">
+            7
+        </div>
+
     </div>
 
-    <button id="start">START</button>
 
-    <div id="result">スタートを押してね！</div>
+    <button id="start">
+        START
+    </button>
+
+
+    <div id="result">
+        スタートを押してね！
+    </div>
+
 
 </div>
 
+
+<!-- 777専用演出 -->
+
+<div id="jackpotEffect">
+
+    <div class="jackpotText">
+        🎉 777 JACKPOT!! 🎉
+    </div>
+
+</div>
+
+
 <script>
 
-const symbols = ["🍒", "🍋", "🔔", "⭐", "🍊", "💎", "7"];
 
-let coins = 100;
+/* =========================
+   基本設定
+========================= */
+
+
+const symbols = [
+    "🍒",
+    "🍋",
+    "🔔",
+    "⭐",
+    "🍊",
+    "💎",
+    "7"
+];
+
+
+// 最初は設定1
 let setting = 1;
 
-/*
-設定ごとの当たりやすさ
 
-設定1 → かなり低い
-設定2 → 低い
-設定3 → 普通
-設定4 → やや高い
-設定5 → 高い
-設定6 → かなり高い
-*/
+// 最初のコイン
+let coins = 100;
+
+
+/* =========================
+   設定別777確率
+========================= */
 
 const settingRates = {
+
     1: 0.001,
+
     2: 0.002,
+
     3: 0.003,
+
     4: 0.005,
+
     5: 0.008,
+
     6: 0.012
+
 };
 
-const coinsElement = document.getElementById("coins");
-const settingNumber = document.getElementById("settingNumber");
-const result = document.getElementById("result");
 
-const reel1 = document.getElementById("reel1");
-const reel2 = document.getElementById("reel2");
-const reel3 = document.getElementById("reel3");
+/* =========================
+   HTML取得
+========================= */
 
-const startButton = document.getElementById("start");
-const settingButton = document.getElementById("settingButton");
+const coinsElement =
+    document.getElementById("coins");
+
+const settingNumber =
+    document.getElementById("settingNumber");
+
+const result =
+    document.getElementById("result");
+
+const reel1 =
+    document.getElementById("reel1");
+
+const reel2 =
+    document.getElementById("reel2");
+
+const reel3 =
+    document.getElementById("reel3");
+
+const startButton =
+    document.getElementById("start");
+
+const settingButton =
+    document.getElementById("settingButton");
+
+const jackpotEffect =
+    document.getElementById("jackpotEffect");
 
 
-// ランダムな図柄
+/* =========================
+   ランダム図柄
+========================= */
+
 function randomSymbol() {
-    return symbols[Math.floor(Math.random() * symbols.length)];
+
+    return symbols[
+        Math.floor(
+            Math.random() * symbols.length
+        )
+    ];
+
 }
 
 
-// 設定変更
-settingButton.addEventListener("click", function() {
+/* =========================
+   設定変更
+========================= */
 
-    setting++;
+settingButton.addEventListener(
+    "click",
+    function() {
 
-    if (setting > 6) {
-        setting = 1;
+        setting++;
+
+        if (setting > 6) {
+
+            setting = 1;
+
+        }
+
+        settingNumber.textContent =
+            setting;
+
+        result.textContent =
+            "⚙️ 設定" +
+            setting +
+            "に変更しました！";
+
     }
-
-    settingNumber.textContent = setting;
-
-    result.textContent = "⚙️ 設定" + setting + "に変更しました！";
-
-});
+);
 
 
-// スロット
+/* =========================
+   スロット
+========================= */
+
 function play() {
 
+
+    /* コインチェック */
+
     if (coins <= 0) {
-        result.textContent = "💸 コインがありません！";
+
+        result.textContent =
+            "💸 コインがありません！";
+
         return;
+
     }
+
+
+    /* 1回1コイン */
 
     coins--;
 
-    // まず普通にランダム
+
+    /* 通常ランダム */
+
     let a = randomSymbol();
+
     let b = randomSymbol();
+
     let c = randomSymbol();
 
-    /*
-    設定による777抽選
 
-    設定が高いほど777が出やすい
-    */
-    if (Math.random() < settingRates[setting]) {
+    /* =========================
+       設定による777抽選
+    ========================= */
+
+    if (
+        Math.random()
+        <
+        settingRates[setting]
+    ) {
+
         a = "7";
+
         b = "7";
+
         c = "7";
+
     }
 
-    // リール表示
+
+    /* リール表示 */
+
     reel1.textContent = a;
+
     reel2.textContent = b;
+
     reel3.textContent = c;
 
-    // 結果判定
 
-    if (a === "7" && b === "7" && c === "7") {
+    /* =========================
+       777 JACKPOT
+    ========================= */
+
+    if (
+        a === "7" &&
+        b === "7" &&
+        c === "7"
+    ) {
+
+
+        /* +100コイン */
 
         coins += 100;
 
-        result.textContent = "🎉🎉 JACKPOT!! +100 🎉🎉";
 
-        reel1.classList.add("jackpot");
-        reel2.classList.add("jackpot");
-        reel3.classList.add("jackpot");
+        result.textContent =
+            "🎉🎉 JACKPOT!! +100 🎉🎉";
 
-        setTimeout(() => {
-            reel1.classList.remove("jackpot");
-            reel2.classList.remove("jackpot");
-            reel3.classList.remove("jackpot");
-        }, 1000);
 
-    } 
-    
-    else if (a === b && b === c) {
+        /* 777リール演出 */
 
-        coins += 20;
+        reel1.classList.add(
+            "jackpotReel"
+        );
 
-        result.textContent = "🔥 3つ揃った！ +20";
+        reel2.classList.add(
+            "jackpotReel"
+        );
 
-    } 
-    
-    else if (a === b || b === c || a === c) {
+        reel3.classList.add(
+            "jackpotReel"
+        );
 
-        coins += 5;
 
-        result.textContent = "✨ 2つ揃った！ +5";
+        /* 画面全体演出 */
 
-    } 
-    
-    else {
+        jackpotEffect.classList.add(
+            "show"
+        );
 
-        result.textContent = "💦 ハズレ！";
+
+        /* 2.5秒後に演出終了 */
+
+        setTimeout(
+            function() {
+
+                jackpotEffect.classList.remove(
+                    "show"
+                );
+
+                reel1.classList.remove(
+                    "jackpotReel"
+                );
+
+                reel2.classList.remove(
+                    "jackpotReel"
+                );
+
+                reel3.classList.remove(
+                    "jackpotReel"
+                );
+
+            },
+            2500
+        );
+
 
     }
 
-    coinsElement.textContent = "💰 コイン：" + coins;
+
+    /* =========================
+       3つ揃い
+    ========================= */
+
+    else if (
+        a === b &&
+        b === c
+    ) {
+
+
+        coins += 20;
+
+
+        result.textContent =
+            "🔥 3つ揃った！ +20";
+
+
+    }
+
+
+    /* =========================
+       2つ揃い
+    ========================= */
+
+    else if (
+        a === b ||
+        b === c ||
+        a === c
+    ) {
+
+
+        coins += 5;
+
+
+        result.textContent =
+            "✨ 2つ揃った！ +5";
+
+
+    }
+
+
+    /* =========================
+       ハズレ
+    ========================= */
+
+    else {
+
+
+        result.textContent =
+            "💦 ハズレ！";
+
+
+    }
+
+
+    /* コイン更新 */
+
+    coinsElement.textContent =
+        "💰 コイン：" + coins;
+
 }
 
 
-// START
-startButton.addEventListener("click", play);
+/* =========================
+   STARTボタン
+========================= */
+
+startButton.addEventListener(
+    "click",
+    play
+);
+
 
 </script>
 
