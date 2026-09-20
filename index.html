@@ -42,32 +42,24 @@ h1 {
 .reel {
     width: 100px;
     height: 110px;
-
     background: white;
     color: black;
-
     border: 6px solid #aaa;
     border-radius: 12px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 55px;
-
     box-shadow: inset 0 0 15px #555;
 }
 
 button {
     padding: 15px 30px;
     margin: 8px;
-
     font-size: 22px;
     font-weight: bold;
-
     border-radius: 12px;
     border: 3px solid gold;
-
     cursor: pointer;
 }
 
@@ -77,9 +69,21 @@ button {
     box-shadow: 0 0 15px red;
 }
 
+#adminLogin {
+    background: #222;
+    color: gold;
+}
+
 #settingButton {
     background: #222;
     color: gold;
+    display: none;
+}
+
+#logoutButton {
+    background: #555;
+    color: white;
+    display: none;
 }
 
 #coins {
@@ -92,55 +96,48 @@ button {
     margin: 10px;
 }
 
+#adminStatus {
+    font-size: 16px;
+    color: #aaa;
+    margin: 8px;
+}
+
 #result {
     font-size: 22px;
     min-height: 35px;
 }
 
 
-/* =========================
-   777 JACKPOT 演出
-========================= */
+/* 777 JACKPOT */
 
 #jackpotEffect {
     display: none;
-
     position: fixed;
     inset: 0;
-
     background: rgba(255, 215, 0, 0.25);
-
     z-index: 999;
-
     pointer-events: none;
 }
 
 #jackpotEffect.show {
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     animation: flash 0.15s infinite alternate;
 }
 
 .jackpotText {
     font-size: 80px;
-
     font-weight: bold;
-
     color: gold;
-
     text-shadow:
         0 0 10px red,
         0 0 30px red,
         0 0 60px gold;
-
     animation: jackpotBig 0.5s infinite alternate;
 }
 
 @keyframes flash {
-
     from {
         background: rgba(255, 0, 0, 0.15);
     }
@@ -148,11 +145,9 @@ button {
     to {
         background: rgba(255, 215, 0, 0.5);
     }
-
 }
 
 @keyframes jackpotBig {
-
     from {
         transform: scale(1);
     }
@@ -160,18 +155,13 @@ button {
     to {
         transform: scale(1.3);
     }
-
 }
-
-
-/* 777のリールも光らせる */
 
 .jackpotReel {
     animation: reelFlash 0.2s infinite alternate;
 }
 
 @keyframes reelFlash {
-
     from {
         box-shadow:
             0 0 10px gold,
@@ -184,69 +174,62 @@ button {
             0 0 80px gold,
             inset 0 0 15px #555;
     }
-
 }
 
 </style>
 </head>
 
-
 <body>
-
 
 <h1>🎰 777 CASINO 🎰</h1>
 
-
 <div class="casino">
-
 
     <div id="coins">
         💰 コイン：100
     </div>
-
 
     <div id="setting">
         ⚙️ 設定：
         <span id="settingNumber">1</span>
     </div>
 
+    <div id="adminStatus">
+        🔒 管理者モード：OFF
+    </div>
 
-    <button id="settingButton">
-        設定変更
+    <button id="adminLogin">
+        🔐 管理者ログイン
     </button>
 
+    <button id="settingButton">
+        ⚙️ 設定変更
+    </button>
+
+    <button id="logoutButton">
+        🔓 ログアウト
+    </button>
 
     <div class="reels">
 
-        <div class="reel" id="reel1">
-            7
-        </div>
+        <div class="reel" id="reel1">7</div>
 
-        <div class="reel" id="reel2">
-            7
-        </div>
+        <div class="reel" id="reel2">7</div>
 
-        <div class="reel" id="reel3">
-            7
-        </div>
+        <div class="reel" id="reel3">7</div>
 
     </div>
-
 
     <button id="start">
         START
     </button>
 
-
     <div id="result">
         スタートを押してね！
     </div>
 
-
 </div>
 
-
-<!-- 777専用演出 -->
 
 <div id="jackpotEffect">
 
@@ -259,11 +242,9 @@ button {
 
 <script>
 
-
 /* =========================
    基本設定
 ========================= */
-
 
 const symbols = [
     "🍒",
@@ -275,13 +256,18 @@ const symbols = [
     "7"
 ];
 
+let coins = 100;
 
-// 最初は設定1
 let setting = 1;
 
+let isAdmin = false;
 
-// 最初のコイン
-let coins = 100;
+
+/* =========================
+   管理者パスワード
+========================= */
+
+const ADMIN_PASSWORD = "777admin";
 
 
 /* =========================
@@ -330,8 +316,17 @@ const reel3 =
 const startButton =
     document.getElementById("start");
 
+const adminLogin =
+    document.getElementById("adminLogin");
+
 const settingButton =
     document.getElementById("settingButton");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+const adminStatus =
+    document.getElementById("adminStatus");
 
 const jackpotEffect =
     document.getElementById("jackpotEffect");
@@ -353,12 +348,96 @@ function randomSymbol() {
 
 
 /* =========================
+   管理者ログイン
+========================= */
+
+adminLogin.addEventListener(
+    "click",
+    function() {
+
+        const password =
+            prompt("🔐 管理者パスワードを入力してください");
+
+        if (password === ADMIN_PASSWORD) {
+
+            isAdmin = true;
+
+            adminStatus.textContent =
+                "🔓 管理者モード：ON";
+
+            adminStatus.style.color =
+                "lime";
+
+            adminLogin.style.display =
+                "none";
+
+            settingButton.style.display =
+                "inline-block";
+
+            logoutButton.style.display =
+                "inline-block";
+
+            result.textContent =
+                "✅ 管理者ログイン成功！";
+
+        } else {
+
+            result.textContent =
+                "❌ パスワードが違います！";
+
+        }
+
+    }
+);
+
+
+/* =========================
+   管理者ログアウト
+========================= */
+
+logoutButton.addEventListener(
+    "click",
+    function() {
+
+        isAdmin = false;
+
+        adminStatus.textContent =
+            "🔒 管理者モード：OFF";
+
+        adminStatus.style.color =
+            "#aaa";
+
+        adminLogin.style.display =
+            "inline-block";
+
+        settingButton.style.display =
+            "none";
+
+        logoutButton.style.display =
+            "none";
+
+        result.textContent =
+            "🔒 管理者モードを終了しました";
+
+    }
+);
+
+
+/* =========================
    設定変更
 ========================= */
 
 settingButton.addEventListener(
     "click",
     function() {
+
+        /* 念のため管理者チェック */
+
+        if (!isAdmin) {
+
+            return;
+
+        }
 
         setting++;
 
@@ -386,9 +465,6 @@ settingButton.addEventListener(
 
 function play() {
 
-
-    /* コインチェック */
-
     if (coins <= 0) {
 
         result.textContent =
@@ -397,9 +473,6 @@ function play() {
         return;
 
     }
-
-
-    /* 1回1コイン */
 
     coins--;
 
@@ -413,9 +486,7 @@ function play() {
     let c = randomSymbol();
 
 
-    /* =========================
-       設定による777抽選
-    ========================= */
+    /* 設定による777抽選 */
 
     if (
         Math.random()
@@ -424,9 +495,7 @@ function play() {
     ) {
 
         a = "7";
-
         b = "7";
-
         c = "7";
 
     }
@@ -442,7 +511,7 @@ function play() {
 
 
     /* =========================
-       777 JACKPOT
+       777
     ========================= */
 
     if (
@@ -451,17 +520,11 @@ function play() {
         c === "7"
     ) {
 
-
-        /* +100コイン */
-
         coins += 100;
-
 
         result.textContent =
             "🎉🎉 JACKPOT!! +100 🎉🎉";
 
-
-        /* 777リール演出 */
 
         reel1.classList.add(
             "jackpotReel"
@@ -476,14 +539,10 @@ function play() {
         );
 
 
-        /* 画面全体演出 */
-
         jackpotEffect.classList.add(
             "show"
         );
 
-
-        /* 2.5秒後に演出終了 */
 
         setTimeout(
             function() {
@@ -508,7 +567,6 @@ function play() {
             2500
         );
 
-
     }
 
 
@@ -521,13 +579,10 @@ function play() {
         b === c
     ) {
 
-
         coins += 20;
-
 
         result.textContent =
             "🔥 3つ揃った！ +20";
-
 
     }
 
@@ -542,13 +597,10 @@ function play() {
         a === c
     ) {
 
-
         coins += 5;
-
 
         result.textContent =
             "✨ 2つ揃った！ +5";
-
 
     }
 
@@ -559,15 +611,11 @@ function play() {
 
     else {
 
-
         result.textContent =
             "💦 ハズレ！";
 
-
     }
 
-
-    /* コイン更新 */
 
     coinsElement.textContent =
         "💰 コイン：" + coins;
@@ -576,14 +624,13 @@ function play() {
 
 
 /* =========================
-   STARTボタン
+   START
 ========================= */
 
 startButton.addEventListener(
     "click",
     play
 );
-
 
 </script>
 
