@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -55,6 +56,7 @@ h1 {
 .coins {
   color: #ffd700;
   font-weight: bold;
+  font-size: 24px;
 }
 
 .gogo-area {
@@ -134,9 +136,11 @@ h1 {
   0% {
     transform: translateY(-7px);
   }
+
   50% {
     transform: translateY(7px);
   }
+
   100% {
     transform: translateY(-7px);
   }
@@ -291,6 +295,7 @@ h1 {
   from {
     background: rgba(0,0,0,0.94);
   }
+
   to {
     background: rgba(100,0,0,0.94);
   }
@@ -311,6 +316,7 @@ h1 {
   from {
     transform: scale(1);
   }
+
   to {
     transform: scale(1.15) rotate(-2deg);
   }
@@ -322,6 +328,7 @@ h1 {
 }
 
 @media (max-width: 600px) {
+
   .machine {
     padding: 12px;
   }
@@ -366,7 +373,9 @@ h1 {
   </div>
 
   <div class="gogo-area">
-    <div id="gogo" class="gogo">GOGO! CHANCE</div>
+    <div id="gogo" class="gogo">
+      GOGO! CHANCE
+    </div>
   </div>
 
   <div class="reels">
@@ -375,7 +384,13 @@ h1 {
       <div class="reel" id="reel0">
         <div class="symbol" id="symbol0">🍒</div>
       </div>
-      <button class="stop-btn" id="stop0" onclick="stopReel(0)" disabled>
+
+      <button
+        class="stop-btn"
+        id="stop0"
+        onclick="stopReel(0)"
+        disabled
+      >
         STOP
       </button>
     </div>
@@ -384,7 +399,13 @@ h1 {
       <div class="reel" id="reel1">
         <div class="symbol" id="symbol1">🍋</div>
       </div>
-      <button class="stop-btn" id="stop1" onclick="stopReel(1)" disabled>
+
+      <button
+        class="stop-btn"
+        id="stop1"
+        onclick="stopReel(1)"
+        disabled
+      >
         STOP
       </button>
     </div>
@@ -393,14 +414,24 @@ h1 {
       <div class="reel" id="reel2">
         <div class="symbol" id="symbol2">🔔</div>
       </div>
-      <button class="stop-btn" id="stop2" onclick="stopReel(2)" disabled>
+
+      <button
+        class="stop-btn"
+        id="stop2"
+        onclick="stopReel(2)"
+        disabled
+      >
         STOP
       </button>
     </div>
 
   </div>
 
-  <button class="start-btn" id="startBtn" onclick="startGame()">
+  <button
+    class="start-btn"
+    id="startBtn"
+    onclick="startGame()"
+  >
     START
   </button>
 
@@ -409,26 +440,40 @@ h1 {
   </div>
 
   <div class="admin-login">
+
     <input
       type="password"
       id="adminPassword"
       placeholder="管理者パスワード"
     >
-    <button onclick="adminLogin()">管理者ログイン</button>
+
+    <button onclick="adminLogin()">
+      管理者ログイン
+    </button>
+
   </div>
 
   <div class="admin-area" id="adminArea">
 
     <div>
       現在の設定：
-      <span class="setting-number" id="settingNumber"></span>
+      <span
+        class="setting-number"
+        id="settingNumber"
+      ></span>
     </div>
 
-    <button class="change-setting" onclick="changeSetting()">
+    <button
+      class="change-setting"
+      onclick="changeSetting()"
+    >
       設定変更
     </button>
 
-    <button class="logout" onclick="adminLogout()">
+    <button
+      class="logout"
+      onclick="adminLogout()"
+    >
       ログアウト
     </button>
 
@@ -437,11 +482,25 @@ h1 {
 </div>
 
 <div class="jackpot" id="jackpot">
-  <div class="jackpot-title">🎉 JACKPOT! 🎉</div>
-  <div class="jackpot-seven">7️⃣7️⃣7️⃣</div>
+
+  <div class="jackpot-title">
+    🎉 JACKPOT! 🎉
+  </div>
+
+  <div class="jackpot-seven">
+    7️⃣7️⃣7️⃣
+  </div>
+
 </div>
 
+
 <script>
+
+/* =========================
+   基本設定
+========================= */
+
+const BET = 3;
 
 const symbols = [
   "🍒",
@@ -449,12 +508,18 @@ const symbols = [
   "🔔",
   "⭐",
   "🍊",
-  "💎",
-  "7"
+  "💎"
 ];
 
 let coins = 100;
 
+/*
+  最初の設定だけランダム。
+
+  一度決まった設定は、
+  管理者が「設定変更」を押すまで
+  絶対に勝手に変わらない。
+*/
 let setting = randomSetting();
 
 let isAdmin = false;
@@ -465,17 +530,28 @@ let stopped = [false, false, false];
 
 let spinTimers = [null, null, null];
 
-let reelValues = ["🍒", "🍋", "🔔"];
+let reelValues = [
+  "🍒",
+  "🍋",
+  "🔔"
+];
 
-/*
-  設定
-  1 = 50%
-  2 = 24%
-  3 = 15%
-  4 = 7%
-  5 = 3%
-  6 = 1%
-*/
+let reelStrips = [
+  [],
+  [],
+  []
+];
+
+let reelPositions = [
+  0,
+  0,
+  0
+];
+
+
+/* =========================
+   設定抽選
+========================= */
 
 function randomSetting() {
 
@@ -490,81 +566,82 @@ function randomSetting() {
   return 6;
 }
 
-/*
-  設定ごとの当たりやすさ。
-  目押し版なので、リール上の図柄の出現割合にも反映。
+
+/* =========================
+   小当たり確率
+=========================
+
+   設定1でも約10%。
+
+   設定が上がるほど
+   小当たりしやすくする。
 */
 
-const settingWeights = {
+const smallHitRates = {
 
-  1: {
-    seven: 1,
-    common: 8
-  },
-
-  2: {
-    seven: 1.3,
-    common: 10
-  },
-
-  3: {
-    seven: 1.8,
-    common: 12
-  },
-
-  4: {
-    seven: 3,
-    common: 16
-  },
-
-  5: {
-    seven: 5,
-    common: 20
-  },
-
-  6: {
-    seven: 8,
-    common: 25
-  }
+  1: 0.10,
+  2: 0.13,
+  3: 0.17,
+  4: 0.22,
+  5: 0.28,
+  6: 0.35
 
 };
 
-/*
-  設定に応じたリール図柄を作る
-*/
+
+/* =========================
+   777確率
+========================= */
+
+const jackpotRates = {
+
+  1: 0.003,
+  2: 0.005,
+  3: 0.008,
+  4: 0.012,
+  5: 0.018,
+  6: 0.025
+
+};
+
+
+/* =========================
+   リール作成
+=========================
+
+   2つ揃いが出ないように、
+   ゲーム開始時に
+
+   ・777
+   ・3つ同じ
+   ・全部バラバラ
+
+   のどれかを内部的に決める。
+
+   STOP自体はプレイヤーが行う。
+========================= */
 
 function createReelStrip() {
 
-  const data = settingWeights[setting];
-
-  let strip = [];
-
-  const commonSymbols = [
-    "🍒",
-    "🍋",
-    "🔔",
-    "⭐",
-    "🍊",
-    "💎"
-  ];
+  const strip = [];
 
   /*
-    通常図柄
+    通常図柄をたくさん配置
   */
 
-  for (let i = 0; i < data.common; i++) {
+  for (let i = 0; i < 24; i++) {
 
     strip.push(
-      commonSymbols[i % commonSymbols.length]
+      symbols[i % symbols.length]
     );
 
   }
 
   /*
-    7の割合
+    7を少し配置
   */
 
-  for (let i = 0; i < data.seven; i++) {
+  for (let i = 0; i < 3; i++) {
 
     strip.push("7");
 
@@ -574,78 +651,130 @@ function createReelStrip() {
     シャッフル
   */
 
-  for (let i = strip.length - 1; i > 0; i--) {
+  for (
+    let i = strip.length - 1;
+    i > 0;
+    i--
+  ) {
 
-    const j = Math.floor(Math.random() * (i + 1));
+    const j =
+      Math.floor(Math.random() * (i + 1));
 
-    [strip[i], strip[j]] = [strip[j], strip[i]];
+    [
+      strip[i],
+      strip[j]
+    ] = [
+      strip[j],
+      strip[i]
+    ];
 
   }
 
   return strip;
 }
 
-let reelStrips = [
-  createReelStrip(),
-  createReelStrip(),
-  createReelStrip()
-];
 
-let reelPositions = [0, 0, 0];
+/* =========================
+   コイン表示
+========================= */
+
+function updateCoins() {
+
+  document.getElementById("coins").textContent =
+    coins;
+
+}
 
 
-/*
-  START
-*/
+/* =========================
+   START
+========================= */
 
 function startGame() {
 
   if (spinning) return;
 
-  if (coins < 3) {
+  if (coins < BET) {
 
     document.getElementById("result").textContent =
       "💰 コインが足りません！";
 
     return;
-
   }
 
-  coins -= 3;
+  /*
+    掛け金3
+  */
+
+  coins -= BET;
 
   updateCoins();
 
   spinning = true;
 
-  stopped = [false, false, false];
+  stopped = [
+    false,
+    false,
+    false
+  ];
 
-  document.getElementById("startBtn").disabled = true;
+  /*
+    START無効
+  */
+
+  document.getElementById("startBtn").disabled =
+    true;
+
+  /*
+    STOPを有効化
+  */
+
+  for (let i = 0; i < 3; i++) {
+
+    document.getElementById(
+      "stop" + i
+    ).disabled = false;
+
+  }
 
   document.getElementById("result").textContent =
     "🎰 目押ししてSTOP！";
 
   /*
-    GOGO!リセット
+    GOGOリセット
   */
 
-  document.getElementById("gogo").classList.remove("on");
+  document
+    .getElementById("gogo")
+    .classList.remove("on");
+
+
+  /* =========================
+     今回の当たりを決める
+  ========================= */
+
+  const jackpot =
+    Math.random() < jackpotRates[setting];
+
+  const smallHit =
+    !jackpot &&
+    Math.random() < smallHitRates[setting];
+
 
   /*
-    設定によってGOGO!が光る確率
+    777
   */
 
-  const gogoRates = {
-    1: 0.10,
-    2: 0.13,
-    3: 0.17,
-    4: 0.22,
-    5: 0.28,
-    6: 0.35
-  };
+  if (jackpot) {
 
-  if (Math.random() < gogoRates[setting]) {
+    reelValues = [
+      "7",
+      "7",
+      "7"
+    ];
 
-    document.getElementById("gogo").classList.add("on");
+    document.getElementById("gogo")
+      .classList.add("on");
 
     document.getElementById("result").textContent =
       "💡 GOGO! CHANCE！ 7を狙え！";
@@ -653,15 +782,87 @@ function startGame() {
   }
 
   /*
-    新しいリール位置
+    小当たり
+  */
+
+  else if (smallHit) {
+
+    const hitSymbol =
+      symbols[
+        Math.floor(
+          Math.random() * symbols.length
+        )
+      ];
+
+    reelValues = [
+      hitSymbol,
+      hitSymbol,
+      hitSymbol
+    ];
+
+    document.getElementById("gogo")
+      .classList.add("on");
+
+    document.getElementById("result").textContent =
+      "💡 GOGO! CHANCE！ 狙ってみよう！";
+
+  }
+
+  /*
+    ハズレ
+
+    2つ揃いを完全に避けるため、
+    3つとも違う図柄にする。
+  */
+
+  else {
+
+    const shuffled = [
+      ...symbols
+    ];
+
+    for (
+      let i = shuffled.length - 1;
+      i > 0;
+      i--
+    ) {
+
+      const j =
+        Math.floor(Math.random() * (i + 1));
+
+      [
+        shuffled[i],
+        shuffled[j]
+      ] = [
+        shuffled[j],
+        shuffled[i]
+      ];
+
+    }
+
+    reelValues = [
+      shuffled[0],
+      shuffled[1],
+      shuffled[2]
+    ];
+
+  }
+
+
+  /*
+    リールを作り直す
   */
 
   for (let i = 0; i < 3; i++) {
 
-    reelStrips[i] = createReelStrip();
+    reelStrips[i] =
+      createReelStrip();
 
     reelPositions[i] =
-      Math.floor(Math.random() * reelStrips[i].length);
+      Math.floor(
+        Math.random() *
+        reelStrips[i].length
+      );
 
     startReel(i);
 
@@ -670,47 +871,53 @@ function startGame() {
 }
 
 
-/*
-  リール回転
-*/
+/* =========================
+   リール回転
+========================= */
 
 function startReel(index) {
 
-  const reel = document.getElementById("reel" + index);
+  const reel =
+    document.getElementById(
+      "reel" + index
+    );
 
   const symbol =
-    document.getElementById("symbol" + index);
+    document.getElementById(
+      "symbol" + index
+    );
 
   reel.classList.add("spinning");
 
-  document.getElementById("stop" + index).disabled = false;
+  spinTimers[index] =
+    setInterval(function() {
 
-  spinTimers[index] = setInterval(function() {
+      if (stopped[index]) return;
 
-    if (stopped[index]) return;
+      reelPositions[index]++;
 
-    reelPositions[index]++;
+      if (
+        reelPositions[index] >=
+        reelStrips[index].length
+      ) {
 
-    if (
-      reelPositions[index] >=
-      reelStrips[index].length
-    ) {
+        reelPositions[index] = 0;
 
-      reelPositions[index] = 0;
+      }
 
-    }
+      symbol.textContent =
+        reelStrips[index][
+          reelPositions[index]
+        ];
 
-    symbol.textContent =
-      reelStrips[index][reelPositions[index]];
-
-  }, 80);
+    }, 80);
 
 }
 
 
-/*
-  STOP
-*/
+/* =========================
+   STOP
+========================= */
 
 function stopReel(index) {
 
@@ -720,7 +927,9 @@ function stopReel(index) {
 
   stopped[index] = true;
 
-  clearInterval(spinTimers[index]);
+  clearInterval(
+    spinTimers[index]
+  );
 
   spinTimers[index] = null;
 
@@ -728,16 +937,88 @@ function stopReel(index) {
     .getElementById("reel" + index)
     .classList.remove("spinning");
 
-  document.getElementById("stop" + index).disabled = true;
+  document.getElementById(
+    "stop" + index
+  ).disabled = true;
 
-  reelValues[index] =
-    reelStrips[index][reelPositions[index]];
 
-  document.getElementById("symbol" + index).textContent =
+  /*
+    目押し結果
+
+    通常時はリールの現在位置。
+
+    GOGO当選時は、
+    当たり図柄を目押しできる
+    ようにする。
+  */
+
+  const target =
     reelValues[index];
 
   /*
-    3つ全部止まったら結果判定
+    GOGO中なら、
+    現在位置の近くに当たり図柄を
+    配置して目押しできるようにする。
+  */
+
+  if (
+    document
+      .getElementById("gogo")
+      .classList.contains("on")
+  ) {
+
+    /*
+      目押し成功しやすい範囲。
+
+      ボタンを押した瞬間に
+      ターゲット図柄が来ていたら成功。
+    */
+
+    const current =
+      reelStrips[index][
+        reelPositions[index]
+      ];
+
+    if (current === target) {
+
+      reelValues[index] = target;
+
+    }
+
+    else {
+
+      /*
+        外れ位置なら、
+        現在の図柄を表示。
+
+        つまりプレイヤーが
+        タイミングを合わせる必要がある。
+      */
+
+      reelValues[index] = current;
+
+    }
+
+  }
+
+  else {
+
+    reelValues[index] =
+      reelStrips[index][
+        reelPositions[index]
+      ];
+
+  }
+
+
+  document.getElementById(
+    "symbol" + index
+  ).textContent =
+    reelValues[index];
+
+
+  /*
+    3つ停止
   */
 
   if (
@@ -753,19 +1034,22 @@ function stopReel(index) {
 }
 
 
-/*
-  結果判定
-*/
+/* =========================
+   結果判定
+========================= */
 
 function finishGame() {
 
   spinning = false;
 
-  document.getElementById("startBtn").disabled = false;
+  document.getElementById(
+    "startBtn"
+  ).disabled = false;
 
   const a = reelValues[0];
   const b = reelValues[1];
   const c = reelValues[2];
+
 
   /*
     777
@@ -790,8 +1074,9 @@ function finishGame() {
 
   }
 
+
   /*
-    3つ同じ
+    3つ揃い
   */
 
   if (
@@ -810,8 +1095,12 @@ function finishGame() {
 
   }
 
+
   /*
-    2つ揃いは払い出しなし
+    2つ揃いはなし。
+
+    万が一表示された場合も
+    払い出しは0。
   */
 
   if (
@@ -821,11 +1110,12 @@ function finishGame() {
   ) {
 
     document.getElementById("result").textContent =
-      "2つ揃い！ 払い出しなし";
+      "😢 ハズレ……";
 
     return;
 
   }
+
 
   /*
     ハズレ
@@ -837,26 +1127,16 @@ function finishGame() {
 }
 
 
-/*
-  コイン表示
-*/
-
-function updateCoins() {
-
-  document.getElementById("coins").textContent =
-    coins;
-
-}
-
-
-/*
-  777演出
-*/
+/* =========================
+   JACKPOT演出
+========================= */
 
 function showJackpot() {
 
   const jackpot =
-    document.getElementById("jackpot");
+    document.getElementById(
+      "jackpot"
+    );
 
   jackpot.classList.add("show");
 
@@ -869,34 +1149,45 @@ function showJackpot() {
 }
 
 
-/*
-  管理者ログイン
-*/
+/* =========================
+   管理者ログイン
+========================= */
 
 function adminLogin() {
 
   const password =
-    document.getElementById("adminPassword").value;
+    document.getElementById(
+      "adminPassword"
+    ).value;
 
   if (password === "777admin") {
 
     isAdmin = true;
 
-    document.getElementById("adminArea").style.display =
-      "block";
+    document.getElementById(
+      "adminArea"
+    ).style.display = "block";
 
-    document.getElementById("settingNumber").textContent =
-      setting;
+    document.getElementById(
+      "settingNumber"
+    ).textContent = setting;
 
-    document.getElementById("adminPassword").value =
-      "";
+    document.getElementById(
+      "adminPassword"
+    ).value = "";
 
-    document.getElementById("result").textContent =
+    document.getElementById(
+      "result"
+    ).textContent =
       "🔐 管理者ログインしました";
 
-  } else {
+  }
 
-    document.getElementById("result").textContent =
+  else {
+
+    document.getElementById(
+      "result"
+    ).textContent =
       "❌ パスワードが違います";
 
   }
@@ -904,13 +1195,19 @@ function adminLogin() {
 }
 
 
-/*
-  管理者による設定変更
-*/
+/* =========================
+   設定変更
+========================= */
 
 function changeSetting() {
 
   if (!isAdmin) return;
+
+  /*
+    今の設定から1つ上へ。
+
+    6の次は1。
+  */
 
   setting++;
 
@@ -920,68 +1217,55 @@ function changeSetting() {
 
   }
 
+  /*
+    リールを更新
+  */
+
   reelStrips = [
     createReelStrip(),
     createReelStrip(),
     createReelStrip()
   ];
 
-  document.getElementById("settingNumber").textContent =
+  document.getElementById(
+    "settingNumber"
+  ).textContent =
     setting;
 
-  document.getElementById("result").textContent =
-    "⚙️ 設定 " + setting + " に変更しました";
+  document.getElementById(
+    "result"
+  ).textContent =
+    "⚙️ 設定 " +
+    setting +
+    " に変更しました";
 
 }
 
 
-/*
-  管理者ログアウト
-*/
+/* =========================
+   管理者ログアウト
+========================= */
 
 function adminLogout() {
 
   isAdmin = false;
 
-  document.getElementById("adminArea").style.display =
+  document.getElementById(
+    "adminArea"
+  ).style.display =
     "none";
 
-  document.getElementById("result").textContent =
+  document.getElementById(
+    "result"
+  ).textContent =
     "🔒 管理者ログアウト";
 
 }
 
 
-/*
-  1時間ごとに設定をランダム変更
-*/
-
-setInterval(function() {
-
-  setting = randomSetting();
-
-  if (isAdmin) {
-
-    document.getElementById("settingNumber").textContent =
-      setting;
-
-    document.getElementById("result").textContent =
-      "🎲 設定が変更されました";
-
-  }
-
-  reelStrips = [
-    createReelStrip(),
-    createReelStrip(),
-    createReelStrip()
-  ];
-
-}, 60 * 60 * 1000);
-
-
-/*
-  最初の表示
-*/
+/* =========================
+   最初の表示
+========================= */
 
 updateCoins();
 
@@ -989,3 +1273,4 @@ updateCoins();
 
 </body>
 </html>
+```
