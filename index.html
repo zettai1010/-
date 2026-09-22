@@ -19,7 +19,7 @@ html,body{
   font-family:Arial,"Noto Sans JP",sans-serif;
   background:
     radial-gradient(circle at center,#252525 0%,#111 50%,#050505 100%);
-  color:white;
+  color:#fff;
 }
 
 body{
@@ -425,10 +425,11 @@ button{
   border:7px solid #444;
   border-radius:10px;
   color:#111;
-  font-size:35px;
+  font-size:32px;
   font-weight:900;
   text-shadow:1px 1px 0 white;
   overflow:hidden;
+  text-align:center;
 }
 
 .message{
@@ -499,7 +500,7 @@ button{
 }
 
 /* =========================
-   BONUS LIST
+   BONUS NAME ONLY
 ========================= */
 
 .bonus-panel{
@@ -517,30 +518,17 @@ button{
 
 .bonus-list{
   display:grid;
-  gap:8px;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px;
 }
 
 .bonus-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
+  padding:14px;
   border-radius:8px;
   background:#1c1c1c;
   border:1px solid #333;
-}
-
-.bonus-name{
+  text-align:center;
   font-weight:bold;
-}
-
-.bonus-rate{
-  color:#ffd84a;
-}
-
-.bonus-pay{
-  color:#8cff9a;
 }
 
 /* =========================
@@ -585,9 +573,11 @@ button{
   align-items:center;
   text-align:center;
   background:
-    radial-gradient(circle at center,
+    radial-gradient(
+      circle at center,
       rgba(255,255,255,.12),
-      rgba(0,0,0,.98) 65%);
+      rgba(0,0,0,.98) 65%
+    );
 }
 
 #effectOverlay.show{
@@ -626,16 +616,18 @@ button{
   from{
     transform:scale(.97);
   }
+
   to{
     transform:scale(1.04);
   }
 }
 
 /* =========================
-   RESPONSIVE
+   MOBILE
 ========================= */
 
 @media(max-width:650px){
+
   .game-title{
     font-size:27px;
   }
@@ -647,7 +639,7 @@ button{
 
   .reel{
     min-height:100px;
-    font-size:24px;
+    font-size:22px;
     border-width:5px;
   }
 
@@ -658,21 +650,24 @@ button{
   .effect-main{
     font-size:42px;
   }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
+<!-- =====================================================
      LOGIN
-========================= -->
+===================================================== -->
 
 <section id="loginScreen">
 
   <div class="login-box">
 
-    <div class="login-title">CASINO [Re]</div>
+    <div class="login-title">
+      CASINO [Re]
+    </div>
 
     <div class="login-subtitle">
       ACCOUNT LOGIN
@@ -719,9 +714,9 @@ button{
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      HUB
-========================= -->
+===================================================== -->
 
 <section id="hubScreen" class="hidden">
 
@@ -764,10 +759,12 @@ button{
 
       <div class="game-card">
 
-        <h3>スロット [Re]</h3>
+        <h3>
+          スロット [Re]
+        </h3>
 
         <p>
-          BONUS / VOID / REPLAY CHANCE<br>
+          BONUS / REPLAY CHANCE<br>
           シンプルなワンクリックスロット。
         </p>
 
@@ -780,7 +777,9 @@ button{
 
       <div class="game-card disabled">
 
-        <h3>GAME 02</h3>
+        <h3>
+          GAME 02
+        </h3>
 
         <p>
           Coming Soon...
@@ -795,7 +794,9 @@ button{
 
       <div class="game-card disabled">
 
-        <h3>GAME 03</h3>
+        <h3>
+          GAME 03
+        </h3>
 
         <p>
           Coming Soon...
@@ -810,7 +811,9 @@ button{
     </div>
 
 
-    <!-- COIN REQUEST -->
+    <!-- =================================================
+         COIN REQUEST
+    ================================================= -->
 
     <div
       id="coinRequestPanel"
@@ -850,7 +853,9 @@ button{
     </div>
 
 
-    <!-- ADMIN -->
+    <!-- =================================================
+         ADMIN
+    ================================================= -->
 
     <div
       id="adminPanel"
@@ -869,7 +874,7 @@ button{
         <input
           id="requestCodeInput"
           type="text"
-          placeholder="例：63C8-3191"
+          placeholder="申請コード"
         >
 
         <button onclick="approveCoinRequest()">
@@ -890,9 +895,9 @@ button{
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      GAME
-========================= -->
+===================================================== -->
 
 <section id="gameScreen" class="hidden">
 
@@ -922,11 +927,13 @@ button{
         </h1>
 
         <p>
-          BONUS / VOID / REPLAY CHANCE
+          BONUS / REPLAY CHANCE
         </p>
 
       </div>
 
+
+      <!-- STATUS -->
 
       <div class="status-bar">
 
@@ -1028,7 +1035,7 @@ button{
       </div>
 
 
-      <!-- SPIN -->
+      <!-- START -->
 
       <div class="spin-area">
 
@@ -1046,74 +1053,36 @@ button{
       </div>
 
 
-      <!-- BONUS LIST -->
+      <!-- =================================================
+           BONUS NAME ONLY
+      ================================================= -->
 
       <div class="bonus-panel">
 
         <h3>
-          BONUS TABLE
+          BONUS
         </h3>
 
         <div class="bonus-list">
 
           <div class="bonus-item">
-            <span class="bonus-name">
-              レギュラー
-            </span>
-            <span class="bonus-rate">
-              50%
-            </span>
-            <span class="bonus-pay">
-              10枚 × 5回
-            </span>
+            レギュラー
           </div>
 
           <div class="bonus-item">
-            <span class="bonus-name">
-              BIG
-            </span>
-            <span class="bonus-rate">
-              30%
-            </span>
-            <span class="bonus-pay">
-              10枚 × 10回
-            </span>
+            BIG
           </div>
 
           <div class="bonus-item">
-            <span class="bonus-name">
-              RBIG
-            </span>
-            <span class="bonus-rate">
-              12%
-            </span>
-            <span class="bonus-pay">
-              10枚 × 15回
-            </span>
+            RBIG
           </div>
 
           <div class="bonus-item">
-            <span class="bonus-name">
-              LBIG
-            </span>
-            <span class="bonus-rate">
-              7%
-            </span>
-            <span class="bonus-pay">
-              10枚 × 20回
-            </span>
+            LBIG
           </div>
 
           <div class="bonus-item">
-            <span class="bonus-name">
-              絶対領域
-            </span>
-            <span class="bonus-rate">
-              1%
-            </span>
-            <span class="bonus-pay">
-              10枚 × 30回
-            </span>
+            絶対領域
           </div>
 
         </div>
@@ -1140,9 +1109,9 @@ button{
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      EFFECT
-========================= -->
+===================================================== -->
 
 <div id="effectOverlay">
 
@@ -1228,31 +1197,33 @@ let replayRemaining = 0;
 
 let czRemaining = 0;
 
-let replayInfinite = false;
-
 
 /* =========================================================
-   SETTINGS
+   BONUS PROBABILITY
 ========================================================= */
 
 const BONUS_PROBABILITY = {
 
-  1:1 / 280,
+  1:1 / 238.1,
 
-  2:1 / 250,
+  2:1 / 222.2,
 
-  3:1 / 225,
+  3:1 / 212.8,
 
-  4:1 / 200,
+  4:1 / 200.0,
 
-  5:1 / 180,
+  5:1 / 188.7,
 
-  6:1 / 160,
+  6:1 / 175.4,
 
-  7:1 / 140
+  7:1 / 163.9
 
 };
 
+
+/* =========================================================
+   SETTING WEIGHT
+========================================================= */
 
 const SETTING_WEIGHTS = {
 
@@ -1281,6 +1252,7 @@ const SETTING_CHANGE_INTERVAL =
 
 /* =========================================================
    BONUS TYPES
+   ※ 確率・獲得量は画面に表示しない
 ========================================================= */
 
 const BONUS_TYPES = [
@@ -1289,37 +1261,42 @@ const BONUS_TYPES = [
     name:"レギュラー",
     rounds:5,
     payout:10,
-    weight:50
+    weight:39.5
   },
 
   {
     name:"BIG",
     rounds:10,
     payout:10,
-    weight:30
+    weight:25
   },
 
   {
     name:"RBIG",
     rounds:15,
     payout:10,
-    weight:12
+    weight:15
   },
 
   {
     name:"LBIG",
     rounds:20,
     payout:10,
-    weight:7
+    weight:10
   },
 
   {
     name:"絶対領域",
     rounds:30,
     payout:10,
-    weight:1,
+    weight:0.5,
     special:true
-  }
+  },
+
+  /*
+    残り10%
+    → BONUSなし
+  */
 
 ];
 
@@ -1344,7 +1321,7 @@ function validId(id){
 
 
 /* =========================================================
-   UI
+   SHOW SCREEN
 ========================================================= */
 
 function showOnly(id){
@@ -1361,6 +1338,7 @@ function showOnly(id){
     .getElementById("gameScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById(id)
     .classList.remove("hidden");
@@ -1369,7 +1347,7 @@ function showOnly(id){
 
 
 /* =========================================================
-   LOGIN
+   REGISTER
 ========================================================= */
 
 async function register(){
@@ -1430,7 +1408,8 @@ async function register(){
   if(error){
 
     msg.textContent =
-      "登録エラー：" + error.message;
+      "登録エラー：" +
+      error.message;
 
     return;
 
@@ -1447,14 +1426,15 @@ async function register(){
   }
 
 
-  currentUser = data.user;
+  currentUser =
+    data.user;
 
 
-  const profileResult =
+  const ok =
     await ensureProfile();
 
 
-  if(!profileResult){
+  if(!ok){
 
     msg.textContent =
       "プロフィール作成に失敗しました。";
@@ -1538,14 +1518,16 @@ async function login(){
   if(error){
 
     msg.textContent =
-      "ログインエラー：" + error.message;
+      "ログインエラー：" +
+      error.message;
 
     return;
 
   }
 
 
-  currentUser = data.user;
+  currentUser =
+    data.user;
 
 
   const ok =
@@ -1574,7 +1556,7 @@ async function login(){
 
 
 /* =========================================================
-   PROFILE
+   ENSURE PROFILE
 ========================================================= */
 
 async function ensureProfile(){
@@ -1626,7 +1608,9 @@ async function ensureProfile(){
 
     if(insertError){
 
-      console.error(insertError);
+      console.error(
+        insertError
+      );
 
       return false;
 
@@ -1659,8 +1643,13 @@ async function loadProfile(){
   } =
     await supabaseClient
       .from("profiles")
-      .select("id,coins,is_admin")
-      .eq("id",currentUser.id)
+      .select(
+        "id,coins,is_admin"
+      )
+      .eq(
+        "id",
+        currentUser.id
+      )
       .single();
 
 
@@ -1702,7 +1691,9 @@ function saveCoins(){
   const amount =
     Math.max(
       0,
-      Math.floor(Number(medals) || 0)
+      Math.floor(
+        Number(medals) || 0
+      )
     );
 
 
@@ -1717,7 +1708,10 @@ function saveCoins(){
           .update({
             coins:amount
           })
-          .eq("id",currentUser.id);
+          .eq(
+            "id",
+            currentUser.id
+          );
 
 
       if(error){
@@ -1738,16 +1732,20 @@ function saveCoins(){
 
 
 /* =========================================================
-   COIN UI
+   COINS UI
 ========================================================= */
 
 function updateCoinsUI(){
 
   const hub =
-    document.getElementById("hubCoins");
+    document.getElementById(
+      "hubCoins"
+    );
 
   const game =
-    document.getElementById("gameCoins");
+    document.getElementById(
+      "gameCoins"
+    );
 
 
   if(hub){
@@ -1778,7 +1776,9 @@ function showHub(){
 
 
   document
-    .getElementById("userIdDisplay")
+    .getElementById(
+      "userIdDisplay"
+    )
     .textContent =
       currentUser
         ? currentUser.email.split("@")[0]
@@ -1786,7 +1786,9 @@ function showHub(){
 
 
   document
-    .getElementById("adminPanel")
+    .getElementById(
+      "adminPanel"
+    )
     .classList.toggle(
       "hidden",
       !isAdmin
@@ -1817,28 +1819,43 @@ async function logout(){
 
 
   document
-    .getElementById("loginId")
+    .getElementById(
+      "loginId"
+    )
     .value = "";
 
+
   document
-    .getElementById("loginPassword")
+    .getElementById(
+      "loginPassword"
+    )
     .value = "";
 
+
   document
-    .getElementById("loginMessage")
+    .getElementById(
+      "loginMessage"
+    )
     .textContent = "";
 
 
   document
-    .getElementById("requestResult")
+    .getElementById(
+      "requestResult"
+    )
     .textContent = "";
+
 
   document
-    .getElementById("adminMessage")
+    .getElementById(
+      "adminMessage"
+    )
     .textContent = "";
 
 
-  showOnly("loginScreen");
+  showOnly(
+    "loginScreen"
+  );
 
 }
 
@@ -1858,7 +1875,9 @@ function openGame(){
 
   resetGameState();
 
-  showOnly("gameScreen");
+  showOnly(
+    "gameScreen"
+  );
 
   updateCoinsUI();
 
@@ -1866,7 +1885,7 @@ function openGame(){
 
 
 /* =========================================================
-   BACK HUB
+   BACK TO HUB
 ========================================================= */
 
 async function backToHub(){
@@ -1879,7 +1898,7 @@ async function backToHub(){
 
 
 /* =========================================================
-   COIN REQUEST
+   CREATE COIN REQUEST
 ========================================================= */
 
 async function createCoinRequest(){
@@ -1892,13 +1911,15 @@ async function createCoinRequest(){
 
 
   const input =
-    document
-      .getElementById("requestAmount");
+    document.getElementById(
+      "requestAmount"
+    );
 
 
   const result =
-    document
-      .getElementById("requestResult");
+    document.getElementById(
+      "requestResult"
+    );
 
 
   const amount =
@@ -1939,7 +1960,8 @@ async function createCoinRequest(){
   if(error){
 
     result.textContent =
-      "申請エラー：" + error.message;
+      "申請エラー：" +
+      error.message;
 
     return;
 
@@ -1973,13 +1995,15 @@ async function approveCoinRequest(){
 
 
   const input =
-    document
-      .getElementById("requestCodeInput");
+    document.getElementById(
+      "requestCodeInput"
+    );
 
 
   const msg =
-    document
-      .getElementById("adminMessage");
+    document.getElementById(
+      "adminMessage"
+    );
 
 
   const code =
@@ -2018,7 +2042,8 @@ async function approveCoinRequest(){
   if(error){
 
     msg.textContent =
-      "承認エラー：" + error.message;
+      "承認エラー：" +
+      error.message;
 
     return;
 
@@ -2039,7 +2064,7 @@ async function approveCoinRequest(){
 
 
 /* =========================================================
-   GAME STATE RESET
+   RESET GAME
 ========================================================= */
 
 function resetGameState(){
@@ -2055,8 +2080,6 @@ function resetGameState(){
   replayRemaining = 0;
 
   czRemaining = 0;
-
-  replayInfinite = false;
 
 
   setState(
@@ -2078,19 +2101,23 @@ function resetGameState(){
 
 
   document
-    .getElementById("spinButton")
+    .getElementById(
+      "spinButton"
+    )
     .disabled = false;
 
 
   document
-    .getElementById("historyList")
+    .getElementById(
+      "historyList"
+    )
     .innerHTML = "";
 
 }
 
 
 /* =========================================================
-   PLAY GAME
+   PLAY
 ========================================================= */
 
 async function playGame(){
@@ -2137,20 +2164,11 @@ async function playGame(){
 
   }
 
-
-  if(state === "replayInfinite"){
-
-    await infiniteReplayGame();
-
-    return;
-
-  }
-
 }
 
 
 /* =========================================================
-   NORMAL GAME
+   NORMAL
 ========================================================= */
 
 async function normalGame(){
@@ -2183,9 +2201,9 @@ async function normalGame(){
     ];
 
 
-  /* =========================
-     BONUS
-  ========================= */
+  /* =================================
+     BONUS抽選
+  ================================= */
 
   if(r < bonusChance){
 
@@ -2193,9 +2211,26 @@ async function normalGame(){
       drawBonus();
 
 
+    /*
+      10%はBONUSなし
+    */
+
+    if(!bonus){
+
+      normalMiss();
+
+      return;
+
+    }
+
+
     bonusName =
       bonus.name;
 
+
+    /* =================================
+       絶対領域
+    ================================= */
 
     if(bonus.special){
 
@@ -2211,12 +2246,12 @@ async function normalGame(){
 
       message(
         "🌌 超激レア！！<br>" +
-        "絶対領域 BONUS当選！！"
+        "絶対領域 BONUS！！"
       );
 
 
       addHistory(
-        "★★★ 絶対領域 BONUS当選 ★★★"
+        "★★★ 絶対領域 BONUS ★★★"
       );
 
 
@@ -2227,20 +2262,23 @@ async function normalGame(){
     }
 
 
+    /* =================================
+       通常BONUS
+    ================================= */
+
     hotSignal();
 
 
     setReels(
       "BONUS",
-      "BONUS",
+      bonus.name,
       "BONUS"
     );
 
 
     message(
-      "🎉 " +
-      bonus.name +
-      " BONUS当選！！"
+      "🎉 BONUS当選！！<br>" +
+      bonus.name
     );
 
 
@@ -2258,13 +2296,13 @@ async function normalGame(){
   }
 
 
-  /* =========================
+  /* =================================
      CZ
-  ========================= */
+  ================================= */
 
   if(
     r <
-    bonusChance + 0.08
+    bonusChance + 0.06
   ){
 
     startCZ();
@@ -2274,13 +2312,13 @@ async function normalGame(){
   }
 
 
-  /* =========================
+  /* =================================
      CHERRY
-  ========================= */
+  ================================= */
 
   if(
     r <
-    bonusChance + 0.20
+    bonusChance + 0.14
   ){
 
     setReels(
@@ -2291,6 +2329,7 @@ async function normalGame(){
 
 
     medals += 5;
+
 
     updateCoinsUI();
 
@@ -2307,14 +2346,22 @@ async function normalGame(){
       "🍒 チェリー +5"
     );
 
+
     return;
 
   }
 
 
-  /* =========================
-     MISS
-  ========================= */
+  normalMiss();
+
+}
+
+
+/* =========================================================
+   NORMAL MISS
+========================================================= */
+
+function normalMiss(){
 
   setReels(
     "BAR",
@@ -2341,23 +2388,42 @@ async function normalGame(){
 
 function drawBonus(){
 
-  const total =
-    BONUS_TYPES.reduce(
-      (sum,b)=>sum+b.weight,
-      0
-    );
+  /*
+    指定割合
 
+    レギュラー 39.5
+    BIG        25
+    RBIG       15
+    LBIG       10
+    絶対領域    0.5
+    BONUSなし  10
+  */
 
-  let r =
+  const total = 100;
+
+  const r =
     Math.random() * total;
 
 
-  for(const bonus of BONUS_TYPES){
+  if(r < 10){
 
-    r -= bonus.weight;
+    return null;
+
+  }
 
 
-    if(r < 0){
+  let x = r - 10;
+
+
+  for(
+    const bonus
+    of BONUS_TYPES
+  ){
+
+    x -= bonus.weight;
+
+
+    if(x < 0){
 
       return bonus;
 
@@ -2366,7 +2432,7 @@ function drawBonus(){
   }
 
 
-  return BONUS_TYPES[0];
+  return null;
 
 }
 
@@ -2377,22 +2443,9 @@ function drawBonus(){
 
 function startBonusEffect(){
 
-  const bonus =
-    BONUS_TYPES.find(
-      b=>b.name === bonusName
-    );
-
-
-  if(!bonus){
-
-    return;
-
-  }
-
-
   showEffect(
     "BONUS CHANCE",
-    bonus.name,
+    bonusName,
     "BONUS START!!",
     false
   );
@@ -2423,6 +2476,8 @@ function startBonus(){
 
   if(!bonus){
 
+    state = "normal";
+
     return;
 
   }
@@ -2452,16 +2507,7 @@ function startBonus(){
   message(
     "🔥 " +
     bonus.name +
-    " BONUS開始！<br>" +
-    "10枚 × " +
-    bonus.rounds +
-    "回<br>" +
-    "最大 " +
-    (
-      bonus.rounds *
-      bonus.payout
-    ) +
-    "枚！"
+    " BONUS開始！"
   );
 
 
@@ -2522,9 +2568,6 @@ async function bonusGame(){
     "🔥 " +
     bonus.name +
     "<br>" +
-    "+" +
-    bonus.payout +
-    "枚<br>" +
     "残り " +
     bonusRemaining +
     "回"
@@ -2536,9 +2579,7 @@ async function bonusGame(){
 
   addHistory(
     bonus.name +
-    " +" +
-    bonus.payout +
-    " / 残り" +
+    " BONUS / 残り" +
     bonusRemaining
   );
 
@@ -2546,7 +2587,9 @@ async function bonusGame(){
   await saveCoins();
 
 
-  if(bonusRemaining <= 0){
+  if(
+    bonusRemaining <= 0
+  ){
 
     finishBonus();
 
@@ -2556,24 +2599,16 @@ async function bonusGame(){
 
 
 /* =========================================================
-   ABSOLUTE TERRITORY
+   ABSOLUTE TERRITORY EFFECT
 ========================================================= */
 
 function startAbsoluteBonusEffect(){
-
-  specialSignal();
-
 
   showEffect(
     "ULTRA RARE",
     "絶対領域",
     "SPECIAL BONUS!!",
     true
-  );
-
-
-  addHistory(
-    "★★★ 絶対領域 BONUS突入 ★★★"
   );
 
 
@@ -2589,26 +2624,24 @@ function startAbsoluteBonusEffect(){
 
 
 /* =========================================================
-   START ABSOLUTE
+   START ABSOLUTE TERRITORY
 ========================================================= */
 
 function startAbsoluteBonus(){
 
   state = "bonus";
 
-  bonusName = "絶対領域";
+  bonusName =
+    "絶対領域";
 
   bonusRemaining = 30;
 
   bonusMedals = 0;
 
 
-  specialSignal();
-
-
   setState(
     "絶対領域",
-    "ULTRA RARE BONUS"
+    "SPECIAL BONUS"
   );
 
 
@@ -2620,9 +2653,7 @@ function startAbsoluteBonus(){
 
 
   message(
-    "🌌 絶対領域 BONUS開始！<br>" +
-    "10枚 × 30回<br>" +
-    "最大300枚！"
+    "🌌 絶対領域 BONUS開始！"
   );
 
 
@@ -2680,14 +2711,17 @@ async function replayGame(){
 
     state = "normal";
 
+
     setState(
       "NORMAL",
       "通常状態"
     );
 
+
     message(
       "REPLAY終了。通常状態へ。"
     );
+
 
     return;
 
@@ -2704,14 +2738,28 @@ async function replayGame(){
   );
 
 
-  const r =
-    Math.random();
+  /*
+    REPLAY中BONUS
+  */
 
-
-  if(r < 0.05){
+  if(Math.random() < 0.05){
 
     const bonus =
       drawBonus();
+
+
+    if(!bonus){
+
+      message(
+        "REPLAY継続<br>" +
+        "残り " +
+        replayRemaining +
+        "G"
+      );
+
+      return;
+
+    }
 
 
     bonusName =
@@ -2722,13 +2770,15 @@ async function replayGame(){
 
       specialSignal();
 
+
       message(
-        "🌌 REPLAY中に<br>" +
+        "🌌 REPLAY中！！<br>" +
         "絶対領域！！"
       );
 
+
       addHistory(
-        "★★ REPLAY → 絶対領域 ★★"
+        "REPLAY → 絶対領域"
       );
 
 
@@ -2750,8 +2800,7 @@ async function replayGame(){
 
     addHistory(
       "REPLAY → " +
-      bonus.name +
-      " BONUS"
+      bonus.name
     );
 
 
@@ -2777,9 +2826,12 @@ async function replayGame(){
   );
 
 
-  if(replayRemaining <= 0){
+  if(
+    replayRemaining <= 0
+  ){
 
     state = "normal";
+
 
     setState(
       "NORMAL",
@@ -2852,14 +2904,18 @@ function startCZ(){
 
 async function czGame(){
 
-  if(czRemaining <= 0){
+  if(
+    czRemaining <= 0
+  ){
 
     state = "normal";
+
 
     setState(
       "NORMAL",
       "通常状態"
     );
+
 
     return;
 
@@ -2869,14 +2925,30 @@ async function czGame(){
   czRemaining--;
 
 
-  const r =
-    Math.random();
+  /*
+    CZ中BONUS
+  */
 
-
-  if(r < 0.03){
+  if(
+    Math.random() < 0.03
+  ){
 
     const bonus =
       drawBonus();
+
+
+    if(!bonus){
+
+      message(
+        "CHANCE ZONE<br>" +
+        "残り " +
+        czRemaining +
+        "G"
+      );
+
+      return;
+
+    }
 
 
     bonusName =
@@ -2895,7 +2967,7 @@ async function czGame(){
 
 
       addHistory(
-        "★★ CHANCE ZONE → 絶対領域 ★★"
+        "CZ → 絶対領域"
       );
 
 
@@ -2916,7 +2988,7 @@ async function czGame(){
 
 
     addHistory(
-      "CHANCE ZONE → " +
+      "CZ → " +
       bonus.name
     );
 
@@ -2950,7 +3022,9 @@ async function czGame(){
   );
 
 
-  if(czRemaining <= 0){
+  if(
+    czRemaining <= 0
+  ){
 
     state = "normal";
 
@@ -2983,111 +3057,29 @@ async function czGame(){
 
 
 /* =========================================================
-   INFINITE REPLAY
-========================================================= */
-
-async function infiniteReplayGame(){
-
-  const r =
-    Math.random();
-
-
-  /*
-    絶対領域は通常のBONUS抽選からのみ。
-    特別に追加確率を発生させない。
-  */
-
-  if(r < 0.08){
-
-    const bonus =
-      drawBonus();
-
-
-    bonusName =
-      bonus.name;
-
-
-    if(bonus.special){
-
-      specialSignal();
-
-
-      message(
-        "🌌 INFINITE REPLAY中！！<br>" +
-        "絶対領域！！"
-      );
-
-
-      addHistory(
-        "INFINITE REPLAY → 絶対領域"
-      );
-
-
-      startAbsoluteBonusEffect();
-
-      return;
-
-    }
-
-
-    hotSignal();
-
-
-    message(
-      "🎉 INFINITE REPLAY BONUS！！<br>" +
-      bonus.name
-    );
-
-
-    addHistory(
-      "INFINITE REPLAY → " +
-      bonus.name
-    );
-
-
-    startBonusEffect();
-
-    return;
-
-  }
-
-
-  setReels(
-    "REPLAY",
-    "REPLAY",
-    "REPLAY"
-  );
-
-
-  message(
-    "♾️ INFINITE REPLAY<br>" +
-    "継続中！"
-  );
-
-
-  addHistory(
-    "♾️ INFINITE REPLAY"
-  );
-
-}
-
-
-/* =========================================================
    REELS
 ========================================================= */
 
 function setReels(a,b,c){
 
   document
-    .getElementById("reel1")
+    .getElementById(
+      "reel1"
+    )
     .textContent = a;
 
-  document
-    .getElementById("reel2")
-    .textContent = b;
 
   document
-    .getElementById("reel3")
+    .getElementById(
+      "reel2"
+    )
+    .textContent = b;
+
+
+  document
+    .getElementById(
+      "reel3"
+    )
     .textContent = c;
 
 }
@@ -3100,7 +3092,9 @@ function setReels(a,b,c){
 function message(text){
 
   document
-    .getElementById("message")
+    .getElementById(
+      "message"
+    )
     .innerHTML = text;
 
 }
@@ -3113,12 +3107,18 @@ function message(text){
 function setState(name,info){
 
   document
-    .getElementById("stateName")
+    .getElementById(
+      "stateName"
+    )
     .textContent = name;
 
+
   document
-    .getElementById("stateInfo")
-    .textContent = info || "";
+    .getElementById(
+      "stateInfo"
+    )
+    .textContent =
+      info || "";
 
 }
 
@@ -3130,12 +3130,15 @@ function setState(name,info){
 function addHistory(text){
 
   const list =
-    document
-      .getElementById("historyList");
+    document.getElementById(
+      "historyList"
+    );
 
 
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   item.className =
@@ -3164,7 +3167,9 @@ function addHistory(text){
   list.prepend(item);
 
 
-  while(list.children.length > 50){
+  while(
+    list.children.length > 50
+  ){
 
     list.removeChild(
       list.lastChild
@@ -3187,36 +3192,48 @@ function showEffect(
 ){
 
   document
-    .getElementById("effectSmall")
+    .getElementById(
+      "effectSmall"
+    )
     .textContent = small;
 
 
   document
-    .getElementById("effectMain")
+    .getElementById(
+      "effectMain"
+    )
     .textContent = main;
 
 
   document
-    .getElementById("effectSub")
+    .getElementById(
+      "effectSub"
+    )
     .textContent = sub;
 
 
   document
-    .getElementById("effectOverlay")
+    .getElementById(
+      "effectOverlay"
+    )
     .classList.add("show");
 
 
   if(special){
 
     document
-      .getElementById("effectMain")
+      .getElementById(
+        "effectMain"
+      )
       .style.fontSize =
         "75px";
 
   }else{
 
     document
-      .getElementById("effectMain")
+      .getElementById(
+        "effectMain"
+      )
       .style.fontSize =
         "";
 
@@ -3228,20 +3245,23 @@ function showEffect(
 function hideEffect(){
 
   document
-    .getElementById("effectOverlay")
+    .getElementById(
+      "effectOverlay"
+    )
     .classList.remove("show");
 
 }
 
 
 /* =========================================================
-   SIGNALS
+   SIGNAL
 ========================================================= */
 
 function hotSignal(){
 
   document.body.style.filter =
     "brightness(1.15)";
+
 
   setTimeout(()=>{
 
@@ -3274,7 +3294,7 @@ function specialSignal(){
 
 
 /* =========================================================
-   HOURLY SETTING
+   SETTING RANDOM
 ========================================================= */
 
 function chooseNextSetting(){
@@ -3320,7 +3340,7 @@ function chooseNextSetting(){
 
 
 /* =========================================================
-   SETTING CHANGE
+   HOURLY SETTING CHANGE
 ========================================================= */
 
 function changeSetting(){
@@ -3330,7 +3350,9 @@ function changeSetting(){
 
 
   document
-    .getElementById("settingDisplay")
+    .getElementById(
+      "settingDisplay"
+    )
     .textContent =
       CURRENT_SETTING;
 
@@ -3342,9 +3364,7 @@ function changeSetting(){
 
 
   message(
-    "設定が変更されました。<br>" +
-    "現在：設定" +
-    CURRENT_SETTING
+    "設定が変更されました。"
   );
 
 
@@ -3357,7 +3377,7 @@ function changeSetting(){
 
 
 /* =========================================================
-   INITIAL SETTING
+   INITIAL
 ========================================================= */
 
 CURRENT_SETTING = 1;
@@ -3369,11 +3389,9 @@ setTimeout(
 );
 
 
-/* =========================================================
-   START
-========================================================= */
-
-showOnly("loginScreen");
+showOnly(
+  "loginScreen"
+);
 
 </script>
 
