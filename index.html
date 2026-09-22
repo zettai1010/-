@@ -256,6 +256,93 @@ button{
 }
 
 /* =========================
+   COIN REQUEST
+========================= */
+
+.coin-request-panel{
+  display:none;
+  margin:40px auto 0;
+  padding:25px;
+  max-width:650px;
+  text-align:left;
+  border:2px solid #345c73;
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,#0d202c,#090d11);
+  box-shadow:
+    0 0 25px rgba(70,180,255,.08);
+}
+
+.coin-request-panel.show{
+  display:block;
+}
+
+.request-title{
+  margin-bottom:5px;
+  color:#62c9ff;
+  font-size:25px;
+  font-weight:900;
+}
+
+.request-subtitle{
+  margin-bottom:20px;
+  color:#999;
+  font-size:13px;
+}
+
+.request-button{
+  width:100%;
+  height:55px;
+  border:2px solid #277da8;
+  border-radius:9px;
+  background:linear-gradient(#64d0ff,#1778a5);
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+}
+
+.request-code-box{
+  display:none;
+  margin-top:18px;
+  padding:18px;
+  text-align:center;
+  border:2px dashed #62c9ff;
+  border-radius:12px;
+  background:#07141c;
+}
+
+.request-code-label{
+  color:#999;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.request-code{
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:4px;
+  color:#ffd21a;
+  text-shadow:0 0 12px rgba(255,210,26,.5);
+  word-break:break-all;
+}
+
+.request-copy{
+  margin-top:12px;
+  padding:9px 18px;
+  border:1px solid #666;
+  border-radius:7px;
+  background:#222;
+  color:white;
+}
+
+.request-result{
+  min-height:25px;
+  margin-top:15px;
+  text-align:center;
+  font-weight:bold;
+}
+
+/* =========================
    ADMIN
 ========================= */
 
@@ -696,6 +783,11 @@ button{
     flex-direction:column;
   }
 
+  .request-code{
+    font-size:22px;
+    letter-spacing:2px;
+  }
+
 }
 </style>
 </head>
@@ -906,6 +998,63 @@ button{
 
 
     <!-- =========================
+         COIN REQUEST PANEL
+    ========================= -->
+
+    <div
+      id="coinRequestPanel"
+      class="coin-request-panel">
+
+      <div class="request-title">
+        🪙 コイン追加依頼
+      </div>
+
+      <div class="request-subtitle">
+        ボタンを押すと、管理者に伝えるための依頼IDが発行されます。
+      </div>
+
+      <button
+        class="request-button"
+        onclick="createCoinRequest()">
+
+        🪙 コイン追加依頼を発行
+
+      </button>
+
+
+      <div
+        id="requestCodeBox"
+        class="request-code-box">
+
+        <div class="request-code-label">
+          あなたの依頼ID
+        </div>
+
+        <div
+          id="requestCode"
+          class="request-code">
+        </div>
+
+        <button
+          class="request-copy"
+          onclick="copyRequestCode()">
+
+          📋 依頼IDをコピー
+
+        </button>
+
+      </div>
+
+
+      <div
+        id="requestResult"
+        class="request-result">
+      </div>
+
+    </div>
+
+
+    <!-- =========================
          ADMIN PANEL
     ========================= -->
 
@@ -918,37 +1067,31 @@ button{
       </div>
 
       <div class="admin-subtitle">
-        他のユーザーのコインを追加できます
+        ユーザーから受け取った依頼IDを入力してください。
       </div>
+
 
       <div class="admin-row">
 
         <input
-          id="targetUserId"
+          id="requestCodeInput"
           class="admin-input"
           type="text"
-          maxlength="20"
-          placeholder="追加先のユーザーID"
-        >
-
-        <input
-          id="addCoinAmount"
-          class="admin-input"
-          type="number"
-          min="1"
-          step="1"
-          placeholder="追加コイン数"
+          maxlength="9"
+          placeholder="例：A1B2-C3D4"
         >
 
       </div>
 
+
       <button
         class="admin-add-button"
-        onclick="addCoinsToUser()">
+        onclick="approveCoinRequest()">
 
-        🪙 コインを追加
+        🪙 依頼IDを承認して1000コイン追加
 
       </button>
+
 
       <div
         id="adminResult"
@@ -1749,6 +1892,144 @@ function saveCoins(){
 
 
 /* =====================================================
+   COIN REQUEST
+===================================================== */
+
+async function createCoinRequest(){
+
+  if(!currentUser){
+
+    return;
+
+  }
+
+
+  const result =
+    document.getElementById(
+      "requestResult"
+    );
+
+  const box =
+    document.getElementById(
+      "requestCodeBox"
+    );
+
+  const codeElement =
+    document.getElementById(
+      "requestCode"
+    );
+
+
+  result.className =
+    "request-result admin-success";
+
+  result.textContent =
+    "依頼IDを発行しています...";
+
+
+  const {data,error} =
+    await supabaseClient
+      .rpc(
+        "create_coin_request"
+      );
+
+
+  if(error){
+
+    console.error(
+      "COIN REQUEST ERROR:",
+      error
+    );
+
+    result.className =
+      "request-result admin-error";
+
+    result.textContent =
+      "依頼IDを発行できませんでした："
+      + error.message;
+
+    return;
+
+  }
+
+
+  codeElement.textContent =
+    data;
+
+  box.style.display =
+    "block";
+
+
+  result.className =
+    "request-result admin-success";
+
+  result.textContent =
+    "依頼IDを発行しました！管理者にこのIDを伝えてください。";
+
+
+  addHistory(
+    "コイン追加依頼ID発行"
+  );
+
+}
+
+
+/* =====================================================
+   COPY REQUEST CODE
+===================================================== */
+
+async function copyRequestCode(){
+
+  const code =
+    document.getElementById(
+      "requestCode"
+    ).textContent;
+
+
+  if(!code){
+
+    return;
+
+  }
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      code
+    );
+
+
+    const result =
+      document.getElementById(
+        "requestResult"
+      );
+
+
+    result.className =
+      "request-result admin-success";
+
+    result.textContent =
+      "📋 依頼IDをコピーしました！";
+
+  }
+  catch(error){
+
+    console.error(
+      "COPY ERROR:",
+      error
+    );
+
+    alert(
+      "コピーできませんでした。依頼IDを手動でコピーしてください。"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
    ADMIN PANEL
 ===================================================== */
 
@@ -1759,6 +2040,7 @@ function showAdminPanel(){
       "adminPanel"
     );
 
+
   if(!panel){
 
     return;
@@ -1768,12 +2050,16 @@ function showAdminPanel(){
 
   if(isAdmin){
 
-    panel.classList.add("show");
+    panel.classList.add(
+      "show"
+    );
 
   }
   else{
 
-    panel.classList.remove("show");
+    panel.classList.remove(
+      "show"
+    );
 
   }
 
@@ -1781,10 +2067,10 @@ function showAdminPanel(){
 
 
 /* =====================================================
-   ADMIN COIN ADD
+   ADMIN APPROVE REQUEST
 ===================================================== */
 
-async function addCoinsToUser(){
+async function approveCoinRequest(){
 
   if(!currentUser){
 
@@ -1805,42 +2091,22 @@ async function addCoinsToUser(){
   }
 
 
-  const targetId =
-    document
-      .getElementById("targetUserId")
-      .value
-      .trim();
-
-  const amountInput =
-    document
-      .getElementById("addCoinAmount")
-      .value
-      .trim();
-
-
-  if(!validId(targetId)){
-
-    showAdminResult(
-      "追加先のユーザーIDが正しくありません。",
-      false
+  const input =
+    document.getElementById(
+      "requestCodeInput"
     );
 
-    return;
 
-  }
-
-
-  const amount =
-    Number(amountInput);
+  const code =
+    input.value
+      .trim()
+      .toUpperCase();
 
 
-  if(
-    !Number.isInteger(amount) ||
-    amount <= 0
-  ){
+  if(!code){
 
     showAdminResult(
-      "追加するコインは1以上の整数にしてください。",
+      "依頼IDを入力してください。",
       false
     );
 
@@ -1858,10 +2124,9 @@ async function addCoinsToUser(){
   const {data,error} =
     await supabaseClient
       .rpc(
-        "add_user_coins_by_id",
+        "approve_coin_request",
         {
-          target_id:targetId,
-          amount:amount
+          request_code_input:code
         }
       );
 
@@ -1869,12 +2134,13 @@ async function addCoinsToUser(){
   if(error){
 
     console.error(
-      "ADMIN COIN ERROR:",
+      "APPROVE COIN ERROR:",
       error
     );
 
     showAdminResult(
-      "失敗：" + error.message,
+      "失敗：" +
+      error.message,
       false
     );
 
@@ -1884,27 +2150,25 @@ async function addCoinsToUser(){
 
 
   showAdminResult(
-    targetId +
-    " に " +
-    amount.toLocaleString() +
-    "コイン追加しました！<br>" +
-    "新しい残高：" +
+    "✅ コイン追加完了！<br>" +
+    "依頼ID：" +
+    code +
+    "<br>" +
+    "追加後の残高：" +
     Number(data).toLocaleString() +
     "コイン",
     true
   );
 
 
-  document.getElementById(
-    "targetUserId"
-  ).value = "";
-
-  document.getElementById(
-    "addCoinAmount"
-  ).value = "";
+  input.value = "";
 
 }
 
+
+/* =====================================================
+   ADMIN RESULT
+===================================================== */
 
 function showAdminResult(
   text,
@@ -1917,6 +2181,13 @@ function showAdminResult(
     );
 
 
+  if(!result){
+
+    return;
+
+  }
+
+
   result.innerHTML =
     text;
 
@@ -1924,9 +2195,9 @@ function showAdminResult(
   result.className =
     "admin-result " +
     (
-      success ?
-      "admin-success" :
-      "admin-error"
+      success
+      ? "admin-success"
+      : "admin-error"
     );
 
 }
@@ -1942,9 +2213,11 @@ function showHub(){
     .getElementById("loginScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("gameScreen")
     .classList.add("hidden");
+
 
   document
     .getElementById("casinoHub")
@@ -1971,8 +2244,27 @@ function showHub(){
 
   showAdminPanel();
 
+
+  const requestPanel =
+    document.getElementById(
+      "coinRequestPanel"
+    );
+
+
+  if(requestPanel){
+
+    requestPanel.classList.add(
+      "show"
+    );
+
+  }
+
 }
 
+
+/* =====================================================
+   OPEN GAME
+===================================================== */
 
 function openGame(){
 
@@ -1980,14 +2272,20 @@ function openGame(){
     .getElementById("casinoHub")
     .classList.add("hidden");
 
+
   document
     .getElementById("gameScreen")
     .classList.remove("hidden");
+
 
   updateCoins();
 
 }
 
+
+/* =====================================================
+   BACK HUB
+===================================================== */
 
 function backToHub(){
 
@@ -1995,9 +2293,11 @@ function backToHub(){
     .getElementById("gameScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("casinoHub")
     .classList.remove("hidden");
+
 
   updateCoins();
 
@@ -2005,6 +2305,10 @@ function backToHub(){
 
 }
 
+
+/* =====================================================
+   COMING SOON
+===================================================== */
 
 function comingSoon(){
 
@@ -2024,7 +2328,9 @@ async function logout(){
 
   await saveQueue;
 
+
   await supabaseClient.auth.signOut();
+
 
   currentUser = null;
 
@@ -2037,9 +2343,11 @@ async function logout(){
     .getElementById("casinoHub")
     .classList.add("hidden");
 
+
   document
     .getElementById("gameScreen")
     .classList.add("hidden");
+
 
   document
     .getElementById("loginScreen")
@@ -2051,13 +2359,50 @@ async function logout(){
     .classList.remove("show");
 
 
+  document
+    .getElementById("coinRequestPanel")
+    .classList.remove("show");
+
+
+  document
+    .getElementById("requestCodeBox")
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById("requestCode")
+    .textContent =
+    "";
+
+
+  document
+    .getElementById("requestResult")
+    .textContent =
+    "";
+
+
+  document
+    .getElementById("adminResult")
+    .textContent =
+    "";
+
+
+  document
+    .getElementById("requestCodeInput")
+    .value =
+    "";
+
+
   document.getElementById(
     "loginId"
   ).value = "";
 
+
   document.getElementById(
     "loginPassword"
   ).value = "";
+
 
   document.getElementById(
     "loginError"
@@ -3604,7 +3949,7 @@ document
 
 
 console.log(
-  "CASINO [Re] START - ADMIN SYSTEM READY"
+  "CASINO [Re] START - COIN REQUEST SYSTEM READY"
 );
 
 </script>
