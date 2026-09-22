@@ -614,6 +614,11 @@ body.void-hot{
         BONUS / VOID / REPLAY CHANCE
     </div>
 
+    <div class="status">
+        <div class="status-name" id="medalDisplay">メダル：1000枚</div>
+        <div class="status-info">1 PUSH = 3枚</div>
+    </div>
+
 
     <!-- 状態 -->
 
@@ -631,7 +636,7 @@ body.void-hot{
             class="status-info"
             id="stateInfo">
 
-            小役を消化しながらボーナスを抽選
+            設定1：ボーナス確率 1/238.1　｜　PUSH 3枚
 
         </div>
 
@@ -656,7 +661,7 @@ body.void-hot{
             class="bonus-count"
             id="bonusCount">
 
-            100枚 × 5回
+            10枚 × 5回
 
         </div>
 
@@ -737,54 +742,28 @@ body.void-hot{
     <div class="bonus-list">
 
         <div class="bonus">
-
-            <div class="bonus-name">
-                レギュラー
-            </div>
-
-            <div class="bonus-game">
-                100枚 × 5回
-            </div>
-
+            <div class="bonus-name">レギュラー</div>
+            <div class="bonus-game">10枚 × 5回 = 50枚</div>
         </div>
 
-
         <div class="bonus">
-
-            <div class="bonus-name">
-                リーフィンド
-            </div>
-
-            <div class="bonus-game">
-                100枚 × 5回
-            </div>
-
+            <div class="bonus-name">リーフィンド</div>
+            <div class="bonus-game">10枚 × 11回 = 110枚</div>
         </div>
 
-
         <div class="bonus">
-
-            <div class="bonus-name">
-                ダストロック
-            </div>
-
-            <div class="bonus-game">
-                100枚 × 5回
-            </div>
-
+            <div class="bonus-name">ダストロック</div>
+            <div class="bonus-game">10枚 × 11回 = 110枚</div>
         </div>
 
+        <div class="bonus">
+            <div class="bonus-name">書物の怨念</div>
+            <div class="bonus-game">10枚 × 11回 = 110枚</div>
+        </div>
 
         <div class="bonus">
-
-            <div class="bonus-name">
-                書物の怨念
-            </div>
-
-            <div class="bonus-game">
-                100枚 × 5回
-            </div>
-
+            <div class="bonus-name">Void</div>
+            <div class="bonus-game">100枚 × 10回 = 1000枚</div>
         </div>
 
     </div>
@@ -867,6 +846,101 @@ body.void-hot{
    ゲーム状態
 ========================= */
 
+/* =========================
+   設定・掛け金
+========================= */
+
+let CURRENT_SETTING = 1;
+
+// 設定は最初は1。ページを開いてから1時間ごとに次の設定を抽選。
+const SETTING_WEIGHTS = [
+  { setting: 1, weight: 50 },
+  { setting: 2, weight: 24 },
+  { setting: 3, weight: 15 },
+  { setting: 4, weight: 7 },
+  { setting: 5, weight: 3 },
+  { setting: 6, weight: 1 },
+  { setting: 7, weight: 1 }
+];
+
+function chooseHourlySetting() {
+  const entries = Object.entries(SETTING_WEIGHTS)
+    .map(([setting, weight]) => ({
+      setting: Number(setting),
+      weight: Math.max(0, Number(weight) || 0)
+    }))
+    .filter(x => x.weight > 0);
+
+  const total = entries.reduce((sum, x) => sum + x.weight, 0);
+  if (total <= 0) return 1;
+
+  let r = Math.random() * total;
+  for (const item of entries) {
+    r -= item.weight;
+    if (r < 0) return item.setting;
+  }
+  return 1;
+}
+
+function scheduleHourlySettingChange() {
+  setTimeout(() => {
+    CURRENT_SETTING = chooseHourlySetting();
+
+    // 画面上の設定表示がある場合は更新
+    const settingEl = document.getElementById("settingDisplay");
+    if (settingEl) {
+      settingEl.textContent = `設定${CURRENT_SETTING}`;
+    }
+
+    // 次の1時間後にも再抽選
+    scheduleHourlySettingChange();
+  }, SETTING_CHANGE_INTERVAL);
+}
+
+scheduleHourlySettingChange(); // 1～7。ここを変更すると設定変更できます。
+const BET = 3;
+
+/* ===== 設定を変更するときはここだけ編集 ===== */
+
+// 各設定のボーナス当選確率
+const BONUS_PROBABILITY = {
+  1: 1 / 280,
+  2: 1 / 250,
+  3: 1 / 225,
+  4: 1 / 200,
+  5: 1 / 180,
+  6: 1 / 160,
+  7: 1 / 140
+};
+
+// 1時間ごとの設定選択率（合計100%）
+const SETTING_WEIGHTS = {
+  1: 50,
+  2: 24,
+  3: 15,
+  4: 7,
+  5: 3,
+  6: 1,
+  7: 0
+};
+
+// 最初は設定1
+let CURRENT_SETTING = 1;
+
+// 設定変更間隔
+const SETTING_CHANGE_INTERVAL = 60 * 60 * 1000;
+
+
+const BONUS_TYPES = [
+    { name:"レギュラー", rounds:5, payout:10, weight:39.5 },
+    { name:"リーフィンド", rounds:11, payout:10, weight:20 },
+    { name:"ダストロック", rounds:11, payout:10, weight:20 },
+    { name:"書物の怨念", rounds:11, payout:10, weight:20 },
+    { name:"Void", rounds:10, payout:100, weight:0.5 }
+];
+
+let medals = 1000;
+
 let state =
     "normal";
 
@@ -880,6 +954,9 @@ let bonusRemaining =
 
 
 let bonusMedals =
+    0;
+
+let voidMedals =
     0;
 
 
@@ -903,25 +980,7 @@ let signal =
    ボーナス種類
 ========================= */
 
-const bonuses = [
-
-    {
-        name:"レギュラー"
-    },
-
-    {
-        name:"リーフィンド"
-    },
-
-    {
-        name:"ダストロック"
-    },
-
-    {
-        name:"書物の怨念"
-    }
-
-];
+const bonuses = BONUS_TYPES;
 
 
 /* =========================
@@ -929,6 +988,11 @@ const bonuses = [
 ========================= */
 
 normalSignal();
+updateMedals();
+document.getElementById("stateInfo").textContent =
+    "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
+    (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
+    "　｜　PUSH 3枚";
 
 
 /* =========================
@@ -1114,178 +1178,70 @@ function play(){
 
 function normalGame(){
 
-    /*
-       普通のゲームでは
-       背景もPUSHも変化しない
-    */
+    // 1 PUSH = 3枚
+    if(medals < BET){
+        message("メダルが足りません。リセットしてください。");
+        addHistory("メダル不足");
+        return;
+    }
 
+    medals -= BET;
+    updateMedals();
     normalSignal();
 
+    const bonusChance = BONUS_PROBABILITY[CURRENT_SETTING];
+    const r = Math.random();
 
-    /*
-       ボーナス抽選
-
-       約4.5%
-    */
-
-    const bonusChance =
-        0.045;
-
-
-    const r =
-        Math.random();
-
-
-    /*
-       Void濃厚
-
-       通常時からいきなり
-       Voidになる場合
-    */
-
-    if(r < 0.003){
-
-        voidSignal();
-
-
-        message(
-            "……"
-        );
-
-
-        addHistory(
-            "特殊演出発生"
-        );
-
-
-        setTimeout(()=>{
-
-            startVoidBonusEffect();
-
-        },450);
-
-
-        return;
-    }
-
-
-    /*
-       ボーナス濃厚
-
-       ここで初めて
-       背景＋PUSHが変化
-    */
-
+    // Voidはボーナス振り分け0.5%として、まず通常ボーナス当選を判定。
     if(r < bonusChance){
 
+        const bonus = drawBonusType();
+
+        bonusName = bonus.name;
+
+        if(bonusName === "Void"){
+            voidSignal();
+            setReels("V","O","I");
+            message("……VOID……！");
+            addHistory("VOID BONUS当選");
+            setTimeout(()=>{
+                startVoidBonusEffect();
+            },450);
+            return;
+        }
+
         hotSignal();
-
-
-        setReels(
-            "7",
-            "7",
-            "7"
-        );
-
-
-        message(
-            "……！"
-        );
-
-
-        addHistory(
-            "当たり濃厚演出"
-        );
-
+        setReels("7","7","7");
+        message("……！");
+        addHistory("BONUS当選：" + bonusName);
 
         setTimeout(()=>{
-
             startBonusEffect();
-
         },500);
 
-
         return;
     }
 
-
-    /*
-       CZチャンス
-
-       ただし通常時なので
-       背景は変えない
-    */
-
+    // CZチャンス
     if(r < bonusChance + 0.08){
-
-        setReels(
-            "CZ",
-            "CZ",
-            "CZ"
-        );
-
-
-        message(
-            "CZチャンス！"
-        );
-
-
-        addHistory(
-            "通常時：CZチャンス"
-        );
-
-
+        setReels("CZ","CZ","CZ");
+        message("CZチャンス！");
+        addHistory("通常時：CZチャンス");
         return;
     }
 
-
-    /*
-       チャンス役
-    */
-
+    // チャンス役
     if(r < bonusChance + 0.20){
-
-        setReels(
-            "🍒",
-            "🍒",
-            "🍒"
-        );
-
-
-        message(
-            "チャンス役！"
-        );
-
-
-        addHistory(
-            "通常時：チャンス役"
-        );
-
-
+        setReels("🍒","🍒","🍒");
+        message("チャンス役！");
+        addHistory("通常時：チャンス役");
         return;
     }
 
-
-    /*
-       ハズレ
-    */
-
-    setReels(
-        "7",
-        "BAR",
-        "🍒"
-    );
-
-
-    message(
-        "ハズレ"
-    );
-
-
-    addHistory(
-        "通常時：ハズレ"
-    );
-
+    // ハズレ
+    setReels("7","BAR","🍒");
+    message("ハズレ");
+    addHistory("通常時：ハズレ");
 }
 
 
@@ -1295,17 +1251,9 @@ function normalGame(){
 
 function startBonusEffect(){
 
-    const bonus =
-        bonuses[
-            Math.floor(
-                Math.random() *
-                bonuses.length
-            )
-        ];
-
-
-    bonusName =
-        bonus.name;
+    if(!bonusName){
+        bonusName = drawBonusType().name;
+    }
 
 
     showEffect(
@@ -1338,51 +1286,30 @@ function startBonusEffect(){
 
 function startBonus(){
 
-    state =
-        "bonus";
+    const bonus = BONUS_TYPES.find(b => b.name === bonusName);
 
-
-    bonusRemaining =
-        5;
-
-
-    bonusMedals =
-        0;
-
+    state = "bonus";
+    bonusRemaining = bonus.rounds;
+    bonusMedals = 0;
 
     normalSignal();
-
-
     showBonusInfo();
-
 
     setState(
         "ボーナス",
-        bonusName +
-        "　100枚 × 5回"
+        bonusName + "　" + bonus.payout + "枚 × " + bonus.rounds + "回"
     );
 
-
-    setReels(
-        "BONUS",
-        "BONUS",
-        "BONUS"
-    );
-
+    setReels("BONUS","BONUS","BONUS");
 
     message(
-        "🎰 " +
-        bonusName +
-        " BONUS開始！<br>" +
-        "100枚 × 5回"
+        "🎰 " + bonusName + " BONUS開始！<br>" +
+        bonus.payout + "枚 × " + bonus.rounds + "回"
     );
-
 
     addHistory(
-        bonusName +
-        " BONUS START"
+        bonusName + " BONUS START"
     );
-
 }
 
 
@@ -1392,137 +1319,74 @@ function startBonus(){
 
 function bonusGame(){
 
+    const bonus = BONUS_TYPES.find(b => b.name === bonusName);
+    const payout = bonus ? bonus.payout : 10;
+
     bonusRemaining--;
-
-    bonusMedals +=
-        100;
-
+    bonusMedals += payout;
+    medals += payout;
+    updateMedals();
 
     setReels(
-        "100",
+        String(payout),
         "枚",
         "GET"
     );
 
-
     updateBonusInfo();
 
-
-    /*
-       Void昇格
-    */
-
+    // Void昇格
     if(Math.random() < 0.01){
-
         startVoidBonusEffect();
-
         return;
     }
 
-
-    /*
-       +500枚
-    */
-
+    // +5回
     if(Math.random() < 0.02){
-
-        bonusRemaining +=
-            5;
-
+        bonusRemaining += 5;
 
         message(
             "🔥 <b>BIG BONUS CHANCE!</b><br>" +
-            "+500枚！"
+            "+5回！ +" + (payout * 5) + "枚！"
         );
 
-
-        document
-            .getElementById(
-                "message"
-            )
-            .classList.add(
-                "hot"
-            );
-
-
+        document.getElementById("message").classList.add("hot");
         updateBonusInfo();
-
-
-        addHistory(
-            "BONUS +500枚"
-        );
-
+        addHistory("BONUS +5回");
 
         setTimeout(()=>{
-
-            document
-                .getElementById(
-                    "message"
-                )
-                .classList.remove(
-                    "hot"
-                );
-
+            document.getElementById("message").classList.remove("hot");
         },600);
-
 
         return;
     }
 
-
-    /*
-       +100枚
-    */
-
+    // +1回
     if(Math.random() < 0.10){
-
-        bonusRemaining +=
-            1;
-
+        bonusRemaining += 1;
 
         message(
             "⚡ BONUS CHANCE!<br>" +
-            "+100枚！"
+            "+1回！ +" + payout + "枚！"
         );
-
 
         updateBonusInfo();
-
-
-        addHistory(
-            "BONUS +100枚"
-        );
-
-
+        addHistory("BONUS +1回");
         return;
     }
 
-
-    /*
-       通常
-    */
-
     message(
-        "💰 100枚獲得！<br>" +
-        "残り " +
-        bonusRemaining +
-        "回"
+        "💰 " + payout + "枚獲得！<br>" +
+        "残り " + bonusRemaining + "回"
     );
-
 
     addHistory(
-        "BONUS：+100枚"
+        "BONUS：" + payout + "枚"
     );
 
-
-    if(
-        bonusRemaining <= 0
-    ){
-
+    if(bonusRemaining <= 0){
         finishBonus();
-
     }
-
 }
 
 
@@ -1674,7 +1538,13 @@ function voidGame(){
     remainingGames--;
 
 
-    /*
+    
+
+    // Void中は1Gごとに10枚獲得
+    voidMedals += 10;
+    medals += 10;
+    updateMedals();
+/*
        +10G
     */
 
@@ -1708,6 +1578,7 @@ function voidGame(){
 
     message(
         "👑 Voidボーナス中<br>" +
+        "10枚獲得！<br>" +
         "残り " +
         remainingGames +
         "G"
@@ -1778,6 +1649,7 @@ function replay30Game(){
 
     if(r < 0.02){
 
+        bonusName = drawBonusType().name;
         startBonusEffect();
 
         return;
@@ -1855,7 +1727,9 @@ function replay30Game(){
 
         setState(
             "通常時",
-            "小役を消化しながらボーナスを抽選"
+            "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
+            (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
+            "　｜　PUSH 3枚"
         );
 
 
@@ -1964,7 +1838,9 @@ function czGame(){
 
         setState(
             "通常時",
-            "小役を消化しながらボーナスを抽選"
+            "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
+            (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
+            "　｜　PUSH 3枚"
         );
 
 
@@ -2021,6 +1897,7 @@ function infiniteReplayGame(){
 
     if(r < 0.08){
 
+        bonusName = drawBonusType().name;
         startBonusEffect();
 
         return;
@@ -2112,6 +1989,25 @@ function randomSymbol(){
    状態表示
 ========================= */
 
+function updateMedals(){
+    document.getElementById("medalDisplay").textContent =
+        "メダル：" + medals + "枚";
+}
+
+function drawBonusType(){
+    const total = BONUS_TYPES.reduce((sum,b) => sum + b.weight, 0);
+    let r = Math.random() * total;
+
+    for(const bonus of BONUS_TYPES){
+        r -= bonus.weight;
+        if(r < 0){
+            return bonus;
+        }
+    }
+
+    return BONUS_TYPES[0];
+}
+
 function setState(name,info){
 
     document.getElementById(
@@ -2171,28 +2067,17 @@ function hideBonusInfo(){
 
 function updateBonusInfo(){
 
-    document.getElementById(
-        "bonusTitle"
-    ).textContent =
-        bonusName +
-        " BONUS";
+    const bonus = BONUS_TYPES.find(b => b.name === bonusName);
+    const payout = bonus ? bonus.payout : 10;
 
+    document.getElementById("bonusTitle").textContent =
+        bonusName + " BONUS";
 
-    document.getElementById(
-        "bonusCount"
-    ).textContent =
-        "100枚 × " +
-        bonusRemaining +
-        "回";
+    document.getElementById("bonusCount").textContent =
+        payout + "枚 × " + bonusRemaining + "回";
 
-
-    document.getElementById(
-        "bonusMedals"
-    ).textContent =
-        "獲得枚数：" +
-        bonusMedals +
-        "枚";
-
+    document.getElementById("bonusMedals").textContent =
+        "今回の獲得枚数：" + bonusMedals + "枚";
 }
 
 
@@ -2300,6 +2185,8 @@ function addHistory(text){
 
 function resetGame(){
 
+    medals = 1000;
+
     state =
         "normal";
 
@@ -2324,13 +2211,16 @@ function resetGame(){
 
     hideEffect();
 
+    updateMedals();
 
     normalSignal();
 
 
     setState(
         "通常時",
-        "小役を消化しながらボーナスを抽選"
+        "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
+        (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
+        "　｜　PUSH 3枚"
     );
 
 
