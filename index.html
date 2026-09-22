@@ -634,11 +634,7 @@ body.void-hot{
 
         <div
             class="status-info"
-            id="stateInfo">
-
-            設定1：ボーナス確率 1/238.1　｜　PUSH 3枚
-
-        </div>
+            id="stateInfo"></div>
 
     </div>
 
@@ -843,25 +839,42 @@ body.void-hot{
 
 
 /* =========================
-   ゲーム状態
+   ゲーム状態・設定
 ========================= */
 
-/* =========================
-   設定・掛け金
-========================= */
+// ===== 🎰 ここだけ変更すれば設定を調整できます =====
 
+// 各設定のボーナス当選確率
+const BONUS_PROBABILITY = {
+  1: 1 / 280,
+  2: 1 / 250,
+  3: 1 / 225,
+  4: 1 / 200,
+  5: 1 / 180,
+  6: 1 / 160,
+  7: 1 / 140
+};
+
+// 1時間ごとの設定選択率
+// 数字の比率なので合計100でなくてもOK
+const SETTING_WEIGHTS = {
+  1: 50,
+  2: 24,
+  3: 15,
+  4: 7,
+  5: 3,
+  6: 1,
+  7: 1
+};
+
+// 最初は設定1
 let CURRENT_SETTING = 1;
 
-// 設定は最初は1。ページを開いてから1時間ごとに次の設定を抽選。
-const SETTING_WEIGHTS = [
-  { setting: 1, weight: 50 },
-  { setting: 2, weight: 24 },
-  { setting: 3, weight: 15 },
-  { setting: 4, weight: 7 },
-  { setting: 5, weight: 3 },
-  { setting: 6, weight: 1 },
-  { setting: 7, weight: 1 }
-];
+// 1時間ごとに設定変更
+const SETTING_CHANGE_INTERVAL = 60 * 60 * 1000;
+
+// 掛け金
+const BET = 3;
 
 function chooseHourlySetting() {
   const entries = Object.entries(SETTING_WEIGHTS)
@@ -875,10 +888,12 @@ function chooseHourlySetting() {
   if (total <= 0) return 1;
 
   let r = Math.random() * total;
+
   for (const item of entries) {
     r -= item.weight;
     if (r < 0) return item.setting;
   }
+
   return 1;
 }
 
@@ -886,50 +901,16 @@ function scheduleHourlySettingChange() {
   setTimeout(() => {
     CURRENT_SETTING = chooseHourlySetting();
 
-    // 画面上の設定表示がある場合は更新
     const settingEl = document.getElementById("settingDisplay");
     if (settingEl) {
       settingEl.textContent = `設定${CURRENT_SETTING}`;
     }
 
-    // 次の1時間後にも再抽選
     scheduleHourlySettingChange();
   }, SETTING_CHANGE_INTERVAL);
 }
 
-scheduleHourlySettingChange(); // 1～7。ここを変更すると設定変更できます。
-const BET = 3;
-
-/* ===== 設定を変更するときはここだけ編集 ===== */
-
-// 各設定のボーナス当選確率
-const BONUS_PROBABILITY = {
-  1: 1 / 280,
-  2: 1 / 250,
-  3: 1 / 225,
-  4: 1 / 200,
-  5: 1 / 180,
-  6: 1 / 160,
-  7: 1 / 140
-};
-
-// 1時間ごとの設定選択率（合計100%）
-const SETTING_WEIGHTS = {
-  1: 50,
-  2: 24,
-  3: 15,
-  4: 7,
-  5: 3,
-  6: 1,
-  7: 0
-};
-
-// 最初は設定1
-let CURRENT_SETTING = 1;
-
-// 設定変更間隔
-const SETTING_CHANGE_INTERVAL = 60 * 60 * 1000;
-
+scheduleHourlySettingChange();
 
 const BONUS_TYPES = [
     { name:"レギュラー", rounds:5, payout:10, weight:39.5 },
@@ -989,10 +970,7 @@ const bonuses = BONUS_TYPES;
 
 normalSignal();
 updateMedals();
-document.getElementById("stateInfo").textContent =
-    "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
-    (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
-    "　｜　PUSH 3枚";
+
 
 
 /* =========================
@@ -1727,9 +1705,7 @@ function replay30Game(){
 
         setState(
             "通常時",
-            "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
-            (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
-            "　｜　PUSH 3枚"
+            "PUSH 3枚"
         );
 
 
@@ -1838,9 +1814,7 @@ function czGame(){
 
         setState(
             "通常時",
-            "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
-            (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
-            "　｜　PUSH 3枚"
+            "PUSH 3枚"
         );
 
 
@@ -2015,11 +1989,10 @@ function setState(name,info){
     ).textContent =
         name;
 
-
+    // 設定番号・ボーナス確率は画面に表示しない
     document.getElementById(
         "stateInfo"
-    ).textContent =
-        info;
+    ).textContent = "";
 
 }
 
@@ -2218,9 +2191,7 @@ function resetGame(){
 
     setState(
         "通常時",
-        "設定" + CURRENT_SETTING + "：ボーナス確率 1/" +
-        (1 / BONUS_PROBABILITY[CURRENT_SETTING]).toFixed(1) +
-        "　｜　PUSH 3枚"
+        "PUSH 3枚"
     );
 
 
