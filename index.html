@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,261 +6,430 @@
 <title>スロット[Re]</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{
+  box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,"Noto Sans JP",sans-serif;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-x:hidden;
+  transition:background 0.5s ease;
+}
+
+/* =========================
+   背景
+========================= */
+
+body.normal-bg{
   background:
-    radial-gradient(circle at center, #20283d 0%, #0b0f1b 55%, #05070d 100%);
-  color: #fff;
-  font-family: Arial, "Noto Sans JP", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    radial-gradient(circle at center,#252525 0%,#111 55%,#050505 100%);
 }
 
-.game {
-  width: 760px;
-  max-width: 95vw;
-  background: #111827;
-  border: 2px solid #394866;
-  border-radius: 18px;
-  padding: 22px;
-  box-shadow: 0 0 35px rgba(0,0,0,.6);
+body.chance-bg{
+  background:
+    radial-gradient(circle at center,#183c61 0%,#0a1828 55%,#03070c 100%);
 }
 
-/* タイトル */
-.title {
-  text-align: center;
-  font-size: 34px;
-  font-weight: bold;
-  margin-bottom: 5px;
+body.high-bg{
+  background:
+    radial-gradient(circle at center,#234d32 0%,#0b2415 55%,#030805 100%);
 }
 
-.subtitle {
-  text-align: center;
-  color: #8e9ab5;
-  font-size: 13px;
-  margin-bottom: 18px;
+body.hot-bg{
+  background:
+    radial-gradient(circle at center,#663d16 0%,#291607 55%,#080300 100%);
 }
 
-/* 状態 */
-.status {
-  background: #1b2335;
-  border: 1px solid #34405c;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
+body.void-bg{
+  background:
+    radial-gradient(circle at center,#54216e 0%,#200b2d 55%,#050108 100%);
 }
 
-.status-name {
-  font-size: 22px;
-  font-weight: bold;
-  color: #d7ddff;
+/* =========================
+   メイン
+========================= */
+
+.game{
+  width:780px;
+  max-width:95vw;
+  background:rgba(12,17,28,.94);
+  border:2px solid #414e6d;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 0 40px rgba(0,0,0,.75);
 }
 
-.status-info {
-  margin-top: 7px;
-  color: #9da9c4;
-  font-size: 14px;
+/* =========================
+   タイトル
+========================= */
+
+.title{
+  text-align:center;
+  font-size:38px;
+  font-weight:bold;
+  letter-spacing:3px;
 }
 
-/* ボーナス情報 */
-.bonus-info {
-  display: none;
-  background: #171f31;
-  border: 1px solid #3c4b6b;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
+.subtitle{
+  text-align:center;
+  color:#8995b2;
+  font-size:13px;
+  margin-top:4px;
+  margin-bottom:18px;
 }
 
-.bonus-title {
-  font-size: 21px;
-  font-weight: bold;
+/* =========================
+   状態
+========================= */
+
+.status{
+  background:#171e2f;
+  border:1px solid #35415e;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:15px;
 }
 
-.bonus-count {
-  margin-top: 8px;
-  font-size: 17px;
+.status-name{
+  font-size:23px;
+  font-weight:bold;
 }
 
-.bonus-medals {
-  margin-top: 5px;
-  color: #aeb9d4;
+.status-info{
+  color:#9da9c4;
+  font-size:14px;
+  margin-top:6px;
 }
 
-/* リール */
-.reels {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
+/* =========================
+   背景情報
+========================= */
+
+.background-info{
+  text-align:center;
+  color:#aeb9d3;
+  font-size:14px;
+  margin-bottom:10px;
 }
 
-.reel {
-  width: 150px;
-  height: 120px;
-  background: linear-gradient(#f5f5f5, #c9c9c9);
-  border: 5px solid #59657c;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #111;
-  font-size: 34px;
-  font-weight: bold;
+.expect{
+  font-weight:bold;
+}
+
+/* =========================
+   リール
+========================= */
+
+.reels{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:20px 0;
+}
+
+.reel{
+  width:150px;
+  height:120px;
+  background:linear-gradient(#f7f7f7,#c9c9c9);
+  border:5px solid #606b82;
+  border-radius:12px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#111;
+  font-size:32px;
+  font-weight:bold;
   box-shadow:
-    inset 0 0 15px rgba(0,0,0,.3),
-    0 5px 15px rgba(0,0,0,.4);
+    inset 0 0 15px rgba(0,0,0,.35),
+    0 6px 18px rgba(0,0,0,.45);
 }
 
-/* START */
-.start {
-  width: 100%;
-  height: 65px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(#6675ff, #4050d7);
-  color: white;
-  font-size: 25px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 5px 0 #2935a0;
+/* =========================
+   PUSH
+========================= */
+
+.push{
+  width:100%;
+  height:75px;
+  border:none;
+  border-radius:15px;
+  color:white;
+  font-size:30px;
+  font-weight:bold;
+  letter-spacing:3px;
+  cursor:pointer;
+  transition:.15s;
+  box-shadow:0 7px 0 rgba(0,0,0,.4);
 }
 
-.start:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 #2935a0;
+.push:active{
+  transform:translateY(5px);
+  box-shadow:0 2px 0 rgba(0,0,0,.4);
 }
 
-/* メッセージ */
-.message {
-  min-height: 70px;
-  margin-top: 16px;
-  background: #181f30;
-  border: 1px solid #303c57;
-  border-radius: 10px;
-  padding: 14px;
-  text-align: center;
-  font-size: 17px;
-  color: #dfe5ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.push-white{
+  background:linear-gradient(#eee,#999);
+  color:#111;
 }
 
-/* 特殊メッセージ */
-.message.hot {
-  color: #ffd95a;
-  border-color: #806b25;
-  background: #211f16;
+.push-blue{
+  background:linear-gradient(#4d9cff,#1753a8);
 }
 
-.message.void {
-  color: #e1b7ff;
-  border-color: #704b8e;
-  background: #20182b;
+.push-green{
+  background:linear-gradient(#62d879,#16833a);
 }
 
-/* ボーナス一覧 */
-.section-title {
-  margin-top: 22px;
-  margin-bottom: 10px;
-  color: #b9c4ff;
-  font-size: 18px;
-  font-weight: bold;
+.push-yellow{
+  background:linear-gradient(#ffe96a,#c89b00);
+  color:#201800;
 }
 
-.bonus-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 9px;
+.push-red{
+  background:linear-gradient(#ff6969,#a70000);
 }
 
-.bonus {
-  background: #1a2233;
-  border: 1px solid #303b55;
-  border-radius: 9px;
-  padding: 12px;
+.push-purple{
+  background:linear-gradient(#c873ff,#6320a5);
 }
 
-.bonus-name {
-  font-weight: bold;
-  font-size: 15px;
+.push-rainbow{
+  background:linear-gradient(
+    90deg,
+    #ff4444,
+    #ffcf33,
+    #55dd66,
+    #55aaff,
+    #c45cff
+  );
 }
 
-.bonus-game {
-  color: #8e9ab5;
-  font-size: 13px;
-  margin-top: 5px;
+/* =========================
+   メッセージ
+========================= */
+
+.message{
+  min-height:75px;
+  margin-top:17px;
+  background:#171e2f;
+  border:1px solid #35415e;
+  border-radius:11px;
+  padding:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  font-size:18px;
+  line-height:1.5;
 }
 
-/* 履歴 */
-.history {
-  margin-top: 15px;
-  background: #0d1320;
-  border-radius: 10px;
-  padding: 10px;
-  max-height: 150px;
-  overflow-y: auto;
+.message.hot{
+  color:#ffe36e;
+  border-color:#a38325;
+  background:#28220f;
 }
 
-.history div {
-  padding: 5px;
-  border-bottom: 1px solid #202a3d;
-  color: #9da9c4;
-  font-size: 13px;
+.message.void{
+  color:#e7b8ff;
+  border-color:#8148a4;
+  background:#24132e;
 }
 
-.reset {
-  margin-top: 12px;
-  width: 100%;
-  padding: 10px;
-  background: #242d42;
-  color: #aeb8d0;
-  border: 1px solid #3b4762;
-  border-radius: 8px;
-  cursor: pointer;
+/* =========================
+   ボーナス情報
+========================= */
+
+.bonus-info{
+  display:none;
+  margin-bottom:15px;
+  padding:16px;
+  background:#181f31;
+  border:1px solid #4b5878;
+  border-radius:12px;
 }
 
-/* 演出 */
-@keyframes flash {
-  0%,100% {
-    transform: scale(1);
+.bonus-title{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.bonus-count{
+  font-size:17px;
+  margin-top:7px;
+}
+
+.bonus-medals{
+  color:#abb7d1;
+  margin-top:5px;
+}
+
+/* =========================
+   ボーナス一覧
+========================= */
+
+.section-title{
+  margin-top:23px;
+  margin-bottom:10px;
+  color:#bbc5ff;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.bonus-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+
+.bonus{
+  background:#1a2233;
+  border:1px solid #303b55;
+  border-radius:9px;
+  padding:12px;
+}
+
+.bonus-name{
+  font-weight:bold;
+}
+
+.bonus-game{
+  color:#8e9ab5;
+  font-size:13px;
+  margin-top:5px;
+}
+
+/* =========================
+   履歴
+========================= */
+
+.history{
+  margin-top:15px;
+  background:#0c121f;
+  border-radius:10px;
+  padding:10px;
+  max-height:150px;
+  overflow-y:auto;
+}
+
+.history div{
+  padding:5px;
+  border-bottom:1px solid #202a3d;
+  color:#98a5c1;
+  font-size:13px;
+}
+
+.reset{
+  margin-top:12px;
+  width:100%;
+  padding:10px;
+  background:#242d42;
+  color:#aeb8d0;
+  border:1px solid #3b4762;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* =========================
+   突入演出
+========================= */
+
+.effect{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.94);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:100;
+}
+
+.effect.show{
+  display:flex;
+}
+
+.effect-box{
+  text-align:center;
+  animation:effectIn .5s ease-out;
+}
+
+.effect-small{
+  font-size:22px;
+  letter-spacing:5px;
+  color:#d4d8e5;
+}
+
+.effect-big{
+  font-size:58px;
+  font-weight:bold;
+  margin-top:12px;
+  text-shadow:0 0 25px currentColor;
+}
+
+.effect-sub{
+  font-size:24px;
+  margin-top:15px;
+  color:#fff;
+}
+
+@keyframes effectIn{
+  from{
+    transform:scale(.5);
+    opacity:0;
   }
-  50% {
-    transform: scale(1.04);
+  to{
+    transform:scale(1);
+    opacity:1;
   }
 }
 
-.hot-effect {
-  animation: flash .35s ease-in-out 2;
+.flash{
+  animation:flash .3s ease-in-out 3;
 }
 
-@media (max-width: 600px) {
+@keyframes flash{
+  50%{
+    transform:scale(1.05);
+  }
+}
 
-  .game {
-    padding: 14px;
+/* =========================
+   スマホ
+========================= */
+
+@media(max-width:600px){
+
+  .game{
+    padding:14px;
   }
 
-  .reel {
-    width: 30%;
-    height: 90px;
-    font-size: 23px;
+  .title{
+    font-size:30px;
   }
 
-  .bonus-list {
-    grid-template-columns: 1fr;
+  .reel{
+    width:30%;
+    height:90px;
+    font-size:22px;
+  }
+
+  .bonus-list{
+    grid-template-columns:1fr;
+  }
+
+  .effect-big{
+    font-size:40px;
   }
 }
 </style>
 </head>
 
-<body>
+<body class="normal-bg">
 
 <div class="game">
 
@@ -270,68 +438,132 @@ body {
   </div>
 
   <div class="subtitle">
-    Bonus / Void / Replay Chance
+    BONUS / VOID / REPLAY CHANCE
   </div>
 
   <!-- 状態 -->
+
   <div class="status">
 
-    <div class="status-name" id="stateName">
+    <div
+      class="status-name"
+      id="stateName">
       通常時
     </div>
 
-    <div class="status-info" id="stateInfo">
+    <div
+      class="status-info"
+      id="stateInfo">
       小役を消化しながらボーナスを抽選
     </div>
 
   </div>
 
-  <!-- ボーナス情報 -->
-  <div class="bonus-info" id="bonusInfo">
+  <!-- 背景 -->
 
-    <div class="bonus-title" id="bonusTitle">
-      ボーナス
+  <div class="background-info">
+    背景：
+    <span id="backgroundName">
+      通常
+    </span>
+   　
+    期待度：
+    <span
+      class="expect"
+      id="backgroundExpect">
+      ★☆☆☆☆
+    </span>
+  </div>
+
+  <!-- BONUS情報 -->
+
+  <div
+    class="bonus-info"
+    id="bonusInfo">
+
+    <div
+      class="bonus-title"
+      id="bonusTitle">
+      BONUS
     </div>
 
-    <div class="bonus-count" id="bonusCount">
+    <div
+      class="bonus-count"
+      id="bonusCount">
       100枚 × 5回
     </div>
 
-    <div class="bonus-medals" id="bonusMedals">
+    <div
+      class="bonus-medals"
+      id="bonusMedals">
       獲得枚数：0枚
     </div>
 
   </div>
 
   <!-- リール -->
+
   <div class="reels">
 
-    <div class="reel" id="reel1">
+    <div
+      class="reel"
+      id="reel1">
       7
     </div>
 
-    <div class="reel" id="reel2">
+    <div
+      class="reel"
+      id="reel2">
       BAR
     </div>
 
-    <div class="reel" id="reel3">
+    <div
+      class="reel"
+      id="reel3">
       7
     </div>
 
   </div>
 
+  <!-- PUSH -->
+
   <button
-    class="start"
-    id="startButton"
+    class="push push-white"
+    id="pushButton"
     onclick="play()">
-    START
+    PUSH
   </button>
 
-  <div class="message" id="message">
-    STARTを押してゲーム開始
+  <div
+    class="background-info"
+    style="margin-top:9px">
+
+    PUSH：
+    <span id="pushName">
+      WHITE
+    </span>
+    　
+    期待度：
+    <span
+      class="expect"
+      id="pushExpect">
+      ★☆☆☆☆
+    </span>
+
   </div>
 
-  <!-- ボーナス -->
+  <!-- メッセージ -->
+
+  <div
+    class="message"
+    id="message">
+
+    PUSHでゲーム開始
+
+  </div>
+
+  <!-- ボーナス一覧 -->
+
   <div class="section-title">
     ボーナス
   </div>
@@ -377,19 +609,61 @@ body {
   </div>
 
   <!-- 履歴 -->
+
   <div class="section-title">
     ゲーム履歴
   </div>
 
-  <div class="history" id="history">
-    <div>ゲーム開始</div>
+  <div
+    class="history"
+    id="history">
+
+    <div>
+      ゲーム開始
+    </div>
+
   </div>
 
   <button
     class="reset"
     onclick="resetGame()">
+
     リセット
+
   </button>
+
+</div>
+
+
+<!-- =========================
+     突入演出画面
+========================= -->
+
+<div
+  class="effect"
+  id="effect">
+
+  <div class="effect-box">
+
+    <div
+      class="effect-small"
+      id="effectSmall">
+      CHANCE
+    </div>
+
+    <div
+      class="effect-big"
+      id="effectBig">
+      BONUS
+    </div>
+
+    <div
+      class="effect-sub"
+      id="effectSub">
+      BONUS START!!
+    </div>
+
+  </div>
 
 </div>
 
@@ -397,7 +671,7 @@ body {
 <script>
 
 /* =========================
-   ゲーム状態
+   状態
 ========================= */
 
 let state = "normal";
@@ -406,84 +680,346 @@ let bonusName = "";
 
 let bonusRemaining = 0;
 
-let bonusTotal = 0;
-
 let bonusMedals = 0;
 
 let remainingGames = 0;
 
 
 /* =========================
-   ボーナス種類
+   背景
+========================= */
+
+let currentBackground = {
+  name:"通常",
+  expect:1,
+  bonusRate:0
+};
+
+
+/* =========================
+   PUSH
+========================= */
+
+let currentPush = {
+  name:"WHITE",
+  expect:1,
+  bonusRate:0
+};
+
+
+/* =========================
+   ボーナス
 ========================= */
 
 const bonuses = [
 
-  {
-    name: "レギュラー"
-  },
+  {name:"レギュラー"},
 
-  {
-    name: "リーフィンド"
-  },
+  {name:"リーフィンド"},
 
-  {
-    name: "ダストロック"
-  },
+  {name:"ダストロック"},
 
-  {
-    name: "書物の怨念"
-  }
+  {name:"書物の怨念"}
 
 ];
 
 
 /* =========================
-   START
+   背景抽選
 ========================= */
 
-function play() {
+function randomBackground(){
 
-  if (state === "normal") {
+  const r = Math.random();
+
+  if(r < 0.55){
+
+    currentBackground = {
+      name:"通常",
+      expect:1,
+      bonusRate:0
+    };
+
+    document.body.className =
+      "normal-bg";
+
+  }
+
+  else if(r < 0.78){
+
+    currentBackground = {
+      name:"チャンス",
+      expect:2,
+      bonusRate:.02
+    };
+
+    document.body.className =
+      "chance-bg";
+
+  }
+
+  else if(r < 0.91){
+
+    currentBackground = {
+      name:"HIGH",
+      expect:3,
+      bonusRate:.04
+    };
+
+    document.body.className =
+      "high-bg";
+
+  }
+
+  else if(r < 0.98){
+
+    currentBackground = {
+      name:"激熱",
+      expect:4,
+      bonusRate:.07
+    };
+
+    document.body.className =
+      "hot-bg";
+
+  }
+
+  else{
+
+    currentBackground = {
+      name:"VOID",
+      expect:5,
+      bonusRate:.12
+    };
+
+    document.body.className =
+      "void-bg";
+
+  }
+
+
+  document.getElementById(
+    "backgroundName"
+  ).textContent =
+    currentBackground.name;
+
+
+  document.getElementById(
+    "backgroundExpect"
+  ).textContent =
+    stars(currentBackground.expect);
+
+}
+
+
+/* =========================
+   PUSH色抽選
+========================= */
+
+function randomPush(){
+
+  const button =
+    document.getElementById(
+      "pushButton"
+    );
+
+  button.className =
+    "push";
+
+
+  const r = Math.random();
+
+
+  if(r < .40){
+
+    currentPush = {
+      name:"WHITE",
+      expect:1,
+      bonusRate:0
+    };
+
+    button.classList.add(
+      "push-white"
+    );
+
+  }
+
+  else if(r < .60){
+
+    currentPush = {
+      name:"BLUE",
+      expect:2,
+      bonusRate:.01
+    };
+
+    button.classList.add(
+      "push-blue"
+    );
+
+  }
+
+  else if(r < .76){
+
+    currentPush = {
+      name:"GREEN",
+      expect:3,
+      bonusRate:.025
+    };
+
+    button.classList.add(
+      "push-green"
+    );
+
+  }
+
+  else if(r < .88){
+
+    currentPush = {
+      name:"YELLOW",
+      expect:3,
+      bonusRate:.04
+    };
+
+    button.classList.add(
+      "push-yellow"
+    );
+
+  }
+
+  else if(r < .96){
+
+    currentPush = {
+      name:"RED",
+      expect:4,
+      bonusRate:.07
+    };
+
+    button.classList.add(
+      "push-red"
+    );
+
+  }
+
+  else if(r < .99){
+
+    currentPush = {
+      name:"PURPLE",
+      expect:5,
+      bonusRate:.10
+    };
+
+    button.classList.add(
+      "push-purple"
+    );
+
+  }
+
+  else{
+
+    currentPush = {
+      name:"RAINBOW",
+      expect:5,
+      bonusRate:.20
+    };
+
+    button.classList.add(
+      "push-rainbow"
+    );
+
+  }
+
+
+  document.getElementById(
+    "pushName"
+  ).textContent =
+    currentPush.name;
+
+
+  document.getElementById(
+    "pushExpect"
+  ).textContent =
+    stars(currentPush.expect);
+
+}
+
+
+/* =========================
+   星
+========================= */
+
+function stars(n){
+
+  return "★".repeat(n) +
+         "☆".repeat(5-n);
+
+}
+
+
+/* =========================
+   初期演出
+========================= */
+
+randomBackground();
+randomPush();
+
+
+/* =========================
+   PUSH
+========================= */
+
+function play(){
+
+  if(state === "normal"){
 
     normalGame();
 
     return;
+
   }
 
-  if (state === "bonus") {
+
+  if(state === "bonus"){
 
     bonusGame();
 
     return;
+
   }
 
-  if (state === "void") {
+
+  if(state === "void"){
 
     voidGame();
 
     return;
+
   }
 
-  if (state === "replay30") {
+
+  if(state === "replay30"){
 
     replayChanceGame();
 
     return;
+
   }
 
-  if (state === "cz") {
+
+  if(state === "cz"){
 
     czGame();
 
     return;
+
   }
 
-  if (state === "replayInfinite") {
+
+  if(state === "replayInfinite"){
 
     infiniteReplayGame();
 
     return;
+
   }
 
 }
@@ -493,14 +1029,86 @@ function play() {
    通常時
 ========================= */
 
-function normalGame() {
+function normalGame(){
 
-  const r = Math.random();
+  /*
+    背景＋PUSHの複合期待度
+  */
+
+  let bonusRate =
+    .045 +
+    currentBackground.bonusRate +
+    currentPush.bonusRate;
 
 
-  /* チェリー */
+  /*
+    VOID背景＋虹PUSH
+  */
 
-  if (r < 0.025) {
+  if(
+    currentBackground.expect >= 5 &&
+    currentPush.expect >= 5
+  ){
+
+    if(Math.random() < .35){
+
+      startVoidBonusEffect();
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+    ボーナス
+  */
+
+  if(Math.random() < bonusRate){
+
+    startBonusEffect();
+
+    return;
+
+  }
+
+
+  /*
+    CZチャンス
+  */
+
+  if(
+    currentBackground.expect >= 3 &&
+    Math.random() < .08
+  ){
+
+    setReels(
+      "CZ",
+      "CZ",
+      "CZ"
+    );
+
+    message(
+      "⚡ CZチャンス！"
+    );
+
+    addHistory(
+      "通常時：CZチャンス"
+    );
+
+    nextNormal();
+
+    return;
+
+  }
+
+
+  /*
+    チャンス役
+  */
+
+  if(Math.random() < .12){
 
     setReels(
       "🍒",
@@ -509,50 +1117,23 @@ function normalGame() {
     );
 
     message(
-      "チェリー！<br>チャンス役！"
+      "🍒 チャンス役！"
     );
 
     addHistory(
-      "通常時：チェリー"
+      "通常時：チャンス役"
     );
 
+    nextNormal();
+
     return;
+
   }
 
 
-  /* メロン */
-
-  if (r < 0.05) {
-
-    setReels(
-      "🍈",
-      "🍈",
-      "🍈"
-    );
-
-    message(
-      "メロン！<br>チャンス役！"
-    );
-
-    addHistory(
-      "通常時：メロン"
-    );
-
-    return;
-  }
-
-
-  /* ボーナス */
-
-  if (r < 0.065) {
-
-    startBonus();
-
-    return;
-  }
-
-
-  /* ハズレ */
+  /*
+    ハズレ
+  */
 
   setReels(
     "7",
@@ -568,14 +1149,29 @@ function normalGame() {
     "通常時：ハズレ"
   );
 
+
+  nextNormal();
+
 }
 
 
 /* =========================
-   ボーナス開始
+   次の通常ゲーム
 ========================= */
 
-function startBonus() {
+function nextNormal(){
+
+  randomBackground();
+  randomPush();
+
+}
+
+
+/* =========================
+   BONUS演出
+========================= */
+
+function startBonusEffect(){
 
   const bonus =
     bonuses[
@@ -586,29 +1182,60 @@ function startBonus() {
     ];
 
 
-  state = "bonus";
+  bonusName =
+    bonus.name;
 
-  bonusName = bonus.name;
 
-  /*
-    100枚 × 5回
-  */
+  showEffect(
+    "CHANCE",
+    bonusName + " BONUS",
+    "BONUS START!!"
+  );
 
-  bonusRemaining = 5;
 
-  bonusTotal = 5;
+  addHistory(
+    "BONUS突入演出：" +
+    bonusName
+  );
 
-  bonusMedals = 0;
+
+  setTimeout(()=>{
+
+    hideEffect();
+
+    startBonus();
+
+  },1800);
+
+}
+
+
+/* =========================
+   BONUS開始
+========================= */
+
+function startBonus(){
+
+  state =
+    "bonus";
+
+
+  bonusRemaining =
+    5;
+
+
+  bonusMedals =
+    0;
+
+
+  showBonusInfo();
 
 
   setState(
     "ボーナス",
-    bonusName + "　100枚 × " +
-    bonusRemaining + "回"
+    bonusName +
+    "　100枚 × 5回"
   );
-
-
-  showBonusInfo();
 
 
   setReels(
@@ -621,28 +1248,24 @@ function startBonus() {
   message(
     "🎰 " +
     bonusName +
-    "突入！<br>" +
+    " BONUS開始！<br>" +
     "100枚 × 5回"
   );
 
 
   addHistory(
-    "ボーナス突入：" +
-    bonusName
+    bonusName +
+    " BONUS START"
   );
 
 }
 
 
 /* =========================
-   ボーナス中
+   BONUS中
 ========================= */
 
-function bonusGame() {
-
-  /*
-    1回につき100枚
-  */
+function bonusGame(){
 
   bonusRemaining--;
 
@@ -661,161 +1284,88 @@ function bonusGame() {
 
   /*
     Void昇格
-    約1%
   */
 
-  if (Math.random() < 0.01) {
+  if(Math.random() < .01){
 
-    state = "void";
-
-    remainingGames = 100;
-
-
-    hideBonusInfo();
-
-
-    setState(
-      "Voidボーナス",
-      "100G"
-    );
-
-
-    setReels(
-      "VOID",
-      "VOID",
-      "VOID"
-    );
-
-
-    message(
-      "👑 <b>VOID BONUS昇格！</b><br>" +
-      "100GのVoidボーナスへ！"
-    );
-
-
-    document
-      .getElementById("message")
-      .classList.add("void");
-
-
-    addHistory(
-      "🔥 ボーナス中 → Void昇格！"
-    );
-
+    startVoidBonusEffect();
 
     return;
+
   }
 
 
   /*
-    通常追加
-    約10%
+    +500枚
   */
 
-  if (Math.random() < 0.10) {
-
-    bonusRemaining++;
-
-    bonusTotal++;
-
-
-    setState(
-      "ボーナス",
-      bonusName +
-      "　追加BONUS！"
-    );
-
-
-    message(
-      "⚡ <b>BONUS CHANCE!</b><br>" +
-      "+100枚追加！"
-    );
-
-
-    document
-      .getElementById("message")
-      .classList.add("hot");
-
-
-    updateBonusInfo();
-
-
-    addHistory(
-      "BONUS CHANCE → +100枚"
-    );
-
-
-    setTimeout(() => {
-
-      document
-        .getElementById("message")
-        .classList.remove("hot");
-
-    }, 500);
-
-
-    /*
-      追加されたので終了判定しない
-    */
-
-    return;
-  }
-
-
-  /*
-    大追加
-    約2%
-  */
-
-  if (Math.random() < 0.02) {
+  if(Math.random() < .02){
 
     bonusRemaining += 5;
-
-    bonusTotal += 5;
-
-
-    setState(
-      "ボーナス",
-      bonusName +
-      "　BIG BONUS CHANCE！"
-    );
-
 
     message(
       "🔥 <b>BIG BONUS CHANCE!!</b><br>" +
       "+500枚追加！"
     );
 
-
     document
       .getElementById("message")
       .classList.add("hot");
 
-
     updateBonusInfo();
-
 
     addHistory(
       "BIG BONUS CHANCE → +500枚"
     );
 
-
-    setTimeout(() => {
+    setTimeout(()=>{
 
       document
         .getElementById("message")
         .classList.remove("hot");
 
-    }, 500);
-
+    },500);
 
     return;
+
   }
 
 
   /*
-    通常のボーナス中
+    +100枚
   */
+
+  if(Math.random() < .10){
+
+    bonusRemaining++;
+
+    message(
+      "⚡ <b>BONUS CHANCE!</b><br>" +
+      "+100枚追加！"
+    );
+
+    document
+      .getElementById("message")
+      .classList.add("hot");
+
+    updateBonusInfo();
+
+    addHistory(
+      "BONUS CHANCE → +100枚"
+    );
+
+    setTimeout(()=>{
+
+      document
+        .getElementById("message")
+        .classList.remove("hot");
+
+    },500);
+
+    return;
+
+  }
+
 
   message(
     "💰 100枚獲得！<br>" +
@@ -826,15 +1376,11 @@ function bonusGame() {
 
 
   addHistory(
-    "ボーナス：+100枚"
+    "BONUS：+100枚"
   );
 
 
-  /*
-    ボーナス終了
-  */
-
-  if (bonusRemaining <= 0) {
+  if(bonusRemaining <= 0){
 
     finishBonus();
 
@@ -844,14 +1390,17 @@ function bonusGame() {
 
 
 /* =========================
-   ボーナス終了
+   BONUS終了
 ========================= */
 
-function finishBonus() {
+function finishBonus(){
 
-  state = "replay30";
+  state =
+    "replay30";
 
-  remainingGames = 30;
+
+  remainingGames =
+    30;
 
 
   hideBonusInfo();
@@ -871,7 +1420,7 @@ function finishBonus() {
 
 
   message(
-    "🎉 ボーナス終了！<br>" +
+    "🎉 BONUS終了！<br>" +
     "獲得枚数：" +
     bonusMedals +
     "枚<br>" +
@@ -880,7 +1429,7 @@ function finishBonus() {
 
 
   addHistory(
-    "ボーナス終了：" +
+    "BONUS終了：" +
     bonusMedals +
     "枚"
   );
@@ -889,25 +1438,97 @@ function finishBonus() {
 
 
 /* =========================
-   Voidボーナス
+   Void演出
 ========================= */
 
-function voidGame() {
+function startVoidBonusEffect(){
+
+  showEffect(
+    "SPECIAL",
+    "VOID BONUS",
+    "MAXIMUM CHANCE"
+  );
+
+
+  addHistory(
+    "👑 VOID BONUS昇格演出"
+  );
+
+
+  setTimeout(()=>{
+
+    hideEffect();
+
+    startVoidBonus();
+
+  },2000);
+
+}
+
+
+/* =========================
+   Void開始
+========================= */
+
+function startVoidBonus(){
+
+  state =
+    "void";
+
+
+  remainingGames =
+    100;
+
+
+  hideBonusInfo();
+
+
+  setState(
+    "Voidボーナス",
+    "100G"
+  );
+
+
+  document.body.className =
+    "void-bg";
+
+
+  setReels(
+    "VOID",
+    "VOID",
+    "VOID"
+  );
+
+
+  message(
+    "👑 <b>VOID BONUS</b><br>" +
+    "100G開始！"
+  );
+
+
+  addHistory(
+    "VOID BONUS START"
+  );
+
+}
+
+
+/* =========================
+   Void中
+========================= */
+
+function voidGame(){
 
   remainingGames--;
 
 
-  /*
-    Void中ゲーム数上乗せ
-  */
-
-  if (Math.random() < 0.02) {
+  if(Math.random() < .02){
 
     remainingGames += 10;
 
 
     message(
-      "👑 Voidボーナス<br>" +
+      "👑 Void中<br>" +
       "ゲーム数上乗せ！<br>" +
       "+10G"
     );
@@ -919,6 +1540,7 @@ function voidGame() {
 
 
     return;
+
   }
 
 
@@ -937,7 +1559,7 @@ function voidGame() {
   );
 
 
-  if (remainingGames <= 0) {
+  if(remainingGames <= 0){
 
     state =
       "replayInfinite";
@@ -957,8 +1579,8 @@ function voidGame() {
 
 
     message(
-      "👑 Voidボーナス終了！<br>" +
-      "♾️ リプレイ確変（無限）へ！"
+      "👑 Void終了！<br>" +
+      "♾️ 無限リプレイ確変へ！"
     );
 
 
@@ -975,35 +1597,32 @@ function voidGame() {
    リプレイ確変30G
 ========================= */
 
-function replayChanceGame() {
+function replayChanceGame(){
 
   remainingGames--;
 
 
-  const r = Math.random();
+  const r =
+    Math.random();
 
 
-  /*
-    ボーナス
-  */
+  if(r < .02){
 
-  if (r < 0.02) {
-
-    startBonus();
+    startBonusEffect();
 
     return;
+
   }
 
 
-  /*
-    CZ
-  */
+  if(r < .10){
 
-  if (r < 0.10) {
+    state =
+      "cz";
 
-    state = "cz";
 
-    remainingGames = 5;
+    remainingGames =
+      5;
 
 
     setState(
@@ -1020,7 +1639,7 @@ function replayChanceGame() {
 
 
     message(
-      "⚡ CZ突入！<br>" +
+      "⚡ <b>CZ突入！</b><br>" +
       "5G間のチャンス！"
     );
 
@@ -1031,12 +1650,9 @@ function replayChanceGame() {
 
 
     return;
+
   }
 
-
-  /*
-    リプレイ
-  */
 
   setReels(
     "REPLAY",
@@ -1053,9 +1669,10 @@ function replayChanceGame() {
   );
 
 
-  if (remainingGames <= 0) {
+  if(remainingGames <= 0){
 
-    state = "normal";
+    state =
+      "normal";
 
 
     setState(
@@ -1074,6 +1691,9 @@ function replayChanceGame() {
       "リプレイ確変終了"
     );
 
+
+    nextNormal();
+
   }
 
 }
@@ -1083,16 +1703,12 @@ function replayChanceGame() {
    CZ
 ========================= */
 
-function czGame() {
+function czGame(){
 
   remainingGames--;
 
 
-  /*
-    CZ成功率13%
-  */
-
-  if (Math.random() < 0.13) {
+  if(Math.random() < .13){
 
     state =
       "replayInfinite";
@@ -1113,7 +1729,7 @@ function czGame() {
 
     message(
       "🔥 <b>CZ成功！</b><br>" +
-      "♾️ リプレイ確変（無限）へ！"
+      "♾️ 無限リプレイ確変へ！"
     );
 
 
@@ -1123,6 +1739,7 @@ function czGame() {
 
 
     return;
+
   }
 
 
@@ -1141,9 +1758,10 @@ function czGame() {
   );
 
 
-  if (remainingGames <= 0) {
+  if(remainingGames <= 0){
 
-    state = "normal";
+    state =
+      "normal";
 
 
     setState(
@@ -1162,6 +1780,9 @@ function czGame() {
       "CZ失敗"
     );
 
+
+    nextNormal();
+
   }
 
 }
@@ -1171,64 +1792,29 @@ function czGame() {
    無限リプレイ確変
 ========================= */
 
-function infiniteReplayGame() {
+function infiniteReplayGame(){
 
-  const r = Math.random();
-
-
-  /*
-    Void
-  */
-
-  if (r < 0.04) {
-
-    state = "void";
-
-    remainingGames = 100;
+  const r =
+    Math.random();
 
 
-    setState(
-      "Voidボーナス",
-      "100G"
-    );
+  if(r < .04){
 
-
-    setReels(
-      "VOID",
-      "VOID",
-      "VOID"
-    );
-
-
-    message(
-      "👑 <b>VOID BONUS！</b>"
-    );
-
-
-    addHistory(
-      "無限リプレイ確変 → Void"
-    );
-
+    startVoidBonusEffect();
 
     return;
+
   }
 
 
-  /*
-    通常ボーナス
-  */
+  if(r < .08){
 
-  if (r < 0.08) {
-
-    startBonus();
+    startBonusEffect();
 
     return;
+
   }
 
-
-  /*
-    リプレイ
-  */
 
   setReels(
     "REPLAY",
@@ -1244,70 +1830,8 @@ function infiniteReplayGame() {
 
 
   addHistory(
-    "無限リプレイ確変：リプレイ"
+    "無限リプレイ：リプレイ"
   );
-
-}
-
-
-/* =========================
-   ボーナス表示
-========================= */
-
-function showBonusInfo() {
-
-  const box =
-    document.getElementById(
-      "bonusInfo"
-    );
-
-  box.style.display = "block";
-
-  updateBonusInfo();
-
-}
-
-
-/* =========================
-   ボーナス情報更新
-========================= */
-
-function updateBonusInfo() {
-
-  document.getElementById(
-    "bonusTitle"
-  ).textContent =
-    bonusName + " BONUS";
-
-
-  document.getElementById(
-    "bonusCount"
-  ).textContent =
-    "100枚 × " +
-    bonusRemaining +
-    "回";
-
-
-  document.getElementById(
-    "bonusMedals"
-  ).textContent =
-    "獲得枚数：" +
-    bonusMedals +
-    "枚";
-
-
-}
-
-
-/* =========================
-   ボーナス表示を隠す
-========================= */
-
-function hideBonusInfo() {
-
-  document.getElementById(
-    "bonusInfo"
-  ).style.display = "none";
 
 }
 
@@ -1316,19 +1840,19 @@ function hideBonusInfo() {
    リール
 ========================= */
 
-function setReels(a, b, c) {
+function setReels(a,b,c){
 
   document.getElementById(
     "reel1"
-  ).textContent = a;
+  ).textContent=a;
 
   document.getElementById(
     "reel2"
-  ).textContent = b;
+  ).textContent=b;
 
   document.getElementById(
     "reel3"
-  ).textContent = c;
+  ).textContent=c;
 
 }
 
@@ -1337,9 +1861,9 @@ function setReels(a, b, c) {
    ランダム図柄
 ========================= */
 
-function randomSymbol() {
+function randomSymbol(){
 
-  const symbols = [
+  const symbols=[
     "7",
     "BAR",
     "🍒",
@@ -1359,19 +1883,18 @@ function randomSymbol() {
 
 
 /* =========================
-   状態変更
+   状態
 ========================= */
 
-function setState(name, info) {
+function setState(name,info){
 
   document.getElementById(
     "stateName"
-  ).textContent = name;
-
+  ).textContent=name;
 
   document.getElementById(
     "stateInfo"
-  ).textContent = info;
+  ).textContent=info;
 
 }
 
@@ -1380,11 +1903,116 @@ function setState(name, info) {
    メッセージ
 ========================= */
 
-function message(text) {
+function message(text){
 
   document.getElementById(
     "message"
-  ).innerHTML = text;
+  ).innerHTML=text;
+
+}
+
+
+/* =========================
+   BONUS情報
+========================= */
+
+function showBonusInfo(){
+
+  document.getElementById(
+    "bonusInfo"
+  ).style.display="block";
+
+  updateBonusInfo();
+
+}
+
+
+function hideBonusInfo(){
+
+  document.getElementById(
+    "bonusInfo"
+  ).style.display="none";
+
+}
+
+
+function updateBonusInfo(){
+
+  document.getElementById(
+    "bonusTitle"
+  ).textContent=
+    bonusName+" BONUS";
+
+
+  document.getElementById(
+    "bonusCount"
+  ).textContent=
+    "100枚 × "+
+    bonusRemaining+
+    "回";
+
+
+  document.getElementById(
+    "bonusMedals"
+  ).textContent=
+    "獲得枚数："+
+    bonusMedals+
+    "枚";
+
+}
+
+
+/* =========================
+   演出
+========================= */
+
+function showEffect(small,big,sub){
+
+  document.getElementById(
+    "effectSmall"
+  ).textContent=small;
+
+  document.getElementById(
+    "effectBig"
+  ).textContent=big;
+
+  document.getElementById(
+    "effectSub"
+  ).textContent=sub;
+
+
+  const bigText =
+    document.getElementById(
+      "effectBig"
+    );
+
+
+  if(big.includes("VOID")){
+
+    bigText.style.color=
+      "#d98cff";
+
+  }
+  else{
+
+    bigText.style.color=
+      "#ffd85c";
+
+  }
+
+
+  document.getElementById(
+    "effect"
+  ).classList.add("show");
+
+}
+
+
+function hideEffect(){
+
+  document.getElementById(
+    "effect"
+  ).classList.remove("show");
 
 }
 
@@ -1393,7 +2021,7 @@ function message(text) {
    履歴
 ========================= */
 
-function addHistory(text) {
+function addHistory(text){
 
   const history =
     document.getElementById(
@@ -1407,7 +2035,7 @@ function addHistory(text) {
     );
 
 
-  item.textContent = text;
+  item.textContent=text;
 
 
   history.prepend(item);
@@ -1419,22 +2047,26 @@ function addHistory(text) {
    リセット
 ========================= */
 
-function resetGame() {
+function resetGame(){
 
-  state = "normal";
+  state="normal";
 
-  bonusName = "";
+  bonusName="";
 
-  bonusRemaining = 0;
+  bonusRemaining=0;
 
-  bonusTotal = 0;
+  bonusMedals=0;
 
-  bonusMedals = 0;
-
-  remainingGames = 0;
+  remainingGames=0;
 
 
   hideBonusInfo();
+
+  hideEffect();
+
+
+  document.body.className=
+    "normal-bg";
 
 
   setState(
@@ -1451,14 +2083,18 @@ function resetGame() {
 
 
   message(
-    "STARTを押してゲーム開始"
+    "PUSHでゲーム開始"
   );
 
 
   document.getElementById(
     "history"
-  ).innerHTML =
+  ).innerHTML=
     "<div>ゲームリセット</div>";
+
+
+  randomBackground();
+  randomPush();
 
 }
 
