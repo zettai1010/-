@@ -425,7 +425,7 @@ button{
   border:7px solid #444;
   border-radius:10px;
   color:#111;
-  font-size:32px;
+  font-size:30px;
   font-weight:900;
   text-shadow:1px 1px 0 white;
   overflow:hidden;
@@ -657,9 +657,9 @@ button{
 
 <body>
 
-<!-- =====================================================
+<!-- =========================
      LOGIN
-===================================================== -->
+========================= -->
 
 <section id="loginScreen">
 
@@ -714,9 +714,9 @@ button{
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      HUB
-===================================================== -->
+========================= -->
 
 <section id="hubScreen" class="hidden">
 
@@ -811,9 +811,7 @@ button{
     </div>
 
 
-    <!-- =================================================
-         COIN REQUEST
-    ================================================= -->
+    <!-- COIN REQUEST -->
 
     <div
       id="coinRequestPanel"
@@ -853,9 +851,7 @@ button{
     </div>
 
 
-    <!-- =================================================
-         ADMIN
-    ================================================= -->
+    <!-- ADMIN -->
 
     <div
       id="adminPanel"
@@ -895,9 +891,9 @@ button{
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      GAME
-===================================================== -->
+========================= -->
 
 <section id="gameScreen" class="hidden">
 
@@ -959,8 +955,7 @@ button{
           </div>
 
           <div
-            class="status-value"
-            id="settingDisplay">
+            class="status-value">
             1
           </div>
 
@@ -1053,9 +1048,7 @@ button{
       </div>
 
 
-      <!-- =================================================
-           BONUS NAME ONLY
-      ================================================= -->
+      <!-- BONUS NAME ONLY -->
 
       <div class="bonus-panel">
 
@@ -1109,9 +1102,9 @@ button{
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      EFFECT
-===================================================== -->
+========================= -->
 
 <div id="effectOverlay">
 
@@ -1126,7 +1119,7 @@ button{
     <div
       id="effectMain"
       class="effect-main">
-      BIG
+      BONUS
     </div>
 
     <div
@@ -1199,6 +1192,14 @@ let czRemaining = 0;
 
 
 /* =========================================================
+   SETTING
+   ※ ランダム変更なし
+========================================================= */
+
+const CURRENT_SETTING = 1;
+
+
+/* =========================================================
    BONUS PROBABILITY
 ========================================================= */
 
@@ -1222,37 +1223,7 @@ const BONUS_PROBABILITY = {
 
 
 /* =========================================================
-   SETTING WEIGHT
-========================================================= */
-
-const SETTING_WEIGHTS = {
-
-  1:50,
-
-  2:24,
-
-  3:15,
-
-  4:7,
-
-  5:3,
-
-  6:1,
-
-  7:1
-
-};
-
-
-let CURRENT_SETTING = 1;
-
-const SETTING_CHANGE_INTERVAL =
-  60 * 60 * 1000;
-
-
-/* =========================================================
    BONUS TYPES
-   ※ 確率・獲得量は画面に表示しない
 ========================================================= */
 
 const BONUS_TYPES = [
@@ -1291,12 +1262,7 @@ const BONUS_TYPES = [
     payout:10,
     weight:0.5,
     special:true
-  },
-
-  /*
-    残り10%
-    → BONUSなし
-  */
+  }
 
 ];
 
@@ -1321,7 +1287,7 @@ function validId(id){
 
 
 /* =========================================================
-   SHOW SCREEN
+   SCREEN
 ========================================================= */
 
 function showOnly(id){
@@ -1593,17 +1559,17 @@ async function ensureProfile(){
     const {
       error:insertError
     } =
-      await supabaseClient
-        .from("profiles")
-        .insert({
+    await supabaseClient
+      .from("profiles")
+      .insert({
 
-          id:currentUser.id,
+        id:currentUser.id,
 
-          coins:1000,
+        coins:1000,
 
-          is_admin:false
+        is_admin:false
 
-        });
+      });
 
 
     if(insertError){
@@ -1703,15 +1669,15 @@ function saveCoins(){
       const {
         error
       } =
-        await supabaseClient
-          .from("profiles")
-          .update({
-            coins:amount
-          })
-          .eq(
-            "id",
-            currentUser.id
-          );
+      await supabaseClient
+        .from("profiles")
+        .update({
+          coins:amount
+        })
+        .eq(
+          "id",
+          currentUser.id
+        );
 
 
       if(error){
@@ -2168,7 +2134,7 @@ async function playGame(){
 
 
 /* =========================================================
-   NORMAL
+   NORMAL GAME
 ========================================================= */
 
 async function normalGame(){
@@ -2201,9 +2167,9 @@ async function normalGame(){
     ];
 
 
-  /* =================================
-     BONUS抽選
-  ================================= */
+  /* =========================
+     BONUS
+  ========================= */
 
   if(r < bonusChance){
 
@@ -2212,7 +2178,7 @@ async function normalGame(){
 
 
     /*
-      10%はBONUSなし
+      BONUSなし10%
     */
 
     if(!bonus){
@@ -2228,9 +2194,9 @@ async function normalGame(){
       bonus.name;
 
 
-    /* =================================
+    /* =========================
        絶対領域
-    ================================= */
+    ========================= */
 
     if(bonus.special){
 
@@ -2262,9 +2228,9 @@ async function normalGame(){
     }
 
 
-    /* =================================
-       通常BONUS
-    ================================= */
+    /* =========================
+       通常 BONUS
+    ========================= */
 
     hotSignal();
 
@@ -2296,9 +2262,9 @@ async function normalGame(){
   }
 
 
-  /* =================================
-     CZ
-  ================================= */
+  /* =========================
+     CHANCE ZONE
+  ========================= */
 
   if(
     r <
@@ -2312,9 +2278,9 @@ async function normalGame(){
   }
 
 
-  /* =================================
+  /* =========================
      CHERRY
-  ================================= */
+  ========================= */
 
   if(
     r <
@@ -2358,7 +2324,7 @@ async function normalGame(){
 
 
 /* =========================================================
-   NORMAL MISS
+   MISS
 ========================================================= */
 
 function normalMiss(){
@@ -2389,30 +2355,30 @@ function normalMiss(){
 function drawBonus(){
 
   /*
-    指定割合
+    ボーナス振り分け
 
-    レギュラー 39.5
-    BIG        25
-    RBIG       15
-    LBIG       10
-    絶対領域    0.5
-    BONUSなし  10
+    レギュラー 39.5%
+    BIG        25%
+    RBIG       15%
+    LBIG       10%
+    絶対領域    0.5%
+    BONUSなし  10%
   */
 
-  const total = 100;
-
   const r =
-    Math.random() * total;
+    Math.random() * 100;
 
 
-  if(r < 10){
+  /* BONUSなし10% */
+
+  if(r >= 90){
 
     return null;
 
   }
 
 
-  let x = r - 10;
+  let x = r;
 
 
   for(
@@ -2599,7 +2565,7 @@ async function bonusGame(){
 
 
 /* =========================================================
-   ABSOLUTE TERRITORY EFFECT
+   ABSOLUTE TERRITORY
 ========================================================= */
 
 function startAbsoluteBonusEffect(){
@@ -2624,7 +2590,7 @@ function startAbsoluteBonusEffect(){
 
 
 /* =========================================================
-   START ABSOLUTE TERRITORY
+   START ABSOLUTE BONUS
 ========================================================= */
 
 function startAbsoluteBonus(){
@@ -2862,7 +2828,7 @@ async function replayGame(){
 
 
 /* =========================================================
-   CZ
+   CHANCE ZONE
 ========================================================= */
 
 function startCZ(){
@@ -3294,100 +3260,8 @@ function specialSignal(){
 
 
 /* =========================================================
-   SETTING RANDOM
+   START
 ========================================================= */
-
-function chooseNextSetting(){
-
-  const entries =
-    Object.entries(
-      SETTING_WEIGHTS
-    );
-
-
-  const total =
-    entries.reduce(
-      (sum,[,weight]) =>
-        sum + Number(weight),
-      0
-    );
-
-
-  let r =
-    Math.random() * total;
-
-
-  for(
-    const [setting,weight]
-    of entries
-  ){
-
-    r -= Number(weight);
-
-
-    if(r < 0){
-
-      return Number(setting);
-
-    }
-
-  }
-
-
-  return 1;
-
-}
-
-
-/* =========================================================
-   HOURLY SETTING CHANGE
-========================================================= */
-
-function changeSetting(){
-
-  CURRENT_SETTING =
-    chooseNextSetting();
-
-
-  document
-    .getElementById(
-      "settingDisplay"
-    )
-    .textContent =
-      CURRENT_SETTING;
-
-
-  addHistory(
-    "設定変更 → 設定" +
-    CURRENT_SETTING
-  );
-
-
-  message(
-    "設定が変更されました。"
-  );
-
-
-  setTimeout(
-    changeSetting,
-    SETTING_CHANGE_INTERVAL
-  );
-
-}
-
-
-/* =========================================================
-   INITIAL
-========================================================= */
-
-CURRENT_SETTING = 1;
-
-
-setTimeout(
-  changeSetting,
-  SETTING_CHANGE_INTERVAL
-);
-
 
 showOnly(
   "loginScreen"
