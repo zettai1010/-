@@ -1,10 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOGO! SLOT</title>
+<title>スロット[Re]</title>
 
 <style>
 * {
@@ -15,347 +14,192 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at center, #303030 0%, #111 45%, #050505 100%);
-  color: white;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  overflow-x: hidden;
-}
-
-h1 {
-  margin: 25px 0 5px;
-  font-size: 42px;
-  color: #ffd700;
-  text-shadow:
-    0 0 5px #ff0,
-    0 0 15px #ff9800,
-    0 0 30px #ff4500;
-}
-
-.machine {
-  width: 650px;
-  max-width: 95%;
-  margin: 20px auto;
-  padding: 25px;
-  border: 8px solid #777;
-  border-radius: 25px;
-  background: linear-gradient(#333, #111);
-  box-shadow:
-    0 0 20px #000,
-    inset 0 0 25px #000;
-}
-
-.info {
+    radial-gradient(circle at center, #20283d 0%, #0b0f1b 55%, #05070d 100%);
+  color: #fff;
+  font-family: Arial, "Noto Sans JP", sans-serif;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 18px;
-  font-size: 20px;
 }
 
-.coins {
-  color: #ffd700;
+.game {
+  width: 720px;
+  max-width: 95vw;
+  background: #111827;
+  border: 2px solid #394866;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 0 35px rgba(0,0,0,.6);
+}
+
+/* タイトル */
+.title {
+  text-align: center;
+  font-size: 34px;
   font-weight: bold;
-  font-size: 24px;
+  margin-bottom: 5px;
+  color: #f4f5ff;
 }
 
-.gogo-area {
-  margin: 10px auto 25px;
+.subtitle {
+  text-align: center;
+  color: #8e9ab5;
+  font-size: 13px;
+  margin-bottom: 20px;
 }
 
-.gogo {
-  display: inline-block;
-  padding: 12px 28px;
-  border-radius: 50px;
-  background: #111;
-  border: 4px solid #555;
-  color: #444;
-  font-size: 28px;
+/* 状態 */
+.status {
+  background: #1b2335;
+  border: 1px solid #34405c;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.status-name {
+  font-size: 22px;
   font-weight: bold;
-  letter-spacing: 4px;
-  box-shadow: inset 0 0 15px #000;
+  color: #cfd7ff;
 }
 
-.gogo.on {
-  color: white;
-  background: #00a000;
-  border-color: #55ff55;
-  box-shadow:
-    0 0 10px #0f0,
-    0 0 25px #0f0,
-    0 0 50px #0f0,
-    inset 0 0 15px #fff;
-  animation: gogoFlash 0.45s infinite alternate;
+.status-info {
+  margin-top: 7px;
+  color: #9da9c4;
+  font-size: 14px;
 }
 
-@keyframes gogoFlash {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.08);
-  }
-}
-
+/* リール */
 .reels {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 10px;
   margin: 20px 0;
 }
 
-.reel-box {
-  width: 170px;
-}
-
 .reel {
-  height: 155px;
-  background: linear-gradient(#eee, #ccc);
-  border: 7px solid #555;
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  box-shadow:
-    inset 0 0 15px #000,
-    0 0 10px #000;
-}
-
-.symbol {
-  font-size: 78px;
-  line-height: 1;
-  user-select: none;
-}
-
-.reel.spinning .symbol {
-  animation: shake 0.07s infinite linear;
-}
-
-@keyframes shake {
-  0% {
-    transform: translateY(-7px);
-  }
-
-  50% {
-    transform: translateY(7px);
-  }
-
-  100% {
-    transform: translateY(-7px);
-  }
-}
-
-.stop-btn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 15px 5px;
-  border: 4px solid #8b0000;
+  width: 150px;
+  height: 120px;
+  background: linear-gradient(#f5f5f5, #c9c9c9);
+  border: 5px solid #59657c;
   border-radius: 12px;
-  background: linear-gradient(#ff4444, #a00000);
-  color: white;
-  font-size: 23px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 5px 0 #500000;
-}
-
-.stop-btn:hover {
-  filter: brightness(1.2);
-}
-
-.stop-btn:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 #500000;
-}
-
-.stop-btn:disabled {
-  background: #444;
-  border-color: #333;
-  color: #777;
-  cursor: default;
-  box-shadow: 0 3px 0 #222;
-}
-
-.start-btn {
-  width: 300px;
-  max-width: 90%;
-  margin-top: 25px;
-  padding: 18px;
-  border: 5px solid #ffd700;
-  border-radius: 15px;
-  background: linear-gradient(#ffdf00, #d89000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #111;
-  font-size: 30px;
+  font-size: 38px;
   font-weight: bold;
-  cursor: pointer;
   box-shadow:
-    0 6px 0 #805000,
-    0 0 20px #ffb300;
+    inset 0 0 15px rgba(0,0,0,.3),
+    0 5px 15px rgba(0,0,0,.4);
 }
 
-.start-btn:hover {
-  filter: brightness(1.15);
-}
-
-.start-btn:active {
-  transform: translateY(5px);
-  box-shadow: 0 1px 0 #805000;
-}
-
-.start-btn:disabled {
-  background: #555;
-  border-color: #444;
-  color: #888;
-  cursor: default;
-  box-shadow: 0 3px 0 #222;
-}
-
-.result {
-  min-height: 40px;
-  margin-top: 22px;
-  font-size: 25px;
-  font-weight: bold;
-}
-
-.admin-login {
-  margin-top: 25px;
-}
-
-.admin-login input {
-  width: 180px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 2px solid #555;
-  background: #222;
-  color: white;
-  font-size: 16px;
-}
-
-.admin-login button {
-  padding: 10px 15px;
-  margin-left: 5px;
+/* START */
+.start {
+  width: 100%;
+  height: 65px;
   border: none;
-  border-radius: 8px;
-  background: #555;
-  color: white;
-  cursor: pointer;
-}
-
-.admin-area {
-  display: none;
-  margin-top: 20px;
-  padding: 15px;
-  border: 2px solid #777;
   border-radius: 12px;
-  background: #222;
-}
-
-.admin-area button {
-  margin: 5px;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.change-setting {
-  background: #ff9800;
-}
-
-.logout {
-  background: #777;
+  background: linear-gradient(#6675ff, #4050d7);
   color: white;
-}
-
-.setting-number {
-  color: #ffd700;
   font-size: 25px;
   font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #2935a0;
 }
 
-.jackpot {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background: rgba(0,0,0,0.94);
+.start:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #2935a0;
 }
 
-.jackpot.show {
-  display: flex;
-  animation: jackpotBg 0.2s infinite alternate;
+/* メッセージ */
+.message {
+  min-height: 65px;
+  margin-top: 16px;
+  background: #181f30;
+  border: 1px solid #303c57;
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  font-size: 17px;
+  color: #dfe5ff;
 }
 
-@keyframes jackpotBg {
-  from {
-    background: rgba(0,0,0,0.94);
-  }
-
-  to {
-    background: rgba(100,0,0,0.94);
-  }
-}
-
-.jackpot-title {
-  font-size: 75px;
+/* ボーナス一覧 */
+.section-title {
+  margin-top: 22px;
+  margin-bottom: 10px;
+  color: #b9c4ff;
+  font-size: 18px;
   font-weight: bold;
-  color: #ffd700;
-  text-shadow:
-    0 0 10px #fff,
-    0 0 25px #ff0,
-    0 0 50px #f00;
-  animation: jackpotText 0.25s infinite alternate;
 }
 
-@keyframes jackpotText {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.15) rotate(-2deg);
-  }
+.bonus-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
 }
 
-.jackpot-seven {
-  font-size: 130px;
-  margin-top: 20px;
+.bonus {
+  background: #1a2233;
+  border: 1px solid #303b55;
+  border-radius: 9px;
+  padding: 12px;
+}
+
+.bonus-name {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.bonus-game {
+  color: #8e9ab5;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* 履歴 */
+.history {
+  margin-top: 15px;
+  background: #0d1320;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+.history div {
+  padding: 5px;
+  border-bottom: 1px solid #202a3d;
+  color: #9da9c4;
+  font-size: 13px;
+}
+
+.reset {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  background: #242d42;
+  color: #aeb8d0;
+  border: 1px solid #3b4762;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
-
-  .machine {
-    padding: 12px;
-  }
-
-  .reels {
-    gap: 6px;
-  }
-
-  .reel-box {
-    width: 31%;
+  .game {
+    padding: 14px;
   }
 
   .reel {
-    height: 120px;
+    width: 30%;
+    height: 90px;
+    font-size: 26px;
   }
 
-  .symbol {
-    font-size: 55px;
-  }
-
-  .stop-btn {
-    font-size: 17px;
-    padding: 12px 3px;
-  }
-
-  h1 {
-    font-size: 32px;
+  .bonus-list {
+    grid-template-columns: 1fr;
   }
 }
 </style>
@@ -363,914 +207,657 @@ h1 {
 
 <body>
 
-<h1>🎰 GOGO! SLOT 🎰</h1>
+<div class="game">
 
-<div class="machine">
-
-  <div class="info">
-    <div>💰 コイン</div>
-    <div class="coins" id="coins">100</div>
+  <div class="title">スロット[Re]</div>
+  <div class="subtitle">
+    Voidボーナスと無限リプレイ確変を目指せ
   </div>
 
-  <div class="gogo-area">
-    <div id="gogo" class="gogo">
-      GOGO! CHANCE
+  <!-- 状態 -->
+  <div class="status">
+    <div class="status-name" id="stateName">通常時</div>
+    <div class="status-info" id="stateInfo">
+      小役を消化しながらボーナスを抽選
     </div>
   </div>
 
+  <!-- リール -->
   <div class="reels">
-
-    <div class="reel-box">
-      <div class="reel" id="reel0">
-        <div class="symbol" id="symbol0">🍒</div>
-      </div>
-
-      <button
-        class="stop-btn"
-        id="stop0"
-        onclick="stopReel(0)"
-        disabled
-      >
-        STOP
-      </button>
-    </div>
-
-    <div class="reel-box">
-      <div class="reel" id="reel1">
-        <div class="symbol" id="symbol1">🍋</div>
-      </div>
-
-      <button
-        class="stop-btn"
-        id="stop1"
-        onclick="stopReel(1)"
-        disabled
-      >
-        STOP
-      </button>
-    </div>
-
-    <div class="reel-box">
-      <div class="reel" id="reel2">
-        <div class="symbol" id="symbol2">🔔</div>
-      </div>
-
-      <button
-        class="stop-btn"
-        id="stop2"
-        onclick="stopReel(2)"
-        disabled
-      >
-        STOP
-      </button>
-    </div>
-
+    <div class="reel" id="reel1">7</div>
+    <div class="reel" id="reel2">BAR</div>
+    <div class="reel" id="reel3">7</div>
   </div>
 
-  <button
-    class="start-btn"
-    id="startBtn"
-    onclick="startGame()"
-  >
+  <button class="start" id="startButton" onclick="play()">
     START
   </button>
 
-  <div class="result" id="result">
-    STARTを押してね！
+  <div class="message" id="message">
+    STARTを押してゲーム開始
   </div>
 
-  <div class="admin-login">
+  <!-- ボーナス -->
+  <div class="section-title">ボーナス</div>
 
-    <input
-      type="password"
-      id="adminPassword"
-      placeholder="管理者パスワード"
-    >
+  <div class="bonus-list">
 
-    <button onclick="adminLogin()">
-      管理者ログイン
-    </button>
-
-  </div>
-
-  <div class="admin-area" id="adminArea">
-
-    <div>
-      現在の設定：
-      <span
-        class="setting-number"
-        id="settingNumber"
-      ></span>
+    <div class="bonus">
+      <div class="bonus-name">レギュラー</div>
+      <div class="bonus-game">10G</div>
     </div>
 
-    <button
-      class="change-setting"
-      onclick="changeSetting()"
-    >
-      設定変更
-    </button>
+    <div class="bonus">
+      <div class="bonus-name">リーフィンド</div>
+      <div class="bonus-game">22G</div>
+    </div>
 
-    <button
-      class="logout"
-      onclick="adminLogout()"
-    >
-      ログアウト
-    </button>
+    <div class="bonus">
+      <div class="bonus-name">ダストロック</div>
+      <div class="bonus-game">18G</div>
+    </div>
+
+    <div class="bonus">
+      <div class="bonus-name">書物の怨念</div>
+      <div class="bonus-game">14G</div>
+    </div>
 
   </div>
 
-</div>
+  <!-- 履歴 -->
+  <div class="section-title">ゲーム履歴</div>
 
-<div class="jackpot" id="jackpot">
-
-  <div class="jackpot-title">
-    🎉 JACKPOT! 🎉
+  <div class="history" id="history">
+    <div>ゲーム開始</div>
   </div>
 
-  <div class="jackpot-seven">
-    7️⃣7️⃣7️⃣
-  </div>
+  <button class="reset" onclick="resetGame()">
+    リセット
+  </button>
 
 </div>
 
 
 <script>
 
-/* =========================
-   基本設定
-========================= */
+let state = "normal";
+let remainingGames = 0;
 
-const BET = 3;
-
-const symbols = [
-  "🍒",
-  "🍋",
-  "🔔",
-  "⭐",
-  "🍊",
-  "💎"
-];
-
-let coins = 100;
-
-/*
-  最初の設定だけランダム。
-
-  一度決まった設定は、
-  管理者が「設定変更」を押すまで
-  絶対に勝手に変わらない。
-*/
-let setting = randomSetting();
-
-let isAdmin = false;
-
-let spinning = false;
-
-let stopped = [false, false, false];
-
-let spinTimers = [null, null, null];
-
-let reelValues = [
-  "🍒",
-  "🍋",
-  "🔔"
-];
-
-let reelStrips = [
-  [],
-  [],
-  []
-];
-
-let reelPositions = [
-  0,
-  0,
-  0
+/* ボーナス */
+const bonuses = [
+  {
+    name: "レギュラー",
+    games: 10
+  },
+  {
+    name: "リーフィンド",
+    games: 22
+  },
+  {
+    name: "ダストロック",
+    games: 18
+  },
+  {
+    name: "書物の怨念",
+    games: 14
+  }
 ];
 
 
-/* =========================
-   設定抽選
-========================= */
+/* START */
+function play() {
 
-function randomSetting() {
+  if (state === "normal") {
+    normalGame();
+    return;
+  }
 
-  const r = Math.random() * 100;
+  if (state === "bonus") {
+    bonusGame();
+    return;
+  }
 
-  if (r < 50) return 1;
-  if (r < 74) return 2;
-  if (r < 89) return 3;
-  if (r < 96) return 4;
-  if (r < 99) return 5;
+  if (state === "void") {
+    voidGame();
+    return;
+  }
 
-  return 6;
+  if (state === "replay30") {
+    replayChanceGame();
+    return;
+  }
+
+  if (state === "cz") {
+    czGame();
+    return;
+  }
+
+  if (state === "replayInfinite") {
+    infiniteReplayGame();
+    return;
+  }
 }
 
 
-/* =========================
-   小当たり確率
-=========================
+/* 通常時 */
+function normalGame() {
 
-   設定1でも約10%。
-
-   設定が上がるほど
-   小当たりしやすくする。
-*/
-
-const smallHitRates = {
-
-  1: 0.10,
-  2: 0.13,
-  3: 0.17,
-  4: 0.22,
-  5: 0.28,
-  6: 0.35
-
-};
-
-
-/* =========================
-   777確率
-========================= */
-
-const jackpotRates = {
-
-  1: 0.003,
-  2: 0.005,
-  3: 0.008,
-  4: 0.012,
-  5: 0.018,
-  6: 0.025
-
-};
-
-
-/* =========================
-   リール作成
-=========================
-
-   2つ揃いが出ないように、
-   ゲーム開始時に
-
-   ・777
-   ・3つ同じ
-   ・全部バラバラ
-
-   のどれかを内部的に決める。
-
-   STOP自体はプレイヤーが行う。
-========================= */
-
-function createReelStrip() {
-
-  const strip = [];
+  const r = Math.random();
 
   /*
-    通常図柄をたくさん配置
+    通常時
+    メロン・チェリーをチャンス役として扱う
   */
 
-  for (let i = 0; i < 24; i++) {
+  if (r < 0.025) {
 
-    strip.push(
-      symbols[i % symbols.length]
-    );
+    setReels("🍒", "🍒", "🍒");
 
+    message("チェリー！ チャンス役！");
+    addHistory("チェリー");
+
+    return;
   }
 
-  /*
-    7を少し配置
-  */
+  if (r < 0.05) {
 
-  for (let i = 0; i < 3; i++) {
+    setReels("🍈", "🍈", "🍈");
 
-    strip.push("7");
-
-  }
-
-  /*
-    シャッフル
-  */
-
-  for (
-    let i = strip.length - 1;
-    i > 0;
-    i--
-  ) {
-
-    const j =
-      Math.floor(Math.random() * (i + 1));
-
-    [
-      strip[i],
-      strip[j]
-    ] = [
-      strip[j],
-      strip[i]
-    ];
-
-  }
-
-  return strip;
-}
-
-
-/* =========================
-   コイン表示
-========================= */
-
-function updateCoins() {
-
-  document.getElementById("coins").textContent =
-    coins;
-
-}
-
-
-/* =========================
-   START
-========================= */
-
-function startGame() {
-
-  if (spinning) return;
-
-  if (coins < BET) {
-
-    document.getElementById("result").textContent =
-      "💰 コインが足りません！";
+    message("メロン！ チャンス役！");
+    addHistory("メロン");
 
     return;
   }
 
   /*
-    掛け金3
+    ボーナス抽選
   */
 
-  coins -= BET;
+  if (r < 0.065) {
 
-  updateCoins();
+    startBonus();
 
-  spinning = true;
-
-  stopped = [
-    false,
-    false,
-    false
-  ];
-
-  /*
-    START無効
-  */
-
-  document.getElementById("startBtn").disabled =
-    true;
-
-  /*
-    STOPを有効化
-  */
-
-  for (let i = 0; i < 3; i++) {
-
-    document.getElementById(
-      "stop" + i
-    ).disabled = false;
-
-  }
-
-  document.getElementById("result").textContent =
-    "🎰 目押ししてSTOP！";
-
-  /*
-    GOGOリセット
-  */
-
-  document
-    .getElementById("gogo")
-    .classList.remove("on");
-
-
-  /* =========================
-     今回の当たりを決める
-  ========================= */
-
-  const jackpot =
-    Math.random() < jackpotRates[setting];
-
-  const smallHit =
-    !jackpot &&
-    Math.random() < smallHitRates[setting];
-
-
-  /*
-    777
-  */
-
-  if (jackpot) {
-
-    reelValues = [
-      "7",
-      "7",
-      "7"
-    ];
-
-    document.getElementById("gogo")
-      .classList.add("on");
-
-    document.getElementById("result").textContent =
-      "💡 GOGO! CHANCE！ 7を狙え！";
-
-  }
-
-  /*
-    小当たり
-  */
-
-  else if (smallHit) {
-
-    const hitSymbol =
-      symbols[
-        Math.floor(
-          Math.random() * symbols.length
-        )
-      ];
-
-    reelValues = [
-      hitSymbol,
-      hitSymbol,
-      hitSymbol
-    ];
-
-    document.getElementById("gogo")
-      .classList.add("on");
-
-    document.getElementById("result").textContent =
-      "💡 GOGO! CHANCE！ 狙ってみよう！";
-
+    return;
   }
 
   /*
     ハズレ
-
-    2つ揃いを完全に避けるため、
-    3つとも違う図柄にする。
   */
 
-  else {
+  setReels("7", "BAR", "🍒");
 
-    const shuffled = [
-      ...symbols
-    ];
+  message("ハズレ");
 
-    for (
-      let i = shuffled.length - 1;
-      i > 0;
-      i--
-    ) {
-
-      const j =
-        Math.floor(Math.random() * (i + 1));
-
-      [
-        shuffled[i],
-        shuffled[j]
-      ] = [
-        shuffled[j],
-        shuffled[i]
-      ];
-
-    }
-
-    reelValues = [
-      shuffled[0],
-      shuffled[1],
-      shuffled[2]
-    ];
-
-  }
-
-
-  /*
-    リールを作り直す
-  */
-
-  for (let i = 0; i < 3; i++) {
-
-    reelStrips[i] =
-      createReelStrip();
-
-    reelPositions[i] =
-      Math.floor(
-        Math.random() *
-        reelStrips[i].length
-      );
-
-    startReel(i);
-
-  }
-
+  addHistory("通常時：ハズレ");
 }
 
 
-/* =========================
-   リール回転
-========================= */
+/* ボーナス開始 */
+function startBonus() {
 
-function startReel(index) {
+  const bonus =
+    bonuses[Math.floor(Math.random() * bonuses.length)];
 
-  const reel =
-    document.getElementById(
-      "reel" + index
-    );
+  state = "bonus";
+  remainingGames = bonus.games;
 
-  const symbol =
-    document.getElementById(
-      "symbol" + index
-    );
-
-  reel.classList.add("spinning");
-
-  spinTimers[index] =
-    setInterval(function() {
-
-      if (stopped[index]) return;
-
-      reelPositions[index]++;
-
-      if (
-        reelPositions[index] >=
-        reelStrips[index].length
-      ) {
-
-        reelPositions[index] = 0;
-
-      }
-
-      symbol.textContent =
-        reelStrips[index][
-          reelPositions[index]
-        ];
-
-    }, 80);
-
-}
-
-
-/* =========================
-   STOP
-========================= */
-
-function stopReel(index) {
-
-  if (!spinning) return;
-
-  if (stopped[index]) return;
-
-  stopped[index] = true;
-
-  clearInterval(
-    spinTimers[index]
+  setState(
+    "ボーナス",
+    bonus.name + " " + bonus.games + "G"
   );
 
-  spinTimers[index] = null;
+  setReels("BONUS", "BONUS", "BONUS");
 
-  document
-    .getElementById("reel" + index)
-    .classList.remove("spinning");
+  message(
+    bonus.name +
+    " 突入！ " +
+    bonus.games +
+    "G"
+  );
 
-  document.getElementById(
-    "stop" + index
-  ).disabled = true;
-
-
-  /*
-    目押し結果
-
-    通常時はリールの現在位置。
-
-    GOGO当選時は、
-    当たり図柄を目押しできる
-    ようにする。
-  */
-
-  const target =
-    reelValues[index];
-
-  /*
-    GOGO中なら、
-    現在位置の近くに当たり図柄を
-    配置して目押しできるようにする。
-  */
-
-  if (
-    document
-      .getElementById("gogo")
-      .classList.contains("on")
-  ) {
-
-    /*
-      目押し成功しやすい範囲。
-
-      ボタンを押した瞬間に
-      ターゲット図柄が来ていたら成功。
-    */
-
-    const current =
-      reelStrips[index][
-        reelPositions[index]
-      ];
-
-    if (current === target) {
-
-      reelValues[index] = target;
-
-    }
-
-    else {
-
-      /*
-        外れ位置なら、
-        現在の図柄を表示。
-
-        つまりプレイヤーが
-        タイミングを合わせる必要がある。
-      */
-
-      reelValues[index] = current;
-
-    }
-
-  }
-
-  else {
-
-    reelValues[index] =
-      reelStrips[index][
-        reelPositions[index]
-      ];
-
-  }
-
-
-  document.getElementById(
-    "symbol" + index
-  ).textContent =
-    reelValues[index];
-
-
-  /*
-    3つ停止
-  */
-
-  if (
-    stopped[0] &&
-    stopped[1] &&
-    stopped[2]
-  ) {
-
-    finishGame();
-
-  }
-
+  addHistory(
+    "ボーナス突入：" + bonus.name
+  );
 }
 
 
-/* =========================
-   結果判定
-========================= */
+/* ボーナス中 */
+function bonusGame() {
 
-function finishGame() {
-
-  spinning = false;
-
-  document.getElementById(
-    "startBtn"
-  ).disabled = false;
-
-  const a = reelValues[0];
-  const b = reelValues[1];
-  const c = reelValues[2];
-
+  remainingGames--;
 
   /*
-    777
+    ボーナス中にVoid昇格
   */
+  if (Math.random() < 0.01) {
 
-  if (
-    a === "7" &&
-    b === "7" &&
-    c === "7"
-  ) {
+    state = "void";
+    remainingGames = 100;
 
-    coins += 100;
-
-    updateCoins();
-
-    document.getElementById("result").textContent =
-      "🎉 777 JACKPOT！ +100コイン！";
-
-    showJackpot();
-
-    return;
-
-  }
-
-
-  /*
-    3つ揃い
-  */
-
-  if (
-    a === b &&
-    b === c
-  ) {
-
-    coins += 20;
-
-    updateCoins();
-
-    document.getElementById("result").textContent =
-      "✨ 小当たり！ +20コイン！";
-
-    return;
-
-  }
-
-
-  /*
-    2つ揃いはなし。
-
-    万が一表示された場合も
-    払い出しは0。
-  */
-
-  if (
-    a === b ||
-    b === c ||
-    a === c
-  ) {
-
-    document.getElementById("result").textContent =
-      "😢 ハズレ……";
-
-    return;
-
-  }
-
-
-  /*
-    ハズレ
-  */
-
-  document.getElementById("result").textContent =
-    "😢 ハズレ……";
-
-}
-
-
-/* =========================
-   JACKPOT演出
-========================= */
-
-function showJackpot() {
-
-  const jackpot =
-    document.getElementById(
-      "jackpot"
+    setState(
+      "Voidボーナス",
+      "100G"
     );
 
-  jackpot.classList.add("show");
+    setReels("VOID", "VOID", "VOID");
 
-  setTimeout(function() {
+    message(
+      "⚡ Voidボーナスへ昇格！"
+    );
 
-    jackpot.classList.remove("show");
+    addHistory(
+      "Voidボーナスへ昇格"
+    );
 
-  }, 2500);
+    return;
+  }
 
+  setReels(
+    randomSymbol(),
+    randomSymbol(),
+    randomSymbol()
+  );
+
+  message(
+    "ボーナス中　残り " +
+    remainingGames +
+    "G"
+  );
+
+  if (remainingGames <= 0) {
+
+    /*
+      ボーナス終了後
+      リプレイ確変30Gへ
+    */
+
+    state = "replay30";
+    remainingGames = 30;
+
+    setState(
+      "リプレイ確変",
+      "30G"
+    );
+
+    message(
+      "ボーナス終了！\n" +
+      "リプレイ確変30Gへ"
+    );
+
+    addHistory(
+      "リプレイ確変30Gへ"
+    );
+  }
 }
 
 
-/* =========================
-   管理者ログイン
-========================= */
+/* Voidボーナス */
+function voidGame() {
 
-function adminLogin() {
+  remainingGames--;
 
-  const password =
-    document.getElementById(
-      "adminPassword"
-    ).value;
+  /*
+    Void中のゲーム数上乗せ
+  */
+  if (Math.random() < 0.02) {
 
-  if (password === "777admin") {
+    remainingGames += 10;
 
-    isAdmin = true;
+    message(
+      "ゲーム数上乗せ！ +10G\n" +
+      "残り " + remainingGames + "G"
+    );
 
-    document.getElementById(
-      "adminArea"
-    ).style.display = "block";
+    addHistory("Void中：+10G");
 
-    document.getElementById(
-      "settingNumber"
-    ).textContent = setting;
-
-    document.getElementById(
-      "adminPassword"
-    ).value = "";
-
-    document.getElementById(
-      "result"
-    ).textContent =
-      "🔐 管理者ログインしました";
-
+    return;
   }
 
-  else {
+  setReels(
+    "VOID",
+    randomSymbol(),
+    "VOID"
+  );
 
-    document.getElementById(
-      "result"
-    ).textContent =
-      "❌ パスワードが違います";
+  message(
+    "Voidボーナス中\n残り " +
+    remainingGames +
+    "G"
+  );
 
+  if (remainingGames <= 0) {
+
+    /*
+      Void終了後は無限リプレイ確変
+    */
+
+    state = "replayInfinite";
+
+    setState(
+      "リプレイ確変（無限）",
+      "終了条件なし"
+    );
+
+    setReels(
+      "REPLAY",
+      "REPLAY",
+      "REPLAY"
+    );
+
+    message(
+      "Voidボーナス終了\n" +
+      "リプレイ確変（無限）へ！"
+    );
+
+    addHistory(
+      "リプレイ確変（無限）へ"
+    );
   }
-
 }
 
 
-/* =========================
-   設定変更
-========================= */
+/* リプレイ確変30G */
+function replayChanceGame() {
 
-function changeSetting() {
-
-  if (!isAdmin) return;
+  remainingGames--;
 
   /*
-    今の設定から1つ上へ。
-
-    6の次は1。
+    リプレイ確変中
   */
 
-  setting++;
+  const r = Math.random();
 
-  if (setting > 6) {
+  if (r < 0.02) {
 
-    setting = 1;
+    /*
+      ボーナス
+    */
 
+    startBonus();
+
+    return;
   }
 
+  if (r < 0.10) {
+
+    /*
+      CZ突入
+    */
+
+    state = "cz";
+    remainingGames = 5;
+
+    setState(
+      "CZ",
+      "5G"
+    );
+
+    setReels(
+      "CZ",
+      "CZ",
+      "CZ"
+    );
+
+    message(
+      "CZ突入！\n5G間のチャンス"
+    );
+
+    addHistory("CZ突入");
+
+    return;
+  }
+
+  setReels(
+    "REPLAY",
+    "REPLAY",
+    "BAR"
+  );
+
+  message(
+    "リプレイ確変中\n残り " +
+    remainingGames +
+    "G"
+  );
+
+  if (remainingGames <= 0) {
+
+    state = "normal";
+
+    setState(
+      "通常時",
+      "小役を消化しながらボーナスを抽選"
+    );
+
+    message(
+      "リプレイ確変終了\n通常時へ"
+    );
+
+    addHistory(
+      "リプレイ確変終了"
+    );
+  }
+}
+
+
+/* CZ */
+function czGame() {
+
+  remainingGames--;
+
   /*
-    リールを更新
+    CZ中に成功
   */
 
-  reelStrips = [
-    createReelStrip(),
-    createReelStrip(),
-    createReelStrip()
+  if (Math.random() < 0.13) {
+
+    state = "replayInfinite";
+
+    setState(
+      "リプレイ確変（無限）",
+      "終了条件なし"
+    );
+
+    setReels(
+      "REPLAY",
+      "REPLAY",
+      "REPLAY"
+    );
+
+    message(
+      "CZ成功！\n" +
+      "リプレイ確変（無限）へ！"
+    );
+
+    addHistory(
+      "CZ成功 → 無限リプレイ確変"
+    );
+
+    return;
+  }
+
+  setReels(
+    "REPLAY",
+    "7",
+    "BAR"
+  );
+
+  message(
+    "CZ中…… 残り " +
+    remainingGames +
+    "G"
+  );
+
+  if (remainingGames <= 0) {
+
+    state = "normal";
+
+    setState(
+      "通常時",
+      "小役を消化しながらボーナスを抽選"
+    );
+
+    message(
+      "CZ終了\n通常時へ"
+    );
+
+    addHistory(
+      "CZ失敗"
+    );
+  }
+}
+
+
+/* 無限リプレイ確変 */
+function infiniteReplayGame() {
+
+  const r = Math.random();
+
+  if (r < 0.04) {
+
+    /*
+      Voidボーナス
+    */
+
+    state = "void";
+    remainingGames = 100;
+
+    setState(
+      "Voidボーナス",
+      "100G"
+    );
+
+    setReels(
+      "VOID",
+      "VOID",
+      "VOID"
+    );
+
+    message(
+      "Voidボーナス当選！"
+    );
+
+    addHistory(
+      "無限リプレイ確変 → Void"
+    );
+
+    return;
+  }
+
+  if (r < 0.08) {
+
+    startBonus();
+
+    return;
+  }
+
+  setReels(
+    "REPLAY",
+    "REPLAY",
+    "REPLAY"
+  );
+
+  message(
+    "リプレイ確変（無限）\n" +
+    "終了条件なし"
+  );
+
+  addHistory(
+    "無限リプレイ確変：リプレイ"
+  );
+}
+
+
+/* リール */
+function setReels(a, b, c) {
+
+  document.getElementById("reel1").textContent = a;
+  document.getElementById("reel2").textContent = b;
+  document.getElementById("reel3").textContent = c;
+}
+
+
+/* ランダム図柄 */
+function randomSymbol() {
+
+  const symbols = [
+    "7",
+    "BAR",
+    "🍒",
+    "🍈",
+    "REPLAY"
   ];
 
-  document.getElementById(
-    "settingNumber"
-  ).textContent =
-    setting;
-
-  document.getElementById(
-    "result"
-  ).textContent =
-    "⚙️ 設定 " +
-    setting +
-    " に変更しました";
-
+  return symbols[
+    Math.floor(Math.random() * symbols.length)
+  ];
 }
 
 
-/* =========================
-   管理者ログアウト
-========================= */
-
-function adminLogout() {
-
-  isAdmin = false;
+/* 状態変更 */
+function setState(name, info) {
 
   document.getElementById(
-    "adminArea"
-  ).style.display =
-    "none";
+    "stateName"
+  ).textContent = name;
 
   document.getElementById(
-    "result"
-  ).textContent =
-    "🔒 管理者ログアウト";
-
+    "stateInfo"
+  ).textContent = info;
 }
 
 
-/* =========================
-   最初の表示
-========================= */
+/* メッセージ */
+function message(text) {
 
-updateCoins();
+  document.getElementById(
+    "message"
+  ).innerHTML = text.replace(/\n/g, "<br>");
+}
+
+
+/* 履歴 */
+function addHistory(text) {
+
+  const history =
+    document.getElementById("history");
+
+  const item =
+    document.createElement("div");
+
+  item.textContent = text;
+
+  history.prepend(item);
+}
+
+
+/* リセット */
+function resetGame() {
+
+  state = "normal";
+  remainingGames = 0;
+
+  setState(
+    "通常時",
+    "小役を消化しながらボーナスを抽選"
+  );
+
+  setReels(
+    "7",
+    "BAR",
+    "7"
+  );
+
+  message(
+    "STARTを押してゲーム開始"
+  );
+
+  document.getElementById(
+    "history"
+  ).innerHTML =
+    "<div>ゲームリセット</div>";
+}
 
 </script>
 
 </body>
 </html>
-```
