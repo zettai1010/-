@@ -256,6 +256,90 @@ button{
 }
 
 /* =========================
+   ADMIN
+========================= */
+
+.admin-panel{
+  display:none;
+  margin:40px auto 0;
+  padding:25px;
+  max-width:650px;
+  text-align:left;
+  border:2px solid #735c16;
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,#211d0c,#0b0b0b);
+  box-shadow:
+    0 0 25px rgba(255,210,26,.08);
+}
+
+.admin-panel.show{
+  display:block;
+}
+
+.admin-title{
+  margin-bottom:5px;
+  color:#ffd21a;
+  font-size:25px;
+  font-weight:900;
+}
+
+.admin-subtitle{
+  margin-bottom:20px;
+  color:#999;
+  font-size:13px;
+}
+
+.admin-row{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.admin-input{
+  flex:1;
+  min-width:0;
+  height:48px;
+  padding:0 14px;
+  border:2px solid #555;
+  border-radius:8px;
+  outline:none;
+  background:#111;
+  color:white;
+  font-size:16px;
+}
+
+.admin-input:focus{
+  border-color:#ffd21a;
+}
+
+.admin-add-button{
+  width:100%;
+  height:52px;
+  border:2px solid #a77d00;
+  border-radius:9px;
+  background:linear-gradient(#ffe66b,#d79b00);
+  color:#111;
+  font-size:17px;
+  font-weight:bold;
+}
+
+.admin-result{
+  min-height:25px;
+  margin-top:15px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.admin-success{
+  color:#5cff8a;
+}
+
+.admin-error{
+  color:#ff5555;
+}
+
+/* =========================
    GAME
 ========================= */
 
@@ -608,6 +692,10 @@ button{
     font-size:40px;
   }
 
+  .admin-row{
+    flex-direction:column;
+  }
+
 }
 </style>
 </head>
@@ -720,6 +808,7 @@ button{
       遊びたいゲームを選んでください
     </p>
 
+
     <div class="casino-grid">
 
       <button
@@ -815,6 +904,60 @@ button{
 
     </div>
 
+
+    <!-- =========================
+         ADMIN PANEL
+    ========================= -->
+
+    <div
+      id="adminPanel"
+      class="admin-panel">
+
+      <div class="admin-title">
+        👑 管理者メニュー
+      </div>
+
+      <div class="admin-subtitle">
+        他のユーザーのコインを追加できます
+      </div>
+
+      <div class="admin-row">
+
+        <input
+          id="targetUserId"
+          class="admin-input"
+          type="text"
+          maxlength="20"
+          placeholder="追加先のユーザーID"
+        >
+
+        <input
+          id="addCoinAmount"
+          class="admin-input"
+          type="number"
+          min="1"
+          step="1"
+          placeholder="追加コイン数"
+        >
+
+      </div>
+
+      <button
+        class="admin-add-button"
+        onclick="addCoinsToUser()">
+
+        🪙 コインを追加
+
+      </button>
+
+      <div
+        id="adminResult"
+        class="admin-result">
+      </div>
+
+    </div>
+
+
     <div
       id="hubMessage"
       style="
@@ -864,8 +1007,6 @@ button{
     </div>
 
 
-    <!-- メダル -->
-
     <div class="status">
 
       <div
@@ -880,8 +1021,6 @@ button{
 
     </div>
 
-
-    <!-- 状態 -->
 
     <div class="status">
 
@@ -898,8 +1037,6 @@ button{
 
     </div>
 
-
-    <!-- BONUS情報 -->
 
     <div
       class="bonus-info"
@@ -926,8 +1063,6 @@ button{
     </div>
 
 
-    <!-- リール -->
-
     <div class="reels">
 
       <div
@@ -951,8 +1086,6 @@ button{
     </div>
 
 
-    <!-- PUSH -->
-
     <button
       class="push push-white"
       id="pushButton"
@@ -963,8 +1096,6 @@ button{
     </button>
 
 
-    <!-- メッセージ -->
-
     <div
       class="message"
       id="message">
@@ -973,8 +1104,6 @@ button{
 
     </div>
 
-
-    <!-- BONUS一覧 -->
 
     <div class="section-title">
       ボーナス
@@ -1029,8 +1158,6 @@ button{
 
     </div>
 
-
-    <!-- 履歴 -->
 
     <div class="section-title">
       ゲーム履歴
@@ -1096,7 +1223,6 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_87rSIEju76172IK7boCx_g_y_2qPHpe";
 
-
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
@@ -1118,6 +1244,8 @@ const supabaseClient =
 let currentUser = null;
 
 let medals = 0;
+
+let isAdmin = false;
 
 let saveQueue =
   Promise.resolve();
@@ -1404,7 +1532,7 @@ async function ensureProfile(){
   const {data,error} =
     await supabaseClient
       .from("profiles")
-      .select("id, coins")
+      .select("id, coins, is_admin")
       .eq("id",currentUser.id)
       .maybeSingle();
 
@@ -1435,7 +1563,9 @@ async function ensureProfile(){
 
         id:currentUser.id,
 
-        coins:1000
+        coins:1000,
+
+        is_admin:false
 
       });
 
@@ -1484,7 +1614,7 @@ async function loadProfile(){
   const {data,error} =
     await supabaseClient
       .from("profiles")
-      .select("id, coins")
+      .select("id, coins, is_admin")
       .eq("id",currentUser.id)
       .maybeSingle();
 
@@ -1503,6 +1633,10 @@ async function loadProfile(){
 
   medals =
     Number(data.coins || 0);
+
+
+  isAdmin =
+    data.is_admin === true;
 
 
   updateCoins();
@@ -1615,6 +1749,190 @@ function saveCoins(){
 
 
 /* =====================================================
+   ADMIN PANEL
+===================================================== */
+
+function showAdminPanel(){
+
+  const panel =
+    document.getElementById(
+      "adminPanel"
+    );
+
+  if(!panel){
+
+    return;
+
+  }
+
+
+  if(isAdmin){
+
+    panel.classList.add("show");
+
+  }
+  else{
+
+    panel.classList.remove("show");
+
+  }
+
+}
+
+
+/* =====================================================
+   ADMIN COIN ADD
+===================================================== */
+
+async function addCoinsToUser(){
+
+  if(!currentUser){
+
+    return;
+
+  }
+
+
+  if(!isAdmin){
+
+    showAdminResult(
+      "管理者ではありません。",
+      false
+    );
+
+    return;
+
+  }
+
+
+  const targetId =
+    document
+      .getElementById("targetUserId")
+      .value
+      .trim();
+
+  const amountInput =
+    document
+      .getElementById("addCoinAmount")
+      .value
+      .trim();
+
+
+  if(!validId(targetId)){
+
+    showAdminResult(
+      "追加先のユーザーIDが正しくありません。",
+      false
+    );
+
+    return;
+
+  }
+
+
+  const amount =
+    Number(amountInput);
+
+
+  if(
+    !Number.isInteger(amount) ||
+    amount <= 0
+  ){
+
+    showAdminResult(
+      "追加するコインは1以上の整数にしてください。",
+      false
+    );
+
+    return;
+
+  }
+
+
+  showAdminResult(
+    "コインを追加しています...",
+    true
+  );
+
+
+  const {data,error} =
+    await supabaseClient
+      .rpc(
+        "add_user_coins_by_id",
+        {
+          target_id:targetId,
+          amount:amount
+        }
+      );
+
+
+  if(error){
+
+    console.error(
+      "ADMIN COIN ERROR:",
+      error
+    );
+
+    showAdminResult(
+      "失敗：" + error.message,
+      false
+    );
+
+    return;
+
+  }
+
+
+  showAdminResult(
+    targetId +
+    " に " +
+    amount.toLocaleString() +
+    "コイン追加しました！<br>" +
+    "新しい残高：" +
+    Number(data).toLocaleString() +
+    "コイン",
+    true
+  );
+
+
+  document.getElementById(
+    "targetUserId"
+  ).value = "";
+
+  document.getElementById(
+    "addCoinAmount"
+  ).value = "";
+
+}
+
+
+function showAdminResult(
+  text,
+  success
+){
+
+  const result =
+    document.getElementById(
+      "adminResult"
+    );
+
+
+  result.innerHTML =
+    text;
+
+
+  result.className =
+    "admin-result " +
+    (
+      success ?
+      "admin-success" :
+      "admin-error"
+    );
+
+}
+
+
+/* =====================================================
    HUB
 ===================================================== */
 
@@ -1651,6 +1969,8 @@ function showHub(){
 
   updateCoins();
 
+  showAdminPanel();
+
 }
 
 
@@ -1681,6 +2001,8 @@ function backToHub(){
 
   updateCoins();
 
+  showAdminPanel();
+
 }
 
 
@@ -1708,6 +2030,8 @@ async function logout(){
 
   medals = 0;
 
+  isAdmin = false;
+
 
   document
     .getElementById("casinoHub")
@@ -1720,6 +2044,11 @@ async function logout(){
   document
     .getElementById("loginScreen")
     .classList.remove("hidden");
+
+
+  document
+    .getElementById("adminPanel")
+    .classList.remove("show");
 
 
   document.getElementById(
@@ -1739,23 +2068,26 @@ async function logout(){
 
 /* =====================================================
    SETTINGS
-   ★ 設定1固定
 ===================================================== */
 
 const BONUS_PROBABILITY = {
+
   1: 1 / 280,
+
   2: 1 / 260,
+
   3: 1 / 240,
+
   4: 1 / 220,
+
   5: 1 / 200,
+
   6: 1 / 180,
+
   7: 1 / 160
+
 };
 
-/*
-  現在の設定
-  1〜7で変更できる
-*/
 
 const CURRENT_SETTING = 4;
 
@@ -2039,10 +2371,6 @@ function normalGame(){
     Math.random();
 
 
-  /*
-    BONUS
-  */
-
   if(r < bonusChance){
 
     const bonus =
@@ -2052,10 +2380,6 @@ function normalGame(){
     bonusName =
       bonus.name;
 
-
-    /*
-      Void
-    */
 
     if(
       bonusName === "Void"
@@ -2090,12 +2414,6 @@ function normalGame(){
     }
 
 
-    /*
-      通常BONUS
-
-      777は使用しない
-    */
-
     hotSignal();
 
     setReels(
@@ -2126,10 +2444,6 @@ function normalGame(){
   }
 
 
-  /*
-    CZ
-  */
-
   if(
     r <
     bonusChance + 0.08
@@ -2154,10 +2468,6 @@ function normalGame(){
   }
 
 
-  /*
-    チャンス役
-  */
-
   if(
     r <
     bonusChance + 0.20
@@ -2181,12 +2491,6 @@ function normalGame(){
 
   }
 
-
-  /*
-    ハズレ
-
-    777は使用しない
-  */
 
   setReels(
     "RE",
@@ -2344,10 +2648,6 @@ function bonusGame(){
   updateBonusInfo();
 
 
-  /*
-    Void昇格
-  */
-
   if(
     Math.random() < 0.01
   ){
@@ -2358,10 +2658,6 @@ function bonusGame(){
 
   }
 
-
-  /*
-    +5回
-  */
 
   if(
     Math.random() < 0.02
@@ -2403,10 +2699,6 @@ function bonusGame(){
 
   }
 
-
-  /*
-    +1回
-  */
 
   if(
     Math.random() < 0.10
@@ -2616,10 +2908,6 @@ function voidGame(){
   saveCoins();
 
 
-  /*
-    +10G
-  */
-
   if(
     Math.random() < 0.02
   ){
@@ -2725,10 +3013,6 @@ function replay30Game(){
     Math.random();
 
 
-  /*
-    BONUS
-  */
-
   if(r < 0.02){
 
     bonusName =
@@ -2753,10 +3037,6 @@ function replay30Game(){
 
   }
 
-
-  /*
-    CZ
-  */
 
   if(r < 0.10){
 
@@ -2796,10 +3076,6 @@ function replay30Game(){
 
   }
 
-
-  /*
-    REPLAY
-  */
 
   setReels(
     "REPLAY",
@@ -2869,10 +3145,6 @@ function czGame(){
   remainingGames--;
 
 
-  /*
-    CZ成功
-  */
-
   if(
     Math.random() < 0.13
   ){
@@ -2910,10 +3182,6 @@ function czGame(){
   }
 
 
-  /*
-    CZ継続
-  */
-
   setReels(
     "REPLAY",
     "CZ",
@@ -2928,10 +3196,6 @@ function czGame(){
     "G"
   );
 
-
-  /*
-    CZ終了
-  */
 
   if(
     remainingGames <= 0
@@ -2982,10 +3246,6 @@ function infiniteReplayGame(){
     Math.random();
 
 
-  /*
-    VOID
-  */
-
   if(r < 0.04){
 
     startVoidBonusEffect();
@@ -2994,10 +3254,6 @@ function infiniteReplayGame(){
 
   }
 
-
-  /*
-    BONUS
-  */
 
   if(r < 0.08){
 
@@ -3023,10 +3279,6 @@ function infiniteReplayGame(){
 
   }
 
-
-  /*
-    REPLAY
-  */
 
   setReels(
     "REPLAY",
@@ -3125,11 +3377,6 @@ function setState(
   ).textContent =
     name;
 
-
-  /*
-    設定番号や確率は
-    プレイヤーには表示しない
-  */
 
   document.getElementById(
     "stateInfo"
@@ -3357,7 +3604,7 @@ document
 
 
 console.log(
-  "CASINO [Re] START - SETTING 1"
+  "CASINO [Re] START - ADMIN SYSTEM READY"
 );
 
 </script>
