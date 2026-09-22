@@ -1,804 +1,1558 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
 <title>CASINO [Re]</title>
+
+
+<!-- =========================================
+     SUPABASE
+========================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <style>
+
+/* =========================================
+   共通
+========================================= */
+
 *{
   box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
   margin:0;
   min-height:100%;
 }
 
 body{
-  min-height:100vh;
-  font-family:Arial,"Noto Sans JP",sans-serif;
-  color:white;
+
+  font-family:
+    Arial,
+    "Noto Sans JP",
+    sans-serif;
+
+  color:#fff;
+
   background:
-    radial-gradient(circle at center,#252525 0%,#111 55%,#050505 100%);
+    radial-gradient(
+      circle at center,
+      #252525 0%,
+      #111 55%,
+      #050505 100%
+    );
+
+  min-height:100vh;
 }
 
-button{
-  cursor:pointer;
-}
+
+/* =========================================
+   画面
+========================================= */
 
 .hidden{
   display:none !important;
 }
 
-/* =========================
+
+/* =========================================
    LOGIN
-========================= */
+========================================= */
 
 #loginScreen{
+
   position:fixed;
+
   inset:0;
+
   z-index:99999;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
-  padding:20px;
+
   background:
-    radial-gradient(circle at center,#303030 0%,#111 48%,#050505 100%);
+    radial-gradient(
+      circle at center,
+      #303030 0%,
+      #111 48%,
+      #050505 100%
+    );
+
 }
 
 .login-box{
-  width:min(420px,92vw);
-  padding:35px 28px;
+
+  width:min(430px,90vw);
+
+  padding:38px 30px;
+
   border:3px solid #777;
+
   border-radius:18px;
-  background:linear-gradient(145deg,#181818,#080808);
+
+  background:
+    linear-gradient(
+      145deg,
+      #181818,
+      #080808
+    );
+
   box-shadow:
-    0 0 35px rgba(255,180,0,.18),
-    inset 0 0 25px rgba(255,255,255,.03);
+    0 0 35px
+    rgba(255,180,0,.18);
+
   text-align:center;
+
 }
 
 .login-title{
+
   color:#ffd21a;
+
   font-size:38px;
+
   font-weight:900;
+
   letter-spacing:3px;
+
   text-shadow:
-    0 0 12px #ff9d00,
-    0 0 25px #ff6a00;
+    0 0 12px #ff9d00;
+
 }
 
 .login-subtitle{
-  margin:8px 0 25px;
+
+  margin:
+    5px 0 28px;
+
   color:#aaa;
-  letter-spacing:4px;
+
+  letter-spacing:5px;
+
   font-size:13px;
+
 }
 
 .login-input{
+
   width:100%;
+
   height:52px;
+
   margin:7px 0;
-  padding:0 16px;
-  border:2px solid #555;
+
+  padding:
+    0 16px;
+
+  border:
+    2px solid #555;
+
   border-radius:9px;
+
   outline:none;
+
   background:#111;
-  color:white;
+
+  color:#fff;
+
   font-size:16px;
+
 }
 
 .login-input:focus{
-  border-color:#ffd21a;
-  box-shadow:0 0 10px rgba(255,210,26,.25);
-}
 
-.login-button,
-.register-button{
-  width:100%;
-  height:54px;
-  margin-top:12px;
-  border-radius:9px;
-  font-size:18px;
-  font-weight:bold;
+  border-color:#ffd21a;
+
+  box-shadow:
+    0 0 10px
+    rgba(255,210,26,.25);
+
 }
 
 .login-button{
-  border:2px solid #b88600;
-  background:linear-gradient(#ffe66b,#e5a900);
+
+  width:100%;
+
+  height:56px;
+
+  margin-top:15px;
+
+  border:
+    3px solid #b88600;
+
+  border-radius:10px;
+
+  background:
+    linear-gradient(
+      #ffe66b,
+      #e5a900
+    );
+
   color:#111;
+
+  font-size:22px;
+
+  font-weight:900;
+
+  letter-spacing:4px;
+
+  cursor:pointer;
+
 }
 
-.register-button{
-  border:1px solid #666;
-  background:#222;
-  color:white;
+.login-button:hover{
+
+  filter:brightness(1.12);
+
+}
+
+.login-secondary{
+
+  width:100%;
+
+  height:48px;
+
+  margin-top:10px;
+
+  border:
+    1px solid #555;
+
+  border-radius:9px;
+
+  background:#171717;
+
+  color:#ddd;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+}
+
+.login-secondary:hover{
+
+  background:#252525;
+
 }
 
 .login-error{
+
   min-height:25px;
+
   margin-top:12px;
-  color:#ff5555;
-  font-size:14px;
+
+  color:#ff4d4d;
+
+  font-weight:bold;
+
 }
 
-.login-success{
-  color:#5cff8a !important;
+.login-demo{
+
+  margin-top:18px;
+
+  padding:10px;
+
+  border:
+    1px solid #333;
+
+  border-radius:8px;
+
+  color:#888;
+
+  font-size:12px;
+
+  line-height:1.7;
+
 }
 
-/* =========================
+
+/* =========================================
    HUB
-========================= */
+========================================= */
 
 #casinoHub{
+
+  display:none;
+
   min-height:100vh;
+
   background:
-    radial-gradient(circle at center,#303030 0%,#111 48%,#050505 100%);
+    radial-gradient(
+      circle at center,
+      #303030 0%,
+      #111 48%,
+      #050505 100%
+    );
+
 }
 
 .hub-header{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:10;
+
   display:flex;
-  justify-content:space-between;
+
   align-items:center;
-  gap:15px;
-  padding:18px 28px;
-  border-bottom:2px solid #444;
-  background:rgba(5,5,5,.94);
+
+  justify-content:space-between;
+
+  padding:
+    18px 28px;
+
+  background:
+    rgba(5,5,5,.94);
+
+  border-bottom:
+    2px solid #444;
+
+  backdrop-filter:
+    blur(8px);
+
 }
 
 .hub-logo{
+
   color:#ffd21a;
+
   font-size:28px;
+
   font-weight:900;
+
   letter-spacing:3px;
-  text-shadow:0 0 12px #ff9d00;
+
+  text-shadow:
+    0 0 12px #ff9d00;
+
 }
 
 .hub-subtitle{
+
   color:#888;
+
   font-size:11px;
+
   letter-spacing:4px;
-}
 
-.account{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.coin-box{
-  padding:9px 14px;
-  border:1px solid #666;
-  border-radius:8px;
-  background:#151515;
-  color:#ffd21a;
-  font-weight:bold;
 }
 
 .hub-logout{
-  padding:9px 16px;
-  border:1px solid #666;
+
+  border:
+    1px solid #666;
+
   border-radius:8px;
+
+  padding:
+    9px 16px;
+
   background:#171717;
+
   color:#ddd;
+
+  cursor:pointer;
+
 }
 
-.hub-content{
+.hub-logout:hover{
+
+  background:#2a2a2a;
+
+}
+
+
+/* =========================================
+   保存情報
+========================================= */
+
+.save-profile{
+
   width:min(1100px,92vw);
-  margin:auto;
-  padding:50px 0 70px;
+
+  margin:
+    18px auto 0;
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:12px;
+
+  flex-wrap:wrap;
+
+}
+
+.save-profile > div{
+
+  min-width:145px;
+
+  padding:
+    10px 15px;
+
+  border:
+    1px solid #444;
+
+  border-radius:9px;
+
+  background:#111;
+
   text-align:center;
+
+}
+
+.save-label{
+
+  display:block;
+
+  color:#777;
+
+  font-size:10px;
+
+  letter-spacing:2px;
+
+  margin-bottom:3px;
+
+}
+
+.save-profile strong{
+
+  color:#ddd;
+
+  font-size:13px;
+
+}
+
+
+/* =========================================
+   HUB CONTENT
+========================================= */
+
+.hub-content{
+
+  width:min(1100px,92vw);
+
+  margin:0 auto;
+
+  padding:
+    40px 0 70px;
+
+  text-align:center;
+
 }
 
 .hub-content h1{
+
   margin:0;
+
   font-size:36px;
+
 }
 
 .hub-description{
+
   color:#999;
-  margin:8px 0 35px;
+
+  margin:
+    8px 0 30px;
+
 }
 
 .casino-grid{
+
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(220px,1fr)
+    );
+
   gap:22px;
+
 }
 
 .casino-card{
+
   min-height:245px;
+
   padding:25px 20px;
-  border:2px solid #555;
+
+  border:
+    2px solid #555;
+
   border-radius:16px;
-  background:linear-gradient(145deg,#202020,#0b0b0b);
-  color:white;
-  box-shadow:0 8px 25px rgba(0,0,0,.45);
+
+  background:
+    linear-gradient(
+      145deg,
+      #202020,
+      #0b0b0b
+    );
+
+  color:#fff;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 8px 25px
+    rgba(0,0,0,.45);
+
   transition:.18s;
+
 }
 
 .casino-card:hover{
-  transform:translateY(-5px);
+
+  transform:
+    translateY(-5px);
+
   border-color:#ffd21a;
+
 }
 
 .casino-card.coming{
+
   opacity:.6;
+
 }
 
 .casino-icon{
+
   font-size:58px;
+
   margin-bottom:15px;
+
 }
 
 .casino-name{
+
   font-size:22px;
+
   font-weight:900;
+
 }
 
 .casino-desc{
-  margin:9px 0 18px;
+
+  margin:
+    9px 0 18px;
+
   color:#999;
+
 }
 
 .casino-enter{
+
   display:inline-block;
-  padding:8px 15px;
+
+  padding:
+    8px 15px;
+
   border-radius:7px;
+
   background:#222;
+
   color:#ffd21a;
+
   font-size:12px;
+
   font-weight:bold;
+
 }
 
-/* =========================
+
+/* =========================================
    COIN REQUEST
-========================= */
+========================================= */
 
-.coin-request-panel{
-  display:none;
-  margin:40px auto 0;
-  padding:25px;
-  max-width:650px;
-  text-align:left;
-  border:2px solid #345c73;
-  border-radius:16px;
+.coin-panel{
+
+  width:min(700px,92vw);
+
+  margin:
+    35px auto 0;
+
+  padding:22px;
+
+  border:
+    2px solid #4c4c4c;
+
+  border-radius:15px;
+
   background:
-    linear-gradient(145deg,#0d202c,#090d11);
-  box-shadow:
-    0 0 25px rgba(70,180,255,.08);
+    linear-gradient(
+      145deg,
+      #1b1b1b,
+      #0b0b0b
+    );
+
+  text-align:center;
+
 }
 
-.coin-request-panel.show{
-  display:block;
-}
+.coin-title{
 
-.request-title{
-  margin-bottom:5px;
-  color:#62c9ff;
-  font-size:25px;
+  color:#ffd21a;
+
+  font-size:24px;
+
   font-weight:900;
+
 }
 
-.request-subtitle{
-  margin-bottom:20px;
+.coin-subtitle{
+
+  margin-top:7px;
+
   color:#999;
+
   font-size:13px;
+
 }
 
-.request-button{
-  width:100%;
-  height:55px;
-  border:2px solid #277da8;
+.coin-row{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-top:18px;
+
+}
+
+.coin-input{
+
+  flex:1;
+
+  height:50px;
+
+  padding:
+    0 15px;
+
+  border:
+    2px solid #555;
+
   border-radius:9px;
-  background:linear-gradient(#64d0ff,#1778a5);
-  color:white;
+
+  background:#111;
+
+  color:#fff;
+
+  font-size:18px;
+
+  outline:none;
+
+}
+
+.coin-input:focus{
+
+  border-color:#ffd21a;
+
+}
+
+.coin-button{
+
+  width:100%;
+
+  margin-top:12px;
+
+  height:52px;
+
+  border:
+    2px solid #a77d00;
+
+  border-radius:9px;
+
+  background:
+    linear-gradient(
+      #ffe66b,
+      #d99d00
+    );
+
+  color:#111;
+
   font-size:17px;
-  font-weight:bold;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+.coin-button:hover{
+
+  filter:brightness(1.1);
+
 }
 
 .request-code-box{
+
   display:none;
+
   margin-top:18px;
+
   padding:18px;
-  text-align:center;
-  border:2px dashed #62c9ff;
+
+  border:
+    2px solid #a77d00;
+
   border-radius:12px;
-  background:#07141c;
+
+  background:#111;
+
 }
 
 .request-code-label{
+
   color:#999;
+
   font-size:13px;
-  margin-bottom:8px;
+
 }
 
 .request-code{
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:4px;
+
+  margin-top:7px;
+
   color:#ffd21a;
-  text-shadow:0 0 12px rgba(255,210,26,.5);
-  word-break:break-all;
+
+  font-size:32px;
+
+  font-weight:900;
+
+  letter-spacing:5px;
+
+  text-shadow:
+    0 0 12px #ff9d00;
+
 }
 
-.request-copy{
-  margin-top:12px;
-  padding:9px 18px;
-  border:1px solid #666;
-  border-radius:7px;
-  background:#222;
-  color:white;
+.request-code-note{
+
+  margin-top:10px;
+
+  color:#aaa;
+
+  font-size:12px;
+
 }
 
 .request-result{
+
   min-height:25px;
-  margin-top:15px;
-  text-align:center;
+
+  margin-top:12px;
+
   font-weight:bold;
+
 }
 
-/* =========================
+.success{
+
+  color:#64ff9a;
+
+}
+
+.error{
+
+  color:#ff6666;
+
+}
+
+
+/* =========================================
    ADMIN
-========================= */
+========================================= */
 
 .admin-panel{
+
   display:none;
-  margin:40px auto 0;
-  padding:25px;
-  max-width:650px;
-  text-align:left;
-  border:2px solid #735c16;
-  border-radius:16px;
+
+  width:min(700px,92vw);
+
+  margin:
+    20px auto 0;
+
+  padding:22px;
+
+  border:
+    2px solid #714d00;
+
+  border-radius:15px;
+
   background:
-    linear-gradient(145deg,#211d0c,#0b0b0b);
-  box-shadow:
-    0 0 25px rgba(255,210,26,.08);
+    linear-gradient(
+      145deg,
+      #211b0c,
+      #0b0b0b
+    );
+
 }
 
 .admin-panel.show{
+
   display:block;
+
 }
 
 .admin-title{
-  margin-bottom:5px;
+
   color:#ffd21a;
-  font-size:25px;
+
+  font-size:23px;
+
   font-weight:900;
+
 }
 
 .admin-subtitle{
-  margin-bottom:20px;
-  color:#999;
-  font-size:13px;
-}
 
-.admin-row{
-  display:flex;
-  gap:10px;
-  margin-bottom:12px;
+  margin-top:6px;
+
+  color:#999;
+
+  font-size:13px;
+
 }
 
 .admin-input{
-  flex:1;
-  min-width:0;
-  height:48px;
-  padding:0 14px;
-  border:2px solid #555;
-  border-radius:8px;
-  outline:none;
+
+  width:100%;
+
+  height:50px;
+
+  margin-top:15px;
+
+  padding:
+    0 15px;
+
+  border:
+    2px solid #555;
+
+  border-radius:9px;
+
   background:#111;
-  color:white;
-  font-size:16px;
+
+  color:#fff;
+
+  font-size:17px;
+
+  outline:none;
+
 }
 
 .admin-input:focus{
+
   border-color:#ffd21a;
+
 }
 
-.admin-add-button{
+.admin-button{
+
   width:100%;
+
   height:52px;
-  border:2px solid #a77d00;
+
+  margin-top:12px;
+
+  border:
+    2px solid #a77d00;
+
   border-radius:9px;
-  background:linear-gradient(#ffe66b,#d79b00);
+
+  background:
+    linear-gradient(
+      #ffe66b,
+      #d99d00
+    );
+
   color:#111;
+
   font-size:17px;
-  font-weight:bold;
+
+  font-weight:900;
+
+  cursor:pointer;
+
 }
 
 .admin-result{
+
   min-height:25px;
-  margin-top:15px;
-  text-align:center;
-  font-weight:bold;
+
+  margin-top:12px;
+
+  line-height:1.6;
+
 }
 
-.admin-success{
-  color:#5cff8a;
-}
 
-.admin-error{
-  color:#ff5555;
-}
-
-/* =========================
+/* =========================================
    GAME
-========================= */
+========================================= */
 
 #gameScreen{
+
+  display:none;
+
   min-height:100vh;
-  padding:20px;
+
+  padding:
+    25px 0;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #252525 0%,
+      #111 55%,
+      #050505 100%
+    );
+
 }
 
 .game{
+
   width:780px;
+
   max-width:95vw;
-  margin:25px auto;
+
+  margin:auto;
+
   padding:22px;
-  background:rgba(10,15,25,.96);
-  border:2px solid #414c66;
+
+  background:
+    rgba(10,15,25,.96);
+
+  border:
+    2px solid #414c66;
+
   border-radius:20px;
-  box-shadow:0 0 40px rgba(0,0,0,.8);
+
+  box-shadow:
+    0 0 40px
+    rgba(0,0,0,.8);
+
 }
 
 .game-top{
+
   display:flex;
-  justify-content:space-between;
+
+  justify-content:
+    space-between;
+
   align-items:center;
+
   margin-bottom:15px;
+
 }
 
 .back-button{
-  padding:9px 14px;
-  border:1px solid #666;
+
+  padding:
+    9px 14px;
+
+  border:
+    1px solid #555;
+
   border-radius:8px;
-  background:#222;
-  color:white;
+
+  background:#171717;
+
+  color:#ddd;
+
+  cursor:pointer;
+
 }
 
 .title{
+
   text-align:center;
+
   font-size:38px;
+
   font-weight:bold;
+
   letter-spacing:4px;
-  margin-bottom:4px;
+
 }
 
 .subtitle{
+
   text-align:center;
+
   color:#8994aa;
+
   font-size:13px;
+
   margin-bottom:18px;
+
 }
 
 .status{
+
   padding:15px;
-  margin-bottom:14px;
+
   background:#171e2d;
-  border:1px solid #35415b;
+
+  border:
+    1px solid #35415b;
+
   border-radius:12px;
+
+  margin-bottom:14px;
+
 }
 
 .status-name{
+
   font-size:23px;
+
   font-weight:bold;
+
 }
 
 .status-info{
+
   margin-top:6px;
+
   color:#929eb8;
+
   font-size:14px;
+
 }
 
-/* =========================
+
+/* =========================================
    REELS
-========================= */
+========================================= */
 
 .reels{
+
   display:flex;
+
   justify-content:center;
+
   gap:10px;
+
   margin:22px 0;
+
 }
 
 .reel{
+
   width:150px;
+
   height:120px;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
-  overflow:hidden;
-  background:linear-gradient(#f5f5f5,#c9c9c9);
+
+  background:
+    linear-gradient(
+      #f5f5f5,
+      #c9c9c9
+    );
+
   color:#111;
-  border:5px solid #59657c;
+
+  border:
+    5px solid #59657c;
+
   border-radius:12px;
-  font-size:24px;
+
+  font-size:28px;
+
   font-weight:bold;
+
   box-shadow:
-    inset 0 0 15px rgba(0,0,0,.35),
-    0 7px 20px rgba(0,0,0,.45);
+    inset 0 0 15px
+    rgba(0,0,0,.35),
+    0 7px 20px
+    rgba(0,0,0,.45);
+
 }
 
-/* =========================
+
+/* =========================================
    PUSH
-========================= */
+========================================= */
 
 .push{
-  width:100%;
-  height:75px;
-  border:0;
-  border-radius:15px;
-  font-size:30px;
-  font-weight:bold;
-  letter-spacing:4px;
-  transition:.12s;
-  box-shadow:0 7px 0 rgba(0,0,0,.45);
-}
 
-.push:active{
-  transform:translateY(5px);
-  box-shadow:0 2px 0 rgba(0,0,0,.45);
+  width:100%;
+
+  height:75px;
+
+  border:0;
+
+  border-radius:15px;
+
+  font-size:30px;
+
+  font-weight:bold;
+
+  letter-spacing:4px;
+
+  cursor:pointer;
+
 }
 
 .push-white{
-  background:linear-gradient(#eeeeee,#999999);
+
+  background:
+    linear-gradient(
+      #eeeeee,
+      #999999
+    );
+
   color:#111;
+
 }
 
 .push-red{
-  background:linear-gradient(#ff6666,#a80000);
+
+  background:
+    linear-gradient(
+      #ff6666,
+      #a80000
+    );
+
   color:white;
+
   box-shadow:
-    0 7px 0 #450000,
-    0 0 25px rgba(255,0,0,.65);
+    0 0 25px
+    rgba(255,0,0,.65);
+
 }
 
-.push-purple{
-  background:linear-gradient(#d47aff,#6420a4);
+.push-rainbow{
+
+  background:
+    linear-gradient(
+      90deg,
+      #ff3030,
+      #ffd42e,
+      #42dc62,
+      #4ca7ff,
+      #c55cff
+    );
+
   color:white;
-  box-shadow:
-    0 7px 0 #28003d,
-    0 0 30px rgba(190,70,255,.75);
+
 }
 
-/* =========================
+
+/* =========================================
    MESSAGE
-========================= */
+========================================= */
 
 .message{
+
   min-height:78px;
+
   margin-top:17px;
+
   padding:15px;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   text-align:center;
+
   line-height:1.5;
+
   font-size:18px;
+
   background:#171e2d;
-  border:1px solid #35415b;
+
+  border:
+    1px solid #35415b;
+
   border-radius:11px;
+
 }
 
 .message.hot{
+
   color:#ffe56b;
+
   border-color:#9c7620;
+
   background:#2a210c;
+
 }
 
 .message.void{
+
   color:#e5b2ff;
+
   border-color:#824ca3;
+
   background:#25122e;
+
 }
 
-/* =========================
-   BONUS INFO
-========================= */
+
+/* =========================================
+   BONUS
+========================================= */
 
 .bonus-info{
+
   display:none;
+
   padding:15px;
+
   margin-bottom:14px;
+
   background:#171e2d;
-  border:1px solid #495675;
+
+  border:
+    1px solid #495675;
+
   border-radius:12px;
+
 }
 
 .bonus-title{
+
   font-size:22px;
+
   font-weight:bold;
+
 }
 
 .bonus-count{
+
   margin-top:7px;
+
   font-size:17px;
+
 }
 
 .bonus-medals{
+
   margin-top:5px;
+
   color:#9ba7bd;
+
 }
 
-/* =========================
-   BONUS LIST
-========================= */
-
 .section-title{
+
   margin-top:22px;
+
   margin-bottom:10px;
+
   font-size:18px;
+
   font-weight:bold;
+
   color:#bbc6e5;
+
 }
 
 .bonus-list{
+
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+
+  grid-template-columns:
+    repeat(2,1fr);
+
   gap:9px;
+
 }
 
 .bonus{
+
   padding:12px;
+
   background:#1a2233;
-  border:1px solid #303b54;
+
+  border:
+    1px solid #303b54;
+
   border-radius:9px;
+
 }
 
 .bonus-name{
+
   font-weight:bold;
+
 }
 
 .bonus-game{
+
   margin-top:5px;
+
   color:#8995ae;
+
   font-size:13px;
+
 }
 
-/* =========================
+
+/* =========================================
    HISTORY
-========================= */
+========================================= */
 
 .history{
+
   max-height:150px;
+
   overflow-y:auto;
+
   padding:10px;
+
   background:#0c121e;
+
   border-radius:10px;
+
   margin-top:8px;
+
 }
 
 .history div{
+
   padding:5px;
-  border-bottom:1px solid #202a3c;
+
+  border-bottom:
+    1px solid #202a3c;
+
   color:#929eb6;
+
   font-size:13px;
+
 }
 
-/* =========================
+
+/* =========================================
+   RESET
+========================================= */
+
+.reset{
+
+  width:100%;
+
+  margin-top:12px;
+
+  padding:10px;
+
+  background:#242d40;
+
+  color:#aab4c9;
+
+  border:
+    1px solid #3b4760;
+
+  border-radius:8px;
+
+  cursor:pointer;
+
+}
+
+
+/* =========================================
    EFFECT
-========================= */
+========================================= */
 
 .effect{
+
   position:fixed;
+
   inset:0;
-  z-index:100;
+
+  z-index:100000;
+
   display:none;
+
   align-items:center;
+
   justify-content:center;
+
   background:rgba(0,0,0,.95);
+
 }
 
 .effect.show{
+
   display:flex;
+
 }
 
 .effect-box{
+
   text-align:center;
-  animation:effectIn .45s ease-out;
+
+  animation:
+    effectIn .45s ease-out;
+
 }
 
 .effect-small{
+
   font-size:22px;
+
   letter-spacing:5px;
+
   color:#d5d9e5;
+
 }
 
 .effect-big{
+
   margin-top:12px;
+
   font-size:58px;
+
   font-weight:bold;
-  text-shadow:0 0 25px currentColor;
+
+  text-shadow:
+    0 0 25px currentColor;
+
 }
 
 .effect-sub{
+
   margin-top:15px;
+
   font-size:24px;
-  color:white;
+
 }
 
 @keyframes effectIn{
+
   from{
+
     transform:scale(.5);
+
     opacity:0;
+
   }
+
   to{
+
     transform:scale(1);
+
     opacity:1;
+
   }
+
 }
 
-.flash{
-  animation:flash .25s ease-in-out 4;
-}
 
-@keyframes flash{
-  50%{
-    transform:scale(1.04);
-  }
-}
-
-/* =========================
+/* =========================================
    MOBILE
-========================= */
+========================================= */
 
 @media(max-width:600px){
 
   .hub-header{
-    padding:14px 16px;
+
+    padding:
+      14px 16px;
+
   }
 
   .hub-logo{
+
     font-size:21px;
+
+  }
+
+  .hub-content{
+
+    padding-top:30px;
+
+  }
+
+  .hub-content h1{
+
+    font-size:28px;
+
+  }
+
+  .coin-row{
+
+    flex-direction:column;
+
   }
 
   .game{
+
     padding:14px;
+
   }
 
   .title{
+
     font-size:30px;
+
   }
 
   .reel{
+
     width:30%;
+
     height:90px;
-    font-size:18px;
+
+    font-size:21px;
+
   }
 
   .bonus-list{
+
     grid-template-columns:1fr;
+
   }
 
   .effect-big{
+
     font-size:40px;
-  }
 
-  .admin-row{
-    flex-direction:column;
-  }
-
-  .request-code{
-    font-size:22px;
-    letter-spacing:2px;
   }
 
 }
+
 </style>
+
 </head>
+
 
 <body>
 
-<!-- =========================
-     LOGIN
-========================= -->
 
-<section id="loginScreen">
+<!-- =========================================
+     LOGIN
+========================================= -->
+
+<div id="loginScreen">
 
   <div class="login-box">
 
@@ -810,14 +1564,16 @@ button{
       MEMBER LOGIN
     </div>
 
+
     <input
       id="loginId"
       class="login-input"
       type="text"
-      placeholder="ユーザーID"
       maxlength="20"
+      placeholder="ユーザーID"
       autocomplete="username"
     >
+
 
     <input
       id="loginPassword"
@@ -827,39 +1583,49 @@ button{
       autocomplete="current-password"
     >
 
+
     <button
       class="login-button"
-      onclick="login()">
+      onclick="login()"
+    >
       LOGIN
     </button>
 
+
     <button
-      class="register-button"
-      onclick="register()">
+      class="login-secondary"
+      onclick="register()"
+    >
       新規登録
     </button>
+
 
     <div
       id="loginError"
       class="login-error">
     </div>
 
+
+    <div class="login-demo">
+      ゲーム内コインのみの試作品です
+    </div>
+
   </div>
 
-</section>
+</div>
 
 
-<!-- =========================
+
+<!-- =========================================
      HUB
-========================= -->
+========================================= -->
 
-<section
-  id="casinoHub"
-  class="hidden">
+<div id="casinoHub">
 
   <div class="hub-header">
 
     <div>
+
       <div class="hub-logo">
         CASINO [Re]
       </div>
@@ -867,23 +1633,75 @@ button{
       <div class="hub-subtitle">
         GAME SELECT
       </div>
+
     </div>
 
-    <div class="account">
 
-      <div class="coin-box">
-        🪙 <span id="hubCoins">0</span>
-      </div>
+    <button
+      class="hub-logout"
+      onclick="logout()"
+    >
+      LOGOUT
+    </button>
 
-      <div id="hubPlayer">
+  </div>
+
+
+  <!-- 保存情報 -->
+
+  <div
+    id="saveProfile"
+    class="save-profile"
+  >
+
+    <div>
+
+      <span class="save-label">
         PLAYER
-      </div>
+      </span>
 
-      <button
-        class="hub-logout"
-        onclick="logout()">
-        LOGOUT
-      </button>
+      <strong id="playerName">
+        PLAYER
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span class="save-label">
+        COIN
+      </span>
+
+      <strong id="hubCoins">
+        0
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span class="save-label">
+        SAVE
+      </span>
+
+      <strong id="saveStatus">
+        自動保存ON
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span class="save-label">
+        LAST PLAYED
+      </span>
+
+      <strong id="lastPlayed">
+        ---
+      </strong>
 
     </div>
 
@@ -901,11 +1719,15 @@ button{
     </p>
 
 
+    <!-- カジノ -->
+
     <div class="casino-grid">
+
 
       <button
         class="casino-card"
-        onclick="openGame()">
+        onclick="openGame('slotRe')"
+      >
 
         <div class="casino-icon">
           🎰
@@ -916,7 +1738,7 @@ button{
         </div>
 
         <div class="casino-desc">
-          Re専用システム
+          現在プレイできます
         </div>
 
         <span class="casino-enter">
@@ -928,7 +1750,8 @@ button{
 
       <button
         class="casino-card coming"
-        onclick="comingSoon()">
+        onclick="comingSoon()"
+      >
 
         <div class="casino-icon">
           🃏
@@ -951,7 +1774,8 @@ button{
 
       <button
         class="casino-card coming"
-        onclick="comingSoon()">
+        onclick="comingSoon()"
+      >
 
         <div class="casino-icon">
           🎲
@@ -974,7 +1798,8 @@ button{
 
       <button
         class="casino-card coming"
-        onclick="comingSoon()">
+        onclick="comingSoon()"
+      >
 
         <div class="casino-icon">
           ♠️
@@ -997,51 +1822,79 @@ button{
     </div>
 
 
-    <!-- =========================
-         COIN REQUEST PANEL
-    ========================= -->
+    <div
+      id="hubMessage"
+      style="
+        margin-top:20px;
+        color:#ffd21a;
+        font-weight:bold;
+      ">
+    </div>
+
+
+    <!-- =====================================
+         コイン追加依頼
+    ====================================== -->
 
     <div
       id="coinRequestPanel"
-      class="coin-request-panel">
+      class="coin-panel"
+    >
 
-      <div class="request-title">
+      <div class="coin-title">
         🪙 コイン追加依頼
       </div>
 
-      <div class="request-subtitle">
-        ボタンを押すと、管理者に伝えるための依頼IDが発行されます。
+      <div class="coin-subtitle">
+        追加したいコイン枚数を入力してください
       </div>
 
+
+      <div class="coin-row">
+
+        <input
+          id="requestAmount"
+          class="coin-input"
+          type="number"
+          min="1"
+          max="1000000"
+          step="1"
+          value="1000"
+          placeholder="追加枚数"
+        >
+
+      </div>
+
+
       <button
-        class="request-button"
-        onclick="createCoinRequest()">
-
+        class="coin-button"
+        onclick="createCoinRequest()"
+      >
         🪙 コイン追加依頼を発行
-
       </button>
 
 
+      <!-- 依頼ID -->
+
       <div
         id="requestCodeBox"
-        class="request-code-box">
+        class="request-code-box"
+      >
 
         <div class="request-code-label">
           あなたの依頼ID
         </div>
+
 
         <div
           id="requestCode"
           class="request-code">
         </div>
 
-        <button
-          class="request-copy"
-          onclick="copyRequestCode()">
 
-          📋 依頼IDをコピー
-
-        </button>
+        <div class="request-code-note">
+          このIDを管理者に伝えてください
+        </div>
 
       </div>
 
@@ -1054,42 +1907,38 @@ button{
     </div>
 
 
-    <!-- =========================
-         ADMIN PANEL
-    ========================= -->
+    <!-- =====================================
+         管理者
+    ====================================== -->
 
     <div
       id="adminPanel"
-      class="admin-panel">
+      class="admin-panel"
+    >
 
       <div class="admin-title">
         👑 管理者メニュー
       </div>
 
       <div class="admin-subtitle">
-        ユーザーから受け取った依頼IDを入力してください。
+        ユーザーから受け取った依頼IDを承認します
       </div>
 
 
-      <div class="admin-row">
-
-        <input
-          id="requestCodeInput"
-          class="admin-input"
-          type="text"
-          maxlength="9"
-          placeholder="例：A1B2-C3D4"
-        >
-
-      </div>
+      <input
+        id="requestCodeInput"
+        class="admin-input"
+        type="text"
+        maxlength="9"
+        placeholder="依頼ID 例：AB12-CD34"
+      >
 
 
       <button
-        class="admin-add-button"
-        onclick="approveCoinRequest()">
-
-        🪙 依頼IDを承認して1000コイン追加
-
+        class="admin-button"
+        onclick="approveCoinRequest()"
+      >
+        ✅ 依頼を承認してコイン追加
       </button>
 
 
@@ -1101,42 +1950,29 @@ button{
     </div>
 
 
-    <div
-      id="hubMessage"
-      style="
-        min-height:25px;
-        margin-top:25px;
-        color:#ffd21a;
-        font-weight:bold;
-      ">
-    </div>
-
   </div>
 
-</section>
+</div>
 
 
-<!-- =========================
+
+<!-- =========================================
      GAME
-========================= -->
+========================================= -->
 
-<section
-  id="gameScreen"
-  class="hidden">
+<div id="gameScreen">
 
   <div class="game">
+
 
     <div class="game-top">
 
       <button
         class="back-button"
-        onclick="backToHub()">
-        ← GAME SELECT
+        onclick="backToHub()"
+      >
+        ← カジノ選択
       </button>
-
-      <div class="coin-box">
-        🪙 <span id="gameCoins">0</span>
-      </div>
 
     </div>
 
@@ -1144,6 +1980,7 @@ button{
     <div class="title">
       スロット[Re]
     </div>
+
 
     <div class="subtitle">
       BONUS / VOID / REPLAY CHANCE
@@ -1154,7 +1991,8 @@ button{
 
       <div
         class="status-name"
-        id="medalDisplay">
+        id="medalDisplay"
+      >
         メダル：0枚
       </div>
 
@@ -1165,11 +2003,14 @@ button{
     </div>
 
 
+    <!-- 状態 -->
+
     <div class="status">
 
       <div
         class="status-name"
-        id="stateName">
+        id="stateName"
+      >
         通常時
       </div>
 
@@ -1181,134 +2022,173 @@ button{
     </div>
 
 
+    <!-- BONUS情報 -->
+
     <div
       class="bonus-info"
-      id="bonusInfo">
+      id="bonusInfo"
+    >
 
       <div
         class="bonus-title"
-        id="bonusTitle">
+        id="bonusTitle"
+      >
         BONUS
       </div>
 
       <div
         class="bonus-count"
-        id="bonusCount">
-        -
+        id="bonusCount"
+      >
+        10枚 × 5回
       </div>
 
       <div
         class="bonus-medals"
-        id="bonusMedals">
+        id="bonusMedals"
+      >
         今回の獲得枚数：0枚
       </div>
 
     </div>
 
 
+    <!-- リール -->
+
     <div class="reels">
 
       <div
         class="reel"
-        id="reel1">
-        RE
+        id="reel1"
+      >
+        7
       </div>
 
       <div
         class="reel"
-        id="reel2">
+        id="reel2"
+      >
         BAR
       </div>
 
       <div
         class="reel"
-        id="reel3">
-        RE
+        id="reel3"
+      >
+        7
       </div>
 
     </div>
 
 
+    <!-- PUSH -->
+
     <button
       class="push push-white"
       id="pushButton"
-      onclick="play()">
-
+      onclick="play()"
+    >
       PUSH
-
     </button>
 
 
+    <!-- メッセージ -->
+
     <div
       class="message"
-      id="message">
-
+      id="message"
+    >
       PUSHでゲーム開始
-
     </div>
 
+
+    <!-- ボーナス一覧 -->
 
     <div class="section-title">
       ボーナス
     </div>
 
+
     <div class="bonus-list">
 
       <div class="bonus">
+
         <div class="bonus-name">
           レギュラー
         </div>
+
         <div class="bonus-game">
           10枚 × 5回 = 50枚
         </div>
+
       </div>
 
+
       <div class="bonus">
+
         <div class="bonus-name">
           リーフィンド
         </div>
+
         <div class="bonus-game">
           10枚 × 11回 = 110枚
         </div>
+
       </div>
 
+
       <div class="bonus">
+
         <div class="bonus-name">
           ダストロック
         </div>
+
         <div class="bonus-game">
           10枚 × 11回 = 110枚
         </div>
+
       </div>
 
+
       <div class="bonus">
+
         <div class="bonus-name">
           書物の怨念
         </div>
+
         <div class="bonus-game">
           10枚 × 11回 = 110枚
         </div>
+
       </div>
 
+
       <div class="bonus">
+
         <div class="bonus-name">
           Void
         </div>
+
         <div class="bonus-game">
           100枚 × 10回 = 1000枚
         </div>
+
       </div>
 
     </div>
 
+
+    <!-- 履歴 -->
 
     <div class="section-title">
       ゲーム履歴
     </div>
 
+
     <div
       class="history"
-      id="history">
+      id="history"
+    >
 
       <div>
         ゲーム開始
@@ -1316,37 +2196,50 @@ button{
 
     </div>
 
+
+    <button
+      class="reset"
+      onclick="resetGame()"
+    >
+      リセット
+    </button>
+
   </div>
 
-</section>
+</div>
 
 
-<!-- =========================
-     EFFECT
-========================= -->
+
+<!-- =========================================
+     演出
+========================================= -->
 
 <div
   class="effect"
-  id="effect">
+  id="effect"
+>
 
   <div class="effect-box">
 
     <div
       class="effect-small"
-      id="effectSmall">
+      id="effectSmall"
+    >
       CHANCE
     </div>
 
     <div
       class="effect-big"
-      id="effectBig">
+      id="effectBig"
+    >
       BONUS
     </div>
 
     <div
       class="effect-sub"
-      id="effectSub">
-      START!!
+      id="effectSub"
+    >
+      BONUS START!!
     </div>
 
   </div>
@@ -1354,11 +2247,12 @@ button{
 </div>
 
 
+
 <script>
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+/* =========================================
+   SUPABASE設定
+========================================= */
 
 const SUPABASE_URL =
   "https://yazkexvgmdyjeeimmayq.supabase.co";
@@ -1380,9 +2274,9 @@ const supabaseClient =
   );
 
 
-/* =====================================================
-   GLOBAL
-===================================================== */
+/* =========================================
+   ユーザー
+========================================= */
 
 let currentUser = null;
 
@@ -1396,58 +2290,258 @@ let saveQueue =
 const BET = 3;
 
 
-/* =====================================================
-   ID
-===================================================== */
+/* =========================================
+   ID → メール
+========================================= */
 
 function idToEmail(id){
 
   return (
-    id.toLowerCase() +
+    id.toLowerCase()
+    +
     "@casino-re.local"
   );
 
 }
 
 
+/* =========================================
+   IDチェック
+========================================= */
+
 function validId(id){
 
-  return /^[a-zA-Z0-9_-]{3,20}$/.test(id);
+  return /^[a-zA-Z0-9_-]{3,20}$/
+    .test(id);
 
 }
 
 
-/* =====================================================
+/* =========================================
+   プロフィール確認
+========================================= */
+
+async function ensureProfile(){
+
+  if(!currentUser){
+    return null;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id, coins, is_admin"
+      )
+      .eq(
+        "id",
+        currentUser.id
+      )
+      .maybeSingle();
+
+
+  if(error){
+
+    console.error(
+      "PROFILE ERROR:",
+      error
+    );
+
+    return null;
+
+  }
+
+
+  if(!data){
+
+    const {
+      data:newData,
+      error:insertError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .insert({
+          id:currentUser.id,
+          coins:1000,
+          is_admin:false
+        })
+        .select(
+          "id, coins, is_admin"
+        )
+        .single();
+
+
+    if(insertError){
+
+      console.error(
+        "PROFILE INSERT ERROR:",
+        insertError
+      );
+
+      return null;
+
+    }
+
+    return newData;
+
+  }
+
+
+  return data;
+
+}
+
+
+/* =========================================
+   プロフィール読み込み
+========================================= */
+
+async function loadProfile(){
+
+  const data =
+    await ensureProfile();
+
+
+  if(!data){
+    return false;
+  }
+
+
+  medals =
+    Number(
+      data.coins || 0
+    );
+
+
+  isAdmin =
+    data.is_admin === true;
+
+
+  updateMedals();
+
+  updateCoins();
+
+  showAdminPanel();
+
+
+  return true;
+
+}
+
+
+/* =========================================
+   コイン保存
+========================================= */
+
+function saveCoins(){
+
+  if(!currentUser){
+    return Promise.resolve();
+  }
+
+
+  saveQueue =
+    saveQueue.then(
+      async()=>{
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("profiles")
+            .update({
+              coins:medals
+            })
+            .eq(
+              "id",
+              currentUser.id
+            );
+
+
+        if(error){
+
+          console.error(
+            "COIN SAVE ERROR:",
+            error
+          );
+
+        }
+
+      }
+    );
+
+
+  return saveQueue;
+
+}
+
+
+/* =========================================
+   コイン表示
+========================================= */
+
+function updateCoins(){
+
+  const el =
+    document.getElementById(
+      "hubCoins"
+    );
+
+
+  if(el){
+
+    el.textContent =
+      Number(
+        medals || 0
+      ).toLocaleString();
+
+  }
+
+}
+
+
+/* =========================================
    LOGIN
-===================================================== */
+========================================= */
 
 async function login(){
 
   const id =
     document
-      .getElementById("loginId")
+      .getElementById(
+        "loginId"
+      )
       .value
       .trim();
 
+
   const password =
     document
-      .getElementById("loginPassword")
+      .getElementById(
+        "loginPassword"
+      )
       .value;
 
+
   const error =
-    document.getElementById("loginError");
+    document
+      .getElementById(
+        "loginError"
+      );
 
-  error.classList.remove(
-    "login-success"
-  );
 
-  error.textContent = "";
+  error.textContent =
+    "ログインしています...";
 
 
   if(!validId(id)){
 
     error.textContent =
-      "IDは3～20文字の英数字・_・-で入力してね。";
+      "IDは3～20文字の英数字・_・-で入力してください";
 
     return;
 
@@ -1457,25 +2551,25 @@ async function login(){
   if(!password){
 
     error.textContent =
-      "パスワードを入力してね。";
+      "パスワードを入力してください";
 
     return;
 
   }
 
 
-  error.textContent =
-    "ログイン中...";
+  const email =
+    idToEmail(id);
 
 
-  const {data,error:loginError} =
+  const {
+    data,
+    error:loginError
+  } =
     await supabaseClient.auth
       .signInWithPassword({
-
-        email:idToEmail(id),
-
+        email:email,
         password:password
-
       });
 
 
@@ -1487,8 +2581,7 @@ async function login(){
     );
 
     error.textContent =
-      "ログインできませんでした："
-      + loginError.message;
+      "IDまたはパスワードが違います";
 
     return;
 
@@ -1505,24 +2598,29 @@ async function login(){
 
   if(!loaded){
 
-    await supabaseClient.auth.signOut();
+    await supabaseClient.auth
+      .signOut();
 
     currentUser = null;
 
     error.textContent =
-      "コインデータを読み込めませんでした。";
+      "プロフィールを読み込めませんでした";
 
     return;
 
   }
 
 
-  error.classList.add(
-    "login-success"
-  );
-
   error.textContent =
-    "ログイン成功！";
+    "";
+
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .style.display =
+      "none";
 
 
   showHub();
@@ -1530,38 +2628,40 @@ async function login(){
 }
 
 
-/* =====================================================
+/* =========================================
    REGISTER
-===================================================== */
+========================================= */
 
 async function register(){
 
   const id =
     document
-      .getElementById("loginId")
+      .getElementById(
+        "loginId"
+      )
       .value
       .trim();
 
+
   const password =
     document
-      .getElementById("loginPassword")
+      .getElementById(
+        "loginPassword"
+      )
       .value;
 
+
   const error =
-    document.getElementById("loginError");
-
-
-  error.classList.remove(
-    "login-success"
-  );
-
-  error.textContent = "";
+    document
+      .getElementById(
+        "loginError"
+      );
 
 
   if(!validId(id)){
 
     error.textContent =
-      "IDは3～20文字の英数字・_・-で入力してね。";
+      "IDは3～20文字の英数字・_・-で入力してください";
 
     return;
 
@@ -1571,7 +2671,7 @@ async function register(){
   if(password.length < 6){
 
     error.textContent =
-      "パスワードは6文字以上にしてね。";
+      "パスワードは6文字以上にしてください";
 
     return;
 
@@ -1579,17 +2679,21 @@ async function register(){
 
 
   error.textContent =
-    "アカウント作成中...";
+    "アカウントを作成しています...";
 
 
-  const {data,error:registerError} =
+  const email =
+    idToEmail(id);
+
+
+  const {
+    data,
+    error:registerError
+  } =
     await supabaseClient.auth
       .signUp({
-
-        email:idToEmail(id),
-
+        email:email,
         password:password
-
       });
 
 
@@ -1601,19 +2705,18 @@ async function register(){
     );
 
     error.textContent =
-      "登録できません："
-      + registerError.message;
+      "登録できませんでした：" +
+      registerError.message;
 
     return;
 
   }
 
 
-  if(!data.session){
+  if(!data.user){
 
     error.textContent =
-      "アカウントは作成されました。"
-      + "SupabaseのConfirm emailをOFFにしてください。";
+      "登録できませんでした";
 
     return;
 
@@ -1624,276 +2727,197 @@ async function register(){
     data.user;
 
 
-  const profileOK =
+  const profile =
     await ensureProfile();
 
 
-  if(!profileOK){
-
-    await supabaseClient.auth.signOut();
-
-    currentUser = null;
+  if(!profile){
 
     error.textContent =
-      "アカウントは作成されましたが、"
-      + "コインデータを作成できませんでした。";
+      "登録はできましたがプロフィール作成に失敗しました";
 
     return;
 
   }
 
 
-  await loadProfile();
-
-
-  error.classList.add(
-    "login-success"
-  );
-
-  error.textContent =
-    "登録完了！";
-
-
-  showHub();
-
-}
-
-
-/* =====================================================
-   PROFILE
-===================================================== */
-
-async function ensureProfile(){
-
-  if(!currentUser){
-
-    return false;
-
-  }
-
-
-  const {data,error} =
-    await supabaseClient
-      .from("profiles")
-      .select("id, coins, is_admin")
-      .eq("id",currentUser.id)
-      .maybeSingle();
-
-
-  if(error){
-
-    console.error(
-      "PROFILE SELECT ERROR:",
-      error
-    );
-
-    return false;
-
-  }
-
-
-  if(data){
-
-    return true;
-
-  }
-
-
-  const {error:insertError} =
-    await supabaseClient
-      .from("profiles")
-      .insert({
-
-        id:currentUser.id,
-
-        coins:1000,
-
-        is_admin:false
-
-      });
-
-
-  if(insertError){
-
-    console.error(
-      "PROFILE INSERT ERROR:",
-      insertError
-    );
-
-    return false;
-
-  }
-
-
-  return true;
-
-}
-
-
-/* =====================================================
-   PROFILE LOAD
-===================================================== */
-
-async function loadProfile(){
-
-  if(!currentUser){
-
-    return false;
-
-  }
-
-
-  const ok =
-    await ensureProfile();
-
-
-  if(!ok){
-
-    return false;
-
-  }
-
-
-  const {data,error} =
-    await supabaseClient
-      .from("profiles")
-      .select("id, coins, is_admin")
-      .eq("id",currentUser.id)
-      .maybeSingle();
-
-
-  if(error || !data){
-
-    console.error(
-      "PROFILE LOAD ERROR:",
-      error
-    );
-
-    return false;
-
-  }
-
-
   medals =
-    Number(data.coins || 0);
+    Number(
+      profile.coins || 1000
+    );
 
 
   isAdmin =
-    data.is_admin === true;
+    profile.is_admin === true;
+
+
+  updateMedals();
+
+  updateCoins();
+
+  showAdminPanel();
+
+
+  error.textContent =
+    "登録完了！ログインしました";
+
+
+  setTimeout(
+    ()=>{
+      document
+        .getElementById(
+          "loginScreen"
+        )
+        .style.display =
+          "none";
+
+      showHub();
+
+    },
+    500
+  );
+
+}
+
+
+/* =========================================
+   HUB
+========================================= */
+
+function showHub(){
+
+  document
+    .getElementById(
+      "casinoHub"
+    )
+    .style.display =
+      "block";
+
+
+  document
+    .getElementById(
+      "gameScreen"
+    )
+    .style.display =
+      "none";
+
+
+  const player =
+    document.getElementById(
+      "playerName"
+    );
+
+
+  if(player && currentUser){
+
+    player.textContent =
+      currentUser.email
+        .split("@")[0];
+
+  }
 
 
   updateCoins();
 
-
-  return true;
-
-}
+  showAdminPanel();
 
 
-/* =====================================================
-   COIN
-===================================================== */
-
-function updateCoins(){
-
-  const hub =
+  const requestPanel =
     document.getElementById(
-      "hubCoins"
-    );
-
-  const game =
-    document.getElementById(
-      "gameCoins"
-    );
-
-  const medal =
-    document.getElementById(
-      "medalDisplay"
+      "coinRequestPanel"
     );
 
 
-  if(hub){
+  if(requestPanel){
 
-    hub.textContent =
-      medals.toLocaleString();
-
-  }
-
-
-  if(game){
-
-    game.textContent =
-      medals.toLocaleString();
-
-  }
-
-
-  if(medal){
-
-    medal.textContent =
-      "メダル：" +
-      medals.toLocaleString() +
-      "枚";
+    requestPanel.style.display =
+      "block";
 
   }
 
 }
 
 
-/* =====================================================
-   COIN SAVE
-===================================================== */
+/* =========================================
+   GAMEを開く
+========================================= */
 
-function saveCoins(){
+function openGame(game){
 
-  if(!currentUser){
-
-    return Promise.resolve();
-
+  if(game !== "slotRe"){
+    return;
   }
 
 
-  const coinsToSave =
-    Number(medals);
+  document
+    .getElementById(
+      "casinoHub"
+    )
+    .style.display =
+      "none";
 
 
-  saveQueue =
-    saveQueue.then(async()=>{
-
-      const {error} =
-        await supabaseClient
-          .from("profiles")
-          .update({
-
-            coins:coinsToSave
-
-          })
-          .eq(
-            "id",
-            currentUser.id
-          );
+  document
+    .getElementById(
+      "gameScreen"
+    )
+    .style.display =
+      "block";
 
 
-      if(error){
-
-        console.error(
-          "COIN SAVE ERROR:",
-          error
-        );
-
-      }
-
-    });
-
-
-  return saveQueue;
+  updateMedals();
 
 }
 
 
-/* =====================================================
-   COIN REQUEST
-===================================================== */
+/* =========================================
+   HUBに戻る
+========================================= */
+
+function backToHub(){
+
+  document
+    .getElementById(
+      "gameScreen"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "casinoHub"
+    )
+    .style.display =
+      "block";
+
+
+  updateCoins();
+
+  showAdminPanel();
+
+}
+
+
+/* =========================================
+   準備中
+========================================= */
+
+function comingSoon(){
+
+  document
+    .getElementById(
+      "hubMessage"
+    )
+    .textContent =
+      "このカジノは現在準備中です！";
+
+}
+
+
+/* =========================================
+   コイン追加依頼
+========================================= */
 
 async function createCoinRequest(){
 
@@ -1904,33 +2928,88 @@ async function createCoinRequest(){
   }
 
 
+  const amountInput =
+    document.getElementById(
+      "requestAmount"
+    );
+
+
+  const amount =
+    Number(
+      amountInput.value
+    );
+
+
   const result =
     document.getElementById(
       "requestResult"
     );
+
 
   const box =
     document.getElementById(
       "requestCodeBox"
     );
 
-  const codeElement =
+
+  const code =
     document.getElementById(
       "requestCode"
     );
 
 
+  if(
+    !Number.isInteger(amount)
+    ||
+    amount <= 0
+  ){
+
+    result.className =
+      "request-result error";
+
+    result.textContent =
+      "1以上の整数を入力してください。";
+
+    return;
+
+  }
+
+
+  if(amount > 1000000){
+
+    result.className =
+      "request-result error";
+
+    result.textContent =
+      "最大1,000,000コインまでです。";
+
+    return;
+
+  }
+
+
   result.className =
-    "request-result admin-success";
+    "request-result success";
 
   result.textContent =
     "依頼IDを発行しています...";
 
 
-  const {data,error} =
+  box.style.display =
+    "none";
+
+
+  const {
+    data,
+    error
+  } =
     await supabaseClient
       .rpc(
-        "create_coin_request"
+        "create_coin_request",
+        {
+          request_amount:
+            amount
+        }
       );
 
 
@@ -1942,96 +3021,42 @@ async function createCoinRequest(){
     );
 
     result.className =
-      "request-result admin-error";
+      "request-result error";
 
     result.textContent =
-      "依頼IDを発行できませんでした："
-      + error.message;
+      "依頼IDを発行できませんでした：" +
+      error.message;
 
     return;
 
   }
 
 
-  codeElement.textContent =
+  code.textContent =
     data;
+
 
   box.style.display =
     "block";
 
 
   result.className =
-    "request-result admin-success";
+    "request-result success";
 
   result.textContent =
-    "依頼IDを発行しました！管理者にこのIDを伝えてください。";
+    amount.toLocaleString() +
+    "コインの依頼IDを発行しました！";
 
 
-  addHistory(
-    "コイン追加依頼ID発行"
-  );
-
-}
-
-
-/* =====================================================
-   COPY REQUEST CODE
-===================================================== */
-
-async function copyRequestCode(){
-
-  const code =
-    document.getElementById(
-      "requestCode"
-    ).textContent;
-
-
-  if(!code){
-
-    return;
-
-  }
-
-
-  try{
-
-    await navigator.clipboard.writeText(
-      code
-    );
-
-
-    const result =
-      document.getElementById(
-        "requestResult"
-      );
-
-
-    result.className =
-      "request-result admin-success";
-
-    result.textContent =
-      "📋 依頼IDをコピーしました！";
-
-  }
-  catch(error){
-
-    console.error(
-      "COPY ERROR:",
-      error
-    );
-
-    alert(
-      "コピーできませんでした。依頼IDを手動でコピーしてください。"
-    );
-
-  }
+  amountInput.value =
+    "1000";
 
 }
 
 
-/* =====================================================
-   ADMIN PANEL
-===================================================== */
+/* =========================================
+   管理者表示
+========================================= */
 
 function showAdminPanel(){
 
@@ -2042,9 +3067,7 @@ function showAdminPanel(){
 
 
   if(!panel){
-
     return;
-
   }
 
 
@@ -2066,9 +3089,9 @@ function showAdminPanel(){
 }
 
 
-/* =====================================================
-   ADMIN APPROVE REQUEST
-===================================================== */
+/* =========================================
+   管理者承認
+========================================= */
 
 async function approveCoinRequest(){
 
@@ -2121,12 +3144,16 @@ async function approveCoinRequest(){
   );
 
 
-  const {data,error} =
+  const {
+    data,
+    error
+  } =
     await supabaseClient
       .rpc(
         "approve_coin_request",
         {
-          request_code_input:code
+          request_code_input:
+            code
         }
       );
 
@@ -2155,7 +3182,8 @@ async function approveCoinRequest(){
     code +
     "<br>" +
     "追加後の残高：" +
-    Number(data).toLocaleString() +
+    Number(data)
+      .toLocaleString() +
     "コイン",
     true
   );
@@ -2163,12 +3191,20 @@ async function approveCoinRequest(){
 
   input.value = "";
 
+
+  /*
+     管理者自身のプロフィールも
+     最新状態に更新
+  */
+
+  await loadProfile();
+
 }
 
 
-/* =====================================================
-   ADMIN RESULT
-===================================================== */
+/* =========================================
+   管理者結果
+========================================= */
 
 function showAdminResult(
   text,
@@ -2182,9 +3218,7 @@ function showAdminResult(
 
 
   if(!result){
-
     return;
-
   }
 
 
@@ -2196,64 +3230,162 @@ function showAdminResult(
     "admin-result " +
     (
       success
-      ? "admin-success"
-      : "admin-error"
+      ? "success"
+      : "error"
     );
 
 }
 
 
-/* =====================================================
-   HUB
-===================================================== */
+/* =========================================
+   LOGOUT
+========================================= */
 
-function showHub(){
+async function logout(){
+
+  await supabaseClient.auth
+    .signOut();
+
+
+  currentUser =
+    null;
+
+
+  medals =
+    0;
+
+
+  isAdmin =
+    false;
+
 
   document
-    .getElementById("loginScreen")
-    .classList.add("hidden");
+    .getElementById(
+      "casinoHub"
+    )
+    .style.display =
+      "none";
 
 
   document
-    .getElementById("gameScreen")
-    .classList.add("hidden");
+    .getElementById(
+      "gameScreen"
+    )
+    .style.display =
+      "none";
 
 
   document
-    .getElementById("casinoHub")
-    .classList.remove("hidden");
+    .getElementById(
+      "loginScreen"
+    )
+    .style.display =
+      "flex";
 
 
-  const player =
+  document
+    .getElementById(
+      "loginId"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "loginPassword"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "loginError"
+    )
+    .textContent =
+      "";
+
+
+  const requestBox =
     document.getElementById(
-      "hubPlayer"
+      "requestCodeBox"
     );
 
 
-  if(currentUser){
+  if(requestBox){
 
-    player.textContent =
-      "ID: " +
-      currentUser.email
-        .split("@")[0];
+    requestBox.style.display =
+      "none";
 
   }
 
 
-  updateCoins();
-
-  showAdminPanel();
-
-
-  const requestPanel =
+  const requestCode =
     document.getElementById(
-      "coinRequestPanel"
+      "requestCode"
     );
 
 
-  if(requestPanel){
+  if(requestCode){
 
-    requestPanel.classList.add(
+    requestCode.textContent =
+      "";
+
+  }
+
+
+  const requestResult =
+    document.getElementById(
+      "requestResult"
+    );
+
+
+  if(requestResult){
+
+    requestResult.textContent =
+      "";
+
+  }
+
+
+  const requestAmount =
+    document.getElementById(
+      "requestAmount"
+    );
+
+
+  if(requestAmount){
+
+    requestAmount.value =
+      "1000";
+
+  }
+
+
+  const adminResult =
+    document.getElementById(
+      "adminResult"
+    );
+
+
+  if(adminResult){
+
+    adminResult.textContent =
+      "";
+
+  }
+
+
+  const adminPanel =
+    document.getElementById(
+      "adminPanel"
+    );
+
+
+  if(adminPanel){
+
+    adminPanel.classList.remove(
       "show"
     );
 
@@ -2262,191 +3394,145 @@ function showHub(){
 }
 
 
-/* =====================================================
-   OPEN GAME
-===================================================== */
-
-function openGame(){
-
-  document
-    .getElementById("casinoHub")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("gameScreen")
-    .classList.remove("hidden");
-
-
-  updateCoins();
-
-}
-
-
-/* =====================================================
-   BACK HUB
-===================================================== */
-
-function backToHub(){
-
-  document
-    .getElementById("gameScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("casinoHub")
-    .classList.remove("hidden");
-
-
-  updateCoins();
-
-  showAdminPanel();
-
-}
-
-
-/* =====================================================
-   COMING SOON
-===================================================== */
-
-function comingSoon(){
-
-  document.getElementById(
-    "hubMessage"
-  ).textContent =
-    "このカジノは現在準備中です！";
-
-}
-
-
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-async function logout(){
-
-  await saveQueue;
-
-
-  await supabaseClient.auth.signOut();
-
-
-  currentUser = null;
-
-  medals = 0;
-
-  isAdmin = false;
-
-
-  document
-    .getElementById("casinoHub")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("gameScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("loginScreen")
-    .classList.remove("hidden");
-
-
-  document
-    .getElementById("adminPanel")
-    .classList.remove("show");
-
-
-  document
-    .getElementById("coinRequestPanel")
-    .classList.remove("show");
-
-
-  document
-    .getElementById("requestCodeBox")
-    .style.display =
-    "none";
-
-
-  document
-    .getElementById("requestCode")
-    .textContent =
-    "";
-
-
-  document
-    .getElementById("requestResult")
-    .textContent =
-    "";
-
-
-  document
-    .getElementById("adminResult")
-    .textContent =
-    "";
-
-
-  document
-    .getElementById("requestCodeInput")
-    .value =
-    "";
-
-
-  document.getElementById(
-    "loginId"
-  ).value = "";
-
-
-  document.getElementById(
-    "loginPassword"
-  ).value = "";
-
-
-  document.getElementById(
-    "loginError"
-  ).textContent = "";
-
-}
-
-
-/* =====================================================
-   SETTINGS
-===================================================== */
+/* =========================================
+   ゲーム設定
+========================================= */
 
 const BONUS_PROBABILITY = {
 
-  1: 1 / 280,
+  1:1 / 280,
 
-  2: 1 / 260,
+  2:1 / 250,
 
-  3: 1 / 240,
+  3:1 / 225,
 
-  4: 1 / 220,
+  4:1 / 200,
 
-  5: 1 / 200,
+  5:1 / 180,
 
-  6: 1 / 180,
+  6:1 / 160,
 
-  7: 1 / 160
+  7:1 / 140
 
 };
 
 
-const CURRENT_SETTING = 4;
+const SETTING_WEIGHTS = {
+
+  1:50,
+
+  2:24,
+
+  3:15,
+
+  4:7,
+
+  5:3,
+
+  6:1,
+
+  7:1
+
+};
 
 
-/* =====================================================
-   BET
-===================================================== */
-
-const BET_COST = 3;
+let CURRENT_SETTING = 1;
 
 
-/* =====================================================
-   BONUS TYPES
-===================================================== */
+const SETTING_CHANGE_INTERVAL =
+  60 * 60 * 1000;
+
+
+function chooseHourlySetting(){
+
+  const entries =
+    Object.entries(
+      SETTING_WEIGHTS
+    )
+    .map(
+      ([setting,weight])=>({
+
+        setting:
+          Number(setting),
+
+        weight:
+          Math.max(
+            0,
+            Number(weight) || 0
+          )
+
+      })
+    )
+    .filter(
+      x => x.weight > 0
+    );
+
+
+  const total =
+    entries.reduce(
+      (sum,x)=>
+        sum + x.weight,
+      0
+    );
+
+
+  if(total <= 0){
+
+    return 1;
+
+  }
+
+
+  let r =
+    Math.random() *
+    total;
+
+
+  for(
+    const item of entries
+  ){
+
+    r -= item.weight;
+
+
+    if(r < 0){
+
+      return item.setting;
+
+    }
+
+  }
+
+
+  return 1;
+
+}
+
+
+function scheduleHourlySettingChange(){
+
+  setTimeout(
+    ()=>{
+
+      CURRENT_SETTING =
+        chooseHourlySetting();
+
+
+      scheduleHourlySettingChange();
+
+    },
+    SETTING_CHANGE_INTERVAL
+  );
+
+}
+
+
+scheduleHourlySettingChange();
+
+
+/* =========================================
+   BONUS
+========================================= */
 
 const BONUS_TYPES = [
 
@@ -2488,36 +3574,37 @@ const BONUS_TYPES = [
 ];
 
 
-/* =====================================================
-   GAME STATE
-===================================================== */
-
 let state =
   "normal";
+
 
 let bonusName =
   "";
 
+
 let bonusRemaining =
   0;
+
 
 let bonusMedals =
   0;
 
+
 let voidMedals =
   0;
+
 
 let remainingGames =
   0;
 
 
-/* =====================================================
-   SIGNAL
-===================================================== */
-
 let signal =
   "normal";
 
+
+/* =========================================
+   初期化
+========================================= */
 
 function normalSignal(){
 
@@ -2526,7 +3613,10 @@ function normalSignal(){
 
 
   document.body.classList.remove(
-    "hot",
+    "hot"
+  );
+
+  document.body.classList.remove(
     "void-hot"
   );
 
@@ -2537,8 +3627,12 @@ function normalSignal(){
     );
 
 
-  button.className =
-    "push push-white";
+  if(button){
+
+    button.className =
+      "push push-white";
+
+  }
 
 }
 
@@ -2555,22 +3649,12 @@ function hotSignal(){
     );
 
 
-  button.className =
-    "push push-red";
+  if(button){
 
+    button.className =
+      "push push-red";
 
-  button.classList.add(
-    "flash"
-  );
-
-
-  setTimeout(()=>{
-
-    button.classList.remove(
-      "flash"
-    );
-
-  },1000);
+  }
 
 }
 
@@ -2587,38 +3671,21 @@ function voidSignal(){
     );
 
 
-  button.className =
-    "push push-purple";
+  if(button){
 
+    button.className =
+      "push push-rainbow";
 
-  button.classList.add(
-    "flash"
-  );
-
-
-  setTimeout(()=>{
-
-    button.classList.remove(
-      "flash"
-    );
-
-  },1000);
+  }
 
 }
 
 
-/* =====================================================
-   PLAY
-===================================================== */
+/* =========================================
+   PUSH
+========================================= */
 
 function play(){
-
-  if(!currentUser){
-
-    return;
-
-  }
-
 
   if(state === "normal"){
 
@@ -2676,13 +3743,13 @@ function play(){
 }
 
 
-/* =====================================================
-   NORMAL
-===================================================== */
+/* =========================================
+   通常時
+========================================= */
 
 function normalGame(){
 
-  if(medals < BET_COST){
+  if(medals < BET){
 
     message(
       "メダルが足りません。"
@@ -2697,7 +3764,9 @@ function normalGame(){
   }
 
 
-  medals -= BET_COST;
+  medals -= BET;
+
+  updateMedals();
 
   updateCoins();
 
@@ -2733,25 +3802,28 @@ function normalGame(){
       voidSignal();
 
       setReels(
-        "VOID",
-        "VOID",
-        "VOID"
+        "V",
+        "O",
+        "I"
       );
+
 
       message(
         "……VOID……！"
       );
+
 
       addHistory(
         "VOID BONUS当選"
       );
 
 
-      setTimeout(()=>{
-
-        startVoidBonusEffect();
-
-      },450);
+      setTimeout(
+        ()=>{
+          startVoidBonusEffect();
+        },
+        450
+      );
 
 
       return;
@@ -2761,15 +3833,18 @@ function normalGame(){
 
     hotSignal();
 
+
     setReels(
-      "BONUS",
-      "RE",
-      bonusName
+      "7",
+      "7",
+      "7"
     );
 
+
     message(
-      "BONUS CHANCE！"
+      "……！"
     );
+
 
     addHistory(
       "BONUS当選：" +
@@ -2777,11 +3852,12 @@ function normalGame(){
     );
 
 
-    setTimeout(()=>{
-
-      startBonusEffect();
-
-    },500);
+    setTimeout(
+      ()=>{
+        startBonusEffect();
+      },
+      500
+    );
 
 
     return;
@@ -2796,17 +3872,20 @@ function normalGame(){
 
     setReels(
       "CZ",
-      "CHANCE",
+      "CZ",
       "CZ"
     );
+
 
     message(
       "CZチャンス！"
     );
 
+
     addHistory(
       "通常時：CZチャンス"
     );
+
 
     return;
 
@@ -2821,16 +3900,19 @@ function normalGame(){
     setReels(
       "🍒",
       "🍒",
-      "🍈"
+      "🍒"
     );
+
 
     message(
       "チャンス役！"
     );
 
+
     addHistory(
       "通常時：チャンス役"
     );
+
 
     return;
 
@@ -2838,14 +3920,16 @@ function normalGame(){
 
 
   setReels(
-    "RE",
+    "7",
     "BAR",
     "🍒"
   );
 
+
   message(
     "ハズレ"
   );
+
 
   addHistory(
     "通常時：ハズレ"
@@ -2854,11 +3938,19 @@ function normalGame(){
 }
 
 
-/* =====================================================
-   BONUS EFFECT
-===================================================== */
+/* =========================================
+   BONUS演出
+========================================= */
 
 function startBonusEffect(){
+
+  if(!bonusName){
+
+    bonusName =
+      drawBonusType().name;
+
+  }
+
 
   showEffect(
     "BONUS CHANCE",
@@ -2873,20 +3965,23 @@ function startBonusEffect(){
   );
 
 
-  setTimeout(()=>{
+  setTimeout(
+    ()=>{
 
-    hideEffect();
+      hideEffect();
 
-    startBonus();
+      startBonus();
 
-  },1800);
+    },
+    1800
+  );
 
 }
 
 
-/* =====================================================
-   BONUS START
-===================================================== */
+/* =========================================
+   BONUS開始
+========================================= */
 
 function startBonus(){
 
@@ -2895,13 +3990,6 @@ function startBonus(){
       b =>
         b.name === bonusName
     );
-
-
-  if(!bonus){
-
-    return;
-
-  }
 
 
   state =
@@ -2923,7 +4011,7 @@ function startBonus(){
 
   setState(
     "ボーナス",
-    bonusName
+    ""
   );
 
 
@@ -2953,9 +4041,9 @@ function startBonus(){
 }
 
 
-/* =====================================================
-   BONUS GAME
-===================================================== */
+/* =========================================
+   BONUS中
+========================================= */
 
 function bonusGame(){
 
@@ -2967,16 +4055,23 @@ function bonusGame(){
 
 
   const payout =
-    bonus ?
-    bonus.payout :
-    10;
+    bonus
+    ? bonus.payout
+    : 10;
 
 
   bonusRemaining--;
 
-  bonusMedals += payout;
 
-  medals += payout;
+  bonusMedals +=
+    payout;
+
+
+  medals +=
+    payout;
+
+
+  updateMedals();
 
   updateCoins();
 
@@ -3012,33 +4107,21 @@ function bonusGame(){
 
 
     message(
-      "🔥 <b>BIG BONUS CHANCE!</b><br>" +
+      "🔥 BIG BONUS CHANCE!<br>" +
       "+5回！ +" +
-      payout * 5 +
+      (
+        payout * 5
+      ) +
       "枚！"
     );
 
-
-    document
-      .getElementById("message")
-      .classList.add("hot");
-
-
-    updateBonusInfo();
 
     addHistory(
       "BONUS +5回"
     );
 
 
-    setTimeout(()=>{
-
-      document
-        .getElementById("message")
-        .classList.remove("hot");
-
-    },600);
-
+    updateBonusInfo();
 
     return;
 
@@ -3060,11 +4143,12 @@ function bonusGame(){
     );
 
 
-    updateBonusInfo();
-
     addHistory(
       "BONUS +1回"
     );
+
+
+    updateBonusInfo();
 
     return;
 
@@ -3099,9 +4183,9 @@ function bonusGame(){
 }
 
 
-/* =====================================================
-   BONUS FINISH
-===================================================== */
+/* =========================================
+   BONUS終了
+========================================= */
 
 function finishBonus(){
 
@@ -3120,7 +4204,7 @@ function finishBonus(){
 
   setState(
     "リプレイ確変",
-    "30G"
+    ""
   );
 
 
@@ -3149,9 +4233,9 @@ function finishBonus(){
 }
 
 
-/* =====================================================
-   VOID EFFECT
-===================================================== */
+/* =========================================
+   VOID演出
+========================================= */
 
 function startVoidBonusEffect(){
 
@@ -3171,20 +4255,23 @@ function startVoidBonusEffect(){
   );
 
 
-  setTimeout(()=>{
+  setTimeout(
+    ()=>{
 
-    hideEffect();
+      hideEffect();
 
-    startVoidBonus();
+      startVoidBonus();
 
-  },2000);
+    },
+    2000
+  );
 
 }
 
 
-/* =====================================================
-   VOID START
-===================================================== */
+/* =========================================
+   VOID開始
+========================================= */
 
 function startVoidBonus(){
 
@@ -3202,12 +4289,12 @@ function startVoidBonus(){
 
   hideBonusInfo();
 
-  voidSignal();
+  normalSignal();
 
 
   setState(
     "Voidボーナス",
-    "100G"
+    ""
   );
 
 
@@ -3219,14 +4306,9 @@ function startVoidBonus(){
 
 
   message(
-    "👑 <b>VOID BONUS</b><br>" +
+    "👑 VOID BONUS<br>" +
     "100G開始！"
   );
-
-
-  document
-    .getElementById("message")
-    .classList.add("void");
 
 
   addHistory(
@@ -3236,17 +4318,24 @@ function startVoidBonus(){
 }
 
 
-/* =====================================================
-   VOID GAME
-===================================================== */
+/* =========================================
+   VOID
+========================================= */
 
 function voidGame(){
 
   remainingGames--;
 
-  voidMedals += 10;
 
-  medals += 10;
+  voidMedals +=
+    10;
+
+
+  medals +=
+    10;
+
+
+  updateMedals();
 
   updateCoins();
 
@@ -3257,14 +4346,8 @@ function voidGame(){
     Math.random() < 0.02
   ){
 
-    remainingGames += 10;
-
-
-    setReels(
-      "VOID",
-      "+10G",
-      "VOID"
-    );
+    remainingGames +=
+      10;
 
 
     message(
@@ -3285,7 +4368,7 @@ function voidGame(){
 
   setReels(
     "VOID",
-    "RE",
+    randomSymbol(),
     "VOID"
   );
 
@@ -3299,11 +4382,6 @@ function voidGame(){
   );
 
 
-  addHistory(
-    "Void：10枚"
-  );
-
-
   if(
     remainingGames <= 0
   ){
@@ -3312,14 +4390,9 @@ function voidGame(){
       "replayInfinite";
 
 
-    document
-      .getElementById("message")
-      .classList.remove("void");
-
-
     setState(
       "リプレイ確変（無限）",
-      "終了条件なし"
+      ""
     );
 
 
@@ -3345,9 +4418,9 @@ function voidGame(){
 }
 
 
-/* =====================================================
-   REPLAY 30G
-===================================================== */
+/* =========================================
+   30Gリプレイ
+========================================= */
 
 function replay30Game(){
 
@@ -3364,19 +4437,7 @@ function replay30Game(){
       drawBonusType().name;
 
 
-    if(
-      bonusName === "Void"
-    ){
-
-      startVoidBonusEffect();
-
-    }
-    else{
-
-      startBonusEffect();
-
-    }
-
+    startBonusEffect();
 
     return;
 
@@ -3395,7 +4456,7 @@ function replay30Game(){
 
     setState(
       "CZ",
-      "5G"
+      ""
     );
 
 
@@ -3407,7 +4468,7 @@ function replay30Game(){
 
 
     message(
-      "⚡ <b>CZ突入！</b><br>" +
+      "⚡ CZ突入！<br>" +
       "5G間のチャンス！"
     );
 
@@ -3425,7 +4486,7 @@ function replay30Game(){
   setReels(
     "REPLAY",
     "REPLAY",
-    "RE"
+    "BAR"
   );
 
 
@@ -3434,11 +4495,6 @@ function replay30Game(){
     "残り " +
     remainingGames +
     "G"
-  );
-
-
-  addHistory(
-    "リプレイ確変"
   );
 
 
@@ -3452,7 +4508,7 @@ function replay30Game(){
 
     setState(
       "通常時",
-      "PUSH 3枚"
+      ""
     );
 
 
@@ -3460,9 +4516,9 @@ function replay30Game(){
 
 
     setReels(
-      "RE",
+      "7",
       "BAR",
-      "RE"
+      "7"
     );
 
 
@@ -3481,9 +4537,9 @@ function replay30Game(){
 }
 
 
-/* =====================================================
+/* =========================================
    CZ
-===================================================== */
+========================================= */
 
 function czGame(){
 
@@ -3500,7 +4556,7 @@ function czGame(){
 
     setState(
       "リプレイ確変（無限）",
-      "終了条件なし"
+      ""
     );
 
 
@@ -3512,7 +4568,7 @@ function czGame(){
 
 
     message(
-      "🔥 <b>CZ成功！</b><br>" +
+      "🔥 CZ成功！<br>" +
       "♾️ 無限リプレイ確変へ！"
     );
 
@@ -3529,7 +4585,7 @@ function czGame(){
 
   setReels(
     "REPLAY",
-    "CZ",
+    "7",
     "BAR"
   );
 
@@ -3552,7 +4608,7 @@ function czGame(){
 
     setState(
       "通常時",
-      "PUSH 3枚"
+      ""
     );
 
 
@@ -3560,9 +4616,9 @@ function czGame(){
 
 
     setReels(
-      "RE",
+      "7",
       "BAR",
-      "RE"
+      "7"
     );
 
 
@@ -3581,9 +4637,9 @@ function czGame(){
 }
 
 
-/* =====================================================
-   INFINITE REPLAY
-===================================================== */
+/* =========================================
+   無限リプレイ
+========================================= */
 
 function infiniteReplayGame(){
 
@@ -3606,19 +4662,7 @@ function infiniteReplayGame(){
       drawBonusType().name;
 
 
-    if(
-      bonusName === "Void"
-    ){
-
-      startVoidBonusEffect();
-
-    }
-    else{
-
-      startBonusEffect();
-
-    }
-
+    startBonusEffect();
 
     return;
 
@@ -3639,38 +4683,102 @@ function infiniteReplayGame(){
 
 
   addHistory(
-    "無限リプレイ"
+    "無限リプレイ：リプレイ"
   );
 
 }
 
 
-/* =====================================================
-   REELS
-===================================================== */
+/* =========================================
+   リール
+========================================= */
 
-function setReels(a,b,c){
+function setReels(
+  a,
+  b,
+  c
+){
 
   document.getElementById(
     "reel1"
-  ).textContent = a;
+  ).textContent =
+    a;
 
 
   document.getElementById(
     "reel2"
-  ).textContent = b;
+  ).textContent =
+    b;
 
 
   document.getElementById(
     "reel3"
-  ).textContent = c;
+  ).textContent =
+    c;
 
 }
 
 
-/* =====================================================
-   BONUS DRAW
-===================================================== */
+/* =========================================
+   ランダム図柄
+========================================= */
+
+function randomSymbol(){
+
+  const symbols = [
+
+    "7",
+
+    "BAR",
+
+    "🍒",
+
+    "🍈",
+
+    "REPLAY"
+
+  ];
+
+
+  return symbols[
+    Math.floor(
+      Math.random() *
+      symbols.length
+    )
+  ];
+
+}
+
+
+/* =========================================
+   メダル
+========================================= */
+
+function updateMedals(){
+
+  const el =
+    document.getElementById(
+      "medalDisplay"
+    );
+
+
+  if(el){
+
+    el.textContent =
+      "メダル：" +
+      Number(
+        medals || 0
+      ).toLocaleString() +
+      "枚";
+
+  }
+
+}
+
+
+/* =========================================
+   BONUS抽選
+========================================= */
 
 function drawBonusType(){
 
@@ -3683,15 +4791,16 @@ function drawBonusType(){
 
 
   let r =
-    Math.random() * total;
+    Math.random() *
+    total;
 
 
   for(
-    const bonus
-    of BONUS_TYPES
+    const bonus of BONUS_TYPES
   ){
 
-    r -= bonus.weight;
+    r -=
+      bonus.weight;
 
 
     if(r < 0){
@@ -3708,9 +4817,9 @@ function drawBonusType(){
 }
 
 
-/* =====================================================
-   STATE
-===================================================== */
+/* =========================================
+   状態
+========================================= */
 
 function setState(
   name,
@@ -3725,14 +4834,15 @@ function setState(
 
   document.getElementById(
     "stateInfo"
-  ).textContent = "";
+  ).textContent =
+    "";
 
 }
 
 
-/* =====================================================
-   MESSAGE
-===================================================== */
+/* =========================================
+   メッセージ
+========================================= */
 
 function message(text){
 
@@ -3744,9 +4854,9 @@ function message(text){
 }
 
 
-/* =====================================================
-   BONUS INFO
-===================================================== */
+/* =========================================
+   BONUS情報
+========================================= */
 
 function showBonusInfo(){
 
@@ -3781,9 +4891,9 @@ function updateBonusInfo(){
 
 
   const payout =
-    bonus ?
-    bonus.payout :
-    10;
+    bonus
+    ? bonus.payout
+    : 10;
 
 
   document.getElementById(
@@ -3812,9 +4922,9 @@ function updateBonusInfo(){
 }
 
 
-/* =====================================================
-   EFFECT
-===================================================== */
+/* =========================================
+   演出
+========================================= */
 
 function showEffect(
   small,
@@ -3841,12 +4951,16 @@ function showEffect(
     sub;
 
 
-  document.getElementById(
-    "effectBig"
-  ).style.color =
-    isVoid ?
-    "#dc8aff" :
-    "#ffd65c";
+  const bigText =
+    document.getElementById(
+      "effectBig"
+    );
+
+
+  bigText.style.color =
+    isVoid
+    ? "#dc8aff"
+    : "#ffd65c";
 
 
   document.getElementById(
@@ -3869,9 +4983,9 @@ function hideEffect(){
 }
 
 
-/* =====================================================
-   HISTORY
-===================================================== */
+/* =========================================
+   履歴
+========================================= */
 
 function addHistory(text){
 
@@ -3898,61 +5012,128 @@ function addHistory(text){
 }
 
 
-/* =====================================================
-   START
-===================================================== */
+/* =========================================
+   リセット
+========================================= */
 
-normalSignal();
+async function resetGame(){
 
-setState(
-  "通常時",
-  ""
-);
-
-updateCoins();
+  medals =
+    1000;
 
 
-/* =====================================================
-   ENTER LOGIN
-===================================================== */
+  state =
+    "normal";
 
-document
-  .getElementById("loginPassword")
-  .addEventListener(
-    "keydown",
-    event => {
 
-      if(event.key === "Enter"){
+  bonusName =
+    "";
 
-        login();
 
-      }
+  bonusRemaining =
+    0;
 
-    }
+
+  bonusMedals =
+    0;
+
+
+  remainingGames =
+    0;
+
+
+  hideBonusInfo();
+
+  hideEffect();
+
+  updateMedals();
+
+  updateCoins();
+
+  normalSignal();
+
+
+  setState(
+    "通常時",
+    ""
   );
 
 
-document
-  .getElementById("loginId")
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if(event.key === "Enter"){
-
-        login();
-
-      }
-
-    }
+  setReels(
+    "7",
+    "BAR",
+    "7"
   );
 
 
-console.log(
-  "CASINO [Re] START - COIN REQUEST SYSTEM READY"
+  message(
+    "PUSHでゲーム開始"
+  );
+
+
+  document.getElementById(
+    "history"
+  ).innerHTML =
+    "<div>ゲームリセット</div>";
+
+
+  /*
+    Supabaseにも保存
+  */
+
+  await saveCoins();
+
+}
+
+
+/* =========================================
+   ENTERキー
+========================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    document
+      .getElementById(
+        "loginPassword"
+      )
+      .addEventListener(
+        "keydown",
+        e=>{
+
+          if(e.key === "Enter"){
+
+            login();
+
+          }
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "loginId"
+      )
+      .addEventListener(
+        "keydown",
+        e=>{
+
+          if(e.key === "Enter"){
+
+            login();
+
+          }
+
+        }
+      );
+
+  }
 );
 
 </script>
 
 </body>
+
 </html>
