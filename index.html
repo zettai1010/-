@@ -532,6 +532,7 @@ body.void-hot{
 }
 
 @media(max-width:600px){
+
   .game{
     padding:14px;
   }
@@ -567,8 +568,13 @@ body.void-hot{
 
   <div class="login-box">
 
-    <div class="login-title">CASINO [Re]</div>
-    <div class="login-subtitle">MEMBER LOGIN</div>
+    <div class="login-title">
+      CASINO [Re]
+    </div>
+
+    <div class="login-subtitle">
+      MEMBER LOGIN
+    </div>
 
     <input
       id="loginId"
@@ -588,15 +594,24 @@ body.void-hot{
       maxlength="72"
     >
 
-    <button class="login-button" onclick="login()">
+    <button
+      class="login-button"
+      onclick="login()"
+    >
       LOGIN
     </button>
 
-    <button class="login-button register" onclick="register()">
+    <button
+      class="login-button register"
+      onclick="register()"
+    >
       新規登録
     </button>
 
-    <div id="loginError" class="login-error"></div>
+    <div
+      id="loginError"
+      class="login-error"
+    ></div>
 
   </div>
 
@@ -604,7 +619,7 @@ body.void-hot{
 
 
 <!-- =========================
-     CASINO HUB
+     HUB
 ========================= -->
 
 <div id="casinoHub">
@@ -612,48 +627,91 @@ body.void-hot{
   <div class="hub-header">
 
     <div>
-      <div class="hub-logo">CASINO [Re]</div>
-      <div class="hub-subtitle">GAME SELECT</div>
+
+      <div class="hub-logo">
+        CASINO [Re]
+      </div>
+
+      <div class="hub-subtitle">
+        GAME SELECT
+      </div>
+
     </div>
 
-    <button class="hub-logout" onclick="logout()">
+    <button
+      class="hub-logout"
+      onclick="logout()"
+    >
       LOGOUT
     </button>
 
   </div>
+
 
   <div class="hub-content">
 
     <div class="save-profile">
 
       <div>
-        <span class="save-label">PLAYER</span>
-        <strong id="playerName">---</strong>
+
+        <span class="save-label">
+          PLAYER
+        </span>
+
+        <strong id="playerName">
+          ---
+        </strong>
+
       </div>
 
-      <div>
-        <span class="save-label">COINS</span>
-        <strong id="hubCoins">---</strong>
-      </div>
 
       <div>
-        <span class="save-label">SAVE</span>
-        <strong id="saveStatus">接続中</strong>
+
+        <span class="save-label">
+          COINS
+        </span>
+
+        <strong id="hubCoins">
+          ---
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <span class="save-label">
+          SAVE
+        </span>
+
+        <strong id="saveStatus">
+          接続中
+        </strong>
+
       </div>
 
     </div>
 
-    <h1>カジノを選択</h1>
+
+    <h1>
+      カジノを選択
+    </h1>
 
     <p class="hub-description">
       遊びたいゲームを選んでください
     </p>
 
+
     <div class="casino-grid">
 
-      <button class="casino-card" onclick="openGame('slotRe')">
+      <button
+        class="casino-card"
+        onclick="openGame('slotRe')"
+      >
 
-        <div class="casino-icon">🎰</div>
+        <div class="casino-icon">
+          🎰
+        </div>
 
         <div class="casino-name">
           スロット [Re]
@@ -670,9 +728,14 @@ body.void-hot{
       </button>
 
 
-      <button class="casino-card" onclick="comingSoon()">
+      <button
+        class="casino-card"
+        onclick="comingSoon()"
+      >
 
-        <div class="casino-icon">🃏</div>
+        <div class="casino-icon">
+          🃏
+        </div>
 
         <div class="casino-name">
           CASINO 02
@@ -689,9 +752,14 @@ body.void-hot{
       </button>
 
 
-      <button class="casino-card" onclick="comingSoon()">
+      <button
+        class="casino-card"
+        onclick="comingSoon()"
+      >
 
-        <div class="casino-icon">🎲</div>
+        <div class="casino-icon">
+          🎲
+        </div>
 
         <div class="casino-name">
           CASINO 03
@@ -708,9 +776,14 @@ body.void-hot{
       </button>
 
 
-      <button class="casino-card" onclick="comingSoon()">
+      <button
+        class="casino-card"
+        onclick="comingSoon()"
+      >
 
-        <div class="casino-icon">♠️</div>
+        <div class="casino-icon">
+          ♠️
+        </div>
 
         <div class="casino-name">
           CASINO 04
@@ -728,6 +801,7 @@ body.void-hot{
 
     </div>
 
+
     <div id="hubMessage"></div>
 
   </div>
@@ -741,124 +815,213 @@ body.void-hot{
 
 <div id="gameScreen">
 
-<div class="game">
+  <div class="game">
 
-<button class="back-button" onclick="backToHub()">
-  ← カジノ選択へ戻る
-</button>
+    <button
+      class="back-button"
+      onclick="backToHub()"
+    >
+      ← カジノ選択へ戻る
+    </button>
 
-<div class="title">
-  スロット[Re]
-</div>
 
-<div class="subtitle">
-  BONUS / VOID / REPLAY CHANCE
-</div>
+    <div class="title">
+      スロット[Re]
+    </div>
 
-<div class="status">
+    <div class="subtitle">
+      BONUS / VOID / REPLAY CHANCE
+    </div>
 
-  <div class="status-name" id="medalDisplay">
-    メダル：1000枚
+
+    <div class="status">
+
+      <div
+        class="status-name"
+        id="medalDisplay"
+      >
+        メダル：1000枚
+      </div>
+
+      <div class="status-info">
+        1 PUSH = 3枚
+      </div>
+
+    </div>
+
+
+    <div class="status">
+
+      <div
+        class="status-name"
+        id="stateName"
+      >
+        通常時
+      </div>
+
+      <div
+        class="status-info"
+        id="stateInfo"
+      ></div>
+
+    </div>
+
+
+    <div
+      class="bonus-info"
+      id="bonusInfo"
+    >
+
+      <div
+        class="bonus-title"
+        id="bonusTitle"
+      >
+        BONUS
+      </div>
+
+      <div
+        class="bonus-count"
+        id="bonusCount"
+      >
+        10枚 × 5回
+      </div>
+
+      <div
+        class="bonus-medals"
+        id="bonusMedals"
+      >
+        獲得枚数：0枚
+      </div>
+
+    </div>
+
+
+    <div class="reels">
+
+      <div
+        class="reel"
+        id="reel1"
+      >
+        7
+      </div>
+
+      <div
+        class="reel"
+        id="reel2"
+      >
+        BAR
+      </div>
+
+      <div
+        class="reel"
+        id="reel3"
+      >
+        7
+      </div>
+
+    </div>
+
+
+    <button
+      class="push push-white"
+      id="pushButton"
+      onclick="play()"
+    >
+      PUSH
+    </button>
+
+
+    <div
+      class="message"
+      id="message"
+    >
+      PUSHでゲーム開始
+    </div>
+
+
+    <div class="section-title">
+      ボーナス
+    </div>
+
+
+    <div class="bonus-list">
+
+      <div class="bonus">
+        <div class="bonus-name">
+          レギュラー
+        </div>
+        <div class="bonus-game">
+          10枚 × 5回 = 50枚
+        </div>
+      </div>
+
+
+      <div class="bonus">
+        <div class="bonus-name">
+          リーフィンド
+        </div>
+        <div class="bonus-game">
+          10枚 × 11回 = 110枚
+        </div>
+      </div>
+
+
+      <div class="bonus">
+        <div class="bonus-name">
+          ダストロック
+        </div>
+        <div class="bonus-game">
+          10枚 × 11回 = 110枚
+        </div>
+      </div>
+
+
+      <div class="bonus">
+        <div class="bonus-name">
+          書物の怨念
+        </div>
+        <div class="bonus-game">
+          10枚 × 11回 = 110枚
+        </div>
+      </div>
+
+
+      <div class="bonus">
+        <div class="bonus-name">
+          Void
+        </div>
+        <div class="bonus-game">
+          100枚 × 10回 = 1000枚
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      ゲーム履歴
+    </div>
+
+
+    <div
+      class="history"
+      id="history"
+    >
+      <div>
+        ゲーム開始
+      </div>
+    </div>
+
+
+    <button
+      class="reset"
+      onclick="resetGame()"
+    >
+      ゲーム状態リセット
+    </button>
+
   </div>
 
-  <div class="status-info">
-    1 PUSH = 3枚
-  </div>
-
-</div>
-
-<div class="status">
-
-  <div class="status-name" id="stateName">
-    通常時
-  </div>
-
-  <div class="status-info" id="stateInfo"></div>
-
-</div>
-
-<div class="bonus-info" id="bonusInfo">
-
-  <div class="bonus-title" id="bonusTitle">
-    BONUS
-  </div>
-
-  <div class="bonus-count" id="bonusCount">
-    10枚 × 5回
-  </div>
-
-  <div class="bonus-medals" id="bonusMedals">
-    獲得枚数：0枚
-  </div>
-
-</div>
-
-<div class="reels">
-
-  <div class="reel" id="reel1">7</div>
-  <div class="reel" id="reel2">BAR</div>
-  <div class="reel" id="reel3">7</div>
-
-</div>
-
-<button
-  class="push push-white"
-  id="pushButton"
-  onclick="play()"
->
-  PUSH
-</button>
-
-<div class="message" id="message">
-  PUSHでゲーム開始
-</div>
-
-<div class="section-title">
-  ボーナス
-</div>
-
-<div class="bonus-list">
-
-  <div class="bonus">
-    <div class="bonus-name">レギュラー</div>
-    <div class="bonus-game">10枚 × 5回 = 50枚</div>
-  </div>
-
-  <div class="bonus">
-    <div class="bonus-name">リーフィンド</div>
-    <div class="bonus-game">10枚 × 11回 = 110枚</div>
-  </div>
-
-  <div class="bonus">
-    <div class="bonus-name">ダストロック</div>
-    <div class="bonus-game">10枚 × 11回 = 110枚</div>
-  </div>
-
-  <div class="bonus">
-    <div class="bonus-name">書物の怨念</div>
-    <div class="bonus-game">10枚 × 11回 = 110枚</div>
-  </div>
-
-  <div class="bonus">
-    <div class="bonus-name">Void</div>
-    <div class="bonus-game">100枚 × 10回 = 1000枚</div>
-  </div>
-
-</div>
-
-<div class="section-title">
-  ゲーム履歴
-</div>
-
-<div class="history" id="history">
-  <div>ゲーム開始</div>
-</div>
-
-<button class="reset" onclick="resetGame()">
-  ゲーム状態リセット
-</button>
-
-</div>
 </div>
 
 
@@ -866,19 +1029,31 @@ body.void-hot{
      EFFECT
 ========================= -->
 
-<div class="effect" id="effect">
+<div
+  class="effect"
+  id="effect"
+>
 
   <div class="effect-box">
 
-    <div class="effect-small" id="effectSmall">
+    <div
+      class="effect-small"
+      id="effectSmall"
+    >
       CHANCE
     </div>
 
-    <div class="effect-big" id="effectBig">
+    <div
+      class="effect-big"
+      id="effectBig"
+    >
       BONUS
     </div>
 
-    <div class="effect-sub" id="effectSub">
+    <div
+      class="effect-sub"
+      id="effectSub"
+    >
       BONUS START!!
     </div>
 
@@ -913,14 +1088,9 @@ const supabaseClient =
 let currentUser = null;
 
 
-/*
-  IDをSupabase用の内部メールアドレスへ変換する。
-
-  例：
-  test
-  ↓
-  test@casino-re.local
-*/
+/* =====================================================
+   ID → 内部メール
+===================================================== */
 
 function idToEmail(id){
 
@@ -937,11 +1107,6 @@ function idToEmail(id){
 ===================================================== */
 
 function validId(id){
-
-  /*
-    英数字・_・- のみ
-    3～20文字
-  */
 
   return /^[a-zA-Z0-9_-]{3,20}$/.test(id);
 
@@ -966,10 +1131,14 @@ async function login(){
       .value;
 
   const error =
-    document.getElementById("loginError");
+    document
+      .getElementById("loginError");
 
-  error.style.color="#ff5555";
-  error.textContent="";
+  error.style.color =
+    "#ff5555";
+
+  error.textContent =
+    "";
 
 
   if(!validId(id)){
@@ -1011,10 +1180,13 @@ async function login(){
 
   if(loginError){
 
+    console.error(
+      "ログインエラー:",
+      loginError
+    );
+
     error.textContent =
       "ログインできません：IDまたはパスワードが違います";
-
-    console.error(loginError);
 
     return;
 
@@ -1025,7 +1197,18 @@ async function login(){
     data.user;
 
 
-  await loadProfile();
+  const success =
+    await loadProfile();
+
+
+  if(!success){
+
+    await supabaseClient.auth.signOut();
+
+    currentUser =
+      null;
+
+  }
 
 }
 
@@ -1048,10 +1231,14 @@ async function register(){
       .value;
 
   const error =
-    document.getElementById("loginError");
+    document
+      .getElementById("loginError");
 
-  error.style.color="#ff5555";
-  error.textContent="";
+  error.style.color =
+    "#ff5555";
+
+  error.textContent =
+    "";
 
 
   if(!validId(id)){
@@ -1093,7 +1280,11 @@ async function register(){
 
   if(signUpError){
 
-    console.error(signUpError);
+    console.error(
+      "登録エラー:",
+      signUpError
+    );
+
 
     if(
       signUpError.message
@@ -1118,8 +1309,7 @@ async function register(){
 
 
   /*
-    Confirm emailをOFFにしているので、
-    通常はこちらでsessionが取得できる。
+    ユーザー作成成功
   */
 
   if(data.user){
@@ -1128,18 +1318,40 @@ async function register(){
       data.user;
 
 
-    await createProfile();
+    /*
+      profilesを作成
+    */
+
+    const profileOK =
+      await createProfile();
 
 
-    await loadProfile();
+    if(!profileOK){
+
+      error.textContent =
+        "アカウントは作成されましたが、コインデータを作成できませんでした。";
+
+      return;
+
+    }
 
 
-    return;
+    /*
+      コインを読み込み
+    */
+
+    const loaded =
+      await loadProfile();
+
+
+    if(loaded)
+      return;
 
   }
 
 
-  error.style.color="#ffd21a";
+  error.style.color =
+    "#ffd21a";
 
   error.textContent =
     "登録しました。ログインしてください。";
@@ -1154,8 +1366,12 @@ async function register(){
 async function createProfile(){
 
   if(!currentUser)
-    return;
+    return false;
 
+
+  /*
+    すでにあるか確認
+  */
 
   const {
     data,
@@ -1164,51 +1380,66 @@ async function createProfile(){
     await supabaseClient
       .from("profiles")
       .select("id,coins")
-      .eq("id",currentUser.id)
+      .eq(
+        "id",
+        currentUser.id
+      )
       .maybeSingle();
 
 
   if(error){
 
     console.error(
-      "プロフィール確認エラー",
+      "プロフィール確認エラー:",
       error
     );
 
-    return;
+    return false;
 
   }
 
 
   /*
-    すでにプロフィールがあるなら
-    コインを1000に戻さない。
+    すでに存在
   */
 
   if(data)
-    return;
+    return true;
 
 
-  const result =
+  /*
+    新規作成
+  */
+
+  const {
+    error: insertError
+  } =
     await supabaseClient
       .from("profiles")
       .insert({
 
-        id:currentUser.id,
+        id:
+          currentUser.id,
 
-        coins:1000
+        coins:
+          1000
 
       });
 
 
-  if(result.error){
+  if(insertError){
 
     console.error(
-      "プロフィール作成エラー",
-      result.error
+      "プロフィール作成エラー:",
+      insertError
     );
 
+    return false;
+
   }
+
+
+  return true;
 
 }
 
@@ -1220,86 +1451,281 @@ async function createProfile(){
 async function loadProfile(){
 
   if(!currentUser)
-    return;
+    return false;
 
 
-  /*
-    まずプロフィールがあるか確認
-  */
+  const errorBox =
+    document
+      .getElementById("loginError");
 
-  await createProfile();
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("coins")
-      .eq("id",currentUser.id)
-      .single();
+  const saveStatus =
+    document
+      .getElementById("saveStatus");
 
 
-  if(error || !data){
+  try{
 
-    console.error(
-      "コイン読み込みエラー",
+    if(saveStatus){
+
+      saveStatus.textContent =
+        "読み込み中...";
+
+    }
+
+
+    /*
+      profilesを検索
+    */
+
+    let {
+      data,
       error
-    );
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("id,coins")
+        .eq(
+          "id",
+          currentUser.id
+        )
+        .maybeSingle();
+
+
+    /*
+      DBエラー
+    */
+
+    if(error){
+
+      console.error(
+        "コイン読み込みエラー:",
+        error
+      );
+
+      if(saveStatus){
+
+        saveStatus.textContent =
+          "読み込みエラー";
+
+      }
+
+
+      if(errorBox){
+
+        errorBox.textContent =
+          "コインデータを読み込めませんでした。";
+
+      }
+
+
+      return false;
+
+    }
+
+
+    /*
+      プロフィールが無い
+    */
+
+    if(!data){
+
+      console.log(
+        "プロフィールが無いため作成します"
+      );
+
+
+      const created =
+        await createProfile();
+
+
+      if(!created){
+
+        if(saveStatus){
+
+          saveStatus.textContent =
+            "作成エラー";
+
+        }
+
+
+        if(errorBox){
+
+          errorBox.textContent =
+            "コインデータを作成できませんでした。";
+
+        }
+
+
+        return false;
+
+      }
+
+
+      /*
+        もう一度取得
+      */
+
+      const result =
+        await supabaseClient
+          .from("profiles")
+          .select("id,coins")
+          .eq(
+            "id",
+            currentUser.id
+          )
+          .single();
+
+
+      if(result.error || !result.data){
+
+        console.error(
+          "プロフィール再取得エラー:",
+          result.error
+        );
+
+
+        if(saveStatus){
+
+          saveStatus.textContent =
+            "読み込みエラー";
+
+        }
+
+
+        if(errorBox){
+
+          errorBox.textContent =
+            "コインデータを読み込めませんでした。";
+
+        }
+
+
+        return false;
+
+      }
+
+
+      data =
+        result.data;
+
+    }
+
+
+    /*
+      コイン読み込み
+    */
+
+    medals =
+      Number(data.coins);
+
+
+    if(
+      !Number.isFinite(medals)
+    ){
+
+      medals =
+        1000;
+
+    }
+
+
+    /*
+      プレイヤー名
+    */
 
     document
-      .getElementById("loginError")
+      .getElementById("playerName")
       .textContent =
-      "コインデータを読み込めませんでした。";
+      getCurrentId();
 
-    return;
+
+    /*
+      コイン表示
+    */
+
+    updateMedals();
+
+
+    /*
+      保存状態
+    */
+
+    if(saveStatus){
+
+      saveStatus.textContent =
+        "保存済み";
+
+    }
+
+
+    /*
+      ログイン画面を消す
+    */
+
+    document
+      .getElementById("loginScreen")
+      .style.display =
+      "none";
+
+
+    /*
+      HUBを表示
+    */
+
+    document
+      .getElementById("casinoHub")
+      .style.display =
+      "block";
+
+
+    document
+      .getElementById("gameScreen")
+      .style.display =
+      "none";
+
+
+    /*
+      ゲーム初期化
+    */
+
+    resetGame();
+
+
+    console.log(
+      "コイン読み込み成功:",
+      medals
+    );
+
+
+    return true;
+
+  }catch(err){
+
+    console.error(
+      "loadProfileエラー:",
+      err
+    );
+
+
+    if(saveStatus){
+
+      saveStatus.textContent =
+        "読み込みエラー";
+
+    }
+
+
+    if(errorBox){
+
+      errorBox.textContent =
+        "コインデータを読み込めませんでした。";
+
+    }
+
+
+    return false;
 
   }
-
-
-  medals =
-    Number(data.coins);
-
-
-  updateMedals();
-
-
-  const id =
-    getCurrentId();
-
-
-  document
-    .getElementById("playerName")
-    .textContent =
-    id;
-
-
-  document
-    .getElementById("saveStatus")
-    .textContent =
-    "保存済み";
-
-
-  document
-    .getElementById("loginScreen")
-    .style.display =
-    "none";
-
-
-  document
-    .getElementById("gameScreen")
-    .style.display =
-    "none";
-
-
-  document
-    .getElementById("casinoHub")
-    .style.display =
-    "block";
-
-
-  resetGame();
 
 }
 
@@ -1329,11 +1755,6 @@ function getCurrentId(){
    コイン保存
 ===================================================== */
 
-/*
-  連続PUSHでも保存が競合しないように
-  保存処理を順番に実行する。
-*/
-
 let saveQueue =
   Promise.resolve();
 
@@ -1354,12 +1775,17 @@ function saveCoins(){
 
         const status =
           document
-            .getElementById("saveStatus");
+            .getElementById(
+              "saveStatus"
+            );
 
 
-        if(status)
+        if(status){
+
           status.textContent =
             "保存中...";
+
+        }
 
 
         const {
@@ -1369,7 +1795,8 @@ function saveCoins(){
             .from("profiles")
             .update({
 
-              coins:coinsToSave
+              coins:
+                coinsToSave
 
             })
             .eq(
@@ -1381,14 +1808,17 @@ function saveCoins(){
         if(error){
 
           console.error(
-            "コイン保存エラー",
+            "コイン保存エラー:",
             error
           );
 
 
-          if(status)
+          if(status){
+
             status.textContent =
               "保存エラー";
+
+          }
 
 
           return;
@@ -1396,9 +1826,12 @@ function saveCoins(){
         }
 
 
-        if(status)
+        if(status){
+
           status.textContent =
             "保存済み";
+
+        }
 
 
         updateHubCoins();
@@ -1416,9 +1849,10 @@ function saveCoins(){
 function updateHubCoins(){
 
   const el =
-    document.getElementById(
-      "hubCoins"
-    );
+    document
+      .getElementById(
+        "hubCoins"
+      );
 
 
   if(el){
@@ -1433,15 +1867,36 @@ function updateHubCoins(){
 }
 
 
+function updateMedals(){
+
+  const el =
+    document
+      .getElementById(
+        "medalDisplay"
+      );
+
+
+  if(el){
+
+    el.textContent =
+      "メダル：" +
+      Number(medals)
+        .toLocaleString() +
+      "枚";
+
+  }
+
+
+  updateHubCoins();
+
+}
+
+
 /* =====================================================
    ログアウト
 ===================================================== */
 
 async function logout(){
-
-  /*
-    直前のコイン保存を待つ
-  */
 
   await saveQueue;
 
@@ -1577,14 +2032,16 @@ const SETTING_WEIGHTS = {
 };
 
 
-let CURRENT_SETTING=1;
+let CURRENT_SETTING =
+  1;
 
 
 const SETTING_CHANGE_INTERVAL =
-  60*60*1000;
+  60 * 60 * 1000;
 
 
-const BET=3;
+const BET =
+  3;
 
 
 function chooseHourlySetting(){
@@ -1596,12 +2053,13 @@ function chooseHourlySetting(){
     .map(
       ([setting,weight])=>({
 
-        setting:Number(setting),
+        setting:
+          Number(setting),
 
         weight:
           Math.max(
             0,
-            Number(weight)||0
+            Number(weight) || 0
           )
 
       })
@@ -1627,9 +2085,11 @@ function chooseHourlySetting(){
     Math.random()*total;
 
 
-  for(const item of entries){
+  for(
+    const item of entries
+  ){
 
-    r-=item.weight;
+    r -= item.weight;
 
 
     if(r<0)
@@ -1645,15 +2105,18 @@ function chooseHourlySetting(){
 
 function scheduleHourlySettingChange(){
 
-  setTimeout(()=>{
+  setTimeout(
+    ()=>{
 
-    CURRENT_SETTING =
-      chooseHourlySetting();
+      CURRENT_SETTING =
+        chooseHourlySetting();
 
 
-    scheduleHourlySettingChange();
+      scheduleHourlySettingChange();
 
-  },SETTING_CHANGE_INTERVAL);
+    },
+    SETTING_CHANGE_INTERVAL
+  );
 
 }
 
@@ -1665,7 +2128,7 @@ scheduleHourlySettingChange();
    BONUS
 ===================================================== */
 
-const BONUS_TYPES=[
+const BONUS_TYPES = [
 
   {
     name:"レギュラー",
@@ -1705,39 +2168,56 @@ const BONUS_TYPES=[
 ];
 
 
-let medals=1000;
+let medals =
+  1000;
 
-let state="normal";
+let state =
+  "normal";
 
-let bonusName="";
+let bonusName =
+  "";
 
-let bonusRemaining=0;
+let bonusRemaining =
+  0;
 
-let bonusMedals=0;
+let bonusMedals =
+  0;
 
-let voidMedals=0;
+let voidMedals =
+  0;
 
-let remainingGames=0;
+let remainingGames =
+  0;
 
-let signal="normal";
+let signal =
+  "normal";
 
 
 /* =====================================================
-   初期化
+   シグナル
 ===================================================== */
 
 function normalSignal(){
 
-  signal="normal";
+  signal =
+    "normal";
 
-  document.body.classList.remove("hot");
-  document.body.classList.remove("void-hot");
+
+  document.body
+    .classList
+    .remove("hot");
+
+
+  document.body
+    .classList
+    .remove("void-hot");
 
 
   const button =
-    document.getElementById(
-      "pushButton"
-    );
+    document
+      .getElementById(
+        "pushButton"
+      );
 
 
   button.className =
@@ -1748,16 +2228,25 @@ function normalSignal(){
 
 function hotSignal(){
 
-  signal="hot";
+  signal =
+    "hot";
 
-  document.body.classList.remove("void-hot");
-  document.body.classList.add("hot");
+
+  document.body
+    .classList
+    .remove("void-hot");
+
+
+  document.body
+    .classList
+    .add("hot");
 
 
   const button =
-    document.getElementById(
-      "pushButton"
-    );
+    document
+      .getElementById(
+        "pushButton"
+      );
 
 
   button.className =
@@ -1768,16 +2257,25 @@ function hotSignal(){
 
 function voidSignal(){
 
-  signal="void";
+  signal =
+    "void";
 
-  document.body.classList.remove("hot");
-  document.body.classList.add("void-hot");
+
+  document.body
+    .classList
+    .remove("hot");
+
+
+  document.body
+    .classList
+    .add("void-hot");
 
 
   const button =
-    document.getElementById(
-      "pushButton"
-    );
+    document
+      .getElementById(
+        "pushButton"
+      );
 
 
   button.className =
@@ -1794,7 +2292,9 @@ function play(){
 
   if(!currentUser){
 
-    alert("ログインしてください");
+    alert(
+      "ログインしてください"
+    );
 
     return;
 
@@ -1861,26 +2361,30 @@ function play(){
    通常
 ===================================================== */
 
-async function normalGame(){
+function normalGame(){
 
-  if(medals<BET){
+  if(medals < BET){
 
     message(
       "メダルが足りません。"
     );
 
+
     addHistory(
       "メダル不足"
     );
+
 
     return;
 
   }
 
 
-  medals-=BET;
+  medals -= BET;
+
 
   updateMedals();
+
 
   saveCoins();
 
@@ -1898,7 +2402,11 @@ async function normalGame(){
     Math.random();
 
 
-  if(r<bonusChance){
+  /*
+    BONUS
+  */
+
+  if(r < bonusChance){
 
     const bonus =
       drawBonusType();
@@ -1908,9 +2416,17 @@ async function normalGame(){
       bonus.name;
 
 
-    if(bonusName==="Void"){
+    /*
+      VOID
+    */
+
+    if(
+      bonusName ===
+      "Void"
+    ){
 
       voidSignal();
+
 
       setReels(
         "V",
@@ -1942,6 +2458,10 @@ async function normalGame(){
     }
 
 
+    /*
+      通常BONUS
+    */
+
     hotSignal();
 
 
@@ -1958,7 +2478,8 @@ async function normalGame(){
 
 
     addHistory(
-      "BONUS当選："+bonusName
+      "BONUS当選：" +
+      bonusName
     );
 
 
@@ -1975,7 +2496,14 @@ async function normalGame(){
   }
 
 
-  if(r<bonusChance+0.08){
+  /*
+    CZ
+  */
+
+  if(
+    r <
+    bonusChance + 0.08
+  ){
 
     setReels(
       "CZ",
@@ -1999,7 +2527,14 @@ async function normalGame(){
   }
 
 
-  if(r<bonusChance+0.20){
+  /*
+    チャンス役
+  */
+
+  if(
+    r <
+    bonusChance + 0.20
+  ){
 
     setReels(
       "🍒",
@@ -2022,6 +2557,10 @@ async function normalGame(){
 
   }
 
+
+  /*
+    ハズレ
+  */
 
   setReels(
     "7",
@@ -2050,7 +2589,7 @@ function startBonusEffect(){
 
   showEffect(
     "BONUS CHANCE",
-    bonusName+" BONUS",
+    bonusName + " BONUS",
     "BONUS START!!",
     false
   );
@@ -2075,22 +2614,30 @@ function startBonusEffect(){
 }
 
 
+/* =====================================================
+   BONUS開始
+===================================================== */
+
 function startBonus(){
 
   const bonus =
     BONUS_TYPES.find(
-      b=>b.name===bonusName
+      b=>b.name === bonusName
     );
 
 
-  state="bonus";
+  state =
+    "bonus";
 
 
   bonusRemaining =
-    bonus.rounds;
+    bonus
+      ? bonus.rounds
+      : 5;
 
 
-  bonusMedals=0;
+  bonusMedals =
+    0;
 
 
   normalSignal();
@@ -2113,18 +2660,18 @@ function startBonus(){
 
 
   message(
-    "🎰 "+
-    bonusName+
-    " BONUS開始！<br>"+
-    bonus.payout+
-    "枚 × "+
-    bonus.rounds+
+    "🎰 " +
+    bonusName +
+    " BONUS開始！<br>" +
+    (bonus ? bonus.payout : 10) +
+    "枚 × " +
+    bonusRemaining +
     "回"
   );
 
 
   addHistory(
-    bonusName+
+    bonusName +
     " BONUS START"
   );
 
@@ -2135,11 +2682,11 @@ function startBonus(){
    BONUS中
 ===================================================== */
 
-async function bonusGame(){
+function bonusGame(){
 
   const bonus =
     BONUS_TYPES.find(
-      b=>b.name===bonusName
+      b=>b.name === bonusName
     );
 
 
@@ -2149,16 +2696,30 @@ async function bonusGame(){
       : 10;
 
 
+  if(
+    bonusRemaining <= 0
+  ){
+
+    finishBonus();
+
+    return;
+
+  }
+
+
   bonusRemaining--;
 
 
-  bonusMedals+=payout;
+  bonusMedals +=
+    payout;
 
 
-  medals+=payout;
+  medals +=
+    payout;
 
 
   updateMedals();
+
 
   saveCoins();
 
@@ -2173,7 +2734,13 @@ async function bonusGame(){
   updateBonusInfo();
 
 
-  if(Math.random()<0.01){
+  /*
+    Void昇格
+  */
+
+  if(
+    Math.random() < 0.01
+  ){
 
     startVoidBonusEffect();
 
@@ -2182,15 +2749,21 @@ async function bonusGame(){
   }
 
 
-  if(Math.random()<0.02){
+  /*
+    +5
+  */
 
-    bonusRemaining+=5;
+  if(
+    Math.random() < 0.02
+  ){
+
+    bonusRemaining += 5;
 
 
     message(
-      "🔥 <b>BIG BONUS CHANCE!</b><br>"+
-      "+5回！ +"+
-      (payout*5)+
+      "🔥 <b>BIG BONUS CHANCE!</b><br>" +
+      "+5回！ +" +
+      (payout * 5) +
       "枚！"
     );
 
@@ -2208,15 +2781,21 @@ async function bonusGame(){
   }
 
 
-  if(Math.random()<0.10){
+  /*
+    +1
+  */
 
-    bonusRemaining+=1;
+  if(
+    Math.random() < 0.10
+  ){
+
+    bonusRemaining += 1;
 
 
     message(
-      "⚡ BONUS CHANCE!<br>"+
-      "+1回！ +"+
-      payout+
+      "⚡ BONUS CHANCE!<br>" +
+      "+1回！ +" +
+      payout +
       "枚！"
     );
 
@@ -2235,21 +2814,25 @@ async function bonusGame(){
 
 
   message(
-    "💰 "+
-    payout+
-    "枚獲得！<br>"+
-    "残り "+
-    bonusRemaining+
+    "💰 " +
+    payout +
+    "枚獲得！<br>" +
+    "残り " +
+    bonusRemaining +
     "回"
   );
 
 
   addHistory(
-    "BONUS："+payout+"枚"
+    "BONUS：" +
+    payout +
+    "枚"
   );
 
 
-  if(bonusRemaining<=0){
+  if(
+    bonusRemaining <= 0
+  ){
 
     finishBonus();
 
@@ -2264,10 +2847,12 @@ async function bonusGame(){
 
 function finishBonus(){
 
-  state="replay30";
+  state =
+    "replay30";
 
 
-  remainingGames=30;
+  remainingGames =
+    30;
 
 
   hideBonusInfo();
@@ -2290,22 +2875,25 @@ function finishBonus(){
 
 
   message(
-    "🎉 BONUS終了！<br>"+
-    "獲得枚数："+bonusMedals+
-    "枚<br>"+
+    "🎉 BONUS終了！<br>" +
+    "獲得枚数：" +
+    bonusMedals +
+    "枚<br>" +
     "リプレイ確変30Gへ！"
   );
 
 
   addHistory(
-    "BONUS終了："+bonusMedals+"枚"
+    "BONUS終了：" +
+    bonusMedals +
+    "枚"
   );
 
 }
 
 
 /* =====================================================
-   VOID
+   VOID演出
 ===================================================== */
 
 function startVoidBonusEffect(){
@@ -2340,18 +2928,28 @@ function startVoidBonusEffect(){
 }
 
 
+/* =====================================================
+   VOID開始
+===================================================== */
+
 function startVoidBonus(){
 
-  state="void";
+  state =
+    "void";
 
 
-  remainingGames=100;
+  remainingGames =
+    100;
+
+
+  voidMedals =
+    0;
 
 
   hideBonusInfo();
 
 
-  normalSignal();
+  voidSignal();
 
 
   setState(
@@ -2368,14 +2966,15 @@ function startVoidBonus(){
 
 
   message(
-    "👑 <b>VOID BONUS</b><br>"+
+    "👑 <b>VOID BONUS</b><br>" +
     "100G開始！"
   );
 
 
   document
     .getElementById("message")
-    .classList.add("void");
+    .classList
+    .add("void");
 
 
   addHistory(
@@ -2385,29 +2984,53 @@ function startVoidBonus(){
 }
 
 
-async function voidGame(){
+/* =====================================================
+   VOID中
+===================================================== */
+
+function voidGame(){
+
+  if(
+    remainingGames <= 0
+  ){
+
+    finishVoid();
+
+    return;
+
+  }
+
 
   remainingGames--;
 
 
-  voidMedals+=10;
+  voidMedals +=
+    10;
 
 
-  medals+=10;
+  medals +=
+    10;
 
 
   updateMedals();
 
+
   saveCoins();
 
 
-  if(Math.random()<0.02){
+  /*
+    +10G
+  */
 
-    remainingGames+=10;
+  if(
+    Math.random() < 0.02
+  ){
+
+    remainingGames += 10;
 
 
     message(
-      "👑 Void中<br>"+
+      "👑 Void中<br>" +
       "+10G上乗せ！"
     );
 
@@ -2430,48 +3053,66 @@ async function voidGame(){
 
 
   message(
-    "👑 Voidボーナス中<br>"+
-    "10枚獲得！<br>"+
-    "残り "+
-    remainingGames+
+    "👑 Voidボーナス中<br>" +
+    "10枚獲得！<br>" +
+    "残り " +
+    remainingGames +
     "G"
   );
 
 
-  if(remainingGames<=0){
+  if(
+    remainingGames <= 0
+  ){
 
-    state="replayInfinite";
-
-
-    document
-      .getElementById("message")
-      .classList.remove("void");
-
-
-    setState(
-      "リプレイ確変（無限）",
-      "終了条件なし"
-    );
-
-
-    setReels(
-      "REPLAY",
-      "REPLAY",
-      "REPLAY"
-    );
-
-
-    message(
-      "👑 Void終了！<br>"+
-      "♾️ 無限リプレイ確変へ！"
-    );
-
-
-    addHistory(
-      "Void終了 → 無限リプレイ"
-    );
+    finishVoid();
 
   }
+
+}
+
+
+/* =====================================================
+   VOID終了
+===================================================== */
+
+function finishVoid(){
+
+  state =
+    "replayInfinite";
+
+
+  document
+    .getElementById("message")
+    .classList
+    .remove("void");
+
+
+  setState(
+    "リプレイ確変（無限）",
+    "終了条件なし"
+  );
+
+
+  normalSignal();
+
+
+  setReels(
+    "REPLAY",
+    "REPLAY",
+    "REPLAY"
+  );
+
+
+  message(
+    "👑 Void終了！<br>" +
+    "♾️ 無限リプレイ確変へ！"
+  );
+
+
+  addHistory(
+    "Void終了 → 無限リプレイ"
+  );
 
 }
 
@@ -2482,6 +3123,46 @@ async function voidGame(){
 
 function replay30Game(){
 
+  if(
+    remainingGames <= 0
+  ){
+
+    state =
+      "normal";
+
+
+    setState(
+      "通常時",
+      ""
+    );
+
+
+    normalSignal();
+
+
+    setReels(
+      "7",
+      "BAR",
+      "7"
+    );
+
+
+    message(
+      "リプレイ確変終了<br>" +
+      "通常時へ"
+    );
+
+
+    addHistory(
+      "リプレイ確変終了"
+    );
+
+
+    return;
+
+  }
+
+
   remainingGames--;
 
 
@@ -2489,7 +3170,13 @@ function replay30Game(){
     Math.random();
 
 
-  if(r<0.02){
+  /*
+    BONUS
+  */
+
+  if(
+    r < 0.02
+  ){
 
     bonusName =
       drawBonusType().name;
@@ -2503,12 +3190,20 @@ function replay30Game(){
   }
 
 
-  if(r<0.10){
+  /*
+    CZ
+  */
 
-    state="cz";
+  if(
+    r < 0.10
+  ){
+
+    state =
+      "cz";
 
 
-    remainingGames=5;
+    remainingGames =
+      5;
 
 
     setState(
@@ -2525,7 +3220,7 @@ function replay30Game(){
 
 
     message(
-      "⚡ <b>CZ突入！</b><br>"+
+      "⚡ <b>CZ突入！</b><br>" +
       "5G間のチャンス！"
     );
 
@@ -2548,16 +3243,19 @@ function replay30Game(){
 
 
   message(
-    "リプレイ確変中<br>"+
-    "残り "+
-    remainingGames+
+    "リプレイ確変中<br>" +
+    "残り " +
+    remainingGames +
     "G"
   );
 
 
-  if(remainingGames<=0){
+  if(
+    remainingGames <= 0
+  ){
 
-    state="normal";
+    state =
+      "normal";
 
 
     setState(
@@ -2577,7 +3275,7 @@ function replay30Game(){
 
 
     message(
-      "リプレイ確変終了<br>"+
+      "リプレイ確変終了<br>" +
       "通常時へ"
     );
 
@@ -2597,18 +3295,56 @@ function replay30Game(){
 
 function czGame(){
 
+  if(
+    remainingGames <= 0
+  ){
+
+    state =
+      "normal";
+
+
+    setState(
+      "通常時",
+      ""
+    );
+
+
+    normalSignal();
+
+
+    message(
+      "CZ終了<br>" +
+      "通常時へ"
+    );
+
+
+    return;
+
+  }
+
+
   remainingGames--;
 
 
-  if(Math.random()<0.13){
+  /*
+    CZ成功
+  */
 
-    state="replayInfinite";
+  if(
+    Math.random() < 0.13
+  ){
+
+    state =
+      "replayInfinite";
 
 
     setState(
       "リプレイ確変（無限）",
       "終了条件なし"
     );
+
+
+    normalSignal();
 
 
     setReels(
@@ -2619,7 +3355,7 @@ function czGame(){
 
 
     message(
-      "🔥 <b>CZ成功！</b><br>"+
+      "🔥 <b>CZ成功！</b><br>" +
       "♾️ 無限リプレイ確変へ！"
     );
 
@@ -2642,16 +3378,19 @@ function czGame(){
 
 
   message(
-    "CZ中……<br>"+
-    "残り "+
-    remainingGames+
+    "CZ中……<br>" +
+    "残り " +
+    remainingGames +
     "G"
   );
 
 
-  if(remainingGames<=0){
+  if(
+    remainingGames <= 0
+  ){
 
-    state="normal";
+    state =
+      "normal";
 
 
     setState(
@@ -2671,7 +3410,7 @@ function czGame(){
 
 
     message(
-      "CZ終了<br>"+
+      "CZ終了<br>" +
       "通常時へ"
     );
 
@@ -2695,7 +3434,13 @@ function infiniteReplayGame(){
     Math.random();
 
 
-  if(r<0.04){
+  /*
+    VOID
+  */
+
+  if(
+    r < 0.04
+  ){
 
     startVoidBonusEffect();
 
@@ -2704,7 +3449,13 @@ function infiniteReplayGame(){
   }
 
 
-  if(r<0.08){
+  /*
+    BONUS
+  */
+
+  if(
+    r < 0.08
+  ){
 
     bonusName =
       drawBonusType().name;
@@ -2725,7 +3476,7 @@ function infiniteReplayGame(){
 
 
   message(
-    "♾️ リプレイ確変（無限）<br>"+
+    "♾️ リプレイ確変（無限）<br>" +
     "終了条件なし"
   );
 
@@ -2745,35 +3496,41 @@ function setReels(a,b,c){
 
   document
     .getElementById("reel1")
-    .textContent=a;
+    .textContent =
+    a;
 
 
   document
     .getElementById("reel2")
-    .textContent=b;
+    .textContent =
+    b;
 
 
   document
     .getElementById("reel3")
-    .textContent=c;
+    .textContent =
+    c;
 
 }
 
 
 function randomSymbol(){
 
-  const symbols=[
+  const symbols = [
+
     "7",
     "BAR",
     "🍒",
     "🍈",
     "REPLAY"
+
   ];
 
 
   return symbols[
     Math.floor(
-      Math.random()*symbols.length
+      Math.random() *
+      symbols.length
     )
   ];
 
@@ -2781,45 +3538,33 @@ function randomSymbol(){
 
 
 /* =====================================================
-   表示
+   BONUS抽選
 ===================================================== */
-
-function updateMedals(){
-
-  document
-    .getElementById("medalDisplay")
-    .textContent =
-    "メダル："+
-    Number(medals)
-      .toLocaleString()+
-    "枚";
-
-
-  updateHubCoins();
-
-}
-
 
 function drawBonusType(){
 
   const total =
     BONUS_TYPES.reduce(
       (sum,b)=>
-        sum+b.weight,
+        sum + b.weight,
       0
     );
 
 
   let r =
-    Math.random()*total;
+    Math.random() *
+    total;
 
 
-  for(const bonus of BONUS_TYPES){
+  for(
+    const bonus of BONUS_TYPES
+  ){
 
-    r-=bonus.weight;
+    r -=
+      bonus.weight;
 
 
-    if(r<0)
+    if(r < 0)
       return bonus;
 
   }
@@ -2830,34 +3575,63 @@ function drawBonusType(){
 }
 
 
+/* =====================================================
+   状態表示
+===================================================== */
+
 function setState(name,info){
 
   document
     .getElementById("stateName")
-    .textContent=name;
+    .textContent =
+    name;
 
 
   document
     .getElementById("stateInfo")
-    .textContent=info || "";
+    .textContent =
+    info || "";
 
 }
 
 
 function message(text){
 
-  document
-    .getElementById("message")
-    .innerHTML=text;
+  const el =
+    document
+      .getElementById("message");
+
+
+  el.innerHTML =
+    text;
+
+
+  /*
+    Void表示を解除
+  */
+
+  if(
+    state !== "void"
+  ){
+
+    el.classList
+      .remove("void");
+
+  }
 
 }
 
+
+/* =====================================================
+   BONUS表示
+===================================================== */
 
 function showBonusInfo(){
 
   document
     .getElementById("bonusInfo")
-    .style.display="block";
+    .style.display =
+    "block";
 
 
   updateBonusInfo();
@@ -2869,7 +3643,8 @@ function hideBonusInfo(){
 
   document
     .getElementById("bonusInfo")
-    .style.display="none";
+    .style.display =
+    "none";
 
 }
 
@@ -2878,7 +3653,7 @@ function updateBonusInfo(){
 
   const bonus =
     BONUS_TYPES.find(
-      b=>b.name===bonusName
+      b=>b.name === bonusName
     );
 
 
@@ -2891,23 +3666,24 @@ function updateBonusInfo(){
   document
     .getElementById("bonusTitle")
     .textContent =
-    bonusName+" BONUS";
+    bonusName +
+    " BONUS";
 
 
   document
     .getElementById("bonusCount")
     .textContent =
-    payout+
-    "枚 × "+
-    bonusRemaining+
+    payout +
+    "枚 × " +
+    bonusRemaining +
     "回";
 
 
   document
     .getElementById("bonusMedals")
     .textContent =
-    "今回の獲得枚数："+
-    bonusMedals+
+    "今回の獲得枚数：" +
+    bonusMedals +
     "枚";
 
 }
@@ -2926,17 +3702,20 @@ function showEffect(
 
   document
     .getElementById("effectSmall")
-    .textContent=small;
+    .textContent =
+    small;
 
 
   document
     .getElementById("effectBig")
-    .textContent=big;
+    .textContent =
+    big;
 
 
   document
     .getElementById("effectSub")
-    .textContent=sub;
+    .textContent =
+    sub;
 
 
   document
@@ -2949,7 +3728,8 @@ function showEffect(
 
   document
     .getElementById("effect")
-    .classList.add("show");
+    .classList
+    .add("show");
 
 }
 
@@ -2958,7 +3738,8 @@ function hideEffect(){
 
   document
     .getElementById("effect")
-    .classList.remove("show");
+    .classList
+    .remove("show");
 
 }
 
@@ -2970,19 +3751,21 @@ function hideEffect(){
 function addHistory(text){
 
   const history =
-    document.getElementById(
-      "history"
-    );
+    document
+      .getElementById("history");
 
 
   const item =
     document.createElement("div");
 
 
-  item.textContent=text;
+  item.textContent =
+    text;
 
 
-  history.prepend(item);
+  history.prepend(
+    item
+  );
 
 }
 
@@ -2994,17 +3777,28 @@ function addHistory(text){
 
 function resetGame(){
 
-  state="normal";
+  state =
+    "normal";
 
-  bonusName="";
 
-  bonusRemaining=0;
+  bonusName =
+    "";
 
-  bonusMedals=0;
 
-  remainingGames=0;
+  bonusRemaining =
+    0;
 
-  voidMedals=0;
+
+  bonusMedals =
+    0;
+
+
+  remainingGames =
+    0;
+
+
+  voidMedals =
+    0;
 
 
   hideBonusInfo();
@@ -3049,30 +3843,106 @@ function resetGame(){
 
 async function initialize(){
 
-  const {
-    data
-  } =
-    await supabaseClient.auth.getSession();
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getSession();
 
 
-  if(data.session){
+    if(error){
 
-    currentUser =
-      data.session.user;
+      console.error(
+        "セッション取得エラー:",
+        error
+      );
+
+      return;
+
+    }
 
 
-    await loadProfile();
+    if(
+      data &&
+      data.session &&
+      data.session.user
+    ){
 
-  }else{
+      currentUser =
+        data.session.user;
 
-    document
-      .getElementById("loginScreen")
-      .style.display =
-      "flex";
+
+      const success =
+        await loadProfile();
+
+
+      if(!success){
+
+        await supabaseClient.auth.signOut();
+
+        currentUser =
+          null;
+
+      }
+
+    }else{
+
+      document
+        .getElementById("loginScreen")
+        .style.display =
+        "flex";
+
+    }
+
+  }catch(err){
+
+    console.error(
+      "initializeエラー:",
+      err
+    );
 
   }
 
 }
+
+
+/* =====================================================
+   Supabaseログイン状態監視
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  async (
+    event,
+    session
+  )=>{
+
+    if(
+      event === "SIGNED_OUT"
+    ){
+
+      currentUser =
+        null;
+
+      return;
+
+    }
+
+
+    if(
+      session &&
+      session.user &&
+      !currentUser
+    ){
+
+      currentUser =
+        session.user;
+
+    }
+
+  }
+);
 
 
 /* =====================================================
@@ -3083,17 +3953,27 @@ document.addEventListener(
   "DOMContentLoaded",
   ()=>{
 
-    document
-      .getElementById("loginPassword")
-      .addEventListener(
-        "keydown",
-        e=>{
+    const password =
+      document
+        .getElementById(
+          "loginPassword"
+        );
 
-          if(e.key==="Enter")
-            login();
+
+    password.addEventListener(
+      "keydown",
+      e=>{
+
+        if(
+          e.key === "Enter"
+        ){
+
+          login();
 
         }
-      );
+
+      }
+    );
 
 
     initialize();
