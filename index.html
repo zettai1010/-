@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -500,6 +501,34 @@ button{
 }
 
 /* =========================
+   REPLAY
+========================= */
+
+.replay-panel{
+  margin-top:15px;
+  padding:18px;
+  border-radius:12px;
+  background:
+    radial-gradient(circle,#151d2c,#090b10 65%,#050505);
+  border:1px solid #5577aa;
+  text-align:center;
+  box-shadow:
+    0 0 20px rgba(70,120,200,.18);
+}
+
+.replay-title{
+  font-size:24px;
+  font-weight:900;
+  color:#8dbbff;
+  text-shadow:0 0 10px #4477cc;
+}
+
+.replay-info{
+  margin-top:7px;
+  color:#ddd;
+}
+
+/* =========================
    BONUS
 ========================= */
 
@@ -551,8 +580,7 @@ button{
   font-size:24px;
   font-weight:900;
   color:#ffbf3c;
-  text-shadow:
-    0 0 10px #ff7b00;
+  text-shadow:0 0 10px #ff7b00;
 }
 
 .absolute-info{
@@ -645,7 +673,6 @@ button{
   from{
     transform:scale(.97);
   }
-
   to{
     transform:scale(1.04);
   }
@@ -840,9 +867,7 @@ button{
     </div>
 
 
-    <!-- =========================
-         COIN REQUEST
-    ========================= -->
+    <!-- COIN REQUEST -->
 
     <div
       id="coinRequestPanel"
@@ -882,9 +907,7 @@ button{
     </div>
 
 
-    <!-- =========================
-         ADMIN
-    ========================= -->
+    <!-- ADMIN -->
 
     <div
       id="adminPanel"
@@ -956,7 +979,7 @@ button{
         </h1>
 
         <p>
-          BONUS / ABSOLUTE
+          BONUS / REPLAY / ABSOLUTE
         </p>
 
       </div>
@@ -987,7 +1010,9 @@ button{
             SETTING
           </div>
 
-          <div class="status-value">
+          <div
+            class="status-value"
+            id="settingDisplay">
             1
           </div>
 
@@ -1062,7 +1087,26 @@ button{
       </div>
 
 
-      <!-- ABSOLUTE INFO -->
+      <!-- REPLAY -->
+
+      <div
+        id="replayPanel"
+        class="replay-panel hidden">
+
+        <div class="replay-title">
+          🔷 REPLAY
+        </div>
+
+        <div
+          id="replayInfo"
+          class="replay-info">
+          REPLAY中
+        </div>
+
+      </div>
+
+
+      <!-- ABSOLUTE -->
 
       <div
         id="absolutePanel"
@@ -1215,11 +1259,8 @@ const supabaseClient =
 ========================================================= */
 
 let currentUser = null;
-
 let medals = 0;
-
 let isAdmin = false;
-
 let saveQueue = Promise.resolve();
 
 const BET = 3;
@@ -1232,15 +1273,29 @@ const BET = 3;
 let state = "normal";
 
 let bonusName = "";
-
 let bonusRemaining = 0;
 
 let absoluteRemaining = 0;
+
+let replayRemaining = 0;
 
 
 /* =========================================================
    SETTING
 ========================================================= */
+
+/*
+  現在は設定1でプレイ。
+
+  変更する場合：
+  1 → 設定1
+  2 → 設定2
+  3 → 設定3
+  4 → 設定4
+  5 → 設定5
+  6 → 設定6
+  7 → 設定7
+*/
 
 const CURRENT_SETTING = 1;
 
@@ -1251,7 +1306,19 @@ const CURRENT_SETTING = 1;
 
 const BONUS_PROBABILITY = {
 
-  1:1 / 238.1
+  1:1 / 280,
+
+  2:1 / 265,
+
+  3:1 / 250,
+
+  4:1 / 235,
+
+  5:1 / 210,
+
+  6:1 / 190,
+
+  7:1 / 170
 
 };
 
@@ -1299,8 +1366,7 @@ const BONUS_TYPES = [
 
 function idToEmail(id){
 
-  return id.toLowerCase()
-    + "@casino-re.local";
+  return id.toLowerCase() + "@casino-re.local";
 
 }
 
@@ -1329,7 +1395,6 @@ function showOnly(id){
   document
     .getElementById("gameScreen")
     .classList.add("hidden");
-
 
   document
     .getElementById(id)
@@ -1649,7 +1714,6 @@ async function loadProfile(){
   medals =
     Number(data.coins || 0);
 
-
   isAdmin =
     data.is_admin === true;
 
@@ -1785,9 +1849,7 @@ async function logout(){
 
 
   currentUser = null;
-
   medals = 0;
-
   isAdmin = false;
 
 
@@ -2023,6 +2085,8 @@ function resetGameState(){
 
   absoluteRemaining = 0;
 
+  replayRemaining = 0;
+
 
   setState(
     "NORMAL",
@@ -2033,6 +2097,17 @@ function resetGameState(){
   document
     .getElementById("absolutePanel")
     .classList.add("hidden");
+
+
+  document
+    .getElementById("replayPanel")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("settingDisplay")
+    .textContent =
+      CURRENT_SETTING;
 
 
   setReels(
@@ -2090,6 +2165,15 @@ async function playGame(){
   }
 
 
+  if(state === "replay"){
+
+    await replayGame();
+
+    return;
+
+  }
+
+
   if(state === "absolute"){
 
     await absoluteGame();
@@ -2136,7 +2220,7 @@ async function normalGame(){
 
 
   /*
-    1/238.1のBONUS抽選
+    設定ごとのBONUS抽選
   */
 
   if(bonusRoll < bonusChance){
@@ -2209,10 +2293,6 @@ async function normalGame(){
   }
 
 
-  /*
-    通常ハズレ
-  */
-
   normalMiss();
 
 }
@@ -2250,7 +2330,7 @@ function normalMiss(){
 function drawBonus(){
 
   /*
-    元の振り分け
+    BONUS内部振り分け
 
     レギュラー 39.5%
     BIG        25%
@@ -2258,8 +2338,6 @@ function drawBonus(){
     LBIG       10%
     絶対領域    0.5%
     BONUSなし  10%
-
-    合計100%
   */
 
   const r =
@@ -2360,6 +2438,10 @@ function startBonus(){
 
   document
     .getElementById("absolutePanel")
+    .classList.add("hidden");
+
+  document
+    .getElementById("replayPanel")
     .classList.add("hidden");
 
 
@@ -2475,22 +2557,240 @@ async function bonusGame(){
 function finishBonus(){
 
   /*
-    BONUS終了後は必ずNORMAL。
+    BONUS終了後はREPLAYへ。
 
-    REPLAYなし
-    CHANCE ZONEなし
-    BONUS後の優遇なし
+    REPLAYは30G。
+
+    重要：
+    REPLAY中も通常と同じ設定確率。
+    REPLAYだから確率アップはしない。
   */
 
-  state = "normal";
+  state = "replay";
 
   bonusName = "";
 
   bonusRemaining = 0;
 
+  replayRemaining = 30;
+
 
   document
     .getElementById("absolutePanel")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("replayPanel")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("replayInfo")
+    .textContent =
+      "REPLAY 残り " +
+      replayRemaining +
+      "G";
+
+
+  setState(
+    "REPLAY",
+    "BONUS後REPLAY"
+  );
+
+
+  setReels(
+    "REPLAY",
+    "REPLAY",
+    "REPLAY"
+  );
+
+
+  message(
+    "🔷 BONUS終了！<br>" +
+    "REPLAY 30Gへ突入！"
+  );
+
+
+  addHistory(
+    "BONUS終了 → REPLAY 30G"
+  );
+
+}
+
+
+/* =========================================================
+   REPLAY GAME
+========================================================= */
+
+async function replayGame(){
+
+  if(replayRemaining <= 0){
+
+    finishReplay();
+
+    return;
+
+  }
+
+
+  if(medals < BET){
+
+    message(
+      "コインが足りないためREPLAYを続けられません。"
+    );
+
+    return;
+
+  }
+
+
+  /*
+    REPLAYでもBETは3。
+
+    ここで通常と同じ設定確率を使う。
+    特別な高確率は一切なし。
+  */
+
+  medals -= BET;
+
+  replayRemaining--;
+
+
+  updateCoinsUI();
+
+  await saveCoins();
+
+
+  const bonusChance =
+    BONUS_PROBABILITY[
+      CURRENT_SETTING
+    ];
+
+
+  const bonusRoll =
+    Math.random();
+
+
+  /*
+    NORMALと完全に同じ確率
+  */
+
+  if(bonusRoll < bonusChance){
+
+    const result =
+      drawBonus();
+
+
+    if(result === "absolute"){
+
+      startAbsoluteFromReplay();
+
+      return;
+
+    }
+
+
+    if(result !== null){
+
+      bonusName =
+        result.name;
+
+
+      hotSignal();
+
+
+      setReels(
+        "BONUS",
+        bonusName,
+        "BONUS"
+      );
+
+
+      message(
+        "🎉 REPLAY中 BONUS当選！！<br>" +
+        bonusName
+      );
+
+
+      addHistory(
+        "★ REPLAY中 " +
+        bonusName +
+        " BONUS当選 ★"
+      );
+
+
+      startBonusEffect();
+
+      return;
+
+    }
+
+  }
+
+
+  setReels(
+    "REPLAY",
+    "REPLAY",
+    "REPLAY"
+  );
+
+
+  message(
+    "🔷 REPLAY中<br>" +
+    "残り " +
+    replayRemaining +
+    "G"
+  );
+
+
+  addHistory(
+    "REPLAY / 残り" +
+    replayRemaining
+  );
+
+
+  updateReplayUI();
+
+
+  if(replayRemaining <= 0){
+
+    finishReplay();
+
+  }
+
+}
+
+
+/* =========================================================
+   REPLAY UI
+========================================================= */
+
+function updateReplayUI(){
+
+  document
+    .getElementById("replayInfo")
+    .textContent =
+      "REPLAY 残り " +
+      replayRemaining +
+      "G";
+
+}
+
+
+/* =========================================================
+   FINISH REPLAY
+========================================================= */
+
+function finishReplay(){
+
+  state = "normal";
+
+  replayRemaining = 0;
+
+
+  document
+    .getElementById("replayPanel")
     .classList.add("hidden");
 
 
@@ -2508,14 +2808,31 @@ function finishBonus(){
 
 
   message(
-    "BONUS終了！<br>" +
+    "REPLAY終了！<br>" +
     "通常状態へ戻りました。"
   );
 
 
   addHistory(
-    "BONUS終了 → NORMAL"
+    "REPLAY終了 → NORMAL"
   );
+
+}
+
+
+/* =========================================================
+   ABSOLUTE FROM REPLAY
+========================================================= */
+
+function startAbsoluteFromReplay(){
+
+  replayRemaining = 0;
+
+  document
+    .getElementById("replayPanel")
+    .classList.add("hidden");
+
+  startAbsolute();
 
 }
 
@@ -2601,8 +2918,7 @@ async function absoluteGame(){
 
   /*
     絶対領域中はBETなし。
-
-    10Gの特別状態として進行。
+    10回の特別状態。
   */
 
   absoluteRemaining--;
@@ -2636,10 +2952,6 @@ async function absoluteGame(){
     absoluteRemaining
   );
 
-
-  /*
-    絶対領域終了
-  */
 
   if(absoluteRemaining <= 0){
 
@@ -2895,3 +3207,4 @@ showOnly(
 
 </body>
 </html>
+```
