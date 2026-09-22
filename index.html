@@ -425,7 +425,7 @@ button{
   border:7px solid #444;
   border-radius:10px;
   color:#111;
-  font-size:30px;
+  font-size:27px;
   font-weight:900;
   text-shadow:1px 1px 0 white;
   overflow:hidden;
@@ -500,7 +500,7 @@ button{
 }
 
 /* =========================
-   BONUS NAME ONLY
+   BONUS
 ========================= */
 
 .bonus-panel{
@@ -529,6 +529,35 @@ button{
   border:1px solid #333;
   text-align:center;
   font-weight:bold;
+}
+
+/* =========================
+   ABSOLUTE
+========================= */
+
+.absolute-panel{
+  margin-top:15px;
+  padding:18px;
+  border-radius:12px;
+  background:
+    radial-gradient(circle,#241300,#100900 60%,#050505);
+  border:1px solid #ff9d00;
+  text-align:center;
+  box-shadow:
+    0 0 20px rgba(255,130,0,.2);
+}
+
+.absolute-title{
+  font-size:24px;
+  font-weight:900;
+  color:#ffbf3c;
+  text-shadow:
+    0 0 10px #ff7b00;
+}
+
+.absolute-info{
+  margin-top:7px;
+  color:#ddd;
 }
 
 /* =========================
@@ -639,7 +668,7 @@ button{
 
   .reel{
     min-height:100px;
-    font-size:22px;
+    font-size:21px;
     border-width:5px;
   }
 
@@ -764,7 +793,7 @@ button{
         </h3>
 
         <p>
-          BONUS / REPLAY CHANCE<br>
+          BONUS<br>
           シンプルなワンクリックスロット。
         </p>
 
@@ -811,7 +840,9 @@ button{
     </div>
 
 
-    <!-- COIN REQUEST -->
+    <!-- =========================
+         COIN REQUEST
+    ========================= -->
 
     <div
       id="coinRequestPanel"
@@ -851,7 +882,9 @@ button{
     </div>
 
 
-    <!-- ADMIN -->
+    <!-- =========================
+         ADMIN
+    ========================= -->
 
     <div
       id="adminPanel"
@@ -923,7 +956,7 @@ button{
         </h1>
 
         <p>
-          BONUS / REPLAY CHANCE
+          BONUS / ABSOLUTE
         </p>
 
       </div>
@@ -954,8 +987,7 @@ button{
             SETTING
           </div>
 
-          <div
-            class="status-value">
+          <div class="status-value">
             1
           </div>
 
@@ -1030,6 +1062,25 @@ button{
       </div>
 
 
+      <!-- ABSOLUTE INFO -->
+
+      <div
+        id="absolutePanel"
+        class="absolute-panel hidden">
+
+        <div class="absolute-title">
+          ✦ 絶対領域 ✦
+        </div>
+
+        <div
+          id="absoluteInfo"
+          class="absolute-info">
+          絶対領域中
+        </div>
+
+      </div>
+
+
       <!-- START -->
 
       <div class="spin-area">
@@ -1048,7 +1099,7 @@ button{
       </div>
 
 
-      <!-- BONUS NAME ONLY -->
+      <!-- BONUS -->
 
       <div class="bonus-panel">
 
@@ -1184,16 +1235,11 @@ let bonusName = "";
 
 let bonusRemaining = 0;
 
-let bonusMedals = 0;
-
-let replayRemaining = 0;
-
-let czRemaining = 0;
+let absoluteRemaining = 0;
 
 
 /* =========================================================
    SETTING
-   ※ ランダム変更なし
 ========================================================= */
 
 const CURRENT_SETTING = 1;
@@ -1205,19 +1251,7 @@ const CURRENT_SETTING = 1;
 
 const BONUS_PROBABILITY = {
 
-  1:1 / 238.1,
-
-  2:1 / 222.2,
-
-  3:1 / 212.8,
-
-  4:1 / 200.0,
-
-  5:1 / 188.7,
-
-  6:1 / 175.4,
-
-  7:1 / 163.9
+  1:1 / 238.1
 
 };
 
@@ -1254,14 +1288,6 @@ const BONUS_TYPES = [
     rounds:20,
     payout:10,
     weight:10
-  },
-
-  {
-    name:"絶対領域",
-    rounds:30,
-    payout:10,
-    weight:0.5,
-    special:true
   }
 
 ];
@@ -1515,7 +1541,6 @@ async function login(){
 
   msg.textContent = "";
 
-
   showHub();
 
 }
@@ -1574,9 +1599,7 @@ async function ensureProfile(){
 
     if(insertError){
 
-      console.error(
-        insertError
-      );
+      console.error(insertError);
 
       return false;
 
@@ -1607,16 +1630,11 @@ async function loadProfile(){
     data,
     error
   } =
-    await supabaseClient
-      .from("profiles")
-      .select(
-        "id,coins,is_admin"
-      )
-      .eq(
-        "id",
-        currentUser.id
-      )
-      .single();
+  await supabaseClient
+    .from("profiles")
+    .select("id,coins,is_admin")
+    .eq("id",currentUser.id)
+    .single();
 
 
   if(error){
@@ -1674,10 +1692,7 @@ function saveCoins(){
         .update({
           coins:amount
         })
-        .eq(
-          "id",
-          currentUser.id
-        );
+        .eq("id",currentUser.id);
 
 
       if(error){
@@ -1704,14 +1719,10 @@ function saveCoins(){
 function updateCoinsUI(){
 
   const hub =
-    document.getElementById(
-      "hubCoins"
-    );
+    document.getElementById("hubCoins");
 
   const game =
-    document.getElementById(
-      "gameCoins"
-    );
+    document.getElementById("gameCoins");
 
 
   if(hub){
@@ -1742,9 +1753,7 @@ function showHub(){
 
 
   document
-    .getElementById(
-      "userIdDisplay"
-    )
+    .getElementById("userIdDisplay")
     .textContent =
       currentUser
         ? currentUser.email.split("@")[0]
@@ -1752,9 +1761,7 @@ function showHub(){
 
 
   document
-    .getElementById(
-      "adminPanel"
-    )
+    .getElementById("adminPanel")
     .classList.toggle(
       "hidden",
       !isAdmin
@@ -1785,43 +1792,31 @@ async function logout(){
 
 
   document
-    .getElementById(
-      "loginId"
-    )
+    .getElementById("loginId")
     .value = "";
 
 
   document
-    .getElementById(
-      "loginPassword"
-    )
+    .getElementById("loginPassword")
     .value = "";
 
 
   document
-    .getElementById(
-      "loginMessage"
-    )
+    .getElementById("loginMessage")
     .textContent = "";
 
 
   document
-    .getElementById(
-      "requestResult"
-    )
+    .getElementById("requestResult")
     .textContent = "";
 
 
   document
-    .getElementById(
-      "adminMessage"
-    )
+    .getElementById("adminMessage")
     .textContent = "";
 
 
-  showOnly(
-    "loginScreen"
-  );
+  showOnly("loginScreen");
 
 }
 
@@ -1841,9 +1836,7 @@ function openGame(){
 
   resetGameState();
 
-  showOnly(
-    "gameScreen"
-  );
+  showOnly("gameScreen");
 
   updateCoinsUI();
 
@@ -1877,16 +1870,10 @@ async function createCoinRequest(){
 
 
   const input =
-    document.getElementById(
-      "requestAmount"
-    );
-
+    document.getElementById("requestAmount");
 
   const result =
-    document.getElementById(
-      "requestResult"
-    );
-
+    document.getElementById("requestResult");
 
   const amount =
     Number(input.value);
@@ -1914,13 +1901,13 @@ async function createCoinRequest(){
     data,
     error
   } =
-    await supabaseClient
-      .rpc(
-        "create_coin_request",
-        {
-          amount_input:amount
-        }
-      );
+  await supabaseClient
+    .rpc(
+      "create_coin_request",
+      {
+        amount_input:amount
+      }
+    );
 
 
   if(error){
@@ -1961,16 +1948,10 @@ async function approveCoinRequest(){
 
 
   const input =
-    document.getElementById(
-      "requestCodeInput"
-    );
-
+    document.getElementById("requestCodeInput");
 
   const msg =
-    document.getElementById(
-      "adminMessage"
-    );
-
+    document.getElementById("adminMessage");
 
   const code =
     input.value
@@ -1996,13 +1977,13 @@ async function approveCoinRequest(){
     data,
     error
   } =
-    await supabaseClient
-      .rpc(
-        "approve_coin_request",
-        {
-          request_code_input:code
-        }
-      );
+  await supabaseClient
+    .rpc(
+      "approve_coin_request",
+      {
+        request_code_input:code
+      }
+    );
 
 
   if(error){
@@ -2023,7 +2004,6 @@ async function approveCoinRequest(){
 
   input.value = "";
 
-
   await loadProfile();
 
 }
@@ -2041,17 +2021,18 @@ function resetGameState(){
 
   bonusRemaining = 0;
 
-  bonusMedals = 0;
-
-  replayRemaining = 0;
-
-  czRemaining = 0;
+  absoluteRemaining = 0;
 
 
   setState(
     "NORMAL",
     "通常状態"
   );
+
+
+  document
+    .getElementById("absolutePanel")
+    .classList.add("hidden");
 
 
   setReels(
@@ -2067,16 +2048,12 @@ function resetGameState(){
 
 
   document
-    .getElementById(
-      "spinButton"
-    )
+    .getElementById("spinButton")
     .disabled = false;
 
 
   document
-    .getElementById(
-      "historyList"
-    )
+    .getElementById("historyList")
     .innerHTML = "";
 
 }
@@ -2113,18 +2090,9 @@ async function playGame(){
   }
 
 
-  if(state === "replay30"){
+  if(state === "absolute"){
 
-    await replayGame();
-
-    return;
-
-  }
-
-
-  if(state === "cz"){
-
-    await czGame();
+    await absoluteGame();
 
     return;
 
@@ -2157,31 +2125,44 @@ async function normalGame(){
   await saveCoins();
 
 
-  const r =
-    Math.random();
-
-
   const bonusChance =
     BONUS_PROBABILITY[
       CURRENT_SETTING
     ];
 
 
-  /* =========================
-     BONUS
-  ========================= */
+  const bonusRoll =
+    Math.random();
 
-  if(r < bonusChance){
 
-    const bonus =
+  /*
+    1/238.1のBONUS抽選
+  */
+
+  if(bonusRoll < bonusChance){
+
+    const result =
       drawBonus();
 
 
     /*
-      BONUSなし10%
+      絶対領域
     */
 
-    if(!bonus){
+    if(result === "absolute"){
+
+      startAbsolute();
+
+      return;
+
+    }
+
+
+    /*
+      BONUSなし
+    */
+
+    if(result === null){
 
       normalMiss();
 
@@ -2190,67 +2171,33 @@ async function normalGame(){
     }
 
 
+    /*
+      通常BONUS
+    */
+
     bonusName =
-      bonus.name;
+      result.name;
 
-
-    /* =========================
-       絶対領域
-    ========================= */
-
-    if(bonus.special){
-
-      specialSignal();
-
-
-      setReels(
-        "絶対",
-        "領域",
-        "!!"
-      );
-
-
-      message(
-        "🌌 超激レア！！<br>" +
-        "絶対領域 BONUS！！"
-      );
-
-
-      addHistory(
-        "★★★ 絶対領域 BONUS ★★★"
-      );
-
-
-      startAbsoluteBonusEffect();
-
-      return;
-
-    }
-
-
-    /* =========================
-       通常 BONUS
-    ========================= */
 
     hotSignal();
 
 
     setReels(
       "BONUS",
-      bonus.name,
+      bonusName,
       "BONUS"
     );
 
 
     message(
       "🎉 BONUS当選！！<br>" +
-      bonus.name
+      bonusName
     );
 
 
     addHistory(
       "★ " +
-      bonus.name +
+      bonusName +
       " BONUS当選 ★"
     );
 
@@ -2262,61 +2209,9 @@ async function normalGame(){
   }
 
 
-  /* =========================
-     CHANCE ZONE
-  ========================= */
-
-  if(
-    r <
-    bonusChance + 0.06
-  ){
-
-    startCZ();
-
-    return;
-
-  }
-
-
-  /* =========================
-     CHERRY
-  ========================= */
-
-  if(
-    r <
-    bonusChance + 0.14
-  ){
-
-    setReels(
-      "🍒",
-      "🍒",
-      "BAR"
-    );
-
-
-    medals += 5;
-
-
-    updateCoinsUI();
-
-    await saveCoins();
-
-
-    message(
-      "🍒 チェリー！<br>" +
-      "+5枚"
-    );
-
-
-    addHistory(
-      "🍒 チェリー +5"
-    );
-
-
-    return;
-
-  }
-
+  /*
+    通常ハズレ
+  */
 
   normalMiss();
 
@@ -2324,7 +2219,7 @@ async function normalGame(){
 
 
 /* =========================================================
-   MISS
+   NORMAL MISS
 ========================================================= */
 
 function normalMiss(){
@@ -2349,13 +2244,13 @@ function normalMiss(){
 
 
 /* =========================================================
-   DRAW BONUS
+   BONUS DRAW
 ========================================================= */
 
 function drawBonus(){
 
   /*
-    ボーナス振り分け
+    元の振り分け
 
     レギュラー 39.5%
     BIG        25%
@@ -2363,37 +2258,45 @@ function drawBonus(){
     LBIG       10%
     絶対領域    0.5%
     BONUSなし  10%
+
+    合計100%
   */
 
   const r =
     Math.random() * 100;
 
 
-  /* BONUSなし10% */
+  if(r < 39.5){
 
-  if(r >= 90){
-
-    return null;
+    return BONUS_TYPES[0];
 
   }
 
 
-  let x = r;
+  if(r < 64.5){
+
+    return BONUS_TYPES[1];
+
+  }
 
 
-  for(
-    const bonus
-    of BONUS_TYPES
-  ){
+  if(r < 79.5){
 
-    x -= bonus.weight;
+    return BONUS_TYPES[2];
+
+  }
 
 
-    if(x < 0){
+  if(r < 89.5){
 
-      return bonus;
+    return BONUS_TYPES[3];
 
-    }
+  }
+
+
+  if(r < 90){
+
+    return "absolute";
 
   }
 
@@ -2454,7 +2357,10 @@ function startBonus(){
   bonusRemaining =
     bonus.rounds;
 
-  bonusMedals = 0;
+
+  document
+    .getElementById("absolutePanel")
+    .classList.add("hidden");
 
 
   setState(
@@ -2518,8 +2424,6 @@ async function bonusGame(){
 
   medals += bonus.payout;
 
-  bonusMedals += bonus.payout;
-
   bonusRemaining--;
 
 
@@ -2565,15 +2469,108 @@ async function bonusGame(){
 
 
 /* =========================================================
-   ABSOLUTE TERRITORY
+   FINISH BONUS
 ========================================================= */
 
-function startAbsoluteBonusEffect(){
+function finishBonus(){
+
+  /*
+    BONUS終了後は必ずNORMAL。
+
+    REPLAYなし
+    CHANCE ZONEなし
+    BONUS後の優遇なし
+  */
+
+  state = "normal";
+
+  bonusName = "";
+
+  bonusRemaining = 0;
+
+
+  document
+    .getElementById("absolutePanel")
+    .classList.add("hidden");
+
+
+  setState(
+    "NORMAL",
+    "通常状態"
+  );
+
+
+  setReels(
+    "BAR",
+    "🍒",
+    "BAR"
+  );
+
+
+  message(
+    "BONUS終了！<br>" +
+    "通常状態へ戻りました。"
+  );
+
+
+  addHistory(
+    "BONUS終了 → NORMAL"
+  );
+
+}
+
+
+/* =========================================================
+   ABSOLUTE START
+========================================================= */
+
+function startAbsolute(){
+
+  state = "absolute";
+
+  absoluteRemaining = 10;
+
+
+  setState(
+    "絶対領域",
+    "絶対領域中"
+  );
+
+
+  document
+    .getElementById("absolutePanel")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("absoluteInfo")
+    .textContent =
+      "絶対領域 残り " +
+      absoluteRemaining +
+      "回";
+
+
+  setReels(
+    "✦",
+    "絶対領域",
+    "✦"
+  );
+
+
+  message(
+    "✦ 絶対領域突入！！ ✦"
+  );
+
+
+  addHistory(
+    "★★ 絶対領域 START ★★"
+  );
+
 
   showEffect(
-    "ULTRA RARE",
+    "SPECIAL",
     "絶対領域",
-    "SPECIAL BONUS!!",
+    "SPECIAL START!!",
     true
   );
 
@@ -2582,245 +2579,71 @@ function startAbsoluteBonusEffect(){
 
     hideEffect();
 
-    startAbsoluteBonus();
-
-  },2500);
+  },1800);
 
 }
 
 
 /* =========================================================
-   START ABSOLUTE BONUS
+   ABSOLUTE GAME
 ========================================================= */
 
-function startAbsoluteBonus(){
+async function absoluteGame(){
 
-  state = "bonus";
+  if(absoluteRemaining <= 0){
 
-  bonusName =
-    "絶対領域";
+    finishAbsolute();
 
-  bonusRemaining = 30;
+    return;
 
-  bonusMedals = 0;
+  }
 
 
-  setState(
+  /*
+    絶対領域中はBETなし。
+
+    10Gの特別状態として進行。
+  */
+
+  absoluteRemaining--;
+
+
+  setReels(
+    "✦",
     "絶対領域",
-    "SPECIAL BONUS"
+    "✦"
   );
 
 
-  setReels(
-    "絶対",
-    "領域",
-    "!!"
-  );
+  document
+    .getElementById("absoluteInfo")
+    .textContent =
+      "絶対領域 残り " +
+      absoluteRemaining +
+      "回";
 
 
   message(
-    "🌌 絶対領域 BONUS開始！"
+    "✦ 絶対領域中 ✦<br>" +
+    "残り " +
+    absoluteRemaining +
+    "回"
   );
 
 
   addHistory(
-    "★ 絶対領域 BONUS START ★"
-  );
-
-}
-
-
-/* =========================================================
-   FINISH BONUS
-========================================================= */
-
-function finishBonus(){
-
-  state = "replay30";
-
-  replayRemaining = 30;
-
-
-  setState(
-    "REPLAY",
-    "30G"
-  );
-
-
-  setReels(
-    "REPLAY",
-    "REPLAY",
-    "REPLAY"
-  );
-
-
-  message(
-    "BONUS終了！<br>" +
-    "30G REPLAYへ突入！"
-  );
-
-
-  addHistory(
-    "BONUS終了 → 30G REPLAY"
-  );
-
-}
-
-
-/* =========================================================
-   REPLAY
-========================================================= */
-
-async function replayGame(){
-
-  if(replayRemaining <= 0){
-
-    state = "normal";
-
-
-    setState(
-      "NORMAL",
-      "通常状態"
-    );
-
-
-    message(
-      "REPLAY終了。通常状態へ。"
-    );
-
-
-    return;
-
-  }
-
-
-  replayRemaining--;
-
-
-  setReels(
-    "REPLAY",
-    "🍒",
-    "REPLAY"
+    "絶対領域 / 残り" +
+    absoluteRemaining
   );
 
 
   /*
-    REPLAY中BONUS
+    絶対領域終了
   */
 
-  if(Math.random() < 0.05){
+  if(absoluteRemaining <= 0){
 
-    const bonus =
-      drawBonus();
-
-
-    if(!bonus){
-
-      message(
-        "REPLAY継続<br>" +
-        "残り " +
-        replayRemaining +
-        "G"
-      );
-
-      return;
-
-    }
-
-
-    bonusName =
-      bonus.name;
-
-
-    if(bonus.special){
-
-      specialSignal();
-
-
-      message(
-        "🌌 REPLAY中！！<br>" +
-        "絶対領域！！"
-      );
-
-
-      addHistory(
-        "REPLAY → 絶対領域"
-      );
-
-
-      startAbsoluteBonusEffect();
-
-      return;
-
-    }
-
-
-    hotSignal();
-
-
-    message(
-      "🎉 REPLAY中BONUS！！<br>" +
-      bonus.name
-    );
-
-
-    addHistory(
-      "REPLAY → " +
-      bonus.name
-    );
-
-
-    startBonusEffect();
-
-    return;
-
-  }
-
-
-  message(
-    "REPLAY<br>" +
-    "残り " +
-    replayRemaining +
-    "G"
-  );
-
-
-  addHistory(
-    "REPLAY 残り" +
-    replayRemaining +
-    "G"
-  );
-
-
-  if(
-    replayRemaining <= 0
-  ){
-
-    state = "normal";
-
-
-    setState(
-      "NORMAL",
-      "通常状態"
-    );
-
-
-    setReels(
-      "BAR",
-      "🍒",
-      "BAR"
-    );
-
-
-    message(
-      "30G REPLAY終了。<br>" +
-      "通常状態へ。"
-    );
-
-
-    addHistory(
-      "30G REPLAY終了"
-    );
+    finishAbsolute();
 
   }
 
@@ -2828,196 +2651,43 @@ async function replayGame(){
 
 
 /* =========================================================
-   CHANCE ZONE
+   FINISH ABSOLUTE
 ========================================================= */
 
-function startCZ(){
+function finishAbsolute(){
 
-  state = "cz";
+  state = "normal";
 
-  czRemaining = 10;
+  absoluteRemaining = 0;
+
+
+  document
+    .getElementById("absolutePanel")
+    .classList.add("hidden");
 
 
   setState(
-    "CHANCE ZONE",
-    "10G"
+    "NORMAL",
+    "通常状態"
   );
 
 
   setReels(
-    "CHANCE",
-    "ZONE",
-    "!!"
-  );
-
-
-  message(
-    "⚡ CHANCE ZONE突入！<br>" +
-    "10Gのチャンス！"
-  );
-
-
-  addHistory(
-    "CHANCE ZONE突入"
-  );
-
-}
-
-
-/* =========================================================
-   CZ GAME
-========================================================= */
-
-async function czGame(){
-
-  if(
-    czRemaining <= 0
-  ){
-
-    state = "normal";
-
-
-    setState(
-      "NORMAL",
-      "通常状態"
-    );
-
-
-    return;
-
-  }
-
-
-  czRemaining--;
-
-
-  /*
-    CZ中BONUS
-  */
-
-  if(
-    Math.random() < 0.03
-  ){
-
-    const bonus =
-      drawBonus();
-
-
-    if(!bonus){
-
-      message(
-        "CHANCE ZONE<br>" +
-        "残り " +
-        czRemaining +
-        "G"
-      );
-
-      return;
-
-    }
-
-
-    bonusName =
-      bonus.name;
-
-
-    if(bonus.special){
-
-      specialSignal();
-
-
-      message(
-        "🌌 CHANCE ZONE中！！<br>" +
-        "絶対領域！！！"
-      );
-
-
-      addHistory(
-        "CZ → 絶対領域"
-      );
-
-
-      startAbsoluteBonusEffect();
-
-      return;
-
-    }
-
-
-    hotSignal();
-
-
-    message(
-      "🎉 CHANCE ZONE BONUS！！<br>" +
-      bonus.name
-    );
-
-
-    addHistory(
-      "CZ → " +
-      bonus.name
-    );
-
-
-    startBonusEffect();
-
-    return;
-
-  }
-
-
-  setReels(
-    "CHANCE",
+    "BAR",
     "🍒",
-    "ZONE"
+    "BAR"
   );
 
 
   message(
-    "CHANCE ZONE<br>" +
-    "残り " +
-    czRemaining +
-    "G"
+    "絶対領域終了！<br>" +
+    "通常状態へ戻りました。"
   );
 
 
   addHistory(
-    "CZ 残り" +
-    czRemaining +
-    "G"
+    "絶対領域終了 → NORMAL"
   );
-
-
-  if(
-    czRemaining <= 0
-  ){
-
-    state = "normal";
-
-
-    setState(
-      "NORMAL",
-      "通常状態"
-    );
-
-
-    setReels(
-      "BAR",
-      "🍒",
-      "BAR"
-    );
-
-
-    message(
-      "CHANCE ZONE終了。"
-    );
-
-
-    addHistory(
-      "CHANCE ZONE終了"
-    );
-
-  }
 
 }
 
@@ -3029,23 +2699,17 @@ async function czGame(){
 function setReels(a,b,c){
 
   document
-    .getElementById(
-      "reel1"
-    )
+    .getElementById("reel1")
     .textContent = a;
 
 
   document
-    .getElementById(
-      "reel2"
-    )
+    .getElementById("reel2")
     .textContent = b;
 
 
   document
-    .getElementById(
-      "reel3"
-    )
+    .getElementById("reel3")
     .textContent = c;
 
 }
@@ -3058,9 +2722,7 @@ function setReels(a,b,c){
 function message(text){
 
   document
-    .getElementById(
-      "message"
-    )
+    .getElementById("message")
     .innerHTML = text;
 
 }
@@ -3073,16 +2735,12 @@ function message(text){
 function setState(name,info){
 
   document
-    .getElementById(
-      "stateName"
-    )
+    .getElementById("stateName")
     .textContent = name;
 
 
   document
-    .getElementById(
-      "stateInfo"
-    )
+    .getElementById("stateInfo")
     .textContent =
       info || "";
 
@@ -3158,48 +2816,36 @@ function showEffect(
 ){
 
   document
-    .getElementById(
-      "effectSmall"
-    )
+    .getElementById("effectSmall")
     .textContent = small;
 
 
   document
-    .getElementById(
-      "effectMain"
-    )
+    .getElementById("effectMain")
     .textContent = main;
 
 
   document
-    .getElementById(
-      "effectSub"
-    )
+    .getElementById("effectSub")
     .textContent = sub;
 
 
   document
-    .getElementById(
-      "effectOverlay"
-    )
+    .getElementById("effectOverlay")
     .classList.add("show");
 
 
   if(special){
 
     document
-      .getElementById(
-        "effectMain"
-      )
+      .getElementById("effectMain")
       .style.fontSize =
         "75px";
 
   }else{
 
     document
-      .getElementById(
-        "effectMain"
-      )
+      .getElementById("effectMain")
       .style.fontSize =
         "";
 
@@ -3211,16 +2857,14 @@ function showEffect(
 function hideEffect(){
 
   document
-    .getElementById(
-      "effectOverlay"
-    )
+    .getElementById("effectOverlay")
     .classList.remove("show");
 
 }
 
 
 /* =========================================================
-   SIGNAL
+   HOT SIGNAL
 ========================================================= */
 
 function hotSignal(){
@@ -3235,26 +2879,6 @@ function hotSignal(){
       "";
 
   },350);
-
-}
-
-
-function specialSignal(){
-
-  const old =
-    document.body.style.filter;
-
-
-  document.body.style.filter =
-    "brightness(1.35) saturate(1.6)";
-
-
-  setTimeout(()=>{
-
-    document.body.style.filter =
-      old;
-
-  },900);
 
 }
 
