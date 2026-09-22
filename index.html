@@ -3,36 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>CASINO [Re]</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   min-height:100vh;
-  background:
-    radial-gradient(circle at center,#252525 0%,#101010 50%,#050505 100%);
+  background:radial-gradient(circle at center,#252525 0%,#101010 50%,#050505 100%);
   color:white;
   font-family:Arial,sans-serif;
 }
 
-button{
-  cursor:pointer;
-}
-
-.hidden{
-  display:none !important;
-}
-
-/* =========================
-   LOGIN
-========================= */
+button{cursor:pointer}
+.hidden{display:none!important}
 
 #loginScreen{
   min-height:100vh;
@@ -83,18 +70,12 @@ button{
   font-size:17px;
 }
 
-.login-box button:hover{
-  background:#ffc928;
-}
+.login-box button:hover{background:#ffc928}
 
 #loginMessage{
   margin-top:15px;
   color:#ff7777;
 }
-
-/* =========================
-   HUB
-========================= */
 
 #hubScreen{
   min-height:100vh;
@@ -151,9 +132,7 @@ button{
   box-shadow:0 0 20px rgba(0,0,0,.5);
 }
 
-.game-card h2{
-  color:#ffd84d;
-}
+.game-card h2{color:#ffd84d}
 
 .game-card button{
   width:100%;
@@ -165,10 +144,6 @@ button{
   font-weight:bold;
   font-size:17px;
 }
-
-/* =========================
-   COIN REQUEST
-========================= */
 
 .coin-panel,
 .admin-panel{
@@ -214,10 +189,6 @@ button{
   border-radius:8px;
   word-break:break-all;
 }
-
-/* =========================
-   GAME
-========================= */
 
 #gameScreen{
   min-height:100vh;
@@ -269,13 +240,10 @@ button{
   margin:20px auto;
   max-width:760px;
   padding:30px;
-  background:
-    linear-gradient(145deg,#292929,#101010);
+  background:linear-gradient(145deg,#292929,#101010);
   border:8px solid #555;
   border-radius:18px;
-  box-shadow:
-    inset 0 0 20px #000,
-    0 0 25px rgba(0,0,0,.8);
+  box-shadow:inset 0 0 20px #000,0 0 25px rgba(0,0,0,.8);
 }
 
 .reels{
@@ -334,9 +302,7 @@ button{
   box-shadow:0 0 20px rgba(229,169,0,.3);
 }
 
-.play-btn:hover{
-  background:#ffc928;
-}
+.play-btn:hover{background:#ffc928}
 
 .play-btn:disabled{
   background:#555;
@@ -390,9 +356,7 @@ button{
   padding:15px;
 }
 
-.history h3{
-  margin-top:0;
-}
+.history h3{margin-top:0}
 
 .history-list{
   max-height:220px;
@@ -405,15 +369,10 @@ button{
   font-size:14px;
 }
 
-/* =========================
-   EFFECT
-========================= */
-
 #effectOverlay{
   position:fixed;
   inset:0;
-  background:
-    radial-gradient(circle,#ffffff 0%,#ffd84d 20%,#ff5a00 45%,#000 80%);
+  background:radial-gradient(circle,#fff 0%,#ffd84d 20%,#ff5a00 45%,#000 80%);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -423,51 +382,33 @@ button{
   transition:opacity .15s;
 }
 
-#effectOverlay.show{
-  opacity:1;
-}
+#effectOverlay.show{opacity:1}
 
 .effect-text{
   font-size:70px;
   font-weight:bold;
   color:white;
-  text-shadow:
-    0 0 10px #fff,
-    0 0 30px #ff0,
-    0 0 60px #f00;
+  text-shadow:0 0 10px #fff,0 0 30px #ff0,0 0 60px #f00;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
 @media(max-width:600px){
-
   .reel{
     height:110px;
     font-size:40px;
   }
 
-  .reel-machine{
-    padding:15px;
-  }
+  .reel-machine{padding:15px}
 
-  .effect-text{
-    font-size:45px;
-  }
+  .effect-text{font-size:45px}
 
-  .login-box{
-    padding:20px;
-  }
+  .login-box{padding:20px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     LOGIN
-========================= -->
+<!-- LOGIN -->
 
 <div id="loginScreen">
 
@@ -488,9 +429,13 @@ button{
       placeholder="パスワード"
     >
 
-    <button onclick="loginUser()">ログイン</button>
+    <button onclick="loginUser()">
+      ログイン
+    </button>
 
-    <button onclick="registerUser()">新規登録</button>
+    <button onclick="registerUser()">
+      新規登録
+    </button>
 
     <div id="loginMessage"></div>
 
@@ -499,9 +444,7 @@ button{
 </div>
 
 
-<!-- =========================
-     HUB
-========================= -->
+<!-- HUB -->
 
 <div id="hubScreen" class="hidden">
 
@@ -529,9 +472,7 @@ button{
 
       <h2>🎰 SLOT [Re]</h2>
 
-      <p>
-        シンプルなスロットゲーム
-      </p>
+      <p>シンプルなスロットゲーム</p>
 
       <button onclick="openGame()">
         PLAY
@@ -608,9 +549,7 @@ button{
 </div>
 
 
-<!-- =========================
-     GAME
-========================= -->
+<!-- GAME -->
 
 <div id="gameScreen" class="hidden">
 
@@ -649,26 +588,11 @@ button{
 
       <div class="reels">
 
-        <div
-          id="reel1"
-          class="reel"
-        >
-          7
-        </div>
+        <div id="reel1" class="reel">7</div>
 
-        <div
-          id="reel2"
-          class="reel"
-        >
-          BAR
-        </div>
+        <div id="reel2" class="reel">BAR</div>
 
-        <div
-          id="reel3"
-          class="reel"
-        >
-          🍒
-        </div>
+        <div id="reel3" class="reel">🍒</div>
 
       </div>
 
@@ -779,7 +703,7 @@ const SUPABASE_URL =
   "https://yazkexvgmdyjeeimmayq.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_87rSIEju76172IK7BOCx_g_y_2qPHpe";
+  "sb_publishable_87rSIEju76172IK7boCx_g_y_2qPHpe";
 
 const supabaseClient =
   window.supabase.createClient(
@@ -800,11 +724,8 @@ const supabaseClient =
 ===================================================== */
 
 let currentUser = null;
-
 let medals = 0;
-
 let isAdmin = false;
-
 let saveQueue = Promise.resolve();
 
 const BET = 3;
@@ -812,6 +733,7 @@ const BET = 3;
 
 /* =====================================================
    SETTINGS
+   ※ 画面には表示しない
 ===================================================== */
 
 const CURRENT_SETTING = 1;
@@ -819,17 +741,11 @@ const CURRENT_SETTING = 1;
 const BONUS_PROBABILITY = {
 
   1:1 / 280,
-
   2:1 / 265,
-
   3:1 / 250,
-
   4:1 / 235,
-
   5:1 / 210,
-
   6:1 / 190,
-
   7:1 / 170
 
 };
@@ -893,8 +809,8 @@ const BONUS_TYPES = [
 
 function idToEmail(id){
 
-  return id.toLowerCase()
-    + "@casino-re.local";
+  return id.toLowerCase() +
+    "@casino-re.local";
 
 }
 
@@ -924,6 +840,7 @@ async function ensureProfile(){
       .eq("id",currentUser.id)
       .maybeSingle();
 
+
   if(error){
 
     console.error(error);
@@ -931,6 +848,7 @@ async function ensureProfile(){
     return;
 
   }
+
 
   if(!data){
 
@@ -940,20 +858,18 @@ async function ensureProfile(){
       await supabaseClient
         .from("profiles")
         .insert({
-
           id:currentUser.id,
-
           coins:1000,
-
           is_admin:false
-
         });
+
 
     if(insertError){
 
       console.error(insertError);
 
     }
+
 
     medals = 1000;
 
@@ -963,9 +879,12 @@ async function ensureProfile(){
 
   }
 
-  medals = Number(data.coins || 0);
 
-  isAdmin = data.is_admin === true;
+  medals =
+    Number(data.coins || 0);
+
+  isAdmin =
+    data.is_admin === true;
 
 }
 
@@ -978,6 +897,7 @@ async function loadProfile(){
 
   if(!currentUser) return;
 
+
   const {
     data,
     error
@@ -988,6 +908,7 @@ async function loadProfile(){
       .eq("id",currentUser.id)
       .single();
 
+
   if(error){
 
     console.error(error);
@@ -996,9 +917,13 @@ async function loadProfile(){
 
   }
 
-  medals = Number(data.coins || 0);
 
-  isAdmin = data.is_admin === true;
+  medals =
+    Number(data.coins || 0);
+
+  isAdmin =
+    data.is_admin === true;
+
 
   updateCoinDisplays();
 
@@ -1013,7 +938,10 @@ function saveCoins(){
 
   if(!currentUser) return;
 
-  const value = Number(medals);
+
+  const value =
+    Number(medals);
+
 
   saveQueue =
     saveQueue.then(async()=>{
@@ -1027,6 +955,7 @@ function saveCoins(){
             coins:value
           })
           .eq("id",currentUser.id);
+
 
       if(error){
 
@@ -1054,6 +983,7 @@ function updateCoinDisplays(){
   const gameCoins =
     document.getElementById("gameCoins");
 
+
   if(hubCoins){
 
     hubCoins.textContent =
@@ -1061,12 +991,16 @@ function updateCoinDisplays(){
 
   }
 
+
   if(gameCoins){
 
     gameCoins.textContent =
       medals.toLocaleString();
 
   }
+
+
+  updatePlayButton();
 
 }
 
@@ -1134,7 +1068,9 @@ async function loginUser(){
   }
 
 
-  currentUser = data.user;
+  currentUser =
+    data.user;
+
 
   await ensureProfile();
 
@@ -1210,7 +1146,8 @@ async function registerUser(){
 
   if(data.user){
 
-    currentUser = data.user;
+    currentUser =
+      data.user;
 
     await ensureProfile();
 
@@ -1242,13 +1179,16 @@ async function logoutUser(){
 
   isAdmin = false;
 
+
   document
     .getElementById("hubScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("gameScreen")
     .classList.add("hidden");
+
 
   document
     .getElementById("loginScreen")
@@ -1267,19 +1207,23 @@ function showHub(){
     .getElementById("loginScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("gameScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("hubScreen")
     .classList.remove("hidden");
+
 
   updateCoinDisplays();
 
 
   const adminPanel =
     document.getElementById("adminPanel");
+
 
   if(isAdmin){
 
@@ -1302,13 +1246,16 @@ function openGame(){
 
   resetGameState();
 
+
   document
     .getElementById("hubScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("gameScreen")
     .classList.remove("hidden");
+
 
   updateCoinDisplays();
 
@@ -1323,13 +1270,16 @@ function backToHub(){
 
   resetGameState();
 
+
   document
     .getElementById("gameScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("hubScreen")
     .classList.remove("hidden");
+
 
   updateCoinDisplays();
 
@@ -1413,10 +1363,14 @@ async function createCoinRequest(){
 async function approveCoinRequest(){
 
   const input =
-    document.getElementById("requestCodeInput");
+    document.getElementById(
+      "requestCodeInput"
+    );
 
   const result =
-    document.getElementById("adminResult");
+    document.getElementById(
+      "adminResult"
+    );
 
   const code =
     input.value.trim();
@@ -1556,7 +1510,9 @@ async function normalGame(){
 
       showBonusEffect();
 
-      startBonus(result.bonus);
+      startBonus(
+        result.bonus
+      );
 
       return;
 
@@ -1576,32 +1532,26 @@ async function normalGame(){
 
   updateReels();
 
-  setMessage(
-    "ハズレ"
-  );
+  setMessage("ハズレ");
 
-  addHistory(
-    "ハズレ"
-  );
+  addHistory("ハズレ");
 
 }
 
 
 /* =====================================================
-   UPDATE REELS
+   REELS
 ===================================================== */
 
 function updateReels(){
 
   const symbols = [
-
     "7",
     "BAR",
     "🍒",
     "🔔",
     "🍋",
     "★"
-
   ];
 
 
@@ -1609,23 +1559,28 @@ function updateReels(){
     .textContent =
       symbols[
         Math.floor(
-          Math.random()*symbols.length
+          Math.random() *
+          symbols.length
         )
       ];
+
 
   document.getElementById("reel2")
     .textContent =
       symbols[
         Math.floor(
-          Math.random()*symbols.length
+          Math.random() *
+          symbols.length
         )
       ];
+
 
   document.getElementById("reel3")
     .textContent =
       symbols[
         Math.floor(
-          Math.random()*symbols.length
+          Math.random() *
+          symbols.length
         )
       ];
 
@@ -1639,13 +1594,15 @@ function updateReels(){
 function drawBonus(){
 
   const roll =
-    Math.random()*100;
-
+    Math.random() * 100;
 
   let total = 0;
 
 
-  for(const bonus of BONUS_TYPES){
+  for(
+    const bonus
+    of BONUS_TYPES
+  ){
 
     total += bonus.weight;
 
@@ -1712,7 +1669,8 @@ function startBonus(bonus){
 
 
   addHistory(
-    bonus.name + " START"
+    bonus.name +
+    " START"
   );
 
 
@@ -1738,8 +1696,8 @@ async function bonusGame(){
 
   bonusRemaining--;
 
-
   medals += 10;
+
 
   updateCoinDisplays();
 
@@ -1748,8 +1706,7 @@ async function bonusGame(){
 
   setMessage(
     bonusName +
-    " +" +
-    "10コイン"
+    " +10コイン"
   );
 
 
@@ -1818,8 +1775,8 @@ function finishBonus(){
 
 
 /* =====================================================
-   REPLAY GAME
-   ※ コイン消費なし
+   REPLAY
+   ★ ここではコインを使わない
 ===================================================== */
 
 async function replayGame(){
@@ -1832,8 +1789,6 @@ async function replayGame(){
 
   }
 
-
-  // ★ REPLAY中は3コイン消費しない
 
   replayRemaining--;
 
@@ -1858,7 +1813,9 @@ async function replayGame(){
 
       showBonusEffect();
 
-      startBonus(result.bonus);
+      startBonus(
+        result.bonus
+      );
 
       return;
 
@@ -1878,16 +1835,9 @@ async function replayGame(){
 
   updateReels();
 
+  setMessage("REPLAY");
 
-  setMessage(
-    "REPLAY"
-  );
-
-
-  addHistory(
-    "REPLAY"
-  );
-
+  addHistory("REPLAY");
 
   updateReplayInfo();
 
@@ -1918,16 +1868,12 @@ async function replayGame(){
 
 function updateReplayInfo(){
 
-  const info =
-    document.getElementById(
-      "replayInfo"
-    );
-
-
-  info.textContent =
-    "残り " +
-    replayRemaining +
-    "G";
+  document
+    .getElementById("replayInfo")
+    .textContent =
+      "残り " +
+      replayRemaining +
+      "G";
 
 }
 
@@ -2008,10 +1954,6 @@ function startAbsolute(){
 }
 
 
-/* =====================================================
-   ABSOLUTE FROM REPLAY
-===================================================== */
-
 function startAbsoluteFromReplay(){
 
   startAbsolute();
@@ -2036,19 +1978,15 @@ async function absoluteGame(){
 
   absoluteRemaining--;
 
-
   updateReels();
-
 
   setMessage(
     "ABSOLUTE TERRITORY"
   );
 
-
   addHistory(
     "ABSOLUTE"
   );
-
 
   updateAbsoluteInfo();
 
@@ -2124,10 +2062,7 @@ function finishAbsolute(){
    STATE
 ===================================================== */
 
-function setState(
-  title,
-  message
-){
+function setState(title,message){
 
   document
     .getElementById("stateBox")
@@ -2163,6 +2098,9 @@ function updatePlayButton(){
     );
 
 
+  if(!button) return;
+
+
   if(state === "normal"){
 
     button.textContent =
@@ -2191,12 +2129,10 @@ function updatePlayButton(){
 
   if(state === "replay"){
 
-    // ★ REPLAYは無料なので
-    // コイン枚数に関係なく押せる
-
     button.textContent =
       "REPLAY";
 
+    // ★ REPLAYは無料
     button.disabled =
       false;
 
@@ -2231,7 +2167,9 @@ function addHistory(text){
 
 
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   item.className =
@@ -2275,7 +2213,9 @@ function showBonusEffect(){
     "BONUS!!";
 
 
-  overlay.classList.add("show");
+  overlay.classList.add(
+    "show"
+  );
 
 
   setTimeout(()=>{
