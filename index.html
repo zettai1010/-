@@ -598,10 +598,250 @@ body.void-hot{
 }
 
 </style>
+
+<style id="loginStyles">
+#loginScreen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,#303030 0%,#111 48%,#050505 100%)}
+.login-box{width:min(420px,90vw);padding:38px 30px;border:3px solid #777;border-radius:18px;background:linear-gradient(145deg,#181818,#080808);box-shadow:0 0 35px rgba(255,180,0,.18),inset 0 0 25px rgba(255,255,255,.03);text-align:center}
+.login-title{color:#ffd21a;font-size:38px;font-weight:900;letter-spacing:3px;text-shadow:0 0 12px #ff9d00}
+.login-subtitle{margin:5px 0 28px;color:#aaa;letter-spacing:5px;font-size:13px}
+.login-input{width:100%;height:52px;margin:7px 0;padding:0 16px;border:2px solid #555;border-radius:9px;outline:none;background:#111;color:#fff;font-size:16px}
+.login-input:focus{border-color:#ffd21a;box-shadow:0 0 10px rgba(255,210,26,.25)}
+.login-button{width:100%;height:56px;margin-top:15px;border:3px solid #b88600;border-radius:10px;background:linear-gradient(#ffe66b,#e5a900);color:#111;font-size:22px;font-weight:900;letter-spacing:4px;cursor:pointer;box-shadow:0 0 18px rgba(255,190,0,.3)}
+.login-button:hover{filter:brightness(1.12)}
+.login-error{min-height:22px;margin-top:12px;color:#ff4d4d;font-weight:bold}
+.login-demo{margin-top:20px;padding:10px;border:1px solid #333;border-radius:8px;color:#888;font-size:12px;line-height:1.7}
+</style>
+
+
+<style id="casinoHubStyles">
+#casinoHub{
+  position:fixed;
+  inset:0;
+  z-index:99990;
+  overflow:auto;
+  min-height:100vh;
+  background:radial-gradient(circle at center,#303030 0%,#111 48%,#050505 100%);
+  color:#fff;
+}
+.hub-header{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 28px;
+  background:rgba(5,5,5,.94);
+  border-bottom:2px solid #444;
+  backdrop-filter:blur(8px);
+}
+.hub-logo{
+  color:#ffd21a;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:3px;
+  text-shadow:0 0 12px #ff9d00;
+}
+.hub-subtitle{
+  color:#888;
+  font-size:11px;
+  letter-spacing:4px;
+  margin-top:2px;
+}
+.hub-logout{
+  border:1px solid #666;
+  border-radius:8px;
+  padding:9px 16px;
+  background:#171717;
+  color:#ddd;
+  cursor:pointer;
+}
+.hub-logout:hover{background:#2a2a2a}
+.hub-content{
+  width:min(1100px,92vw);
+  margin:0 auto;
+  padding:50px 0 70px;
+  text-align:center;
+}
+.hub-content h1{
+  margin:0;
+  font-size:36px;
+  color:#fff;
+}
+.hub-description{
+  color:#999;
+  margin:8px 0 35px;
+}
+.casino-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:22px;
+}
+.casino-card{
+  min-height:245px;
+  padding:25px 20px;
+  border:2px solid #555;
+  border-radius:16px;
+  background:linear-gradient(145deg,#202020,#0b0b0b);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 8px 25px rgba(0,0,0,.45);
+  transition:.18s;
+}
+.casino-card:hover{
+  transform:translateY(-5px);
+  border-color:#ffd21a;
+  box-shadow:0 0 25px rgba(255,190,0,.22);
+}
+.casino-card.coming{
+  cursor:pointer;
+  opacity:.68;
+}
+.casino-card.coming:hover{
+  transform:none;
+  border-color:#777;
+  box-shadow:0 8px 25px rgba(0,0,0,.45);
+}
+.casino-icon{
+  font-size:58px;
+  margin-bottom:15px;
+}
+.casino-name{
+  font-size:22px;
+  font-weight:900;
+}
+.casino-desc{
+  margin:9px 0 18px;
+  color:#999;
+}
+.casino-enter{
+  display:inline-block;
+  padding:8px 15px;
+  border-radius:7px;
+  background:#222;
+  color:#ffd21a;
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+#hubMessage{
+  min-height:25px;
+  margin-top:25px;
+  color:#ffd21a;
+  font-weight:bold;
+}
+@media(max-width:600px){
+  .hub-header{padding:14px 16px}
+  .hub-logo{font-size:21px}
+  .hub-content{padding-top:35px}
+  .hub-content h1{font-size:28px}
+}
+</style>
+
+
+<style id="saveSystemStyles">
+.save-profile{
+  width:min(1100px,92vw);
+  margin:18px auto 0;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.save-profile>div{
+  min-width:145px;
+  padding:10px 15px;
+  border:1px solid #444;
+  border-radius:9px;
+  background:#111;
+  text-align:center;
+}
+.save-label{
+  display:block;
+  color:#777;
+  font-size:10px;
+  letter-spacing:2px;
+  margin-bottom:3px;
+}
+.save-profile strong{
+  color:#ddd;
+  font-size:13px;
+}
+</style>
+
 </head>
 
 
 <body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-title">SLOT [Re]</div>
+
+<div id="casinoHub" style="display:none;">
+  <div class="hub-header">
+    <div>
+      <div class="hub-logo">CASINO [Re]</div>
+      <div class="hub-subtitle">GAME SELECT</div>
+    </div>
+    <button class="hub-logout" onclick="logout()">LOGOUT</button>
+  </div>
+
+  
+<div id="saveProfile" class="save-profile">
+  <div><span class="save-label">PLAYER</span><strong id="playerName">TEST PLAYER</strong></div>
+  <div><span class="save-label">SAVE</span><strong id="saveStatus">自動保存ON</strong></div>
+  <div><span class="save-label">LAST PLAYED</span><strong id="lastPlayed">---</strong></div>
+</div>
+
+<div class="hub-content">
+    <h1>カジノを選択</h1>
+    <p class="hub-description">遊びたいゲームを選んでください</p>
+
+    <div class="casino-grid">
+      <button class="casino-card" onclick="openGame('slotRe')">
+        <div class="casino-icon">🎰</div>
+        <div class="casino-name">スロット [Re]</div>
+        <div class="casino-desc">現在プレイできます</div>
+        <span class="casino-enter">PLAY ▶</span>
+      </button>
+
+      <button class="casino-card coming" onclick="comingSoon()">
+        <div class="casino-icon">🃏</div>
+        <div class="casino-name">CASINO 02</div>
+        <div class="casino-desc">準備中</div>
+        <span class="casino-enter">COMING SOON</span>
+      </button>
+
+      <button class="casino-card coming" onclick="comingSoon()">
+        <div class="casino-icon">🎲</div>
+        <div class="casino-name">CASINO 03</div>
+        <div class="casino-desc">準備中</div>
+        <span class="casino-enter">COMING SOON</span>
+      </button>
+
+      <button class="casino-card coming" onclick="comingSoon()">
+        <div class="casino-icon">♠️</div>
+        <div class="casino-name">CASINO 04</div>
+        <div class="casino-desc">準備中</div>
+        <span class="casino-enter">COMING SOON</span>
+      </button>
+    </div>
+
+    <div id="hubMessage"></div>
+  </div>
+</div>
+
+    <div class="login-subtitle">MEMBER LOGIN</div>
+    <input id="loginId" class="login-input" type="text" placeholder="ユーザーID" autocomplete="username">
+    <input id="loginPassword" class="login-input" type="password" placeholder="パスワード" autocomplete="current-password">
+    <button class="login-button" onclick="login()">LOGIN</button>
+    <div id="loginError" class="login-error"></div>
+    <div class="login-demo">試作品ログイン<br>ID：test　/　PASS：1234</div>
+  </div>
+</div>
+
+
 
 
 <div class="game">
@@ -2214,6 +2454,153 @@ function resetGame(){
 
 }
 
+</script>
+
+
+<script id="loginScript">
+function login(){
+  const id=document.getElementById("loginId").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  const error=document.getElementById("loginError");
+  if(id==="test" && password==="1234"){
+    sessionStorage.setItem("slotReLoggedIn","1");
+    document.getElementById("loginScreen").style.display="none";
+    if(typeof showCasinoHub==="function") showCasinoHub();
+    error.textContent="";
+  }else{
+    error.textContent="IDまたはパスワードが違います";
+  }
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  const screen=document.getElementById("loginScreen");
+  if(sessionStorage.getItem("slotReLoggedIn")==="1") screen.style.display="none";
+  document.querySelectorAll("#loginId,#loginPassword").forEach(input=>{
+    input.addEventListener("keydown",e=>{if(e.key==="Enter") login();});
+  });
+});
+</script>
+
+
+<script id="casinoHubScript">
+function showCasinoHub(){
+  document.getElementById("loginScreen").style.display="none";
+  document.getElementById("casinoHub").style.display="block";
+}
+
+function openGame(game){
+  if(game==="slotRe"){
+    document.getElementById("casinoHub").style.display="none";
+    document.body.classList.remove("hub-only");
+  }
+}
+
+function comingSoon(){
+  document.getElementById("hubMessage").textContent="このカジノは現在準備中です！";
+}
+
+function logout(){
+  sessionStorage.removeItem("slotReLoggedIn");
+  document.getElementById("casinoHub").style.display="none";
+  document.getElementById("loginScreen").style.display="flex";
+  document.getElementById("loginId").value="";
+  document.getElementById("loginPassword").value="";
+  document.getElementById("loginError").textContent="";
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  if(sessionStorage.getItem("slotReLoggedIn")==="1"){
+    showCasinoHub();
+  }
+});
+</script>
+
+
+<script id="saveSystemScript">
+/* =========================
+   CASINO [Re] 自動保存システム
+   ブラウザを閉じても残る
+========================= */
+const SAVE_KEY = "casinoReSaveData";
+
+function loadSaveData(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw){
+      const fresh = {
+        playerName: "TEST PLAYER",
+        medals: 0,
+        totalSpins: 0,
+        totalWin: 0,
+        lastPlayed: null
+      };
+      localStorage.setItem(SAVE_KEY, JSON.stringify(fresh));
+      return fresh;
+    }
+    return JSON.parse(raw);
+  }catch(e){
+    return {
+      playerName:"TEST PLAYER",
+      medals:0,
+      totalSpins:0,
+      totalWin:0,
+      lastPlayed:null
+    };
+  }
+}
+
+function saveData(data){
+  data.lastPlayed = new Date().toLocaleString("ja-JP");
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  updateSaveDisplay(data);
+}
+
+function updateSaveDisplay(data){
+  const name = document.getElementById("playerName");
+  const last = document.getElementById("lastPlayed");
+  const status = document.getElementById("saveStatus");
+
+  if(name) name.textContent = data.playerName || "PLAYER";
+  if(last) last.textContent = data.lastPlayed || "---";
+  if(status) status.textContent = "自動保存ON";
+}
+
+function recordPlay(spins=1, win=0){
+  const data = loadSaveData();
+  data.totalSpins = Number(data.totalSpins || 0) + spins;
+  data.totalWin = Number(data.totalWin || 0) + Number(win || 0);
+  saveData(data);
+}
+
+function setPlayerName(name){
+  const data = loadSaveData();
+  data.playerName = String(name || "PLAYER").slice(0,20);
+  saveData(data);
+}
+
+function clearSavedData(){
+  if(confirm("保存データを全部消しますか？")){
+    localStorage.removeItem(SAVE_KEY);
+    location.reload();
+  }
+}
+
+/* ログイン成功時に保存データを読み込む */
+document.addEventListener("DOMContentLoaded",()=>{
+  updateSaveDisplay(loadSaveData());
+
+  /*
+    既存ゲームの play() がある場合、元の処理を壊さず
+    1回押すごとにプレイ回数だけ自動記録する。
+  */
+  if(typeof window.play === "function" && !window.__saveWrapped){
+    const originalPlay = window.play;
+    window.play = function(){
+      recordPlay(1,0);
+      return originalPlay.apply(this, arguments);
+    };
+    window.__saveWrapped = true;
+  }
+});
 </script>
 
 </body>
