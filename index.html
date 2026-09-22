@@ -1,9 +1,9 @@
-```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>CASINO [Re]</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,23 +13,13 @@
   box-sizing:border-box;
 }
 
-html,body{
-  margin:0;
-  padding:0;
-  min-height:100%;
-  font-family:Arial,"Noto Sans JP",sans-serif;
-  background:
-    radial-gradient(circle at center,#252525 0%,#111 50%,#050505 100%);
-  color:#fff;
-}
-
 body{
+  margin:0;
   min-height:100vh;
-}
-
-button,
-input{
-  font:inherit;
+  background:
+    radial-gradient(circle at center,#252525 0%,#101010 50%,#050505 100%);
+  color:white;
+  font-family:Arial,sans-serif;
 }
 
 button{
@@ -53,79 +43,53 @@ button{
 }
 
 .login-box{
-  width:min(430px,95vw);
-  background:linear-gradient(145deg,#222,#101010);
+  width:420px;
+  max-width:100%;
+  background:#151515;
   border:2px solid #555;
-  border-radius:18px;
-  padding:35px 28px;
-  box-shadow:
-    0 0 30px rgba(0,0,0,.8),
-    inset 0 0 20px rgba(255,255,255,.03);
+  border-radius:16px;
+  padding:30px;
+  box-shadow:0 0 30px rgba(0,0,0,.8);
   text-align:center;
 }
 
-.login-title{
+.login-box h1{
+  margin-top:0;
   font-size:38px;
-  font-weight:900;
-  letter-spacing:4px;
-  margin-bottom:8px;
-  color:#ffd84a;
-  text-shadow:
-    0 0 8px #ffb300,
-    0 0 20px #ff8c00;
-}
-
-.login-subtitle{
-  color:#aaa;
-  margin-bottom:25px;
+  color:#ffd84d;
+  text-shadow:0 0 15px #ffb300;
 }
 
 .login-box input{
   width:100%;
   padding:14px;
-  margin:7px 0;
-  border-radius:10px;
+  margin:8px 0;
+  border-radius:8px;
   border:1px solid #555;
   background:#080808;
   color:white;
-  outline:none;
+  font-size:16px;
 }
 
-.login-box input:focus{
-  border-color:#ffd43b;
-  box-shadow:0 0 10px rgba(255,212,59,.3);
-}
-
-.login-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:15px;
-}
-
-.login-buttons button{
-  padding:13px;
+.login-box button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
   border:0;
-  border-radius:10px;
-  font-weight:bold;
-}
-
-.btn-login{
-  background:linear-gradient(#ffe46b,#d99a00);
+  border-radius:8px;
+  background:#e5a900;
   color:#111;
-}
-
-.btn-register{
-  background:#333;
-  color:white;
-  border:1px solid #666 !important;
-}
-
-.login-message{
-  margin-top:15px;
-  min-height:25px;
-  color:#ffd95a;
   font-weight:bold;
+  font-size:17px;
+}
+
+.login-box button:hover{
+  background:#ffc928;
+}
+
+#loginMessage{
+  margin-top:15px;
+  color:#ff7777;
 }
 
 /* =========================
@@ -134,104 +98,72 @@ button{
 
 #hubScreen{
   min-height:100vh;
-  padding:30px 20px;
+  padding:25px;
 }
 
-.hub-wrap{
-  width:min(1100px,100%);
+.header{
+  max-width:1100px;
   margin:auto;
-}
-
-.hub-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:15px;
   flex-wrap:wrap;
-  margin-bottom:25px;
 }
 
-.logo{
-  font-size:35px;
-  font-weight:900;
-  letter-spacing:4px;
-  color:#ffd84a;
-  text-shadow:
-    0 0 8px #ffb300,
-    0 0 20px #ff6600;
+.header h1{
+  margin:0;
+  color:#ffd84d;
+  text-shadow:0 0 15px #ffb300;
 }
 
-.account-box{
-  background:#161616;
-  border:1px solid #444;
-  border-radius:12px;
-  padding:12px 16px;
-}
-
-.account-coins{
-  color:#ffd84a;
+.coin-display{
   font-size:20px;
   font-weight:bold;
+  background:#161616;
+  border:1px solid #555;
+  border-radius:10px;
+  padding:10px 18px;
 }
 
 .logout-btn{
-  margin-top:7px;
-  width:100%;
-  padding:7px;
-  border:1px solid #555;
-  border-radius:7px;
-  background:#292929;
+  padding:10px 15px;
+  border:0;
+  border-radius:8px;
+  background:#444;
   color:white;
 }
 
-.games-title{
-  font-size:26px;
-  margin:20px 0 15px;
-}
-
-.game-grid{
+.games{
+  max-width:1100px;
+  margin:40px auto;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:18px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
 }
 
 .game-card{
-  background:linear-gradient(145deg,#252525,#101010);
-  border:1px solid #555;
+  background:#151515;
+  border:2px solid #555;
   border-radius:16px;
-  padding:22px;
-  min-height:180px;
-  box-shadow:0 10px 25px rgba(0,0,0,.4);
+  padding:25px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,0,0,.5);
 }
 
-.game-card h3{
-  margin-top:0;
-  color:#ffd84a;
-}
-
-.game-card p{
-  color:#aaa;
-  line-height:1.6;
+.game-card h2{
+  color:#ffd84d;
 }
 
 .game-card button{
   width:100%;
-  padding:12px;
+  padding:14px;
   border:0;
-  border-radius:10px;
-  background:linear-gradient(#ffe477,#d69b00);
+  border-radius:9px;
+  background:#e5a900;
   color:#111;
   font-weight:bold;
-}
-
-.game-card.disabled{
-  opacity:.55;
-}
-
-.game-card.disabled button{
-  background:#444;
-  color:#aaa;
-  cursor:not-allowed;
+  font-size:17px;
 }
 
 /* =========================
@@ -240,79 +172,47 @@ button{
 
 .coin-panel,
 .admin-panel{
-  margin-top:25px;
-  padding:20px;
-  border-radius:15px;
+  max-width:700px;
+  margin:25px auto;
+  padding:22px;
   background:#151515;
-  border:1px solid #444;
+  border:1px solid #555;
+  border-radius:14px;
 }
 
-.coin-panel h3,
-.admin-panel h3{
+.coin-panel h2,
+.admin-panel h2{
   margin-top:0;
-  color:#ffd84a;
+  color:#ffd84d;
 }
 
-.coin-request-row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.coin-request-row input{
-  flex:1;
-  min-width:180px;
-  padding:12px;
+.coin-panel input,
+.admin-panel input{
+  width:100%;
+  padding:13px;
+  margin:8px 0;
   background:#080808;
   color:white;
   border:1px solid #555;
   border-radius:8px;
 }
 
-.coin-request-row button{
+.coin-panel button,
+.admin-panel button{
   padding:12px 18px;
   border:0;
   border-radius:8px;
-  background:#ffd43b;
+  background:#e5a900;
   color:#111;
   font-weight:bold;
 }
 
 .request-result{
   margin-top:15px;
-  color:#8cff9a;
-  font-weight:bold;
-  word-break:break-all;
-}
-
-.admin-row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.admin-row input{
-  flex:1;
-  min-width:220px;
   padding:12px;
   background:#080808;
-  color:white;
-  border:1px solid #555;
   border-radius:8px;
-}
-
-.admin-row button{
-  padding:12px 18px;
-  border:0;
-  border-radius:8px;
-  background:#75ff9a;
-  color:#111;
-  font-weight:bold;
-}
-
-.admin-message{
-  margin-top:12px;
-  color:#8cff9a;
+  word-break:break-all;
 }
 
 /* =========================
@@ -325,7 +225,7 @@ button{
 }
 
 .game-wrap{
-  width:min(950px,100%);
+  max-width:900px;
   margin:auto;
 }
 
@@ -333,287 +233,175 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:10px;
+  gap:15px;
   flex-wrap:wrap;
-  margin-bottom:15px;
 }
 
-.game-title{
-  font-size:35px;
-  font-weight:900;
-  color:#ffd84a;
-  text-shadow:
-    0 0 8px #ffb300,
-    0 0 20px #ff6600;
+.game-top h1{
+  color:#ffd84d;
+  text-shadow:0 0 15px #ffb300;
 }
 
 .back-btn{
-  padding:10px 16px;
-  border:1px solid #666;
-  background:#252525;
+  padding:10px 18px;
+  background:#444;
   color:white;
-  border-radius:9px;
-}
-
-.machine{
-  background:
-    linear-gradient(145deg,#383838,#151515 45%,#080808);
-  border:8px solid #777;
-  border-radius:20px;
-  padding:22px;
-  box-shadow:
-    0 0 35px rgba(0,0,0,.9),
-    inset 0 0 30px rgba(255,255,255,.03);
-}
-
-.machine-header{
-  text-align:center;
-  margin-bottom:15px;
-}
-
-.machine-header h1{
-  margin:0;
-  color:#ffd84a;
-  letter-spacing:4px;
-}
-
-.machine-header p{
-  margin:5px 0 0;
-  color:#aaa;
+  border:0;
+  border-radius:8px;
 }
 
 .status-bar{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:15px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  margin:15px 0;
 }
 
-.status{
-  background:#090909;
-  border:1px solid #444;
-  border-radius:10px;
-  padding:10px;
-  text-align:center;
+.status-item{
+  background:#151515;
+  border:1px solid #555;
+  border-radius:8px;
+  padding:10px 18px;
 }
 
-.status-label{
-  color:#888;
-  font-size:12px;
-}
-
-.status-value{
-  margin-top:4px;
-  font-size:20px;
-  font-weight:bold;
-  color:#ffd84a;
+.reel-machine{
+  margin:20px auto;
+  max-width:760px;
+  padding:30px;
+  background:
+    linear-gradient(145deg,#292929,#101010);
+  border:8px solid #555;
+  border-radius:18px;
+  box-shadow:
+    inset 0 0 20px #000,
+    0 0 25px rgba(0,0,0,.8);
 }
 
 .reels{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
-  margin:20px 0;
 }
 
 .reel{
-  min-height:130px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    linear-gradient(180deg,#f8f8f8,#d9d9d9 50%,#aaa);
-  border:7px solid #444;
-  border-radius:10px;
+  height:150px;
+  background:#f5f5f5;
   color:#111;
-  font-size:27px;
-  font-weight:900;
-  text-shadow:1px 1px 0 white;
-  overflow:hidden;
-  text-align:center;
-}
-
-.message{
-  min-height:70px;
-  background:#080808;
-  border:1px solid #444;
-  border-radius:10px;
-  padding:15px;
-  text-align:center;
-  font-size:18px;
-  line-height:1.6;
-  margin-bottom:15px;
-}
-
-.spin-area{
-  text-align:center;
-}
-
-.spin-btn{
-  width:100%;
-  max-width:420px;
-  padding:18px;
-  border:0;
+  border:5px solid #888;
   border-radius:12px;
-  background:
-    linear-gradient(#ffe873,#f1bd19 50%,#c98700);
-  color:#111;
-  font-size:24px;
-  font-weight:900;
-  box-shadow:
-    0 5px 0 #7b5100,
-    0 8px 15px rgba(0,0,0,.5);
-}
-
-.spin-btn:active{
-  transform:translateY(4px);
-  box-shadow:0 1px 0 #7b5100;
-}
-
-.spin-btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-
-.bet-info{
-  margin-top:10px;
-  color:#aaa;
-}
-
-.state-box{
-  margin-top:15px;
-  padding:12px;
-  background:#101010;
-  border:1px solid #333;
-  border-radius:10px;
-  text-align:center;
-}
-
-.state-name{
-  color:#ffd84a;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:55px;
   font-weight:bold;
+  box-shadow:inset 0 0 15px rgba(0,0,0,.5);
+}
+
+.game-message{
+  min-height:50px;
+  margin:20px auto;
+  max-width:760px;
+  padding:14px;
+  border-radius:10px;
+  background:#111;
+  border:1px solid #555;
+  text-align:center;
   font-size:20px;
 }
 
-.state-info{
-  color:#aaa;
-  margin-top:4px;
+.state-box{
+  max-width:760px;
+  margin:15px auto;
+  text-align:center;
+  font-weight:bold;
+  font-size:22px;
+  color:#ffd84d;
 }
 
-/* =========================
-   REPLAY
-========================= */
+.play-btn{
+  display:block;
+  width:100%;
+  max-width:760px;
+  margin:20px auto;
+  padding:18px;
+  font-size:24px;
+  font-weight:bold;
+  border:0;
+  border-radius:12px;
+  background:#e5a900;
+  color:#111;
+  box-shadow:0 0 20px rgba(229,169,0,.3);
+}
+
+.play-btn:hover{
+  background:#ffc928;
+}
+
+.play-btn:disabled{
+  background:#555;
+  color:#aaa;
+  cursor:not-allowed;
+}
 
 .replay-panel{
-  margin-top:15px;
-  padding:18px;
-  border-radius:12px;
-  background:
-    radial-gradient(circle,#151d2c,#090b10 65%,#050505);
-  border:1px solid #5577aa;
+  max-width:760px;
+  margin:15px auto;
+  padding:15px;
   text-align:center;
-  box-shadow:
-    0 0 20px rgba(70,120,200,.18);
+  border:2px solid #36a8ff;
+  border-radius:12px;
+  background:#08131d;
 }
 
 .replay-title{
-  font-size:24px;
-  font-weight:900;
-  color:#8dbbff;
-  text-shadow:0 0 10px #4477cc;
-}
-
-.replay-info{
-  margin-top:7px;
-  color:#ddd;
-}
-
-/* =========================
-   BONUS
-========================= */
-
-.bonus-panel{
-  margin-top:20px;
-  background:#101010;
-  border:1px solid #444;
-  border-radius:12px;
-  padding:15px;
-}
-
-.bonus-panel h3{
-  margin:0 0 12px;
-  color:#ffd84a;
-}
-
-.bonus-list{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:10px;
-}
-
-.bonus-item{
-  padding:14px;
-  border-radius:8px;
-  background:#1c1c1c;
-  border:1px solid #333;
-  text-align:center;
+  font-size:28px;
+  color:#49b5ff;
   font-weight:bold;
 }
 
-/* =========================
-   ABSOLUTE
-========================= */
+.replay-info{
+  margin-top:5px;
+  font-size:18px;
+}
 
 .absolute-panel{
-  margin-top:15px;
-  padding:18px;
-  border-radius:12px;
-  background:
-    radial-gradient(circle,#241300,#100900 60%,#050505);
-  border:1px solid #ff9d00;
+  max-width:760px;
+  margin:15px auto;
+  padding:20px;
   text-align:center;
-  box-shadow:
-    0 0 20px rgba(255,130,0,.2);
+  border:2px solid #ff3030;
+  border-radius:12px;
+  background:#1a0505;
 }
 
 .absolute-title{
-  font-size:24px;
-  font-weight:900;
-  color:#ffbf3c;
-  text-shadow:0 0 10px #ff7b00;
+  color:#ff4040;
+  font-size:30px;
+  font-weight:bold;
 }
-
-.absolute-info{
-  margin-top:7px;
-  color:#ddd;
-}
-
-/* =========================
-   HISTORY
-========================= */
 
 .history{
-  margin-top:20px;
+  max-width:760px;
+  margin:25px auto;
   background:#101010;
   border:1px solid #444;
-  border-radius:12px;
+  border-radius:10px;
   padding:15px;
 }
 
 .history h3{
   margin-top:0;
-  color:#ffd84a;
 }
 
-#historyList{
+.history-list{
   max-height:220px;
   overflow-y:auto;
 }
 
 .history-item{
-  padding:7px 0;
-  border-bottom:1px solid #292929;
-  color:#bbb;
+  padding:7px;
+  border-bottom:1px solid #333;
   font-size:14px;
 }
 
@@ -624,89 +412,53 @@ button{
 #effectOverlay{
   position:fixed;
   inset:0;
-  z-index:9999;
-  display:none;
+  background:
+    radial-gradient(circle,#ffffff 0%,#ffd84d 20%,#ff5a00 45%,#000 80%);
+  display:flex;
   justify-content:center;
   align-items:center;
-  text-align:center;
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(255,255,255,.12),
-      rgba(0,0,0,.98) 65%
-    );
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .15s;
 }
 
 #effectOverlay.show{
-  display:flex;
+  opacity:1;
 }
 
-.effect-inner{
-  padding:30px;
-  animation:effectPulse .5s infinite alternate;
-}
-
-.effect-small{
-  font-size:25px;
-  color:#fff;
-  letter-spacing:5px;
-}
-
-.effect-main{
-  margin-top:10px;
-  font-size:65px;
-  font-weight:900;
-  color:#ffd84a;
+.effect-text{
+  font-size:70px;
+  font-weight:bold;
+  color:white;
   text-shadow:
     0 0 10px #fff,
-    0 0 25px #ffbf00,
-    0 0 50px #ff5e00;
-}
-
-.effect-sub{
-  margin-top:15px;
-  font-size:28px;
-  color:white;
-}
-
-@keyframes effectPulse{
-  from{
-    transform:scale(.97);
-  }
-  to{
-    transform:scale(1.04);
-  }
+    0 0 30px #ff0,
+    0 0 60px #f00;
 }
 
 /* =========================
    MOBILE
 ========================= */
 
-@media(max-width:650px){
-
-  .game-title{
-    font-size:27px;
-  }
-
-  .machine{
-    padding:12px;
-    border-width:5px;
-  }
+@media(max-width:600px){
 
   .reel{
-    min-height:100px;
-    font-size:21px;
-    border-width:5px;
+    height:110px;
+    font-size:40px;
   }
 
-  .status-bar{
-    grid-template-columns:1fr;
+  .reel-machine{
+    padding:15px;
   }
 
-  .effect-main{
-    font-size:42px;
+  .effect-text{
+    font-size:45px;
   }
 
+  .login-box{
+    padding:20px;
+  }
 }
 </style>
 </head>
@@ -717,510 +469,285 @@ button{
      LOGIN
 ========================= -->
 
-<section id="loginScreen">
+<div id="loginScreen">
 
   <div class="login-box">
 
-    <div class="login-title">
-      CASINO [Re]
-    </div>
-
-    <div class="login-subtitle">
-      ACCOUNT LOGIN
-    </div>
+    <h1>CASINO [Re]</h1>
 
     <input
       id="loginId"
       type="text"
-      maxlength="20"
       placeholder="ID"
-      autocomplete="username"
+      maxlength="20"
     >
 
     <input
       id="loginPassword"
       type="password"
       placeholder="パスワード"
-      autocomplete="current-password"
     >
 
-    <div class="login-buttons">
+    <button onclick="loginUser()">ログイン</button>
 
-      <button
-        class="btn-login"
-        onclick="login()">
-        ログイン
-      </button>
+    <button onclick="registerUser()">新規登録</button>
 
-      <button
-        class="btn-register"
-        onclick="register()">
-        新規登録
-      </button>
-
-    </div>
-
-    <div
-      id="loginMessage"
-      class="login-message">
-    </div>
+    <div id="loginMessage"></div>
 
   </div>
 
-</section>
+</div>
 
 
 <!-- =========================
      HUB
 ========================= -->
 
-<section id="hubScreen" class="hidden">
+<div id="hubScreen" class="hidden">
 
-  <div class="hub-wrap">
+  <div class="header">
 
-    <div class="hub-header">
+    <h1>CASINO [Re]</h1>
 
-      <div class="logo">
-        CASINO [Re]
-      </div>
-
-      <div class="account-box">
-
-        <div>
-          USER:
-          <strong id="userIdDisplay">---</strong>
-        </div>
-
-        <div class="account-coins">
-          🪙 <span id="hubCoins">0</span>
-        </div>
-
-        <button
-          class="logout-btn"
-          onclick="logout()">
-          ログアウト
-        </button>
-
-      </div>
-
+    <div class="coin-display">
+      🪙 <span id="hubCoins">0</span>
     </div>
 
+    <button
+      class="logout-btn"
+      onclick="logoutUser()"
+    >
+      ログアウト
+    </button>
 
-    <h2 class="games-title">
-      🎰 GAME SELECT
-    </h2>
-
-
-    <div class="game-grid">
-
-      <div class="game-card">
-
-        <h3>
-          スロット [Re]
-        </h3>
-
-        <p>
-          BONUS<br>
-          シンプルなワンクリックスロット。
-        </p>
-
-        <button onclick="openGame()">
-          PLAY
-        </button>
-
-      </div>
+  </div>
 
 
-      <div class="game-card disabled">
+  <div class="games">
 
-        <h3>
-          GAME 02
-        </h3>
+    <div class="game-card">
 
-        <p>
-          Coming Soon...
-        </p>
-
-        <button disabled>
-          LOCKED
-        </button>
-
-      </div>
-
-
-      <div class="game-card disabled">
-
-        <h3>
-          GAME 03
-        </h3>
-
-        <p>
-          Coming Soon...
-        </p>
-
-        <button disabled>
-          LOCKED
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- COIN REQUEST -->
-
-    <div
-      id="coinRequestPanel"
-      class="coin-panel">
-
-      <h3>
-        🪙 コイン追加申請
-      </h3>
+      <h2>🎰 SLOT [Re]</h2>
 
       <p>
-        追加したいコイン数を入力してください。
+        シンプルなスロットゲーム
       </p>
 
-      <div class="coin-request-row">
-
-        <input
-          id="requestAmount"
-          type="number"
-          min="1"
-          max="1000000"
-          step="1"
-          value="1000"
-          placeholder="追加コイン数"
-        >
-
-        <button onclick="createCoinRequest()">
-          申請する
-        </button>
-
-      </div>
-
-      <div
-        id="requestResult"
-        class="request-result">
-      </div>
-
-    </div>
-
-
-    <!-- ADMIN -->
-
-    <div
-      id="adminPanel"
-      class="admin-panel hidden">
-
-      <h3>
-        👑 ADMIN PANEL
-      </h3>
-
-      <p>
-        コイン追加申請コードを入力してください。
-      </p>
-
-      <div class="admin-row">
-
-        <input
-          id="requestCodeInput"
-          type="text"
-          placeholder="申請コード"
-        >
-
-        <button onclick="approveCoinRequest()">
-          承認する
-        </button>
-
-      </div>
-
-      <div
-        id="adminMessage"
-        class="admin-message">
-      </div>
+      <button onclick="openGame()">
+        PLAY
+      </button>
 
     </div>
 
   </div>
 
-</section>
+
+  <!-- COIN REQUEST -->
+
+  <div
+    id="coinRequestPanel"
+    class="coin-panel"
+  >
+
+    <h2>🪙 コイン追加申請</h2>
+
+    <p>
+      追加したいコイン数を入力してください。
+    </p>
+
+    <input
+      id="requestAmount"
+      type="number"
+      min="1"
+      max="1000000"
+      value="1000"
+    >
+
+    <button onclick="createCoinRequest()">
+      申請する
+    </button>
+
+    <div
+      id="requestResult"
+      class="request-result hidden"
+    ></div>
+
+  </div>
+
+
+  <!-- ADMIN -->
+
+  <div
+    id="adminPanel"
+    class="admin-panel hidden"
+  >
+
+    <h2>👑 管理者パネル</h2>
+
+    <p>
+      申請コードを入力して承認します。
+    </p>
+
+    <input
+      id="requestCodeInput"
+      type="text"
+      placeholder="例：AB12-CD34"
+    >
+
+    <button onclick="approveCoinRequest()">
+      承認する
+    </button>
+
+    <div
+      id="adminResult"
+      class="request-result hidden"
+    ></div>
+
+  </div>
+
+</div>
 
 
 <!-- =========================
      GAME
 ========================= -->
 
-<section id="gameScreen" class="hidden">
+<div id="gameScreen" class="hidden">
 
   <div class="game-wrap">
 
     <div class="game-top">
 
-      <div class="game-title">
-        スロット [Re]
-      </div>
+      <h1>🎰 SLOT [Re]</h1>
 
       <button
         class="back-btn"
-        onclick="backToHub()">
-        ← ホームへ
+        onclick="backToHub()"
+      >
+        ← 戻る
       </button>
 
     </div>
 
 
-    <div class="machine">
+    <div class="status-bar">
 
-      <div class="machine-header">
-
-        <h1>
-          SLOT [Re]
-        </h1>
-
-        <p>
-          BONUS / REPLAY / ABSOLUTE
-        </p>
-
+      <div class="status-item">
+        🪙 COINS:
+        <span id="gameCoins">0</span>
       </div>
 
-
-      <!-- STATUS -->
-
-      <div class="status-bar">
-
-        <div class="status">
-
-          <div class="status-label">
-            COINS
-          </div>
-
-          <div
-            class="status-value"
-            id="gameCoins">
-            0
-          </div>
-
-        </div>
-
-
-        <div class="status">
-
-          <div class="status-label">
-            SETTING
-          </div>
-
-          <div
-            class="status-value"
-            id="settingDisplay">
-            1
-          </div>
-
-        </div>
-
-
-        <div class="status">
-
-          <div class="status-label">
-            BET
-          </div>
-
-          <div class="status-value">
-            3
-          </div>
-
-        </div>
-
+      <div class="status-item">
+        BET:
+        <span id="betDisplay">3</span>
       </div>
 
+    </div>
 
-      <!-- REELS -->
+
+    <div class="reel-machine">
 
       <div class="reels">
 
         <div
           id="reel1"
-          class="reel">
-          BAR
+          class="reel"
+        >
+          7
         </div>
 
         <div
           id="reel2"
-          class="reel">
-          🍒
+          class="reel"
+        >
+          BAR
         </div>
 
         <div
           id="reel3"
-          class="reel">
-          BAR
+          class="reel"
+        >
+          🍒
         </div>
-
-      </div>
-
-
-      <!-- MESSAGE -->
-
-      <div
-        id="message"
-        class="message">
-        STARTボタンを押してください。
-      </div>
-
-
-      <!-- STATE -->
-
-      <div class="state-box">
-
-        <div
-          id="stateName"
-          class="state-name">
-          NORMAL
-        </div>
-
-        <div
-          id="stateInfo"
-          class="state-info">
-          通常状態
-        </div>
-
-      </div>
-
-
-      <!-- REPLAY -->
-
-      <div
-        id="replayPanel"
-        class="replay-panel hidden">
-
-        <div class="replay-title">
-          🔷 REPLAY
-        </div>
-
-        <div
-          id="replayInfo"
-          class="replay-info">
-          REPLAY中
-        </div>
-
-      </div>
-
-
-      <!-- ABSOLUTE -->
-
-      <div
-        id="absolutePanel"
-        class="absolute-panel hidden">
-
-        <div class="absolute-title">
-          ✦ 絶対領域 ✦
-        </div>
-
-        <div
-          id="absoluteInfo"
-          class="absolute-info">
-          絶対領域中
-        </div>
-
-      </div>
-
-
-      <!-- START -->
-
-      <div class="spin-area">
-
-        <button
-          id="spinButton"
-          class="spin-btn"
-          onclick="playGame()">
-          START
-        </button>
-
-        <div class="bet-info">
-          1回のBET：3コイン
-        </div>
-
-      </div>
-
-
-      <!-- BONUS -->
-
-      <div class="bonus-panel">
-
-        <h3>
-          BONUS
-        </h3>
-
-        <div class="bonus-list">
-
-          <div class="bonus-item">
-            レギュラー
-          </div>
-
-          <div class="bonus-item">
-            BIG
-          </div>
-
-          <div class="bonus-item">
-            RBIG
-          </div>
-
-          <div class="bonus-item">
-            LBIG
-          </div>
-
-          <div class="bonus-item">
-            絶対領域
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- HISTORY -->
-
-      <div class="history">
-
-        <h3>
-          HISTORY
-        </h3>
-
-        <div id="historyList"></div>
 
       </div>
 
     </div>
 
-  </div>
-
-</section>
-
-
-<!-- =========================
-     EFFECT
-========================= -->
-
-<div id="effectOverlay">
-
-  <div class="effect-inner">
 
     <div
-      id="effectSmall"
-      class="effect-small">
-      BONUS CHANCE
+      id="gameMessage"
+      class="game-message"
+    >
+      STARTを押してください
     </div>
 
-    <div
-      id="effectMain"
-      class="effect-main">
-      BONUS
-    </div>
 
     <div
-      id="effectSub"
-      class="effect-sub">
-      BONUS START!!
+      id="stateBox"
+      class="state-box"
+    >
+      NORMAL
+    </div>
+
+
+    <!-- REPLAY -->
+
+    <div
+      id="replayPanel"
+      class="replay-panel hidden"
+    >
+
+      <div class="replay-title">
+        🔷 REPLAY
+      </div>
+
+      <div
+        id="replayInfo"
+        class="replay-info"
+      >
+        REPLAY中
+      </div>
+
+    </div>
+
+
+    <!-- ABSOLUTE -->
+
+    <div
+      id="absolutePanel"
+      class="absolute-panel hidden"
+    >
+
+      <div class="absolute-title">
+        ⚡ ABSOLUTE TERRITORY
+      </div>
+
+      <div id="absoluteInfo">
+        SPECIAL GAME
+      </div>
+
+    </div>
+
+
+    <button
+      id="playButton"
+      class="play-btn"
+      onclick="playGame()"
+    >
+      START
+    </button>
+
+
+    <div class="history">
+
+      <h3>📜 HISTORY</h3>
+
+      <div
+        id="historyList"
+        class="history-list"
+      ></div>
+
     </div>
 
   </div>
@@ -1228,17 +755,31 @@ button{
 </div>
 
 
+<!-- EFFECT -->
+
+<div id="effectOverlay">
+
+  <div
+    id="effectText"
+    class="effect-text"
+  >
+    BONUS!!
+  </div>
+
+</div>
+
+
 <script>
 
-/* =========================================================
+/* =====================================================
    SUPABASE
-========================================================= */
+===================================================== */
 
 const SUPABASE_URL =
   "https://yazkexvgmdyjeeimmayq.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_87rSIEju76172IK7boCx_g_y_2qPHpe";
+  "sb_publishable_87rSIEju76172IK7BOCx_g_y_2qPHpe";
 
 const supabaseClient =
   window.supabase.createClient(
@@ -1254,55 +795,26 @@ const supabaseClient =
   );
 
 
-/* =========================================================
+/* =====================================================
    GLOBAL
-========================================================= */
+===================================================== */
 
 let currentUser = null;
+
 let medals = 0;
+
 let isAdmin = false;
+
 let saveQueue = Promise.resolve();
 
 const BET = 3;
 
 
-/* =========================================================
-   GAME STATE
-========================================================= */
-
-let state = "normal";
-
-let bonusName = "";
-let bonusRemaining = 0;
-
-let absoluteRemaining = 0;
-
-let replayRemaining = 0;
-
-
-/* =========================================================
-   SETTING
-========================================================= */
-
-/*
-  現在は設定1でプレイ。
-
-  変更する場合：
-  1 → 設定1
-  2 → 設定2
-  3 → 設定3
-  4 → 設定4
-  5 → 設定5
-  6 → 設定6
-  7 → 設定7
-*/
+/* =====================================================
+   SETTINGS
+===================================================== */
 
 const CURRENT_SETTING = 1;
-
-
-/* =========================================================
-   BONUS PROBABILITY
-========================================================= */
 
 const BONUS_PROBABILITY = {
 
@@ -1323,9 +835,24 @@ const BONUS_PROBABILITY = {
 };
 
 
-/* =========================================================
+/* =====================================================
+   GAME STATE
+===================================================== */
+
+let state = "normal";
+
+let bonusName = "";
+
+let bonusRemaining = 0;
+
+let replayRemaining = 0;
+
+let absoluteRemaining = 0;
+
+
+/* =====================================================
    BONUS TYPES
-========================================================= */
+===================================================== */
 
 const BONUS_TYPES = [
 
@@ -1360,13 +887,14 @@ const BONUS_TYPES = [
 ];
 
 
-/* =========================================================
+/* =====================================================
    ID
-========================================================= */
+===================================================== */
 
 function idToEmail(id){
 
-  return id.toLowerCase() + "@casino-re.local";
+  return id.toLowerCase()
+    + "@casino-re.local";
 
 }
 
@@ -1378,15 +906,341 @@ function validId(id){
 }
 
 
-/* =========================================================
-   SCREEN
-========================================================= */
+/* =====================================================
+   PROFILE
+===================================================== */
 
-function showOnly(id){
+async function ensureProfile(){
 
-  document
-    .getElementById("loginScreen")
-    .classList.add("hidden");
+  if(!currentUser) return;
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("id,coins,is_admin")
+      .eq("id",currentUser.id)
+      .maybeSingle();
+
+  if(error){
+
+    console.error(error);
+
+    return;
+
+  }
+
+  if(!data){
+
+    const {
+      error:insertError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .insert({
+
+          id:currentUser.id,
+
+          coins:1000,
+
+          is_admin:false
+
+        });
+
+    if(insertError){
+
+      console.error(insertError);
+
+    }
+
+    medals = 1000;
+
+    isAdmin = false;
+
+    return;
+
+  }
+
+  medals = Number(data.coins || 0);
+
+  isAdmin = data.is_admin === true;
+
+}
+
+
+/* =====================================================
+   LOAD PROFILE
+===================================================== */
+
+async function loadProfile(){
+
+  if(!currentUser) return;
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("coins,is_admin")
+      .eq("id",currentUser.id)
+      .single();
+
+  if(error){
+
+    console.error(error);
+
+    return;
+
+  }
+
+  medals = Number(data.coins || 0);
+
+  isAdmin = data.is_admin === true;
+
+  updateCoinDisplays();
+
+}
+
+
+/* =====================================================
+   SAVE COINS
+===================================================== */
+
+function saveCoins(){
+
+  if(!currentUser) return;
+
+  const value = Number(medals);
+
+  saveQueue =
+    saveQueue.then(async()=>{
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("profiles")
+          .update({
+            coins:value
+          })
+          .eq("id",currentUser.id);
+
+      if(error){
+
+        console.error(
+          "コイン保存エラー:",
+          error
+        );
+
+      }
+
+    });
+
+}
+
+
+/* =====================================================
+   COIN DISPLAY
+===================================================== */
+
+function updateCoinDisplays(){
+
+  const hubCoins =
+    document.getElementById("hubCoins");
+
+  const gameCoins =
+    document.getElementById("gameCoins");
+
+  if(hubCoins){
+
+    hubCoins.textContent =
+      medals.toLocaleString();
+
+  }
+
+  if(gameCoins){
+
+    gameCoins.textContent =
+      medals.toLocaleString();
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function loginUser(){
+
+  const id =
+    document.getElementById("loginId")
+      .value.trim();
+
+  const password =
+    document.getElementById("loginPassword")
+      .value;
+
+  const message =
+    document.getElementById("loginMessage");
+
+
+  if(!validId(id)){
+
+    message.textContent =
+      "IDは3～20文字で入力してください";
+
+    return;
+
+  }
+
+
+  if(!password){
+
+    message.textContent =
+      "パスワードを入力してください";
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth
+      .signInWithPassword({
+
+        email:idToEmail(id),
+
+        password:password
+
+      });
+
+
+  if(error){
+
+    message.textContent =
+      "ログインできません：" +
+      error.message;
+
+    return;
+
+  }
+
+
+  currentUser = data.user;
+
+  await ensureProfile();
+
+  await loadProfile();
+
+  showHub();
+
+}
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+async function registerUser(){
+
+  const id =
+    document.getElementById("loginId")
+      .value.trim();
+
+  const password =
+    document.getElementById("loginPassword")
+      .value;
+
+  const message =
+    document.getElementById("loginMessage");
+
+
+  if(!validId(id)){
+
+    message.textContent =
+      "IDは3～20文字で入力してください";
+
+    return;
+
+  }
+
+
+  if(password.length < 6){
+
+    message.textContent =
+      "パスワードは6文字以上にしてください";
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth
+      .signUp({
+
+        email:idToEmail(id),
+
+        password:password
+
+      });
+
+
+  if(error){
+
+    message.textContent =
+      "登録エラー：" +
+      error.message;
+
+    return;
+
+  }
+
+
+  if(data.user){
+
+    currentUser = data.user;
+
+    await ensureProfile();
+
+    await loadProfile();
+
+    showHub();
+
+  }else{
+
+    message.textContent =
+      "登録しました。ログインしてください。";
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logoutUser(){
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+
+  medals = 0;
+
+  isAdmin = false;
 
   document
     .getElementById("hubScreen")
@@ -1397,539 +1251,96 @@ function showOnly(id){
     .classList.add("hidden");
 
   document
-    .getElementById(id)
+    .getElementById("loginScreen")
     .classList.remove("hidden");
 
 }
 
 
-/* =========================================================
-   REGISTER
-========================================================= */
-
-async function register(){
-
-  const id =
-    document
-      .getElementById("loginId")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-  const msg =
-    document
-      .getElementById("loginMessage");
-
-
-  if(!validId(id)){
-
-    msg.textContent =
-      "IDは3～20文字の英数字・_-で入力してください。";
-
-    return;
-
-  }
-
-
-  if(password.length < 6){
-
-    msg.textContent =
-      "パスワードは6文字以上にしてください。";
-
-    return;
-
-  }
-
-
-  msg.textContent =
-    "登録しています……";
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.signUp({
-
-      email:idToEmail(id),
-
-      password:password
-
-    });
-
-
-  if(error){
-
-    msg.textContent =
-      "登録エラー：" +
-      error.message;
-
-    return;
-
-  }
-
-
-  if(!data.user){
-
-    msg.textContent =
-      "登録できませんでした。";
-
-    return;
-
-  }
-
-
-  currentUser =
-    data.user;
-
-
-  const ok =
-    await ensureProfile();
-
-
-  if(!ok){
-
-    msg.textContent =
-      "プロフィール作成に失敗しました。";
-
-    return;
-
-  }
-
-
-  await loadProfile();
-
-
-  msg.textContent =
-    "登録完了！ログインしました。";
-
-
-  showHub();
-
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-async function login(){
-
-  const id =
-    document
-      .getElementById("loginId")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-  const msg =
-    document
-      .getElementById("loginMessage");
-
-
-  if(!validId(id)){
-
-    msg.textContent =
-      "IDを正しく入力してください。";
-
-    return;
-
-  }
-
-
-  if(!password){
-
-    msg.textContent =
-      "パスワードを入力してください。";
-
-    return;
-
-  }
-
-
-  msg.textContent =
-    "ログインしています……";
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.signInWithPassword({
-
-      email:idToEmail(id),
-
-      password:password
-
-    });
-
-
-  if(error){
-
-    msg.textContent =
-      "ログインエラー：" +
-      error.message;
-
-    return;
-
-  }
-
-
-  currentUser =
-    data.user;
-
-
-  const ok =
-    await ensureProfile();
-
-
-  if(!ok){
-
-    msg.textContent =
-      "プロフィールを取得できませんでした。";
-
-    return;
-
-  }
-
-
-  await loadProfile();
-
-
-  msg.textContent = "";
-
-  showHub();
-
-}
-
-
-/* =========================================================
-   ENSURE PROFILE
-========================================================= */
-
-async function ensureProfile(){
-
-  if(!currentUser){
-
-    return false;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("id")
-      .eq("id",currentUser.id)
-      .maybeSingle();
-
-
-  if(error){
-
-    console.error(error);
-
-    return false;
-
-  }
-
-
-  if(!data){
-
-    const {
-      error:insertError
-    } =
-    await supabaseClient
-      .from("profiles")
-      .insert({
-
-        id:currentUser.id,
-
-        coins:1000,
-
-        is_admin:false
-
-      });
-
-
-    if(insertError){
-
-      console.error(insertError);
-
-      return false;
-
-    }
-
-  }
-
-
-  return true;
-
-}
-
-
-/* =========================================================
-   LOAD PROFILE
-========================================================= */
-
-async function loadProfile(){
-
-  if(!currentUser){
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select("id,coins,is_admin")
-    .eq("id",currentUser.id)
-    .single();
-
-
-  if(error){
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  medals =
-    Number(data.coins || 0);
-
-  isAdmin =
-    data.is_admin === true;
-
-
-  updateCoinsUI();
-
-}
-
-
-/* =========================================================
-   SAVE COINS
-========================================================= */
-
-function saveCoins(){
-
-  if(!currentUser){
-
-    return Promise.resolve();
-
-  }
-
-
-  const amount =
-    Math.max(
-      0,
-      Math.floor(
-        Number(medals) || 0
-      )
-    );
-
-
-  saveQueue =
-    saveQueue.then(async()=>{
-
-      const {
-        error
-      } =
-      await supabaseClient
-        .from("profiles")
-        .update({
-          coins:amount
-        })
-        .eq("id",currentUser.id);
-
-
-      if(error){
-
-        console.error(
-          "コイン保存エラー",
-          error
-        );
-
-      }
-
-    });
-
-
-  return saveQueue;
-
-}
-
-
-/* =========================================================
-   COINS UI
-========================================================= */
-
-function updateCoinsUI(){
-
-  const hub =
-    document.getElementById("hubCoins");
-
-  const game =
-    document.getElementById("gameCoins");
-
-
-  if(hub){
-
-    hub.textContent =
-      Math.floor(medals);
-
-  }
-
-
-  if(game){
-
-    game.textContent =
-      Math.floor(medals);
-
-  }
-
-}
-
-
-/* =========================================================
-   HUB
-========================================================= */
+/* =====================================================
+   SHOW HUB
+===================================================== */
 
 function showHub(){
 
-  showOnly("hubScreen");
-
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
 
   document
-    .getElementById("userIdDisplay")
-    .textContent =
-      currentUser
-        ? currentUser.email.split("@")[0]
-        : "---";
-
+    .getElementById("gameScreen")
+    .classList.add("hidden");
 
   document
-    .getElementById("adminPanel")
-    .classList.toggle(
-      "hidden",
-      !isAdmin
-    );
+    .getElementById("hubScreen")
+    .classList.remove("hidden");
+
+  updateCoinDisplays();
 
 
-  updateCoinsUI();
+  const adminPanel =
+    document.getElementById("adminPanel");
+
+  if(isAdmin){
+
+    adminPanel.classList.remove("hidden");
+
+  }else{
+
+    adminPanel.classList.add("hidden");
+
+  }
 
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function logout(){
-
-  await saveCoins();
-
-  await supabaseClient.auth.signOut();
-
-
-  currentUser = null;
-  medals = 0;
-  isAdmin = false;
-
-
-  document
-    .getElementById("loginId")
-    .value = "";
-
-
-  document
-    .getElementById("loginPassword")
-    .value = "";
-
-
-  document
-    .getElementById("loginMessage")
-    .textContent = "";
-
-
-  document
-    .getElementById("requestResult")
-    .textContent = "";
-
-
-  document
-    .getElementById("adminMessage")
-    .textContent = "";
-
-
-  showOnly("loginScreen");
-
-}
-
-
-/* =========================================================
+/* =====================================================
    OPEN GAME
-========================================================= */
+===================================================== */
 
 function openGame(){
 
-  if(!currentUser){
+  resetGameState();
 
-    return;
+  document
+    .getElementById("hubScreen")
+    .classList.add("hidden");
 
-  }
+  document
+    .getElementById("gameScreen")
+    .classList.remove("hidden");
 
+  updateCoinDisplays();
+
+}
+
+
+/* =====================================================
+   BACK HUB
+===================================================== */
+
+function backToHub(){
 
   resetGameState();
 
-  showOnly("gameScreen");
+  document
+    .getElementById("gameScreen")
+    .classList.add("hidden");
 
-  updateCoinsUI();
+  document
+    .getElementById("hubScreen")
+    .classList.remove("hidden");
 
-}
-
-
-/* =========================================================
-   BACK TO HUB
-========================================================= */
-
-async function backToHub(){
-
-  await saveCoins();
-
-  showHub();
+  updateCoinDisplays();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    CREATE COIN REQUEST
-========================================================= */
+===================================================== */
 
 async function createCoinRequest(){
-
-  if(!currentUser){
-
-    return;
-
-  }
-
 
   const input =
     document.getElementById("requestAmount");
@@ -1943,33 +1354,34 @@ async function createCoinRequest(){
 
   if(
     !Number.isInteger(amount) ||
-    amount < 1 ||
+    amount <= 0 ||
     amount > 1000000
   ){
 
+    result.classList.remove("hidden");
+
     result.textContent =
-      "1～1,000,000の整数を入力してください。";
+      "1～1,000,000の整数を入力してください";
 
     return;
 
   }
 
 
-  result.textContent =
-    "申請しています……";
-
-
   const {
     data,
     error
   } =
-  await supabaseClient
-    .rpc(
-      "create_coin_request",
-      {
-        amount_input:amount
-      }
-    );
+    await supabaseClient
+      .rpc(
+        "create_coin_request",
+        {
+          amount_input:amount
+        }
+      );
+
+
+  result.classList.remove("hidden");
 
 
   if(error){
@@ -1978,79 +1390,69 @@ async function createCoinRequest(){
       "申請エラー：" +
       error.message;
 
+    console.error(error);
+
     return;
 
   }
 
 
   result.innerHTML =
-    "申請完了！<br>" +
     "申請コード：<strong>" +
     data +
     "</strong><br>" +
-    "このコードを管理者に送ってください。";
-
-
-  input.value = 1000;
+    "管理者にこのコードを伝えてください。";
 
 }
 
 
-/* =========================================================
-   ADMIN APPROVE
-========================================================= */
+/* =====================================================
+   APPROVE REQUEST
+===================================================== */
 
 async function approveCoinRequest(){
-
-  if(!isAdmin){
-
-    return;
-
-  }
-
 
   const input =
     document.getElementById("requestCodeInput");
 
-  const msg =
-    document.getElementById("adminMessage");
+  const result =
+    document.getElementById("adminResult");
 
   const code =
-    input.value
-      .trim()
-      .toUpperCase();
+    input.value.trim();
 
 
   if(!code){
 
-    msg.textContent =
-      "申請コードを入力してください。";
+    result.classList.remove("hidden");
+
+    result.textContent =
+      "申請コードを入力してください";
 
     return;
 
   }
-
-
-  msg.textContent =
-    "承認しています……";
 
 
   const {
     data,
     error
   } =
-  await supabaseClient
-    .rpc(
-      "approve_coin_request",
-      {
-        request_code_input:code
-      }
-    );
+    await supabaseClient
+      .rpc(
+        "approve_coin_request",
+        {
+          request_code_input:code
+        }
+      );
+
+
+  result.classList.remove("hidden");
 
 
   if(error){
 
-    msg.textContent =
+    result.textContent =
       "承認エラー：" +
       error.message;
 
@@ -2059,93 +1461,18 @@ async function approveCoinRequest(){
   }
 
 
-  msg.textContent =
-    "承認しました！新しい残高：" +
-    data;
-
-
-  input.value = "";
-
-  await loadProfile();
+  result.textContent =
+    "承認しました。新しい残高：" +
+    Number(data).toLocaleString();
 
 }
 
 
-/* =========================================================
-   RESET GAME
-========================================================= */
-
-function resetGameState(){
-
-  state = "normal";
-
-  bonusName = "";
-
-  bonusRemaining = 0;
-
-  absoluteRemaining = 0;
-
-  replayRemaining = 0;
-
-
-  setState(
-    "NORMAL",
-    "通常状態"
-  );
-
-
-  document
-    .getElementById("absolutePanel")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("replayPanel")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("settingDisplay")
-    .textContent =
-      CURRENT_SETTING;
-
-
-  setReels(
-    "BAR",
-    "🍒",
-    "BAR"
-  );
-
-
-  message(
-    "STARTボタンを押してください。"
-  );
-
-
-  document
-    .getElementById("spinButton")
-    .disabled = false;
-
-
-  document
-    .getElementById("historyList")
-    .innerHTML = "";
-
-}
-
-
-/* =========================================================
-   PLAY
-========================================================= */
+/* =====================================================
+   PLAY GAME
+===================================================== */
 
 async function playGame(){
-
-  if(!currentUser){
-
-    return;
-
-  }
-
 
   if(state === "normal"){
 
@@ -2185,16 +1512,16 @@ async function playGame(){
 }
 
 
-/* =========================================================
+/* =====================================================
    NORMAL GAME
-========================================================= */
+===================================================== */
 
 async function normalGame(){
 
   if(medals < BET){
 
-    message(
-      "コインが足りません。"
+    setMessage(
+      "コインが足りません"
     );
 
     return;
@@ -2204,9 +1531,9 @@ async function normalGame(){
 
   medals -= BET;
 
-  updateCoinsUI();
+  updateCoinDisplays();
 
-  await saveCoins();
+  saveCoins();
 
 
   const bonusChance =
@@ -2219,21 +1546,24 @@ async function normalGame(){
     Math.random();
 
 
-  /*
-    設定ごとのBONUS抽選
-  */
-
   if(bonusRoll < bonusChance){
 
     const result =
       drawBonus();
 
 
-    /*
-      絶対領域
-    */
+    if(result.type === "bonus"){
 
-    if(result === "absolute"){
+      showBonusEffect();
+
+      startBonus(result.bonus);
+
+      return;
+
+    }
+
+
+    if(result.type === "absolute"){
 
       startAbsolute();
 
@@ -2241,204 +1571,127 @@ async function normalGame(){
 
     }
 
-
-    /*
-      BONUSなし
-    */
-
-    if(result === null){
-
-      normalMiss();
-
-      return;
-
-    }
-
-
-    /*
-      通常BONUS
-    */
-
-    bonusName =
-      result.name;
-
-
-    hotSignal();
-
-
-    setReels(
-      "BONUS",
-      bonusName,
-      "BONUS"
-    );
-
-
-    message(
-      "🎉 BONUS当選！！<br>" +
-      bonusName
-    );
-
-
-    addHistory(
-      "★ " +
-      bonusName +
-      " BONUS当選 ★"
-    );
-
-
-    startBonusEffect();
-
-    return;
-
   }
 
 
-  normalMiss();
+  updateReels();
 
-}
-
-
-/* =========================================================
-   NORMAL MISS
-========================================================= */
-
-function normalMiss(){
-
-  setReels(
-    "BAR",
-    "🍒",
-    "BAR"
+  setMessage(
+    "ハズレ"
   );
-
-
-  message(
-    "ハズレ……"
-  );
-
 
   addHistory(
-    "ハズレ -3"
+    "ハズレ"
   );
 
 }
 
 
-/* =========================================================
-   BONUS DRAW
-========================================================= */
+/* =====================================================
+   UPDATE REELS
+===================================================== */
+
+function updateReels(){
+
+  const symbols = [
+
+    "7",
+    "BAR",
+    "🍒",
+    "🔔",
+    "🍋",
+    "★"
+
+  ];
+
+
+  document.getElementById("reel1")
+    .textContent =
+      symbols[
+        Math.floor(
+          Math.random()*symbols.length
+        )
+      ];
+
+  document.getElementById("reel2")
+    .textContent =
+      symbols[
+        Math.floor(
+          Math.random()*symbols.length
+        )
+      ];
+
+  document.getElementById("reel3")
+    .textContent =
+      symbols[
+        Math.floor(
+          Math.random()*symbols.length
+        )
+      ];
+
+}
+
+
+/* =====================================================
+   DRAW BONUS
+===================================================== */
 
 function drawBonus(){
 
-  /*
-    BONUS内部振り分け
-
-    レギュラー 39.5%
-    BIG        25%
-    RBIG       15%
-    LBIG       10%
-    絶対領域    0.5%
-    BONUSなし  10%
-  */
-
-  const r =
-    Math.random() * 100;
+  const roll =
+    Math.random()*100;
 
 
-  if(r < 39.5){
-
-    return BONUS_TYPES[0];
-
-  }
+  let total = 0;
 
 
-  if(r < 64.5){
+  for(const bonus of BONUS_TYPES){
 
-    return BONUS_TYPES[1];
+    total += bonus.weight;
+
+
+    if(roll < total){
+
+      return {
+        type:"bonus",
+        bonus:bonus
+      };
+
+    }
 
   }
 
 
-  if(r < 79.5){
+  if(roll < 99.5){
 
-    return BONUS_TYPES[2];
-
-  }
-
-
-  if(r < 89.5){
-
-    return BONUS_TYPES[3];
+    return {
+      type:"none"
+    };
 
   }
 
 
-  if(r < 90){
-
-    return "absolute";
-
-  }
-
-
-  return null;
+  return {
+    type:"absolute"
+  };
 
 }
 
 
-/* =========================================================
-   BONUS EFFECT
-========================================================= */
-
-function startBonusEffect(){
-
-  showEffect(
-    "BONUS CHANCE",
-    bonusName,
-    "BONUS START!!",
-    false
-  );
-
-
-  setTimeout(()=>{
-
-    hideEffect();
-
-    startBonus();
-
-  },1800);
-
-}
-
-
-/* =========================================================
+/* =====================================================
    START BONUS
-========================================================= */
+===================================================== */
 
-function startBonus(){
-
-  const bonus =
-    BONUS_TYPES.find(
-      b=>b.name === bonusName
-    );
-
-
-  if(!bonus){
-
-    state = "normal";
-
-    return;
-
-  }
-
+function startBonus(bonus){
 
   state = "bonus";
+
+  bonusName =
+    bonus.name;
 
   bonusRemaining =
     bonus.rounds;
 
-
-  document
-    .getElementById("absolutePanel")
-    .classList.add("hidden");
 
   document
     .getElementById("replayPanel")
@@ -2446,37 +1699,31 @@ function startBonus(){
 
 
   setState(
-    bonus.name,
-    "BONUS中"
-  );
-
-
-  setReels(
     "BONUS",
-    bonus.name,
-    "BONUS"
+    bonus.name
   );
 
 
-  message(
-    "🔥 " +
+  setMessage(
+    "🎉 " +
     bonus.name +
-    " BONUS開始！"
+    " START!"
   );
 
 
   addHistory(
-    "★ " +
-    bonus.name +
-    " BONUS START ★"
+    bonus.name + " START"
   );
+
+
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    BONUS GAME
-========================================================= */
+===================================================== */
 
 async function bonusGame(){
 
@@ -2489,13 +1736,30 @@ async function bonusGame(){
   }
 
 
-  const bonus =
-    BONUS_TYPES.find(
-      b=>b.name === bonusName
-    );
+  bonusRemaining--;
 
 
-  if(!bonus){
+  medals += 10;
+
+  updateCoinDisplays();
+
+  saveCoins();
+
+
+  setMessage(
+    bonusName +
+    " +" +
+    "10コイン"
+  );
+
+
+  addHistory(
+    bonusName +
+    " +10"
+  );
+
+
+  if(bonusRemaining <= 0){
 
     finishBonus();
 
@@ -2504,67 +1768,16 @@ async function bonusGame(){
   }
 
 
-  medals += bonus.payout;
-
-  bonusRemaining--;
-
-
-  setReels(
-    "BONUS",
-    bonus.name,
-    "BONUS"
-  );
-
-
-  message(
-    "🔥 " +
-    bonus.name +
-    "<br>" +
-    "残り " +
-    bonusRemaining +
-    "回"
-  );
-
-
-  updateCoinsUI();
-
-
-  addHistory(
-    bonus.name +
-    " BONUS / 残り" +
-    bonusRemaining
-  );
-
-
-  await saveCoins();
-
-
-  if(
-    bonusRemaining <= 0
-  ){
-
-    finishBonus();
-
-  }
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    FINISH BONUS
-========================================================= */
+===================================================== */
 
 function finishBonus(){
-
-  /*
-    BONUS終了後はREPLAYへ。
-
-    REPLAYは30G。
-
-    重要：
-    REPLAY中も通常と同じ設定確率。
-    REPLAYだから確率アップはしない。
-  */
 
   state = "replay";
 
@@ -2576,21 +1789,11 @@ function finishBonus(){
 
 
   document
-    .getElementById("absolutePanel")
-    .classList.add("hidden");
-
-
-  document
     .getElementById("replayPanel")
     .classList.remove("hidden");
 
 
-  document
-    .getElementById("replayInfo")
-    .textContent =
-      "REPLAY 残り " +
-      replayRemaining +
-      "G";
+  updateReplayInfo();
 
 
   setState(
@@ -2599,29 +1802,25 @@ function finishBonus(){
   );
 
 
-  setReels(
-    "REPLAY",
-    "REPLAY",
-    "REPLAY"
-  );
-
-
-  message(
-    "🔷 BONUS終了！<br>" +
-    "REPLAY 30Gへ突入！"
+  setMessage(
+    "BONUS終了！REPLAY 30G開始"
   );
 
 
   addHistory(
-    "BONUS終了 → REPLAY 30G"
+    "REPLAY 30G START"
   );
+
+
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    REPLAY GAME
-========================================================= */
+   ※ コイン消費なし
+===================================================== */
 
 async function replayGame(){
 
@@ -2634,32 +1833,9 @@ async function replayGame(){
   }
 
 
-  if(medals < BET){
-
-    message(
-      "コインが足りないためREPLAYを続けられません。"
-    );
-
-    return;
-
-  }
-
-
-  /*
-    REPLAYでもBETは3。
-
-    ここで通常と同じ設定確率を使う。
-    特別な高確率は一切なし。
-  */
-
-  medals -= BET;
+  // ★ REPLAY中は3コイン消費しない
 
   replayRemaining--;
-
-
-  updateCoinsUI();
-
-  await saveCoins();
 
 
   const bonusChance =
@@ -2672,17 +1848,24 @@ async function replayGame(){
     Math.random();
 
 
-  /*
-    NORMALと完全に同じ確率
-  */
-
   if(bonusRoll < bonusChance){
 
     const result =
       drawBonus();
 
 
-    if(result === "absolute"){
+    if(result.type === "bonus"){
+
+      showBonusEffect();
+
+      startBonus(result.bonus);
+
+      return;
+
+    }
+
+
+    if(result.type === "absolute"){
 
       startAbsoluteFromReplay();
 
@@ -2690,97 +1873,68 @@ async function replayGame(){
 
     }
 
-
-    if(result !== null){
-
-      bonusName =
-        result.name;
-
-
-      hotSignal();
-
-
-      setReels(
-        "BONUS",
-        bonusName,
-        "BONUS"
-      );
-
-
-      message(
-        "🎉 REPLAY中 BONUS当選！！<br>" +
-        bonusName
-      );
-
-
-      addHistory(
-        "★ REPLAY中 " +
-        bonusName +
-        " BONUS当選 ★"
-      );
-
-
-      startBonusEffect();
-
-      return;
-
-    }
-
   }
 
 
-  setReels(
-    "REPLAY",
-    "REPLAY",
+  updateReels();
+
+
+  setMessage(
     "REPLAY"
   );
 
 
-  message(
-    "🔷 REPLAY中<br>" +
-    "残り " +
-    replayRemaining +
-    "G"
-  );
-
-
   addHistory(
-    "REPLAY / 残り" +
-    replayRemaining
+    "REPLAY"
   );
 
 
-  updateReplayUI();
+  updateReplayInfo();
 
 
   if(replayRemaining <= 0){
 
     finishReplay();
 
+    return;
+
   }
 
-}
+
+  setState(
+    "REPLAY",
+    "REPLAY中"
+  );
 
 
-/* =========================================================
-   REPLAY UI
-========================================================= */
-
-function updateReplayUI(){
-
-  document
-    .getElementById("replayInfo")
-    .textContent =
-      "REPLAY 残り " +
-      replayRemaining +
-      "G";
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   REPLAY INFO
+===================================================== */
+
+function updateReplayInfo(){
+
+  const info =
+    document.getElementById(
+      "replayInfo"
+    );
+
+
+  info.textContent =
+    "残り " +
+    replayRemaining +
+    "G";
+
+}
+
+
+/* =====================================================
    FINISH REPLAY
-========================================================= */
+===================================================== */
 
 function finishReplay(){
 
@@ -2800,46 +1954,24 @@ function finishReplay(){
   );
 
 
-  setReels(
-    "BAR",
-    "🍒",
-    "BAR"
-  );
-
-
-  message(
-    "REPLAY終了！<br>" +
-    "通常状態へ戻りました。"
+  setMessage(
+    "REPLAY終了"
   );
 
 
   addHistory(
-    "REPLAY終了 → NORMAL"
+    "REPLAY END"
   );
 
-}
 
-
-/* =========================================================
-   ABSOLUTE FROM REPLAY
-========================================================= */
-
-function startAbsoluteFromReplay(){
-
-  replayRemaining = 0;
-
-  document
-    .getElementById("replayPanel")
-    .classList.add("hidden");
-
-  startAbsolute();
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
-   ABSOLUTE START
-========================================================= */
+/* =====================================================
+   ABSOLUTE
+===================================================== */
 
 function startAbsolute(){
 
@@ -2848,62 +1980,48 @@ function startAbsolute(){
   absoluteRemaining = 10;
 
 
-  setState(
-    "絶対領域",
-    "絶対領域中"
-  );
-
-
   document
     .getElementById("absolutePanel")
     .classList.remove("hidden");
 
 
   document
-    .getElementById("absoluteInfo")
-    .textContent =
-      "絶対領域 残り " +
-      absoluteRemaining +
-      "回";
+    .getElementById("replayPanel")
+    .classList.add("hidden");
 
 
-  setReels(
-    "✦",
-    "絶対領域",
-    "✦"
+  setState(
+    "ABSOLUTE",
+    "SPECIAL"
   );
 
 
-  message(
-    "✦ 絶対領域突入！！ ✦"
+  setMessage(
+    "⚡ ABSOLUTE TERRITORY"
   );
 
 
-  addHistory(
-    "★★ 絶対領域 START ★★"
-  );
+  updateAbsoluteInfo();
 
-
-  showEffect(
-    "SPECIAL",
-    "絶対領域",
-    "SPECIAL START!!",
-    true
-  );
-
-
-  setTimeout(()=>{
-
-    hideEffect();
-
-  },1800);
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   ABSOLUTE FROM REPLAY
+===================================================== */
+
+function startAbsoluteFromReplay(){
+
+  startAbsolute();
+
+}
+
+
+/* =====================================================
    ABSOLUTE GAME
-========================================================= */
+===================================================== */
 
 async function absoluteGame(){
 
@@ -2916,55 +2034,58 @@ async function absoluteGame(){
   }
 
 
-  /*
-    絶対領域中はBETなし。
-    10回の特別状態。
-  */
-
   absoluteRemaining--;
 
 
-  setReels(
-    "✦",
-    "絶対領域",
-    "✦"
-  );
+  updateReels();
 
 
-  document
-    .getElementById("absoluteInfo")
-    .textContent =
-      "絶対領域 残り " +
-      absoluteRemaining +
-      "回";
-
-
-  message(
-    "✦ 絶対領域中 ✦<br>" +
-    "残り " +
-    absoluteRemaining +
-    "回"
+  setMessage(
+    "ABSOLUTE TERRITORY"
   );
 
 
   addHistory(
-    "絶対領域 / 残り" +
-    absoluteRemaining
+    "ABSOLUTE"
   );
+
+
+  updateAbsoluteInfo();
 
 
   if(absoluteRemaining <= 0){
 
     finishAbsolute();
 
+    return;
+
   }
+
+
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   ABSOLUTE INFO
+===================================================== */
+
+function updateAbsoluteInfo(){
+
+  document
+    .getElementById("absoluteInfo")
+    .textContent =
+      "残り " +
+      absoluteRemaining +
+      "G";
+
+}
+
+
+/* =====================================================
    FINISH ABSOLUTE
-========================================================= */
+===================================================== */
 
 function finishAbsolute(){
 
@@ -2984,84 +2105,122 @@ function finishAbsolute(){
   );
 
 
-  setReels(
-    "BAR",
-    "🍒",
-    "BAR"
-  );
-
-
-  message(
-    "絶対領域終了！<br>" +
-    "通常状態へ戻りました。"
+  setMessage(
+    "ABSOLUTE終了"
   );
 
 
   addHistory(
-    "絶対領域終了 → NORMAL"
+    "ABSOLUTE END"
   );
 
-}
 
-
-/* =========================================================
-   REELS
-========================================================= */
-
-function setReels(a,b,c){
-
-  document
-    .getElementById("reel1")
-    .textContent = a;
-
-
-  document
-    .getElementById("reel2")
-    .textContent = b;
-
-
-  document
-    .getElementById("reel3")
-    .textContent = c;
+  updatePlayButton();
 
 }
 
 
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-function message(text){
-
-  document
-    .getElementById("message")
-    .innerHTML = text;
-
-}
-
-
-/* =========================================================
+/* =====================================================
    STATE
-========================================================= */
+===================================================== */
 
-function setState(name,info){
-
-  document
-    .getElementById("stateName")
-    .textContent = name;
-
+function setState(
+  title,
+  message
+){
 
   document
-    .getElementById("stateInfo")
+    .getElementById("stateBox")
     .textContent =
-      info || "";
+      title;
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function setMessage(message){
+
+  document
+    .getElementById("gameMessage")
+    .textContent =
+      message;
+
+}
+
+
+/* =====================================================
+   PLAY BUTTON
+===================================================== */
+
+function updatePlayButton(){
+
+  const button =
+    document.getElementById(
+      "playButton"
+    );
+
+
+  if(state === "normal"){
+
+    button.textContent =
+      "START";
+
+    button.disabled =
+      medals < BET;
+
+    return;
+
+  }
+
+
+  if(state === "bonus"){
+
+    button.textContent =
+      "BONUS";
+
+    button.disabled =
+      false;
+
+    return;
+
+  }
+
+
+  if(state === "replay"){
+
+    // ★ REPLAYは無料なので
+    // コイン枚数に関係なく押せる
+
+    button.textContent =
+      "REPLAY";
+
+    button.disabled =
+      false;
+
+    return;
+
+  }
+
+
+  if(state === "absolute"){
+
+    button.textContent =
+      "ABSOLUTE";
+
+    button.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =====================================================
    HISTORY
-========================================================= */
+===================================================== */
 
 function addHistory(text){
 
@@ -3072,9 +2231,7 @@ function addHistory(text){
 
 
   const item =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
 
   item.className =
@@ -3083,128 +2240,117 @@ function addHistory(text){
 
   const time =
     new Date()
-      .toLocaleTimeString(
-        "ja-JP",
-        {
-          hour:"2-digit",
-          minute:"2-digit",
-          second:"2-digit"
-        }
-      );
+      .toLocaleTimeString();
 
 
   item.textContent =
-    "[" +
     time +
-    "] " +
+    " - " +
     text;
 
 
   list.prepend(item);
 
+}
 
-  while(
-    list.children.length > 50
-  ){
 
-    list.removeChild(
-      list.lastChild
+/* =====================================================
+   BONUS EFFECT
+===================================================== */
+
+function showBonusEffect(){
+
+  const overlay =
+    document.getElementById(
+      "effectOverlay"
     );
 
-  }
-
-}
-
-
-/* =========================================================
-   EFFECT
-========================================================= */
-
-function showEffect(
-  small,
-  main,
-  sub,
-  special=false
-){
-
-  document
-    .getElementById("effectSmall")
-    .textContent = small;
+  const text =
+    document.getElementById(
+      "effectText"
+    );
 
 
-  document
-    .getElementById("effectMain")
-    .textContent = main;
+  text.textContent =
+    "BONUS!!";
 
 
-  document
-    .getElementById("effectSub")
-    .textContent = sub;
-
-
-  document
-    .getElementById("effectOverlay")
-    .classList.add("show");
-
-
-  if(special){
-
-    document
-      .getElementById("effectMain")
-      .style.fontSize =
-        "75px";
-
-  }else{
-
-    document
-      .getElementById("effectMain")
-      .style.fontSize =
-        "";
-
-  }
-
-}
-
-
-function hideEffect(){
-
-  document
-    .getElementById("effectOverlay")
-    .classList.remove("show");
-
-}
-
-
-/* =========================================================
-   HOT SIGNAL
-========================================================= */
-
-function hotSignal(){
-
-  document.body.style.filter =
-    "brightness(1.15)";
+  overlay.classList.add("show");
 
 
   setTimeout(()=>{
 
-    document.body.style.filter =
-      "";
+    overlay.classList.remove(
+      "show"
+    );
 
-  },350);
+  },700);
 
 }
 
 
-/* =========================================================
-   START
-========================================================= */
+/* =====================================================
+   RESET
+===================================================== */
 
-showOnly(
-  "loginScreen"
+function resetGameState(){
+
+  state = "normal";
+
+  bonusName = "";
+
+  bonusRemaining = 0;
+
+  replayRemaining = 0;
+
+  absoluteRemaining = 0;
+
+
+  document
+    .getElementById("replayPanel")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("absolutePanel")
+    .classList.add("hidden");
+
+
+  setState(
+    "NORMAL",
+    "通常状態"
+  );
+
+
+  setMessage(
+    "STARTを押してください"
+  );
+
+
+  updatePlayButton();
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    document
+      .getElementById("betDisplay")
+      .textContent =
+        BET;
+
+    updateCoinDisplays();
+
+  }
 );
 
 </script>
 
 </body>
 </html>
-```
