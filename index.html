@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>CASINO [Re]</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -120,6 +121,7 @@ button {
   font-size: 14px;
 }
 
+
 /* =========================
    HUB
 ========================= */
@@ -222,6 +224,7 @@ button {
   cursor: not-allowed;
 }
 
+
 /* =========================
    SLOT
 ========================= */
@@ -254,8 +257,7 @@ button {
   width: 650px;
   max-width: 100%;
   margin: 20px auto;
-  background:
-    linear-gradient(145deg, #292929, #090909);
+  background: linear-gradient(145deg, #292929, #090909);
   border: 8px solid #777;
   border-radius: 20px;
   padding: 25px;
@@ -311,7 +313,14 @@ button {
   height: 65px;
   margin: 10px auto 20px;
   border-radius: 50%;
-  background: radial-gradient(circle, #fff 0%, #ffd21a 20%, #ff7b00 45%, #700 100%);
+  background:
+    radial-gradient(
+      circle,
+      #fff 0%,
+      #ffd21a 20%,
+      #ff7b00 45%,
+      #700 100%
+    );
   border: 6px solid #333;
   box-shadow:
     0 0 15px #ff9d00,
@@ -358,28 +367,42 @@ button {
   margin-top: 10px;
 }
 
-/* WIN EFFECT */
+
+/* =========================
+   WIN EFFECT
+========================= */
 
 .winEffect {
   animation: winFlash 0.7s ease;
 }
 
 @keyframes winFlash {
+
   0% {
     filter: brightness(1);
   }
+
   30% {
     filter: brightness(3);
   }
+
   60% {
     filter: brightness(1.5);
   }
+
   100% {
     filter: brightness(1);
   }
+
 }
 
+
+/* =========================
+   MOBILE
+========================= */
+
 @media (max-width: 600px) {
+
   .machineTitle {
     font-size: 30px;
   }
@@ -393,22 +416,29 @@ button {
   .machine {
     padding: 15px;
   }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
+
+<!-- =====================================================
      LOGIN
-========================= -->
+===================================================== -->
 
 <section id="loginScreen">
 
   <div class="loginBox">
 
-    <div class="loginTitle">CASINO [Re]</div>
-    <div class="loginSub">IDとパスワードでログイン</div>
+    <div class="loginTitle">
+      CASINO [Re]
+    </div>
+
+    <div class="loginSub">
+      IDとパスワードでログイン
+    </div>
 
     <input
       id="loginId"
@@ -425,11 +455,17 @@ button {
       autocomplete="new-password"
     >
 
-    <button class="loginBtn" onclick="login()">
+    <button
+      class="loginBtn"
+      onclick="login()"
+    >
       LOGIN
     </button>
 
-    <button class="registerBtn" onclick="register()">
+    <button
+      class="registerBtn"
+      onclick="register()"
+    >
       新規登録
     </button>
 
@@ -440,9 +476,9 @@ button {
 </section>
 
 
-<!-- =========================
-     HUB
-========================= -->
+<!-- =====================================================
+     GAME SELECT
+===================================================== -->
 
 <section id="hubScreen" class="hidden">
 
@@ -455,14 +491,18 @@ button {
     <div class="accountArea">
 
       <div class="coins">
-        🪙 <span id="hubCoins">0</span>
+        🪙
+        <span id="hubCoins">0</span>
       </div>
 
       <div id="hubPlayer">
         Guest
       </div>
 
-      <button class="logoutBtn" onclick="logout()">
+      <button
+        class="logoutBtn"
+        onclick="logout()"
+      >
         ログアウト
       </button>
 
@@ -470,18 +510,22 @@ button {
 
   </div>
 
+
   <h1 class="hubTitle">
     GAME SELECT
   </h1>
+
 
   <div class="gameGrid">
 
     <div class="gameCard">
 
-      <h2>🎰 スロット[Re]</h2>
+      <h2>
+        🎰 スロット[Re]
+      </h2>
 
       <p>
-        目押し感覚で遊べるカジノ風スロット
+        カジノ風スロットゲーム
       </p>
 
       <button onclick="openSlot()">
@@ -490,9 +534,12 @@ button {
 
     </div>
 
+
     <div class="gameCard disabled">
 
-      <h2>🎲 GAME 02</h2>
+      <h2>
+        🎲 GAME 02
+      </h2>
 
       <p>
         Coming Soon...
@@ -504,9 +551,12 @@ button {
 
     </div>
 
+
     <div class="gameCard disabled">
 
-      <h2>🃏 GAME 03</h2>
+      <h2>
+        🃏 GAME 03
+      </h2>
 
       <p>
         Coming Soon...
@@ -523,23 +573,28 @@ button {
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      SLOT
-========================= -->
+===================================================== -->
 
 <section id="slotScreen" class="hidden">
 
   <div class="slotTop">
 
-    <button class="backBtn" onclick="backToHub()">
+    <button
+      class="backBtn"
+      onclick="backToHub()"
+    >
       ← GAME SELECT
     </button>
 
     <div class="coins">
-      🪙 <span id="slotCoins">0</span>
+      🪙
+      <span id="slotCoins">0</span>
     </div>
 
   </div>
+
 
   <div class="machine">
 
@@ -547,41 +602,65 @@ button {
       SLOT [Re]
     </div>
 
-    <div class="status" id="slotStatus">
+
+    <div
+      class="status"
+      id="slotStatus"
+    >
       READY
     </div>
 
+
     <div class="reels">
 
-      <div class="reel" id="reel1">
+      <div
+        class="reel"
+        id="reel1"
+      >
         7
       </div>
 
-      <div class="reel" id="reel2">
+      <div
+        class="reel"
+        id="reel2"
+      >
         7
       </div>
 
-      <div class="reel" id="reel3">
+      <div
+        class="reel"
+        id="reel3"
+      >
         7
       </div>
 
     </div>
+
 
     <div class="gogo">
       GOGO! CHANCE
     </div>
 
+
     <div class="controls">
 
-      <button class="spinBtn" onclick="spin()">
+      <button
+        class="spinBtn"
+        onclick="spin()"
+      >
         SPIN　BET 3
       </button>
 
     </div>
 
-    <div class="result" id="result">
+
+    <div
+      class="result"
+      id="result"
+    >
       -
     </div>
+
 
     <div class="slotInfo">
       1回の掛け金：3コイン
@@ -606,13 +685,7 @@ const SUPABASE_KEY =
 
 
 /*
-  ★重要★
-
-  persistSession: false
-
-  これによってブラウザを閉じたり
-  ページを更新したときに
-  自動ログインしなくなる。
+  自動ログインOFF
 */
 
 const supabaseClient =
@@ -634,9 +707,11 @@ const supabaseClient =
 ===================================================== */
 
 let currentUser = null;
+
 let medals = 0;
 
 let saveQueue = Promise.resolve();
+
 
 const BET = 3;
 
@@ -646,12 +721,15 @@ const BET = 3;
 ===================================================== */
 
 function idToEmail(id) {
-  return id.toLowerCase() + "@casino-re.local";
+
+  return id.toLowerCase()
+    + "@casino-re.local";
+
 }
 
 
 /* =====================================================
-   IDチェック
+   ID CHECK
 ===================================================== */
 
 function validId(id) {
@@ -668,15 +746,27 @@ function validId(id) {
 async function login() {
 
   const id =
-    document.getElementById("loginId").value.trim();
+    document
+      .getElementById("loginId")
+      .value
+      .trim();
+
 
   const password =
-    document.getElementById("loginPassword").value;
+    document
+      .getElementById("loginPassword")
+      .value;
+
 
   const message =
-    document.getElementById("loginMessage");
+    document.getElementById(
+      "loginMessage"
+    );
 
-  message.style.color = "#ff6868";
+
+  message.style.color =
+    "#ff6868";
+
   message.textContent = "";
 
 
@@ -686,6 +776,7 @@ async function login() {
       "IDは3～20文字の英数字・_・-で入力してね。";
 
     return;
+
   }
 
 
@@ -695,6 +786,7 @@ async function login() {
       "パスワードを入力してね。";
 
     return;
+
   }
 
 
@@ -703,28 +795,34 @@ async function login() {
 
 
   const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
+    await supabaseClient.auth
+      .signInWithPassword({
 
-      email: idToEmail(id),
+        email: idToEmail(id),
 
-      password: password
+        password: password
 
-    });
+      });
 
 
   if (error) {
 
-    console.error("LOGIN ERROR:", error);
+    console.error(
+      "LOGIN ERROR:",
+      error
+    );
 
     message.textContent =
       "ログインできませんでした："
       + error.message;
 
     return;
+
   }
 
 
-  currentUser = data.user;
+  currentUser =
+    data.user;
 
 
   const loaded =
@@ -741,10 +839,13 @@ async function login() {
       "コインデータを読み込めませんでした。";
 
     return;
+
   }
 
 
-  message.style.color = "#5cff8a";
+  message.style.color =
+    "#5cff8a";
+
 
   message.textContent =
     "ログイン成功！";
@@ -762,16 +863,27 @@ async function login() {
 async function register() {
 
   const id =
-    document.getElementById("loginId").value.trim();
+    document
+      .getElementById("loginId")
+      .value
+      .trim();
+
 
   const password =
-    document.getElementById("loginPassword").value;
+    document
+      .getElementById("loginPassword")
+      .value;
+
 
   const message =
-    document.getElementById("loginMessage");
+    document.getElementById(
+      "loginMessage"
+    );
 
 
-  message.style.color = "#ff6868";
+  message.style.color =
+    "#ff6868";
+
   message.textContent = "";
 
 
@@ -781,6 +893,7 @@ async function register() {
       "IDは3～20文字の英数字・_・-で入力してね。";
 
     return;
+
   }
 
 
@@ -790,6 +903,7 @@ async function register() {
       "パスワードは6文字以上にしてね。";
 
     return;
+
   }
 
 
@@ -798,43 +912,49 @@ async function register() {
 
 
   const { data, error } =
-    await supabaseClient.auth.signUp({
+    await supabaseClient.auth
+      .signUp({
 
-      email: idToEmail(id),
+        email: idToEmail(id),
 
-      password: password
+        password: password
 
-    });
+      });
 
 
   if (error) {
 
-    console.error("REGISTER ERROR:", error);
+    console.error(
+      "REGISTER ERROR:",
+      error
+    );
 
     message.textContent =
       "登録できません："
       + error.message;
 
     return;
+
   }
 
 
   /*
-    Supabase側でConfirm emailがONの場合、
-    sessionが存在しないことがある。
+    Confirm emailがONの場合
   */
 
   if (!data.session) {
 
     message.textContent =
       "アカウントは作成されました。"
-      + "SupabaseのConfirm emailをOFFにしてください。";
+      + "Confirm emailをOFFにしてください。";
 
     return;
+
   }
 
 
-  currentUser = data.user;
+  currentUser =
+    data.user;
 
 
   const profileOK =
@@ -842,10 +962,6 @@ async function register() {
 
 
   if (!profileOK) {
-
-    console.error(
-      "プロフィール作成に失敗しました"
-    );
 
     await supabaseClient.auth.signOut();
 
@@ -856,6 +972,7 @@ async function register() {
       + "コインデータを作成できませんでした。";
 
     return;
+
   }
 
 
@@ -869,10 +986,13 @@ async function register() {
       "コインデータを読み込めませんでした。";
 
     return;
+
   }
 
 
-  message.style.color = "#5cff8a";
+  message.style.color =
+    "#5cff8a";
+
 
   message.textContent =
     "登録完了！";
@@ -884,7 +1004,7 @@ async function register() {
 
 
 /* =====================================================
-   PROFILE確認
+   PROFILE
 ===================================================== */
 
 async function ensureProfile() {
@@ -918,12 +1038,9 @@ async function ensureProfile() {
     );
 
     return false;
+
   }
 
-
-  /*
-    すでに存在するなら何もしない
-  */
 
   if (data) {
 
@@ -958,6 +1075,7 @@ async function ensureProfile() {
     );
 
     return false;
+
   }
 
 
@@ -972,7 +1090,7 @@ async function ensureProfile() {
 
 
 /* =====================================================
-   PROFILE読み込み
+   PROFILE LOAD
 ===================================================== */
 
 async function loadProfile() {
@@ -1011,6 +1129,7 @@ async function loadProfile() {
     );
 
     return false;
+
   }
 
 
@@ -1034,22 +1153,27 @@ async function loadProfile() {
 
 
 /* =====================================================
-   COIN表示
+   COIN UPDATE
 ===================================================== */
 
 function updateCoins() {
 
-  document.getElementById("hubCoins").textContent =
+  document.getElementById(
+    "hubCoins"
+  ).textContent =
     medals.toLocaleString();
 
-  document.getElementById("slotCoins").textContent =
+
+  document.getElementById(
+    "slotCoins"
+  ).textContent =
     medals.toLocaleString();
 
 }
 
 
 /* =====================================================
-   COIN保存
+   COIN SAVE
 ===================================================== */
 
 function saveCoins() {
@@ -1066,29 +1190,34 @@ function saveCoins() {
 
 
   saveQueue =
-    saveQueue.then(async () => {
+    saveQueue.then(
+      async () => {
 
-      const { error } =
-        await supabaseClient
-          .from("profiles")
-          .update({
+        const { error } =
+          await supabaseClient
+            .from("profiles")
+            .update({
 
-            coins: coinsToSave
+              coins: coinsToSave
 
-          })
-          .eq("id", currentUser.id);
+            })
+            .eq(
+              "id",
+              currentUser.id
+            );
 
 
-      if (error) {
+        if (error) {
 
-        console.error(
-          "COIN SAVE ERROR:",
-          error
-        );
+          console.error(
+            "COIN SAVE ERROR:",
+            error
+          );
+
+        }
 
       }
-
-    });
+    );
 
 
   return saveQueue;
@@ -1097,7 +1226,7 @@ function saveCoins() {
 
 
 /* =====================================================
-   HUB表示
+   HUB
 ===================================================== */
 
 function showHub() {
@@ -1106,16 +1235,20 @@ function showHub() {
     .getElementById("loginScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("slotScreen")
     .classList.add("hidden");
+
 
   document
     .getElementById("hubScreen")
     .classList.remove("hidden");
 
 
-  document.getElementById("hubPlayer").textContent =
+  document.getElementById(
+    "hubPlayer"
+  ).textContent =
     "ID: " +
     currentUser.email.split("@")[0];
 
@@ -1126,7 +1259,7 @@ function showHub() {
 
 
 /* =====================================================
-   SLOTを開く
+   SLOT OPEN
 ===================================================== */
 
 function openSlot() {
@@ -1135,9 +1268,11 @@ function openSlot() {
     .getElementById("hubScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("slotScreen")
     .classList.remove("hidden");
+
 
   updateCoins();
 
@@ -1145,7 +1280,7 @@ function openSlot() {
 
 
 /* =====================================================
-   HUBへ戻る
+   BACK
 ===================================================== */
 
 function backToHub() {
@@ -1154,9 +1289,11 @@ function backToHub() {
     .getElementById("slotScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("hubScreen")
     .classList.remove("hidden");
+
 
   updateCoins();
 
@@ -1168,11 +1305,6 @@ function backToHub() {
 ===================================================== */
 
 async function logout() {
-
-  /*
-    保存処理が残っていたら
-    完了するまで待つ。
-  */
 
   await saveQueue;
 
@@ -1189,25 +1321,130 @@ async function logout() {
     .getElementById("hubScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("slotScreen")
     .classList.add("hidden");
+
 
   document
     .getElementById("loginScreen")
     .classList.remove("hidden");
 
 
-  document.getElementById("loginId").value = "";
-  document.getElementById("loginPassword").value = "";
+  document.getElementById(
+    "loginId"
+  ).value = "";
 
-  document.getElementById("loginMessage").textContent = "";
+
+  document.getElementById(
+    "loginPassword"
+  ).value = "";
+
+
+  document.getElementById(
+    "loginMessage"
+  ).textContent = "";
 
 }
 
 
 /* =====================================================
-   SETTINGS
+   SETTING
+   ★ 起動時に抽選
+===================================================== */
+
+/*
+  設定1～7の抽選確率
+
+  1 = 55%
+  2 = 28%
+  3 = 14%
+  4 = 2%
+  5 = 0.7%
+  6 = 0.2%
+  7 = 0.1%
+
+  合計 = 100%
+*/
+
+const SETTING_WEIGHTS = {
+
+  1: 55,
+
+  2: 28,
+
+  3: 14,
+
+  4: 2,
+
+  5: 0.7,
+
+  6: 0.2,
+
+  7: 0.1
+
+};
+
+
+/* =====================================================
+   SETTING抽選
+===================================================== */
+
+function chooseSetting() {
+
+  const total =
+    Object.values(
+      SETTING_WEIGHTS
+    ).reduce(
+      (a, b) => a + b,
+      0
+    );
+
+
+  let random =
+    Math.random() * total;
+
+
+  for (
+    const setting in SETTING_WEIGHTS
+  ) {
+
+    random -=
+      SETTING_WEIGHTS[setting];
+
+
+    if (random <= 0) {
+
+      return Number(setting);
+
+    }
+
+  }
+
+
+  return 1;
+
+}
+
+
+/*
+  ★ページを起動した瞬間に
+  1～7のどれかを抽選する
+*/
+
+let currentSetting =
+  chooseSetting();
+
+
+console.log(
+  "今回の設定:",
+  currentSetting
+);
+
+
+/* =====================================================
+   BONUS確率
 ===================================================== */
 
 const BONUS_PROBABILITY = {
@@ -1229,82 +1466,8 @@ const BONUS_PROBABILITY = {
 };
 
 
-const SETTING_WEIGHTS = {
-
-  1: 50,
-
-  2: 24,
-
-  3: 15,
-
-  4: 7,
-
-  5: 3,
-
-  6: 1,
-
-  7: 1
-
-};
-
-
-let currentSetting = 1;
-
-
 /* =====================================================
-   SETTING抽選
-===================================================== */
-
-function chooseSetting() {
-
-  const total =
-    Object.values(SETTING_WEIGHTS)
-      .reduce((a, b) => a + b, 0);
-
-
-  let random =
-    Math.random() * total;
-
-
-  for (const setting in SETTING_WEIGHTS) {
-
-    random -= SETTING_WEIGHTS[setting];
-
-
-    if (random <= 0) {
-
-      return Number(setting);
-
-    }
-
-  }
-
-
-  return 1;
-
-}
-
-
-/* =====================================================
-   1時間ごとに設定変更
-===================================================== */
-
-function updateSettingHourly() {
-
-  currentSetting =
-    chooseSetting();
-
-}
-
-
-setInterval(
-  updateSettingHourly,
-  60 * 60 * 1000
-);
-
-
-/* =====================================================
-   BONUS
+   BONUS種類
 ===================================================== */
 
 const BONUS_TYPES = [
@@ -1344,10 +1507,14 @@ const BONUS_TYPES = [
 function drawBonus() {
 
   const probability =
-    BONUS_PROBABILITY[currentSetting];
+    BONUS_PROBABILITY[
+      currentSetting
+    ];
 
 
-  if (Math.random() >= probability) {
+  if (
+    Math.random() >= probability
+  ) {
 
     return null;
 
@@ -1355,10 +1522,11 @@ function drawBonus() {
 
 
   /*
-    Voidはかなり低確率
+    Void
   */
 
-  const r = Math.random();
+  const r =
+    Math.random();
 
 
   if (r < 0.005) {
@@ -1374,7 +1542,8 @@ function drawBonus() {
 
   return normalBonuses[
     Math.floor(
-      Math.random() * normalBonuses.length
+      Math.random() *
+      normalBonuses.length
     )
   ];
 
@@ -1382,7 +1551,7 @@ function drawBonus() {
 
 
 /* =====================================================
-   REEL抽選
+   SYMBOL
 ===================================================== */
 
 function randomSymbol() {
@@ -1392,13 +1561,18 @@ function randomSymbol() {
     "7",
     "7",
     "7",
+
     "BAR",
     "BAR",
+
     "🍒",
     "🍒",
+
     "🍉",
+
     "🔔",
     "🔔",
+
     "★"
 
   ];
@@ -1406,7 +1580,8 @@ function randomSymbol() {
 
   return symbols[
     Math.floor(
-      Math.random() * symbols.length
+      Math.random() *
+      symbols.length
     )
   ];
 
@@ -1427,13 +1602,21 @@ function spin() {
 
 
   const result =
-    document.getElementById("result");
+    document.getElementById(
+      "result"
+    );
+
 
   const status =
-    document.getElementById("slotStatus");
+    document.getElementById(
+      "slotStatus"
+    );
+
 
   const machine =
-    document.querySelector(".machine");
+    document.querySelector(
+      ".machine"
+    );
 
 
   /*
@@ -1463,17 +1646,24 @@ function spin() {
 
   /*
     リール
-    アニメーションなし
   */
 
   const reel1 =
-    document.getElementById("reel1");
+    document.getElementById(
+      "reel1"
+    );
+
 
   const reel2 =
-    document.getElementById("reel2");
+    document.getElementById(
+      "reel2"
+    );
+
 
   const reel3 =
-    document.getElementById("reel3");
+    document.getElementById(
+      "reel3"
+    );
 
 
   /*
@@ -1491,7 +1681,9 @@ function spin() {
     */
 
     reel1.textContent = "7";
+
     reel2.textContent = "7";
+
     reel3.textContent = "7";
 
 
@@ -1506,7 +1698,8 @@ function spin() {
       "777 BONUS";
 
 
-    medals += bonus.payout;
+    medals +=
+      bonus.payout;
 
 
     updateCoins();
@@ -1518,26 +1711,39 @@ function spin() {
       当たり時だけ演出
     */
 
-    machine.classList.remove("winEffect");
+    machine.classList.remove(
+      "winEffect"
+    );
+
 
     void machine.offsetWidth;
 
-    machine.classList.add("winEffect");
+
+    machine.classList.add(
+      "winEffect"
+    );
 
 
     /*
       GOGOランプ
     */
 
-    document.querySelector(".gogo").style.boxShadow =
+    document.querySelector(
+      ".gogo"
+    ).style.boxShadow =
       "0 0 25px #ffff00, 0 0 60px #ff8800";
 
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      machine.classList.remove("winEffect");
+        machine.classList.remove(
+          "winEffect"
+        );
 
-    }, 700);
+      },
+      700
+    );
 
 
     return;
@@ -1552,15 +1758,20 @@ function spin() {
   reel1.textContent =
     randomSymbol();
 
+
   reel2.textContent =
     randomSymbol();
+
 
   reel3.textContent =
     randomSymbol();
 
 
   /*
-    2ぞろいは作らない
+    2ぞろい禁止
+
+    3つ全部同じになった場合は
+    3個目をBARに変更
   */
 
   if (
@@ -1577,11 +1788,14 @@ function spin() {
   result.textContent =
     "ハズレ";
 
+
   status.textContent =
     "READY";
 
 
-  document.querySelector(".gogo").style.boxShadow =
+  document.querySelector(
+    ".gogo"
+  ).style.boxShadow =
     "0 0 15px #ff9d00, 0 0 30px rgba(255,100,0,0.4)";
 
 }
@@ -1591,16 +1805,26 @@ function spin() {
    START
 ===================================================== */
 
-console.log("CASINO [Re] START");
+console.log(
+  "CASINO [Re] START"
+);
+
+console.log(
+  "起動時設定:",
+  currentSetting
+);
 
 
 /*
-  ★重要★
+  自動ログイン処理なし。
 
-  自動ログイン処理は入れていません。
-
-  ページを開いたときは必ず
-  ログイン画面から始まります。
+  ページを開く
+  ↓
+  設定1～7を抽選
+  ↓
+  ログイン画面
+  ↓
+  ログイン
 */
 
 </script>
