@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,7 +24,7 @@ body {
 }
 
 .game {
-  width: 720px;
+  width: 760px;
   max-width: 95vw;
   background: #111827;
   border: 2px solid #394866;
@@ -38,14 +39,13 @@ body {
   font-size: 34px;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #f4f5ff;
 }
 
 .subtitle {
   text-align: center;
   color: #8e9ab5;
   font-size: 13px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 /* 状態 */
@@ -60,13 +60,38 @@ body {
 .status-name {
   font-size: 22px;
   font-weight: bold;
-  color: #cfd7ff;
+  color: #d7ddff;
 }
 
 .status-info {
   margin-top: 7px;
   color: #9da9c4;
   font-size: 14px;
+}
+
+/* ボーナス情報 */
+.bonus-info {
+  display: none;
+  background: #171f31;
+  border: 1px solid #3c4b6b;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.bonus-title {
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.bonus-count {
+  margin-top: 8px;
+  font-size: 17px;
+}
+
+.bonus-medals {
+  margin-top: 5px;
+  color: #aeb9d4;
 }
 
 /* リール */
@@ -87,7 +112,7 @@ body {
   align-items: center;
   justify-content: center;
   color: #111;
-  font-size: 38px;
+  font-size: 34px;
   font-weight: bold;
   box-shadow:
     inset 0 0 15px rgba(0,0,0,.3),
@@ -115,7 +140,7 @@ body {
 
 /* メッセージ */
 .message {
-  min-height: 65px;
+  min-height: 70px;
   margin-top: 16px;
   background: #181f30;
   border: 1px solid #303c57;
@@ -124,6 +149,22 @@ body {
   text-align: center;
   font-size: 17px;
   color: #dfe5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 特殊メッセージ */
+.message.hot {
+  color: #ffd95a;
+  border-color: #806b25;
+  background: #211f16;
+}
+
+.message.void {
+  color: #e1b7ff;
+  border-color: #704b8e;
+  background: #20182b;
 }
 
 /* ボーナス一覧 */
@@ -165,7 +206,7 @@ body {
   background: #0d1320;
   border-radius: 10px;
   padding: 10px;
-  max-height: 130px;
+  max-height: 150px;
   overflow-y: auto;
 }
 
@@ -187,7 +228,22 @@ body {
   cursor: pointer;
 }
 
+/* 演出 */
+@keyframes flash {
+  0%,100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+.hot-effect {
+  animation: flash .35s ease-in-out 2;
+}
+
 @media (max-width: 600px) {
+
   .game {
     padding: 14px;
   }
@@ -195,7 +251,7 @@ body {
   .reel {
     width: 30%;
     height: 90px;
-    font-size: 26px;
+    font-size: 23px;
   }
 
   .bonus-list {
@@ -209,27 +265,65 @@ body {
 
 <div class="game">
 
-  <div class="title">スロット[Re]</div>
+  <div class="title">
+    スロット[Re]
+  </div>
+
   <div class="subtitle">
-    Voidボーナスと無限リプレイ確変を目指せ
+    Bonus / Void / Replay Chance
   </div>
 
   <!-- 状態 -->
   <div class="status">
-    <div class="status-name" id="stateName">通常時</div>
+
+    <div class="status-name" id="stateName">
+      通常時
+    </div>
+
     <div class="status-info" id="stateInfo">
       小役を消化しながらボーナスを抽選
     </div>
+
+  </div>
+
+  <!-- ボーナス情報 -->
+  <div class="bonus-info" id="bonusInfo">
+
+    <div class="bonus-title" id="bonusTitle">
+      ボーナス
+    </div>
+
+    <div class="bonus-count" id="bonusCount">
+      100枚 × 5回
+    </div>
+
+    <div class="bonus-medals" id="bonusMedals">
+      獲得枚数：0枚
+    </div>
+
   </div>
 
   <!-- リール -->
   <div class="reels">
-    <div class="reel" id="reel1">7</div>
-    <div class="reel" id="reel2">BAR</div>
-    <div class="reel" id="reel3">7</div>
+
+    <div class="reel" id="reel1">
+      7
+    </div>
+
+    <div class="reel" id="reel2">
+      BAR
+    </div>
+
+    <div class="reel" id="reel3">
+      7
+    </div>
+
   </div>
 
-  <button class="start" id="startButton" onclick="play()">
+  <button
+    class="start"
+    id="startButton"
+    onclick="play()">
     START
   </button>
 
@@ -238,40 +332,62 @@ body {
   </div>
 
   <!-- ボーナス -->
-  <div class="section-title">ボーナス</div>
+  <div class="section-title">
+    ボーナス
+  </div>
 
   <div class="bonus-list">
 
     <div class="bonus">
-      <div class="bonus-name">レギュラー</div>
-      <div class="bonus-game">10G</div>
+      <div class="bonus-name">
+        レギュラー
+      </div>
+      <div class="bonus-game">
+        100枚 × 5回
+      </div>
     </div>
 
     <div class="bonus">
-      <div class="bonus-name">リーフィンド</div>
-      <div class="bonus-game">22G</div>
+      <div class="bonus-name">
+        リーフィンド
+      </div>
+      <div class="bonus-game">
+        100枚 × 5回
+      </div>
     </div>
 
     <div class="bonus">
-      <div class="bonus-name">ダストロック</div>
-      <div class="bonus-game">18G</div>
+      <div class="bonus-name">
+        ダストロック
+      </div>
+      <div class="bonus-game">
+        100枚 × 5回
+      </div>
     </div>
 
     <div class="bonus">
-      <div class="bonus-name">書物の怨念</div>
-      <div class="bonus-game">14G</div>
+      <div class="bonus-name">
+        書物の怨念
+      </div>
+      <div class="bonus-game">
+        100枚 × 5回
+      </div>
     </div>
 
   </div>
 
   <!-- 履歴 -->
-  <div class="section-title">ゲーム履歴</div>
+  <div class="section-title">
+    ゲーム履歴
+  </div>
 
   <div class="history" id="history">
     <div>ゲーム開始</div>
   </div>
 
-  <button class="reset" onclick="resetGame()">
+  <button
+    class="reset"
+    onclick="resetGame()">
     リセット
   </button>
 
@@ -280,98 +396,153 @@ body {
 
 <script>
 
+/* =========================
+   ゲーム状態
+========================= */
+
 let state = "normal";
+
+let bonusName = "";
+
+let bonusRemaining = 0;
+
+let bonusTotal = 0;
+
+let bonusMedals = 0;
+
 let remainingGames = 0;
 
-/* ボーナス */
+
+/* =========================
+   ボーナス種類
+========================= */
+
 const bonuses = [
+
   {
-    name: "レギュラー",
-    games: 10
+    name: "レギュラー"
   },
+
   {
-    name: "リーフィンド",
-    games: 22
+    name: "リーフィンド"
   },
+
   {
-    name: "ダストロック",
-    games: 18
+    name: "ダストロック"
   },
+
   {
-    name: "書物の怨念",
-    games: 14
+    name: "書物の怨念"
   }
+
 ];
 
 
-/* START */
+/* =========================
+   START
+========================= */
+
 function play() {
 
   if (state === "normal") {
+
     normalGame();
+
     return;
   }
 
   if (state === "bonus") {
+
     bonusGame();
+
     return;
   }
 
   if (state === "void") {
+
     voidGame();
+
     return;
   }
 
   if (state === "replay30") {
+
     replayChanceGame();
+
     return;
   }
 
   if (state === "cz") {
+
     czGame();
+
     return;
   }
 
   if (state === "replayInfinite") {
+
     infiniteReplayGame();
+
     return;
   }
+
 }
 
 
-/* 通常時 */
+/* =========================
+   通常時
+========================= */
+
 function normalGame() {
 
   const r = Math.random();
 
-  /*
-    通常時
-    メロン・チェリーをチャンス役として扱う
-  */
+
+  /* チェリー */
 
   if (r < 0.025) {
 
-    setReels("🍒", "🍒", "🍒");
+    setReels(
+      "🍒",
+      "🍒",
+      "🍒"
+    );
 
-    message("チェリー！ チャンス役！");
-    addHistory("チェリー");
+    message(
+      "チェリー！<br>チャンス役！"
+    );
+
+    addHistory(
+      "通常時：チェリー"
+    );
 
     return;
   }
+
+
+  /* メロン */
 
   if (r < 0.05) {
 
-    setReels("🍈", "🍈", "🍈");
+    setReels(
+      "🍈",
+      "🍈",
+      "🍈"
+    );
 
-    message("メロン！ チャンス役！");
-    addHistory("メロン");
+    message(
+      "メロン！<br>チャンス役！"
+    );
+
+    addHistory(
+      "通常時：メロン"
+    );
 
     return;
   }
 
-  /*
-    ボーナス抽選
-  */
+
+  /* ボーナス */
 
   if (r < 0.065) {
 
@@ -380,351 +551,134 @@ function normalGame() {
     return;
   }
 
-  /*
-    ハズレ
-  */
 
-  setReels("7", "BAR", "🍒");
+  /* ハズレ */
 
-  message("ハズレ");
-
-  addHistory("通常時：ハズレ");
-}
-
-
-/* ボーナス開始 */
-function startBonus() {
-
-  const bonus =
-    bonuses[Math.floor(Math.random() * bonuses.length)];
-
-  state = "bonus";
-  remainingGames = bonus.games;
-
-  setState(
-    "ボーナス",
-    bonus.name + " " + bonus.games + "G"
+  setReels(
+    "7",
+    "BAR",
+    "🍒"
   );
 
-  setReels("BONUS", "BONUS", "BONUS");
-
   message(
-    bonus.name +
-    " 突入！ " +
-    bonus.games +
-    "G"
+    "ハズレ"
   );
 
   addHistory(
-    "ボーナス突入：" + bonus.name
+    "通常時：ハズレ"
   );
+
 }
 
 
-/* ボーナス中 */
-function bonusGame() {
+/* =========================
+   ボーナス開始
+========================= */
 
-  remainingGames--;
+function startBonus() {
+
+  const bonus =
+    bonuses[
+      Math.floor(
+        Math.random() *
+        bonuses.length
+      )
+    ];
+
+
+  state = "bonus";
+
+  bonusName = bonus.name;
 
   /*
-    ボーナス中にVoid昇格
+    100枚 × 5回
   */
+
+  bonusRemaining = 5;
+
+  bonusTotal = 5;
+
+  bonusMedals = 0;
+
+
+  setState(
+    "ボーナス",
+    bonusName + "　100枚 × " +
+    bonusRemaining + "回"
+  );
+
+
+  showBonusInfo();
+
+
+  setReels(
+    "BONUS",
+    "BONUS",
+    "BONUS"
+  );
+
+
+  message(
+    "🎰 " +
+    bonusName +
+    "突入！<br>" +
+    "100枚 × 5回"
+  );
+
+
+  addHistory(
+    "ボーナス突入：" +
+    bonusName
+  );
+
+}
+
+
+/* =========================
+   ボーナス中
+========================= */
+
+function bonusGame() {
+
+  /*
+    1回につき100枚
+  */
+
+  bonusRemaining--;
+
+  bonusMedals += 100;
+
+
+  setReels(
+    "100",
+    "枚",
+    "GET"
+  );
+
+
+  updateBonusInfo();
+
+
+  /*
+    Void昇格
+    約1%
+  */
+
   if (Math.random() < 0.01) {
 
     state = "void";
+
     remainingGames = 100;
+
+
+    hideBonusInfo();
+
 
     setState(
       "Voidボーナス",
       "100G"
     );
 
-    setReels("VOID", "VOID", "VOID");
-
-    message(
-      "⚡ Voidボーナスへ昇格！"
-    );
-
-    addHistory(
-      "Voidボーナスへ昇格"
-    );
-
-    return;
-  }
-
-  setReels(
-    randomSymbol(),
-    randomSymbol(),
-    randomSymbol()
-  );
-
-  message(
-    "ボーナス中　残り " +
-    remainingGames +
-    "G"
-  );
-
-  if (remainingGames <= 0) {
-
-    /*
-      ボーナス終了後
-      リプレイ確変30Gへ
-    */
-
-    state = "replay30";
-    remainingGames = 30;
-
-    setState(
-      "リプレイ確変",
-      "30G"
-    );
-
-    message(
-      "ボーナス終了！\n" +
-      "リプレイ確変30Gへ"
-    );
-
-    addHistory(
-      "リプレイ確変30Gへ"
-    );
-  }
-}
-
-
-/* Voidボーナス */
-function voidGame() {
-
-  remainingGames--;
-
-  /*
-    Void中のゲーム数上乗せ
-  */
-  if (Math.random() < 0.02) {
-
-    remainingGames += 10;
-
-    message(
-      "ゲーム数上乗せ！ +10G\n" +
-      "残り " + remainingGames + "G"
-    );
-
-    addHistory("Void中：+10G");
-
-    return;
-  }
-
-  setReels(
-    "VOID",
-    randomSymbol(),
-    "VOID"
-  );
-
-  message(
-    "Voidボーナス中\n残り " +
-    remainingGames +
-    "G"
-  );
-
-  if (remainingGames <= 0) {
-
-    /*
-      Void終了後は無限リプレイ確変
-    */
-
-    state = "replayInfinite";
-
-    setState(
-      "リプレイ確変（無限）",
-      "終了条件なし"
-    );
-
-    setReels(
-      "REPLAY",
-      "REPLAY",
-      "REPLAY"
-    );
-
-    message(
-      "Voidボーナス終了\n" +
-      "リプレイ確変（無限）へ！"
-    );
-
-    addHistory(
-      "リプレイ確変（無限）へ"
-    );
-  }
-}
-
-
-/* リプレイ確変30G */
-function replayChanceGame() {
-
-  remainingGames--;
-
-  /*
-    リプレイ確変中
-  */
-
-  const r = Math.random();
-
-  if (r < 0.02) {
-
-    /*
-      ボーナス
-    */
-
-    startBonus();
-
-    return;
-  }
-
-  if (r < 0.10) {
-
-    /*
-      CZ突入
-    */
-
-    state = "cz";
-    remainingGames = 5;
-
-    setState(
-      "CZ",
-      "5G"
-    );
-
-    setReels(
-      "CZ",
-      "CZ",
-      "CZ"
-    );
-
-    message(
-      "CZ突入！\n5G間のチャンス"
-    );
-
-    addHistory("CZ突入");
-
-    return;
-  }
-
-  setReels(
-    "REPLAY",
-    "REPLAY",
-    "BAR"
-  );
-
-  message(
-    "リプレイ確変中\n残り " +
-    remainingGames +
-    "G"
-  );
-
-  if (remainingGames <= 0) {
-
-    state = "normal";
-
-    setState(
-      "通常時",
-      "小役を消化しながらボーナスを抽選"
-    );
-
-    message(
-      "リプレイ確変終了\n通常時へ"
-    );
-
-    addHistory(
-      "リプレイ確変終了"
-    );
-  }
-}
-
-
-/* CZ */
-function czGame() {
-
-  remainingGames--;
-
-  /*
-    CZ中に成功
-  */
-
-  if (Math.random() < 0.13) {
-
-    state = "replayInfinite";
-
-    setState(
-      "リプレイ確変（無限）",
-      "終了条件なし"
-    );
-
-    setReels(
-      "REPLAY",
-      "REPLAY",
-      "REPLAY"
-    );
-
-    message(
-      "CZ成功！\n" +
-      "リプレイ確変（無限）へ！"
-    );
-
-    addHistory(
-      "CZ成功 → 無限リプレイ確変"
-    );
-
-    return;
-  }
-
-  setReels(
-    "REPLAY",
-    "7",
-    "BAR"
-  );
-
-  message(
-    "CZ中…… 残り " +
-    remainingGames +
-    "G"
-  );
-
-  if (remainingGames <= 0) {
-
-    state = "normal";
-
-    setState(
-      "通常時",
-      "小役を消化しながらボーナスを抽選"
-    );
-
-    message(
-      "CZ終了\n通常時へ"
-    );
-
-    addHistory(
-      "CZ失敗"
-    );
-  }
-}
-
-
-/* 無限リプレイ確変 */
-function infiniteReplayGame() {
-
-  const r = Math.random();
-
-  if (r < 0.04) {
-
-    /*
-      Voidボーナス
-    */
-
-    state = "void";
-    remainingGames = 100;
-
-    setState(
-      "Voidボーナス",
-      "100G"
-    );
 
     setReels(
       "VOID",
@@ -732,16 +686,537 @@ function infiniteReplayGame() {
       "VOID"
     );
 
+
     message(
-      "Voidボーナス当選！"
+      "👑 <b>VOID BONUS昇格！</b><br>" +
+      "100GのVoidボーナスへ！"
     );
+
+
+    document
+      .getElementById("message")
+      .classList.add("void");
+
+
+    addHistory(
+      "🔥 ボーナス中 → Void昇格！"
+    );
+
+
+    return;
+  }
+
+
+  /*
+    通常追加
+    約10%
+  */
+
+  if (Math.random() < 0.10) {
+
+    bonusRemaining++;
+
+    bonusTotal++;
+
+
+    setState(
+      "ボーナス",
+      bonusName +
+      "　追加BONUS！"
+    );
+
+
+    message(
+      "⚡ <b>BONUS CHANCE!</b><br>" +
+      "+100枚追加！"
+    );
+
+
+    document
+      .getElementById("message")
+      .classList.add("hot");
+
+
+    updateBonusInfo();
+
+
+    addHistory(
+      "BONUS CHANCE → +100枚"
+    );
+
+
+    setTimeout(() => {
+
+      document
+        .getElementById("message")
+        .classList.remove("hot");
+
+    }, 500);
+
+
+    /*
+      追加されたので終了判定しない
+    */
+
+    return;
+  }
+
+
+  /*
+    大追加
+    約2%
+  */
+
+  if (Math.random() < 0.02) {
+
+    bonusRemaining += 5;
+
+    bonusTotal += 5;
+
+
+    setState(
+      "ボーナス",
+      bonusName +
+      "　BIG BONUS CHANCE！"
+    );
+
+
+    message(
+      "🔥 <b>BIG BONUS CHANCE!!</b><br>" +
+      "+500枚追加！"
+    );
+
+
+    document
+      .getElementById("message")
+      .classList.add("hot");
+
+
+    updateBonusInfo();
+
+
+    addHistory(
+      "BIG BONUS CHANCE → +500枚"
+    );
+
+
+    setTimeout(() => {
+
+      document
+        .getElementById("message")
+        .classList.remove("hot");
+
+    }, 500);
+
+
+    return;
+  }
+
+
+  /*
+    通常のボーナス中
+  */
+
+  message(
+    "💰 100枚獲得！<br>" +
+    "残り " +
+    bonusRemaining +
+    "回"
+  );
+
+
+  addHistory(
+    "ボーナス：+100枚"
+  );
+
+
+  /*
+    ボーナス終了
+  */
+
+  if (bonusRemaining <= 0) {
+
+    finishBonus();
+
+  }
+
+}
+
+
+/* =========================
+   ボーナス終了
+========================= */
+
+function finishBonus() {
+
+  state = "replay30";
+
+  remainingGames = 30;
+
+
+  hideBonusInfo();
+
+
+  setState(
+    "リプレイ確変",
+    "30G"
+  );
+
+
+  setReels(
+    "REPLAY",
+    "REPLAY",
+    "REPLAY"
+  );
+
+
+  message(
+    "🎉 ボーナス終了！<br>" +
+    "獲得枚数：" +
+    bonusMedals +
+    "枚<br>" +
+    "リプレイ確変30Gへ！"
+  );
+
+
+  addHistory(
+    "ボーナス終了：" +
+    bonusMedals +
+    "枚"
+  );
+
+}
+
+
+/* =========================
+   Voidボーナス
+========================= */
+
+function voidGame() {
+
+  remainingGames--;
+
+
+  /*
+    Void中ゲーム数上乗せ
+  */
+
+  if (Math.random() < 0.02) {
+
+    remainingGames += 10;
+
+
+    message(
+      "👑 Voidボーナス<br>" +
+      "ゲーム数上乗せ！<br>" +
+      "+10G"
+    );
+
+
+    addHistory(
+      "Void：+10G"
+    );
+
+
+    return;
+  }
+
+
+  setReels(
+    "VOID",
+    randomSymbol(),
+    "VOID"
+  );
+
+
+  message(
+    "👑 Voidボーナス中<br>" +
+    "残り " +
+    remainingGames +
+    "G"
+  );
+
+
+  if (remainingGames <= 0) {
+
+    state =
+      "replayInfinite";
+
+
+    setState(
+      "リプレイ確変（無限）",
+      "終了条件なし"
+    );
+
+
+    setReels(
+      "REPLAY",
+      "REPLAY",
+      "REPLAY"
+    );
+
+
+    message(
+      "👑 Voidボーナス終了！<br>" +
+      "♾️ リプレイ確変（無限）へ！"
+    );
+
+
+    addHistory(
+      "Void終了 → 無限リプレイ確変"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   リプレイ確変30G
+========================= */
+
+function replayChanceGame() {
+
+  remainingGames--;
+
+
+  const r = Math.random();
+
+
+  /*
+    ボーナス
+  */
+
+  if (r < 0.02) {
+
+    startBonus();
+
+    return;
+  }
+
+
+  /*
+    CZ
+  */
+
+  if (r < 0.10) {
+
+    state = "cz";
+
+    remainingGames = 5;
+
+
+    setState(
+      "CZ",
+      "5G"
+    );
+
+
+    setReels(
+      "CZ",
+      "CZ",
+      "CZ"
+    );
+
+
+    message(
+      "⚡ CZ突入！<br>" +
+      "5G間のチャンス！"
+    );
+
+
+    addHistory(
+      "CZ突入"
+    );
+
+
+    return;
+  }
+
+
+  /*
+    リプレイ
+  */
+
+  setReels(
+    "REPLAY",
+    "REPLAY",
+    "BAR"
+  );
+
+
+  message(
+    "リプレイ確変中<br>" +
+    "残り " +
+    remainingGames +
+    "G"
+  );
+
+
+  if (remainingGames <= 0) {
+
+    state = "normal";
+
+
+    setState(
+      "通常時",
+      "小役を消化しながらボーナスを抽選"
+    );
+
+
+    message(
+      "リプレイ確変終了<br>" +
+      "通常時へ"
+    );
+
+
+    addHistory(
+      "リプレイ確変終了"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   CZ
+========================= */
+
+function czGame() {
+
+  remainingGames--;
+
+
+  /*
+    CZ成功率13%
+  */
+
+  if (Math.random() < 0.13) {
+
+    state =
+      "replayInfinite";
+
+
+    setState(
+      "リプレイ確変（無限）",
+      "終了条件なし"
+    );
+
+
+    setReels(
+      "REPLAY",
+      "REPLAY",
+      "REPLAY"
+    );
+
+
+    message(
+      "🔥 <b>CZ成功！</b><br>" +
+      "♾️ リプレイ確変（無限）へ！"
+    );
+
+
+    addHistory(
+      "CZ成功 → 無限リプレイ確変"
+    );
+
+
+    return;
+  }
+
+
+  setReels(
+    "REPLAY",
+    "7",
+    "BAR"
+  );
+
+
+  message(
+    "CZ中……<br>" +
+    "残り " +
+    remainingGames +
+    "G"
+  );
+
+
+  if (remainingGames <= 0) {
+
+    state = "normal";
+
+
+    setState(
+      "通常時",
+      "小役を消化しながらボーナスを抽選"
+    );
+
+
+    message(
+      "CZ終了<br>" +
+      "通常時へ"
+    );
+
+
+    addHistory(
+      "CZ失敗"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   無限リプレイ確変
+========================= */
+
+function infiniteReplayGame() {
+
+  const r = Math.random();
+
+
+  /*
+    Void
+  */
+
+  if (r < 0.04) {
+
+    state = "void";
+
+    remainingGames = 100;
+
+
+    setState(
+      "Voidボーナス",
+      "100G"
+    );
+
+
+    setReels(
+      "VOID",
+      "VOID",
+      "VOID"
+    );
+
+
+    message(
+      "👑 <b>VOID BONUS！</b>"
+    );
+
 
     addHistory(
       "無限リプレイ確変 → Void"
     );
 
+
     return;
   }
+
+
+  /*
+    通常ボーナス
+  */
 
   if (r < 0.08) {
 
@@ -750,33 +1225,118 @@ function infiniteReplayGame() {
     return;
   }
 
+
+  /*
+    リプレイ
+  */
+
   setReels(
     "REPLAY",
     "REPLAY",
     "REPLAY"
   );
 
+
   message(
-    "リプレイ確変（無限）\n" +
+    "♾️ リプレイ確変（無限）<br>" +
     "終了条件なし"
   );
+
 
   addHistory(
     "無限リプレイ確変：リプレイ"
   );
+
 }
 
 
-/* リール */
+/* =========================
+   ボーナス表示
+========================= */
+
+function showBonusInfo() {
+
+  const box =
+    document.getElementById(
+      "bonusInfo"
+    );
+
+  box.style.display = "block";
+
+  updateBonusInfo();
+
+}
+
+
+/* =========================
+   ボーナス情報更新
+========================= */
+
+function updateBonusInfo() {
+
+  document.getElementById(
+    "bonusTitle"
+  ).textContent =
+    bonusName + " BONUS";
+
+
+  document.getElementById(
+    "bonusCount"
+  ).textContent =
+    "100枚 × " +
+    bonusRemaining +
+    "回";
+
+
+  document.getElementById(
+    "bonusMedals"
+  ).textContent =
+    "獲得枚数：" +
+    bonusMedals +
+    "枚";
+
+
+}
+
+
+/* =========================
+   ボーナス表示を隠す
+========================= */
+
+function hideBonusInfo() {
+
+  document.getElementById(
+    "bonusInfo"
+  ).style.display = "none";
+
+}
+
+
+/* =========================
+   リール
+========================= */
+
 function setReels(a, b, c) {
 
-  document.getElementById("reel1").textContent = a;
-  document.getElementById("reel2").textContent = b;
-  document.getElementById("reel3").textContent = c;
+  document.getElementById(
+    "reel1"
+  ).textContent = a;
+
+  document.getElementById(
+    "reel2"
+  ).textContent = b;
+
+  document.getElementById(
+    "reel3"
+  ).textContent = c;
+
 }
 
 
-/* ランダム図柄 */
+/* =========================
+   ランダム図柄
+========================= */
+
 function randomSymbol() {
 
   const symbols = [
@@ -787,59 +1347,101 @@ function randomSymbol() {
     "REPLAY"
   ];
 
+
   return symbols[
-    Math.floor(Math.random() * symbols.length)
+    Math.floor(
+      Math.random() *
+      symbols.length
+    )
   ];
+
 }
 
 
-/* 状態変更 */
+/* =========================
+   状態変更
+========================= */
+
 function setState(name, info) {
 
   document.getElementById(
     "stateName"
   ).textContent = name;
 
+
   document.getElementById(
     "stateInfo"
   ).textContent = info;
+
 }
 
 
-/* メッセージ */
+/* =========================
+   メッセージ
+========================= */
+
 function message(text) {
 
   document.getElementById(
     "message"
-  ).innerHTML = text.replace(/\n/g, "<br>");
+  ).innerHTML = text;
+
 }
 
 
-/* 履歴 */
+/* =========================
+   履歴
+========================= */
+
 function addHistory(text) {
 
   const history =
-    document.getElementById("history");
+    document.getElementById(
+      "history"
+    );
+
 
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   item.textContent = text;
 
+
   history.prepend(item);
+
 }
 
 
-/* リセット */
+/* =========================
+   リセット
+========================= */
+
 function resetGame() {
 
   state = "normal";
+
+  bonusName = "";
+
+  bonusRemaining = 0;
+
+  bonusTotal = 0;
+
+  bonusMedals = 0;
+
   remainingGames = 0;
+
+
+  hideBonusInfo();
+
 
   setState(
     "通常時",
     "小役を消化しながらボーナスを抽選"
   );
+
 
   setReels(
     "7",
@@ -847,14 +1449,17 @@ function resetGame() {
     "7"
   );
 
+
   message(
     "STARTを押してゲーム開始"
   );
+
 
   document.getElementById(
     "history"
   ).innerHTML =
     "<div>ゲームリセット</div>";
+
 }
 
 </script>
