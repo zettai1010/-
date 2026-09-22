@@ -8,18 +8,30 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
   min-height:100vh;
-  background:radial-gradient(circle at center,#252525 0%,#101010 50%,#050505 100%);
+  background:
+    radial-gradient(circle at center,#252525 0%,#101010 50%,#050505 100%);
   color:white;
   font-family:Arial,sans-serif;
 }
 
-button{cursor:pointer}
-.hidden{display:none!important}
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================
+   LOGIN
+========================= */
 
 #loginScreen{
   min-height:100vh;
@@ -70,12 +82,18 @@ button{cursor:pointer}
   font-size:17px;
 }
 
-.login-box button:hover{background:#ffc928}
+.login-box button:hover{
+  background:#ffc928;
+}
 
 #loginMessage{
   margin-top:15px;
   color:#ff7777;
 }
+
+/* =========================
+   HUB
+========================= */
 
 #hubScreen{
   min-height:100vh;
@@ -132,7 +150,9 @@ button{cursor:pointer}
   box-shadow:0 0 20px rgba(0,0,0,.5);
 }
 
-.game-card h2{color:#ffd84d}
+.game-card h2{
+  color:#ffd84d;
+}
 
 .game-card button{
   width:100%;
@@ -190,6 +210,10 @@ button{cursor:pointer}
   word-break:break-all;
 }
 
+/* =========================
+   GAME
+========================= */
+
 #gameScreen{
   min-height:100vh;
   padding:20px;
@@ -243,7 +267,9 @@ button{cursor:pointer}
   background:linear-gradient(145deg,#292929,#101010);
   border:8px solid #555;
   border-radius:18px;
-  box-shadow:inset 0 0 20px #000,0 0 25px rgba(0,0,0,.8);
+  box-shadow:
+    inset 0 0 20px #000,
+    0 0 25px rgba(0,0,0,.8);
 }
 
 .reels{
@@ -302,7 +328,9 @@ button{cursor:pointer}
   box-shadow:0 0 20px rgba(229,169,0,.3);
 }
 
-.play-btn:hover{background:#ffc928}
+.play-btn:hover{
+  background:#ffc928;
+}
 
 .play-btn:disabled{
   background:#555;
@@ -356,7 +384,9 @@ button{cursor:pointer}
   padding:15px;
 }
 
-.history h3{margin-top:0}
+.history h3{
+  margin-top:0;
+}
 
 .history-list{
   max-height:220px;
@@ -369,10 +399,21 @@ button{cursor:pointer}
   font-size:14px;
 }
 
+/* =========================
+   BONUS EFFECT
+========================= */
+
 #effectOverlay{
   position:fixed;
   inset:0;
-  background:radial-gradient(circle,#fff 0%,#ffd84d 20%,#ff5a00 45%,#000 80%);
+  background:
+    radial-gradient(
+      circle,
+      #fff 0%,
+      #ffd84d 20%,
+      #ff5a00 45%,
+      #000 80%
+    );
   display:flex;
   justify-content:center;
   align-items:center;
@@ -382,33 +423,47 @@ button{cursor:pointer}
   transition:opacity .15s;
 }
 
-#effectOverlay.show{opacity:1}
+#effectOverlay.show{
+  opacity:1;
+}
 
 .effect-text{
   font-size:70px;
   font-weight:bold;
   color:white;
-  text-shadow:0 0 10px #fff,0 0 30px #ff0,0 0 60px #f00;
+  text-shadow:
+    0 0 10px #fff,
+    0 0 30px #ff0,
+    0 0 60px #f00;
 }
 
 @media(max-width:600px){
+
   .reel{
     height:110px;
     font-size:40px;
   }
 
-  .reel-machine{padding:15px}
+  .reel-machine{
+    padding:15px;
+  }
 
-  .effect-text{font-size:45px}
+  .effect-text{
+    font-size:45px;
+  }
 
-  .login-box{padding:20px}
+  .login-box{
+    padding:20px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div id="loginScreen">
 
@@ -444,7 +499,9 @@ button{cursor:pointer}
 </div>
 
 
-<!-- HUB -->
+<!-- =========================
+     HUB
+========================= -->
 
 <div id="hubScreen" class="hidden">
 
@@ -549,7 +606,9 @@ button{cursor:pointer}
 </div>
 
 
-<!-- GAME -->
+<!-- =========================
+     GAME
+========================= -->
 
 <div id="gameScreen" class="hidden">
 
@@ -679,7 +738,9 @@ button{cursor:pointer}
 </div>
 
 
-<!-- EFFECT -->
+<!-- =========================
+     BONUS EFFECT
+========================= -->
 
 <div id="effectOverlay">
 
@@ -733,7 +794,7 @@ const BET = 3;
 
 /* =====================================================
    SETTINGS
-   ※ 画面には表示しない
+   画面には表示しない
 ===================================================== */
 
 const CURRENT_SETTING = 1;
@@ -828,7 +889,9 @@ function validId(id){
 
 async function ensureProfile(){
 
-  if(!currentUser) return;
+  if(!currentUser){
+    return;
+  }
 
   const {
     data,
@@ -870,9 +933,7 @@ async function ensureProfile(){
 
     }
 
-
     medals = 1000;
-
     isAdmin = false;
 
     return;
@@ -895,8 +956,9 @@ async function ensureProfile(){
 
 async function loadProfile(){
 
-  if(!currentUser) return;
-
+  if(!currentUser){
+    return;
+  }
 
   const {
     data,
@@ -936,8 +998,9 @@ async function loadProfile(){
 
 function saveCoins(){
 
-  if(!currentUser) return;
-
+  if(!currentUser){
+    return;
+  }
 
   const value =
     Number(medals);
@@ -1012,15 +1075,19 @@ function updateCoinDisplays(){
 async function loginUser(){
 
   const id =
-    document.getElementById("loginId")
-      .value.trim();
+    document
+      .getElementById("loginId")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("loginPassword")
+    document
+      .getElementById("loginPassword")
       .value;
 
   const message =
-    document.getElementById("loginMessage");
+    document
+      .getElementById("loginMessage");
 
 
   if(!validId(id)){
@@ -1043,6 +1110,10 @@ async function loginUser(){
   }
 
 
+  message.textContent =
+    "ログイン中...";
+
+
   const {
     data,
     error
@@ -1058,6 +1129,8 @@ async function loginUser(){
 
 
   if(error){
+
+    console.error(error);
 
     message.textContent =
       "ログインできません：" +
@@ -1088,15 +1161,19 @@ async function loginUser(){
 async function registerUser(){
 
   const id =
-    document.getElementById("loginId")
-      .value.trim();
+    document
+      .getElementById("loginId")
+      .value
+      .trim();
 
   const password =
-    document.getElementById("loginPassword")
+    document
+      .getElementById("loginPassword")
       .value;
 
   const message =
-    document.getElementById("loginMessage");
+    document
+      .getElementById("loginMessage");
 
 
   if(!validId(id)){
@@ -1119,6 +1196,10 @@ async function registerUser(){
   }
 
 
+  message.textContent =
+    "登録中...";
+
+
   const {
     data,
     error
@@ -1134,6 +1215,8 @@ async function registerUser(){
 
 
   if(error){
+
+    console.error(error);
 
     message.textContent =
       "登録エラー：" +
@@ -1410,6 +1493,8 @@ async function approveCoinRequest(){
       "承認エラー：" +
       error.message;
 
+    console.error(error);
+
     return;
 
   }
@@ -1546,16 +1631,17 @@ async function normalGame(){
 function updateReels(){
 
   const symbols = [
-    "7",
     "BAR",
     "🍒",
     "🔔",
     "🍋",
-    "★"
+    "★",
+    "7"
   ];
 
 
-  document.getElementById("reel1")
+  document
+    .getElementById("reel1")
     .textContent =
       symbols[
         Math.floor(
@@ -1565,7 +1651,8 @@ function updateReels(){
       ];
 
 
-  document.getElementById("reel2")
+  document
+    .getElementById("reel2")
     .textContent =
       symbols[
         Math.floor(
@@ -1575,7 +1662,8 @@ function updateReels(){
       ];
 
 
-  document.getElementById("reel3")
+  document
+    .getElementById("reel3")
     .textContent =
       symbols[
         Math.floor(
@@ -1776,7 +1864,8 @@ function finishBonus(){
 
 /* =====================================================
    REPLAY
-   ★ ここではコインを使わない
+   ★ コインを消費しない
+   ★ 通常時と同じ確率
 ===================================================== */
 
 async function replayGame(){
@@ -2098,7 +2187,9 @@ function updatePlayButton(){
     );
 
 
-  if(!button) return;
+  if(!button){
+    return;
+  }
 
 
   if(state === "normal"){
@@ -2132,7 +2223,8 @@ function updatePlayButton(){
     button.textContent =
       "REPLAY";
 
-    // ★ REPLAYは無料
+    /* REPLAYは無料 */
+
     button.disabled =
       false;
 
