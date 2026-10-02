@@ -4,217 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>P 東京喰種 -極・狂気LT仕様-</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&family=Noto+Sans+JP:wght@700;900&display=swap');
-    body {
-      font-family: 'Noto Sans JP', sans-serif;
-      background: #050508;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-    }
-    .neon-text-red {
-      text-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033, 0 0 35px #990000;
-    }
-    .neon-text-gold {
-      text-shadow: 0 0 10px #ffd700, 0 0 25px #ffaa00, 0 0 40px #ff6600;
-    }
-    .kakugan-eye {
-      box-shadow: 0 0 25px #ff0033, inset 0 0 15px #000;
-      animation: pulse-eye 2s infinite ease-in-out;
-    }
-    @keyframes pulse-eye {
-      0%, 100% { transform: scale(1); filter: brightness(1); }
-      50% { transform: scale(1.06); filter: brightness(1.4); }
-    }
-    .push-btn {
-      background: radial-gradient(circle at 35% 30%, #ff4d4d, #cc0000 60%, #550000 100%);
-      box-shadow: 0 10px 0 #330000, 0 12px 25px rgba(255, 0, 50, 0.6);
-      transition: all 0.08s ease;
-    }
-    .push-btn:active, .push-btn.pressed {
-      transform: translateY(7px);
-      box-shadow: 0 3px 0 #330000, 0 5px 15px rgba(255, 0, 50, 0.9);
-    }
-    .spin-btn {
-      background: linear-gradient(180deg, #ff1a40, #990018);
-      box-shadow: 0 6px 0 #4a000a, 0 8px 20px rgba(255, 0, 50, 0.5);
-    }
-    .spin-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 #4a000a;
-    }
-  </style>
-</head>
-<body class="min-h-screen text-white flex flex-col items-center justify-start p-2 sm:p-4">
-
-  <!-- ヘッダー管理バー -->
-  <header class="w-full max-w-2xl bg-neutral-900/90 border border-neutral-800 rounded-xl px-4 py-2.5 mb-3 flex flex-wrap items-center justify-between shadow-xl gap-2 text-xs sm:text-sm">
-    <div class="flex items-center gap-2">
-      <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
-      <h1 class="font-black text-red-500 tracking-wider">P 東京喰種 -極・狂気LT仕様-</h1>
-    </div>
-    <div class="flex items-center gap-2">
-      <span class="text-neutral-400 font-bold">設定選択:</span>
-      <select id="setting-select" class="bg-black text-yellow-400 border border-neutral-700 rounded px-2 py-1 font-mono font-bold focus:outline-none focus:border-red-500">
-        <option value="1079">設定1 (1/1079)</option>
-        <option value="1056">設定2 (1/1056)</option>
-        <option value="1022">設定3 (1/1022)</option>
-        <option value="999">設定4 (1/999)</option>
-        <option value="961">設定5 (1/961)</option>
-        <option value="924">設定6 (1/924)</option>
-        <option value="873">設定7 (1/873)</option>
-      </select>
-    </div>
-  </header>
-
-  <!-- パチンコ筐体フレーム -->
-  <div class="w-full max-w-2xl bg-gradient-to-b from-neutral-900 via-neutral-950 to-black border-2 border-red-950/80 rounded-3xl p-3 sm:p-5 shadow-[0_0_50px_rgba(255,0,50,0.2)] flex flex-col items-center relative">
-    
-    <!-- 筐体上部：赫眼ランプ & 状態インジケータ -->
-    <div class="w-full flex items-center justify-between px-3 py-1 mb-2 border-b border-neutral-800/80">
-      <div class="flex items-center gap-2">
-        <div id="kakugan-eye" class="w-7 h-7 rounded-full bg-black border-2 border-red-600 kakugan-eye flex items-center justify-center">
-          <div class="w-2.5 h-2.5 rounded-full bg-red-600"></div>
-        </div>
-        <span id="machine-mode-badge" class="px-2.5 py-0.5 rounded-full bg-neutral-800 text-neutral-300 font-black text-xs tracking-wider border border-neutral-700">通常モード (玉消費)</span>
-      </div>
-      <div class="flex items-center gap-4 text-xs font-mono">
-        <div>回転数: <span id="spin-counter" class="text-yellow-400 font-bold text-sm">0</span>G</div>
-        <div>所持玉: <span id="balls-display" class="text-green-400 font-bold text-base">2000</span>発</div>
-      </div>
-    </div>
-
-    <!-- メイン特大液晶画面 -->
-    <div id="lcd-screen" class="w-full aspect-[16/10] bg-gradient-to-b from-black via-zinc-950 to-neutral-900 rounded-2xl border-2 border-neutral-800 relative overflow-hidden flex flex-col items-center justify-between p-4 shadow-inner">
-      
-      <!-- 液晶上部テロップ -->
-      <div class="w-full flex justify-between items-center z-10">
-        <div id="rush-status-text" class="text-xs font-black tracking-widest text-neutral-500 uppercase">NORMAL GAME</div>
-        <div id="st-remaining-counter" class="hidden text-sm font-black text-yellow-400 font-mono neon-text-gold">ST残り: <span id="st-count" class="text-lg">0</span>回</div>
-      </div>
-
-      <!-- 中央図柄変動エリア -->
-      <div class="relative w-full flex items-center justify-center gap-3 sm:gap-6 my-auto z-10">
-        <!-- 左図柄 -->
-        <div class="w-20 h-28 sm:w-28 sm:h-36 bg-black/80 border-2 border-neutral-700 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden">
-          <div class="absolute inset-0 bg-red-950/20 pointer-events-none"></div>
-          <span id="digit-left" class="text-5xl sm:text-7xl font-black font-mono text-white transition-transform">7</span>
-        </div>
-        <!-- 中図柄 -->
-        <div class="w-20 h-28 sm:w-28 sm:h-36 bg-black/80 border-2 border-neutral-700 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden">
-          <div class="absolute inset-0 bg-red-950/20 pointer-events-none"></div>
-          <span id="digit-center" class="text-5xl sm:text-7xl font-black font-mono text-white transition-transform">7</span>
-        </div>
-        <!-- 右図柄 -->
-        <div class="w-20 h-28 sm:w-28 sm:h-36 bg-black/80 border-2 border-neutral-700 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden">
-          <div class="absolute inset-0 bg-red-950/20 pointer-events-none"></div>
-          <span id="digit-right" class="text-5xl sm:text-7xl font-black font-mono text-white transition-transform">7</span>
-        </div>
-      </div>
-
-      <!-- 液晶下部メッセージ -->
-      <div class="w-full text-center z-10">
-        <p id="lcd-message" class="text-sm sm:text-base font-black text-neutral-400 tracking-wider">SPINボタンを押して大当りを狙え！</p>
-      </div>
-
-      <!-- オーバーレイ演出レイヤー（リーチ・バトル・LTチャレンジ） -->
-      <div id="lcd-overlay" class="absolute inset-0 bg-black/90 z-20 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4 text-center">
-        <h2 id="overlay-title" class="text-3xl sm:text-5xl font-black neon-text-red mb-3 tracking-widest">REACH</h2>
-        <p id="overlay-desc" class="text-sm sm:text-lg text-neutral-200 mb-6 font-bold">ヤモリを撃破せよ！</p>
-        <div id="overlay-push-indicator" class="hidden flex flex-col items-center animate-bounce">
-          <span class="text-xs text-yellow-300 font-black mb-1">【 PUSHを押せ!! 】</span>
-          <div class="w-12 h-12 rounded-full bg-red-600 border-2 border-white flex items-center justify-center shadow-[0_0_20px_#ff0000]">
-            <span class="text-white font-black text-xs">PUSH</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 筐体下部：大当り時・LT突入PUSHボタン ＆ 操作コンソール -->
-    <div class="w-full mt-4 flex flex-col items-center gap-3">
-      
-      <!-- 巨大PUSHボタン -->
-      <button id="main-push-btn" class="push-btn w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-red-400 flex flex-col items-center justify-center cursor-pointer select-none active:scale-95 transition-all">
-        <span class="text-white font-black text-xl sm:text-2xl tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">PUSH</span>
-        <span id="push-btn-sub" class="text-[10px] text-red-200 font-bold tracking-tighter">CHANCE</span>
-      </button>
-
-      <!-- 操作ボタン列 -->
-      <div class="w-full flex items-center justify-center gap-3 mt-1">
-        <!-- 1回転SPINボタン -->
-        <button id="spin-btn" class="spin-btn flex-1 max-w-[200px] py-3.5 rounded-xl font-black text-base sm:text-lg text-white tracking-widest active:scale-95 transition-all">
-          SPIN (15玉)
-        </button>
-        <!-- AUTO SPIN トグル -->
-        <button id="auto-spin-btn" class="px-5 py-3.5 rounded-xl font-black text-sm sm:text-base tracking-wider border-2 border-neutral-700 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 transition-all">
-          AUTO: OFF
-        </button>
-        <!-- 玉チャージ -->
-        <button id="charge-balls-btn" class="px-4 py-3.5 rounded-xl font-bold text-xs sm:text-sm border border-neutral-700 bg-neutral-900 text-neutral-300 hover:text-white transition-all">
-          +1000玉
-        </button>
-      </div>
-
-    </div>
-
-    <!-- 即時検証・デバッグテストバー -->
-    <div class="w-full mt-4 pt-3 border-t border-neutral-800/80 flex flex-wrap items-center justify-center gap-2 text-[11px]">
-      <span class="text-neutral-500 font-bold">検証用:</span>
-      <button id="debug-hit-btn" class="px-2.5 py-1 bg-red-950/80 border border-red-700 text-red-200 rounded font-bold hover:bg-red-900">
-        直撃大当り
-      </button>
-      <button id="debug-lt-btn" class="px-2.5 py-1 bg-amber-950/80 border border-amber-600 text-amber-200 rounded font-bold hover:bg-amber-900">
-        極・覚醒LT直行
-      </button>
-      <button id="debug-skip-btn" class="px-2.5 py-1 bg-neutral-800 border border-neutral-700 text-neutral-300 rounded font-bold hover:bg-neutral-700">
-        高速50回転
-      </button>
-    </div>
-
-  </div>
-
-  <script>
-    // --- Web Audio サウンドシンセサイザー ---
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    function playBeep(freq, type = 'sine', duration = 0.1, vol = 0.15) {
-      if (ctx.state === 'suspended') ctx.resume();
-      try {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        gain.gain.setValueAtTime(vol, ctx.currentTime);
-        gain試作品（プロトタイプ）ですね！
-
-先ほど作成した**「保留なし・SPINで回す・大当り後にLT（ラッキートリガー）抽選・当り中無料消化」**の完成版HTMLコードをそのまま掲載します。
-
-これをPCやスマホのブラウザで開けば、すぐに実機のように遊ぶことができます。
-
-### 遊び方・動作確認の手順
-1. 下のコードをコピーします。
-2. メモ帳などのテキストエディタに貼り付け、名前を `index.html` として保存します。
-3. 保存した `index.html` をダブルクリック（ChromeやEdgeなどのブラウザで開く）するだけで即プレイ可能です。
-   - 最初はブラウザの音声制限があるため、**画面のどこかをクリックするかSPINを押すことで本格SE（サウンド）が鳴り始めます**。
-   - 下部の「即大当り」や「即LT発動」ボタンを押せば、演出フローをすぐにテスト確認できます。
-
-```html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>P 覚醒の喰種 -超狂気LT試作機-</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       user-select: none;
+      -webkit-user-select: none;
     }
     body {
-      background: radial-gradient(circle at center, #1a0003 0%, #050505 100%);
+      background: radial-gradient(circle at center, #1b0004 0%, #050505 100%);
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
       min-height: 100vh;
@@ -222,17 +21,17 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10px;
+      padding: 12px;
       overflow-x: hidden;
     }
     .cabinet {
       width: 100%;
-      max-width: 480px;
-      background: linear-gradient(180deg, #2b0408 0%, #111 20%, #190306 80%, #2b0408 100%);
+      max-width: 460px;
+      background: linear-gradient(180deg, #2b0409 0%, #111113 25%, #160205 85%, #2b0409 100%);
       border: 3px solid #ff1a40;
-      box-shadow: 0 0 35px rgba(255, 0, 50, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 35px rgba(255, 0, 50, 0.45), inset 0 0 20px rgba(0, 0, 0, 0.9);
       border-radius: 20px;
-      padding: 14px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -243,20 +42,21 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.65);
       border: 1px solid #4a0d16;
       border-radius: 10px;
-      padding: 6px 12px;
+      padding: 8px 12px;
       font-size: 13px;
     }
     .badge-setting select {
-      background: #200;
+      background: #250207;
       color: #ff4d6d;
       border: 1px solid #ff1a40;
-      padding: 2px 6px;
+      padding: 3px 6px;
       border-radius: 4px;
       font-weight: bold;
       outline: none;
+      font-size: 12px;
     }
     .counter-display {
       display: flex;
@@ -271,10 +71,10 @@
 
     /* メイン液晶画面 */
     .lcd-screen {
-      height: 320px;
+      height: 310px;
       background: radial-gradient(circle at center, #26050b 0%, #000000 95%);
       border: 2px solid #ff2a4b;
-      border-radius: 12px;
+      border-radius: 14px;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -282,7 +82,7 @@
       justify-content: space-between;
       padding: 12px;
       overflow: hidden;
-      box-shadow: inset 0 0 25px rgba(255, 0, 40, 0.3);
+      box-shadow: inset 0 0 25px rgba(255, 0, 40, 0.35);
     }
     .status-banner {
       font-size: 13px;
@@ -297,8 +97,8 @@
     .mode-lt {
       border-color: #ffd700 !important;
       color: #ffd700 !important;
-      background: rgba(40, 30, 0, 0.8) !important;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      background: rgba(40, 30, 0, 0.85) !important;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
       animation: pulse 1s infinite alternate;
     }
 
@@ -339,7 +139,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 900;
       text-align: center;
       width: 100%;
@@ -373,14 +173,14 @@
       margin: 4px 0;
     }
     .giant-push-btn {
-      width: 130px;
-      height: 130px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #ff4d6d, #b3001e 60%, #4a000a);
       border: 4px solid #ff99aa;
       box-shadow: 0 8px 0 #59000d, 0 12px 25px rgba(255, 0, 40, 0.6);
       color: #fff;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
       cursor: pointer;
       display: flex;
@@ -388,7 +188,7 @@
       align-items: center;
       justify-content: center;
       outline: none;
-      transition: all 0.05s ease;
+      transition: all 0.06s ease;
       text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     }
     .giant-push-btn:active {
@@ -435,7 +235,7 @@
       background: linear-gradient(180deg, #d90429 0%, #7a0014 100%);
       border-color: #ff4d6d;
       box-shadow: 0 4px 12px rgba(217, 4, 41, 0.4);
-      font-size: 18px;
+      font-size: 17px;
     }
     .btn-auto.active {
       background: linear-gradient(180deg, #00b4d8 0%, #0077b6 100%);
@@ -470,7 +270,7 @@
 
     @keyframes pulse {
       from { transform: scale(1); }
-      to { transform: scale(1.04); }
+      to { transform: scale(1.03); }
     }
     @keyframes digitShake {
       0% { transform: translateY(-2px); }
@@ -599,7 +399,6 @@
     const STATE_JUDGE = 'JUDGE';       // LTチャレンジ
     const STATE_RUSH_NORMAL = 'RUSH';  // 通常RUSH (ST50回, 1/39.9)
     const STATE_RUSH_LT = 'LT';        // 極・覚醒LT (ST140回, 1/29.9)
-    const STATE_BONUS = 'BONUS';
 
     let currentMode = STATE_NORMAL;
     let balls = 1500;
