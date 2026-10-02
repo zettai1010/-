@@ -1,2388 +1,1003 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CASINO [Re]</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>スマスロ L 東京喰種 (SMASLOT TOKYO GHOUL)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Zen+Old+Mincho:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: 'Zen Old Mincho', serif;
+      background: radial-gradient(circle at 50% 15%, #180306 0%, #090204 55%, #000000 100%);
+      color: #e2e8f0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      overflow-x: hidden;
+    }
+    .font-digital {
+      font-family: 'Orbitron', monospace;
+    }
 
-<style>
-*{
-  box-sizing:border-box;
-}
+    /* Cabinet Bezel and Neon Glows */
+    .cabinet-shadow {
+      box-shadow: 0 0 60px rgba(225, 29, 72, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.9);
+    }
+    .text-crimson-glow {
+      text-shadow: 0 0 10px #e11d48, 0 0 25px #be123c, 0 0 45px #881337;
+    }
+    .text-gold-glow {
+      text-shadow: 0 0 10px #fbbf24, 0 0 20px #d97706;
+    }
+    .text-purple-glow {
+      text-shadow: 0 0 12px #a855f7, 0 0 25px #7e22ce;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at center,#252525 0%,#101010 50%,#050505 100%);
-  color:white;
-  font-family:Arial,sans-serif;
-}
+    /* PUSH Button styling */
+    .slot-push-btn {
+      background: radial-gradient(circle at 50% 30%, #f43f5e 0%, #9f1239 60%, #4c0519 100%);
+      box-shadow: 0 6px 0 #28020d, 0 12px 25px rgba(225, 29, 72, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+    .slot-push-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #28020d, 0 4px 10px rgba(225, 29, 72, 0.7);
+    }
+    .slot-push-btn.btn-glow {
+      animation: pushRainbowPulse 0.4s infinite alternate;
+    }
+    @keyframes pushRainbowPulse {
+      0% { box-shadow: 0 6px 0 #28020d, 0 0 20px #e11d48; }
+      100% { box-shadow: 0 6px 0 #28020d, 0 0 45px #38bdf8, 0 0 60px #f43f5e; }
+    }
 
-button{
-  cursor:pointer;
-}
+    /* Reel Strip Style */
+    .reel-window {
+      background: linear-gradient(180deg, #050507 0%, #15151c 20%, #1c1c24 50%, #15151c 80%, #050507 100%);
+      box-shadow: inset 0 10px 25px rgba(0,0,0,0.95), inset 0 -10px 25px rgba(0,0,0,0.95);
+    }
+    .reel-symbol-cell {
+      height: 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.04s linear;
+    }
 
-.hidden{
-  display:none!important;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-#loginScreen{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-
-.login-box{
-  width:420px;
-  max-width:100%;
-  background:#151515;
-  border:2px solid #555;
-  border-radius:16px;
-  padding:30px;
-  box-shadow:0 0 30px rgba(0,0,0,.8);
-  text-align:center;
-}
-
-.login-box h1{
-  margin-top:0;
-  font-size:38px;
-  color:#ffd84d;
-  text-shadow:0 0 15px #ffb300;
-}
-
-.login-box input{
-  width:100%;
-  padding:14px;
-  margin:8px 0;
-  border-radius:8px;
-  border:1px solid #555;
-  background:#080808;
-  color:white;
-  font-size:16px;
-}
-
-.login-box button{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:0;
-  border-radius:8px;
-  background:#e5a900;
-  color:#111;
-  font-weight:bold;
-  font-size:17px;
-}
-
-.login-box button:hover{
-  background:#ffc928;
-}
-
-#loginMessage{
-  margin-top:15px;
-  color:#ff7777;
-}
-
-/* =========================
-   HUB
-========================= */
-
-#hubScreen{
-  min-height:100vh;
-  padding:25px;
-}
-
-.header{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
-}
-
-.header h1{
-  margin:0;
-  color:#ffd84d;
-  text-shadow:0 0 15px #ffb300;
-}
-
-.coin-display{
-  font-size:20px;
-  font-weight:bold;
-  background:#161616;
-  border:1px solid #555;
-  border-radius:10px;
-  padding:10px 18px;
-}
-
-.logout-btn{
-  padding:10px 15px;
-  border:0;
-  border-radius:8px;
-  background:#444;
-  color:white;
-}
-
-.games{
-  max-width:1100px;
-  margin:40px auto;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-}
-
-.game-card{
-  background:#151515;
-  border:2px solid #555;
-  border-radius:16px;
-  padding:25px;
-  text-align:center;
-  box-shadow:0 0 20px rgba(0,0,0,.5);
-}
-
-.game-card h2{
-  color:#ffd84d;
-}
-
-.game-card button{
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:9px;
-  background:#e5a900;
-  color:#111;
-  font-weight:bold;
-  font-size:17px;
-}
-
-.coin-panel,
-.admin-panel{
-  max-width:700px;
-  margin:25px auto;
-  padding:22px;
-  background:#151515;
-  border:1px solid #555;
-  border-radius:14px;
-}
-
-.coin-panel h2,
-.admin-panel h2{
-  margin-top:0;
-  color:#ffd84d;
-}
-
-.coin-panel input,
-.admin-panel input{
-  width:100%;
-  padding:13px;
-  margin:8px 0;
-  background:#080808;
-  color:white;
-  border:1px solid #555;
-  border-radius:8px;
-}
-
-.coin-panel button,
-.admin-panel button{
-  padding:12px 18px;
-  border:0;
-  border-radius:8px;
-  background:#e5a900;
-  color:#111;
-  font-weight:bold;
-}
-
-.request-result{
-  margin-top:15px;
-  padding:12px;
-  background:#080808;
-  border-radius:8px;
-  word-break:break-all;
-}
-
-/* =========================
-   GAME
-========================= */
-
-#gameScreen{
-  min-height:100vh;
-  padding:20px;
-}
-
-.game-wrap{
-  max-width:900px;
-  margin:auto;
-}
-
-.game-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
-}
-
-.game-top h1{
-  color:#ffd84d;
-  text-shadow:0 0 15px #ffb300;
-}
-
-.back-btn{
-  padding:10px 18px;
-  background:#444;
-  color:white;
-  border:0;
-  border-radius:8px;
-}
-
-.status-bar{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
-  margin:15px 0;
-}
-
-.status-item{
-  background:#151515;
-  border:1px solid #555;
-  border-radius:8px;
-  padding:10px 18px;
-}
-
-.reel-machine{
-  margin:20px auto;
-  max-width:760px;
-  padding:30px;
-  background:linear-gradient(145deg,#292929,#101010);
-  border:8px solid #555;
-  border-radius:18px;
-  box-shadow:
-    inset 0 0 20px #000,
-    0 0 25px rgba(0,0,0,.8);
-}
-
-.reels{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-
-.reel{
-  height:150px;
-  background:#f5f5f5;
-  color:#111;
-  border:5px solid #888;
-  border-radius:12px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:55px;
-  font-weight:bold;
-  box-shadow:inset 0 0 15px rgba(0,0,0,.5);
-}
-
-.game-message{
-  min-height:50px;
-  margin:20px auto;
-  max-width:760px;
-  padding:14px;
-  border-radius:10px;
-  background:#111;
-  border:1px solid #555;
-  text-align:center;
-  font-size:20px;
-}
-
-.state-box{
-  max-width:760px;
-  margin:15px auto;
-  text-align:center;
-  font-weight:bold;
-  font-size:22px;
-  color:#ffd84d;
-}
-
-.play-btn{
-  display:block;
-  width:100%;
-  max-width:760px;
-  margin:20px auto;
-  padding:18px;
-  font-size:24px;
-  font-weight:bold;
-  border:0;
-  border-radius:12px;
-  background:#e5a900;
-  color:#111;
-  box-shadow:0 0 20px rgba(229,169,0,.3);
-}
-
-.play-btn:hover{
-  background:#ffc928;
-}
-
-.play-btn:disabled{
-  background:#555;
-  color:#aaa;
-  cursor:not-allowed;
-}
-
-.replay-panel{
-  max-width:760px;
-  margin:15px auto;
-  padding:15px;
-  text-align:center;
-  border:2px solid #36a8ff;
-  border-radius:12px;
-  background:#08131d;
-}
-
-.replay-title{
-  font-size:28px;
-  color:#49b5ff;
-  font-weight:bold;
-}
-
-.replay-info{
-  margin-top:5px;
-  font-size:18px;
-}
-
-.absolute-panel{
-  max-width:760px;
-  margin:15px auto;
-  padding:20px;
-  text-align:center;
-  border:2px solid #ff3030;
-  border-radius:12px;
-  background:#1a0505;
-}
-
-.absolute-title{
-  color:#ff4040;
-  font-size:30px;
-  font-weight:bold;
-}
-
-.history{
-  max-width:760px;
-  margin:25px auto;
-  background:#101010;
-  border:1px solid #444;
-  border-radius:10px;
-  padding:15px;
-}
-
-.history h3{
-  margin-top:0;
-}
-
-.history-list{
-  max-height:220px;
-  overflow-y:auto;
-}
-
-.history-item{
-  padding:7px;
-  border-bottom:1px solid #333;
-  font-size:14px;
-}
-
-/* =========================
-   BONUS EFFECT
-========================= */
-
-#effectOverlay{
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(
-      circle,
-      #fff 0%,
-      #ffd84d 20%,
-      #ff5a00 45%,
-      #000 80%
-    );
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .15s;
-}
-
-#effectOverlay.show{
-  opacity:1;
-}
-
-.effect-text{
-  font-size:70px;
-  font-weight:bold;
-  color:white;
-  text-shadow:
-    0 0 10px #fff,
-    0 0 30px #ff0,
-    0 0 60px #f00;
-}
-
-@media(max-width:600px){
-
-  .reel{
-    height:110px;
-    font-size:40px;
-  }
-
-  .reel-machine{
-    padding:15px;
-  }
-
-  .effect-text{
-    font-size:45px;
-  }
-
-  .login-box{
-    padding:20px;
-  }
-}
-</style>
+    /* Kakugan Eye Gimmick */
+    .kakugan-eye {
+      box-shadow: 0 0 25px rgba(225, 29, 72, 0.5);
+      transition: all 0.3s ease;
+    }
+    .kakugan-active {
+      box-shadow: 0 0 45px #ff0044, inset 0 0 20px #ff0044;
+      animation: kakuganPulse 0.8s infinite alternate;
+    }
+    @keyframes kakuganPulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.04); filter: brightness(1.4) drop-shadow(0 0 15px #ff0033); }
+    }
+  </style>
 </head>
+<body class="min-h-screen flex flex-col justify-between items-center py-2 px-1 sm:px-4">
 
-<body>
-
-<!-- =========================
-     LOGIN
-========================= -->
-
-<div id="loginScreen">
-
-  <div class="login-box">
-
-    <h1>CASINO [Re]</h1>
-
-    <input
-      id="loginId"
-      type="text"
-      placeholder="ID"
-      maxlength="20"
-    >
-
-    <input
-      id="loginPassword"
-      type="password"
-      placeholder="パスワード"
-    >
-
-    <button onclick="loginUser()">
-      ログイン
-    </button>
-
-    <button onclick="registerUser()">
-      新規登録
-    </button>
-
-    <div id="loginMessage"></div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     HUB
-========================= -->
-
-<div id="hubScreen" class="hidden">
-
-  <div class="header">
-
-    <h1>CASINO [Re]</h1>
-
-    <div class="coin-display">
-      🪙 <span id="hubCoins">0</span>
+  <header class="w-full max-w-5xl bg-zinc-950/90 border-b border-rose-950/70 py-2 px-4 z-20 backdrop-blur-md rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-lg">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-800 via-red-950 to-black p-0.5 border border-rose-500/70 flex items-center justify-center shadow-[0_0_15px_#e11d48]">
+        <span class="text-xl font-black text-rose-300">喰</span>
+      </div>
+      <div>
+        <h1 class="font-black text-base sm:text-lg tracking-wider text-rose-500 text-crimson-glow leading-tight">
+          スマスロ L 東京喰種
+        </h1>
+        <p class="text-[10px] font-digital tracking-widest text-zinc-400">SMASLOT TOKYO GHOUL &bull; 純増差枚数管理AT &bull; BITES搭載</p>
+      </div>
     </div>
 
-    <button
-      class="logout-btn"
-      onclick="logoutUser()"
-    >
-      ログアウト
-    </button>
-
-  </div>
-
-
-  <div class="games">
-
-    <div class="game-card">
-
-      <h2>🎰 SLOT [Re]</h2>
-
-      <p>シンプルなスロットゲーム</p>
-
-      <button onclick="openGame()">
-        PLAY
+    <!-- Quick Audio & Coin Recharge -->
+    <div class="flex items-center gap-3">
+      <button onclick="audio.toggleMute()" class="p-2 rounded-xl bg-zinc-900 border border-rose-900/40 text-rose-400 hover:bg-zinc-800 transition">
+        <i data-lucide="volume-2" id="sound-icon" class="w-4 h-4"></i>
       </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- COIN REQUEST -->
-
-  <div
-    id="coinRequestPanel"
-    class="coin-panel"
-  >
-
-    <h2>🪙 コイン追加申請</h2>
-
-    <p>
-      追加したいコイン数を入力してください。
-    </p>
-
-    <input
-      id="requestAmount"
-      type="number"
-      min="1"
-      max="1000000"
-      value="1000"
-    >
-
-    <button onclick="createCoinRequest()">
-      申請する
-    </button>
-
-    <div
-      id="requestResult"
-      class="request-result hidden"
-    ></div>
-
-  </div>
-
-
-  <!-- ADMIN -->
-
-  <div
-    id="adminPanel"
-    class="admin-panel hidden"
-  >
-
-    <h2>👑 管理者パネル</h2>
-
-    <p>
-      申請コードを入力して承認します。
-    </p>
-
-    <input
-      id="requestCodeInput"
-      type="text"
-      placeholder="例：AB12-CD34"
-    >
-
-    <button onclick="approveCoinRequest()">
-      承認する
-    </button>
-
-    <div
-      id="adminResult"
-      class="request-result hidden"
-    ></div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     GAME
-========================= -->
-
-<div id="gameScreen" class="hidden">
-
-  <div class="game-wrap">
-
-    <div class="game-top">
-
-      <h1>🎰 SLOT [Re]</h1>
-
-      <button
-        class="back-btn"
-        onclick="backToHub()"
-      >
-        ← 戻る
+      <button onclick="addMedals(1000)" class="px-3.5 py-1.5 text-xs bg-rose-950 hover:bg-rose-900 border border-rose-600/60 rounded-xl text-rose-200 font-bold transition flex items-center gap-1.5 active:scale-95 shadow-[0_0_15px_rgba(225,29,72,0.3)]">
+        <i data-lucide="circle-dollar-sign" class="w-4 h-4 text-amber-400"></i>
+        <span>メダル+1,000枚</span>
       </button>
-
     </div>
+  </header>
 
+  <main class="w-full max-w-5xl flex-grow py-3 flex flex-col xl:flex-row items-center justify-center gap-5 z-10">
 
-    <div class="status-bar">
-
-      <div class="status-item">
-        🪙 COINS:
-        <span id="gameCoins">0</span>
+    <!-- Pachislot Main Housing Unit -->
+    <div class="relative w-full max-w-[530px] bg-zinc-950 p-4 sm:p-5 rounded-3xl border-4 border-rose-950/80 cabinet-shadow flex flex-col items-center">
+      
+      <!-- Top Machine Data Segment LED -->
+      <div class="w-full flex items-center justify-between px-3 py-1.5 mb-2 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 rounded-xl border border-zinc-800 font-digital text-xs">
+        <div class="flex items-center gap-2">
+          <span id="lcd-mode-badge" class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 text-[10px] font-bold">通常時</span>
+          <span class="text-zinc-500">|</span>
+          <span class="text-zinc-400">G数: <strong id="disp-game-count" class="text-amber-400">0</strong>G</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span>AT回数: <strong id="disp-at-count" class="text-rose-400">0</strong></span>
+          <span>獲得差枚: <strong id="disp-diff-count" class="text-emerald-400">0</strong>枚</span>
+        </div>
       </div>
 
-      <div class="status-item">
-        BET:
-        <span id="betDisplay">3</span>
+      <!-- MAIN LCD MONITOR (Upper Screen) -->
+      <div id="lcd-monitor" class="relative w-full h-[230px] bg-black rounded-2xl border-2 border-rose-900/80 shadow-[inset_0_0_35px_rgba(225,29,72,0.35)] overflow-hidden flex flex-col justify-between p-3 select-none">
+        
+        <!-- Scanlines and blood vignette overlay -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,transparent_40%,rgba(0,0,0,0.85)_100%)] pointer-events-none z-10"></div>
+        <div id="lcd-flash-overlay" class="absolute inset-0 bg-red-600/30 opacity-0 pointer-events-none z-15 transition-opacity duration-150"></div>
+        
+        <!-- LCD Top Stage Banner & Sub-status -->
+        <div class="relative z-20 flex items-center justify-between font-digital text-xs">
+          <div id="lcd-stage-name" class="flex items-center gap-1.5 text-zinc-300 font-bold tracking-wide">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i>
+            <span>第20区 喫茶あんていく</span>
+          </div>
+          <div id="lcd-at-diff-remain" class="text-amber-400 font-bold hidden flex items-center gap-1">
+            <span class="text-[10px] text-zinc-400">残り差枚:</span>
+            <span id="at-diff-val" class="text-base text-gold-glow">150</span>枚
+          </div>
+        </div>
+
+        <!-- LCD Center Interactive Event Cinema -->
+        <div class="relative z-20 flex-grow flex flex-col items-center justify-center text-center px-2">
+          <!-- Main Narrative Action Title -->
+          <div id="lcd-action-title" class="text-xl sm:text-2xl font-black text-zinc-100 tracking-wider transition-all">
+            通常遊技中
+          </div>
+          <!-- Subtitle / Dialogue -->
+          <div id="lcd-dialogue" class="text-xs text-rose-300/90 font-bold mt-1 max-w-[90%] leading-relaxed h-8 flex items-center justify-center">
+            「カネキ君、コーヒーを淹れる練習をしようか」
+          </div>
+
+          <!-- BITES / Confrontation Meter or QTE Prompt -->
+          <div id="lcd-bites-bar" class="w-full max-w-[280px] bg-zinc-900/90 border border-zinc-700 rounded-full h-5 mt-2 px-1 flex items-center justify-between text-[10px] font-digital hidden">
+            <span class="text-zinc-400 pl-1">BITES RANK:</span>
+            <span id="bites-rank-label" class="text-amber-300 font-extrabold pr-1">+50枚 (LV.1)</span>
+          </div>
+        </div>
+
+        <!-- LCD Bottom Navigation / Role Information -->
+        <div class="relative z-20 flex items-center justify-between pt-1 border-t border-zinc-800/80 text-[10px] font-digital">
+          <div id="lcd-nav-prompt" class="text-zinc-400">
+            BETを押してレバーを叩け！
+          </div>
+          <div id="lcd-role-notice" class="text-rose-400 font-bold">
+            --
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full mt-3 flex items-center justify-between gap-3">
+        
+        <!-- 3-Reel Mechanism Container -->
+        <div class="relative flex-grow bg-black p-2.5 rounded-2xl border-2 border-zinc-800 flex justify-between gap-2 shadow-[inset_0_0_25px_rgba(0,0,0,0.9)]">
+          
+          <!-- Payline Guide Indicator -->
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[70px] border-y border-rose-500/30 pointer-events-none z-10 bg-rose-500/[0.04]"></div>
+
+          <!-- REEL 1 (LEFT) -->
+          <div class="relative w-1/3 h-[210px] overflow-hidden rounded-xl reel-window border border-zinc-700">
+            <div id="reel-strip-0" class="flex flex-col">
+              <!-- Dynamically populated 3 cells -->
+            </div>
+          </div>
+
+          <!-- REEL 2 (CENTER) -->
+          <div class="relative w-1/3 h-[210px] overflow-hidden rounded-xl reel-window border border-zinc-700">
+            <div id="reel-strip-1" class="flex flex-col">
+              <!-- Dynamically populated 3 cells -->
+            </div>
+          </div>
+
+          <!-- REEL 3 (RIGHT) -->
+          <div class="relative w-1/3 h-[210px] overflow-hidden rounded-xl reel-window border border-zinc-700">
+            <div id="reel-strip-2" class="flex flex-col">
+              <!-- Dynamically populated 3 cells -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Kakugan Eye Gimmick (Right Pillar) -->
+        <div id="kakugan-unit" class="w-16 h-[225px] rounded-2xl bg-zinc-950 border-2 border-rose-950 flex flex-col items-center justify-between py-2 px-1 kakugan-eye">
+          <div class="text-[9px] font-black text-rose-500 tracking-tighter">赫眼状態</div>
+          
+          <!-- Animated Eye Pupil SVG -->
+          <div id="eye-pupil" class="w-12 h-24 rounded-full bg-black border-2 border-rose-900 flex items-center justify-center relative overflow-hidden transition-all duration-300">
+            <!-- Blood vessels veins in sclera -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#220006_0%,#000000_80%)]"></div>
+            <!-- Iris / Pupil -->
+            <div id="eye-iris" class="w-6 h-6 rounded-full bg-rose-950 border border-rose-700 flex items-center justify-center transition-all duration-300">
+              <div class="w-2.5 h-2.5 rounded-full bg-black"></div>
+            </div>
+          </div>
+
+          <div id="kakugan-indicator" class="text-[10px] font-digital font-black text-zinc-600">OFF</div>
+        </div>
+      </div>
+
+      <div class="w-full mt-3 flex flex-col items-center">
+        
+        <!-- PUSH QTE Button & Navi Hints -->
+        <div class="w-full flex items-center justify-between px-2 mb-2">
+          <div id="push-order-nav" class="font-digital text-xs font-black tracking-widest text-purple-400 hidden">
+            ナビ: <span id="push-order-seq" class="text-white text-base">左 &bull; 中 &bull; 右</span>
+          </div>
+          <div class="mx-auto">
+            <button id="pachislot-push-btn" onclick="handlePushButtonPress()" class="slot-push-btn px-6 py-2 rounded-xl text-white font-black text-xs tracking-widest flex items-center gap-2 border border-rose-400/80 cursor-pointer">
+              <i data-lucide="flame" class="w-4 h-4 text-amber-300"></i>
+              <span>PUSH</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stop Buttons (1, 2, 3) -->
+        <div class="w-full flex items-center justify-between gap-3 px-1">
+          <button id="btn-stop-0" onclick="stopReel(0)" class="w-1/3 py-3.5 rounded-2xl bg-gradient-to-b from-zinc-700 via-zinc-800 to-zinc-950 border-2 border-zinc-600 text-stone-200 font-digital font-black text-lg active:scale-95 shadow-md disabled:opacity-40 disabled:pointer-events-none transition">
+            STOP 1
+          </button>
+          <button id="btn-stop-1" onclick="stopReel(1)" class="w-1/3 py-3.5 rounded-2xl bg-gradient-to-b from-zinc-700 via-zinc-800 to-zinc-950 border-2 border-zinc-600 text-stone-200 font-digital font-black text-lg active:scale-95 shadow-md disabled:opacity-40 disabled:pointer-events-none transition">
+            STOP 2
+          </button>
+          <button id="btn-stop-2" onclick="stopReel(2)" class="w-1/3 py-3.5 rounded-2xl bg-gradient-to-b from-zinc-700 via-zinc-800 to-zinc-950 border-2 border-zinc-600 text-stone-200 font-digital font-black text-lg active:scale-95 shadow-md disabled:opacity-40 disabled:pointer-events-none transition">
+            STOP 3
+          </button>
+        </div>
+
+        <!-- Lever & BET Console -->
+        <div class="w-full mt-3 bg-zinc-900/90 border border-zinc-800 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 font-digital text-sm">
+          <div class="flex items-center gap-4">
+            <div>
+              <span class="text-[10px] text-zinc-400 block">所持メダル (CREDIT)</span>
+              <span id="disp-credit" class="text-2xl font-black text-yellow-400">1000</span>
+              <span class="text-xs text-zinc-500">枚</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-zinc-400 block">払出 (PAY)</span>
+              <span id="disp-payout" class="text-xl font-bold text-emerald-400">0</span>
+              <span class="text-xs text-zinc-500">枚</span>
+            </div>
+          </div>
+
+          <!-- BET & LEVER ON -->
+          <div class="flex items-center gap-2">
+            <button id="btn-bet" onclick="pressBet()" class="px-4 py-3 bg-amber-600 hover:bg-amber-500 border border-amber-400 rounded-xl font-black text-xs text-black active:scale-95 transition shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+              MAX BET (3)
+            </button>
+            <button id="btn-lever" onclick="pressLever()" class="px-6 py-3 bg-gradient-to-r from-rose-700 to-red-600 hover:brightness-110 border border-rose-400 rounded-xl font-black text-sm text-white active:scale-95 transition shadow-[0_0_20px_rgba(225,29,72,0.5)] flex items-center gap-2">
+              <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
+              <span>START LEVER</span>
+            </button>
+          </div>
+        </div>
+
       </div>
 
     </div>
 
+    <div class="w-full xl:w-80 flex flex-col gap-3">
+      
+      <!-- Debug / Showcase Quick Triggers -->
+      <div class="bg-zinc-950/90 border border-rose-950 rounded-2xl p-4 shadow-xl">
+        <h3 class="text-amber-400 font-bold text-sm flex items-center gap-2 mb-2 pb-2 border-b border-zinc-800">
+          <i data-lucide="sliders" class="w-4 h-4"></i>
+          <span>実機テスター・演出検証</span>
+        </h3>
+        <p class="text-[11px] text-zinc-400 mb-3">ワンクリックで各種レア役・特化ゾーン・フリーズを即座に体験できます。</p>
+        
+        <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+          <button onclick="forceRole('STRONG_CHERRY')" class="py-2 px-2.5 rounded-lg bg-rose-950/80 hover:bg-rose-900 border border-rose-600/50 text-rose-200 transition text-center">
+            🍒 強チェリー
+          </button>
+          <button onclick="forceKakuganToggle()" class="py-2 px-2.5 rounded-lg bg-red-950/80 hover:bg-red-900 border border-red-600/50 text-red-200 transition text-center">
+            👁 赫眼モード切替
+          </button>
+          <button onclick="forceCZTrigger()" class="py-2 px-2.5 rounded-lg bg-purple-950/80 hover:bg-purple-900 border border-purple-600/50 text-purple-200 transition text-center">
+            ⚔ CZ「レミニセンス」
+          </button>
+          <button onclick="forceATTrigger()" class="py-2 px-2.5 rounded-lg bg-red-900/90 hover:bg-red-800 border border-red-500 text-white transition text-center shadow-[0_0_10px_#e11d48]">
+            🩸 AT「東京喰種咬」
+          </button>
+          <button onclick="forceBitesTrigger()" class="py-2 px-2.5 rounded-lg bg-amber-950/80 hover:bg-amber-900 border border-amber-600/50 text-amber-200 transition text-center">
+            🔥 特化「BITES」
+          </button>
+          <button onclick="triggerLongFreeze()" class="py-2 px-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-rose-500 text-rose-400 transition text-center col-span-2">
+            💀 1000-7 ロングフリーズ
+          </button>
+        </div>
+      </div>
 
-    <div class="reel-machine">
-
-      <div class="reels">
-
-        <div id="reel1" class="reel">7</div>
-
-        <div id="reel2" class="reel">BAR</div>
-
-        <div id="reel3" class="reel">🍒</div>
-
+      <!-- Machine Specification Overview -->
+      <div class="bg-zinc-950/90 border border-zinc-900 rounded-2xl p-4 shadow-xl text-xs space-y-2 text-zinc-300">
+        <h4 class="font-bold text-rose-400 flex items-center gap-1.5 pb-2 border-b border-zinc-800">
+          <i data-lucide="bookmark" class="w-4 h-4"></i>
+          <span>L東京喰種 スペックのポイント</span>
+        </h4>
+        <div class="flex justify-between">
+          <span class="text-zinc-400">赫眼状態のチェリー確率</span>
+          <span class="font-digital text-rose-400 font-bold">約 1/2.6</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-zinc-400">AT初期差枚数</span>
+          <span class="font-digital text-amber-400 font-bold">150枚以上</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-zinc-400">特化ゾーン「BITES」</span>
+          <span class="font-digital text-emerald-400 font-bold">自力1G昇格ループ</span>
+        </div>
+        <div class="pt-2 text-[11px] text-zinc-400 leading-relaxed">
+          赫眼状態中はチェリーが怒涛の連打！レア役とCZからAT「東京喰種咬」へ突入させ、対決勝利から「BITES」の大量上乗せを目指せ！
+        </div>
       </div>
 
     </div>
 
+  </main>
 
-    <div
-      id="gameMessage"
-      class="game-message"
-    >
-      STARTを押してください
-    </div>
-
-
-    <div
-      id="stateBox"
-      class="state-box"
-    >
-      NORMAL
-    </div>
-
-
-    <!-- REPLAY -->
-
-    <div
-      id="replayPanel"
-      class="replay-panel hidden"
-    >
-
-      <div class="replay-title">
-        🔷 REPLAY
-      </div>
-
-      <div
-        id="replayInfo"
-        class="replay-info"
-      >
-        REPLAY中
-      </div>
-
-    </div>
-
-
-    <!-- ABSOLUTE -->
-
-    <div
-      id="absolutePanel"
-      class="absolute-panel hidden"
-    >
-
-      <div class="absolute-title">
-        ⚡ ABSOLUTE TERRITORY
-      </div>
-
-      <div id="absoluteInfo">
-        SPECIAL GAME
-      </div>
-
-    </div>
-
-
-    <button
-      id="playButton"
-      class="play-btn"
-      onclick="playGame()"
-    >
-      START
-    </button>
-
-
-    <div class="history">
-
-      <h3>📜 HISTORY</h3>
-
-      <div
-        id="historyList"
-        class="history-list"
-      ></div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     BONUS EFFECT
-========================= -->
-
-<div id="effectOverlay">
-
-  <div
-    id="effectText"
-    class="effect-text"
-  >
-    BONUS!!
-  </div>
-
-</div>
-
-
-<script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
-
-const SUPABASE_URL =
-  "https://yazkexvgmdyjeeimmayq.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_87rSIEju76172IK7boCx_g_y_2qPHpe";
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        persistSession:false,
-        autoRefreshToken:false,
-        detectSessionInUrl:false
+  <script>
+    class SlotAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
       }
-    }
-  );
-
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
-let currentUser = null;
-let medals = 0;
-let isAdmin = false;
-let saveQueue = Promise.resolve();
-
-const BET = 3;
-
-
-/* =====================================================
-   SETTINGS
-   画面には表示しない
-===================================================== */
-
-const CURRENT_SETTING = 1;
-
-const BONUS_PROBABILITY = {
-
-  1:1 / 280,
-  2:1 / 265,
-  3:1 / 250,
-  4:1 / 235,
-  5:1 / 210,
-  6:1 / 190,
-  7:1 / 170
-
-};
-
-
-/* =====================================================
-   GAME STATE
-===================================================== */
-
-let state = "normal";
-
-let bonusName = "";
-
-let bonusRemaining = 0;
-
-let replayRemaining = 0;
-
-let absoluteRemaining = 0;
-
-
-/* =====================================================
-   BONUS TYPES
-===================================================== */
-
-const BONUS_TYPES = [
-
-  {
-    name:"レギュラー",
-    rounds:5,
-    payout:10,
-    weight:39.5
-  },
-
-  {
-    name:"BIG",
-    rounds:10,
-    payout:10,
-    weight:25
-  },
-
-  {
-    name:"RBIG",
-    rounds:15,
-    payout:10,
-    weight:15
-  },
-
-  {
-    name:"LBIG",
-    rounds:20,
-    payout:10,
-    weight:10
-  }
-
-];
-
-
-/* =====================================================
-   ID
-===================================================== */
-
-function idToEmail(id){
-
-  return id.toLowerCase() +
-    "@casino-re.local";
-
-}
-
-
-function validId(id){
-
-  return /^[a-zA-Z0-9_-]{3,20}$/.test(id);
-
-}
-
-
-/* =====================================================
-   PROFILE
-===================================================== */
-
-async function ensureProfile(){
-
-  if(!currentUser){
-    return;
-  }
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("id,coins,is_admin")
-      .eq("id",currentUser.id)
-      .maybeSingle();
-
-
-  if(error){
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  if(!data){
-
-    const {
-      error:insertError
-    } =
-      await supabaseClient
-        .from("profiles")
-        .insert({
-          id:currentUser.id,
-          coins:1000,
-          is_admin:false
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        const icon = document.getElementById('sound-icon');
+        if (this.isMuted) {
+          icon.setAttribute('data-lucide', 'volume-x');
+        } else {
+          icon.setAttribute('data-lucide', 'volume-2');
+          this.leverClick();
+        }
+        lucide.createIcons();
+      }
+      leverClick() {
+        if (this.isMuted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(260, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(70, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.08);
+      }
+      reelStop() {
+        if (this.isMuted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.09);
+        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.09);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.09);
+      }
+      payoutChime() {
+        if (this.isMuted) return;
+        this.init();
+        [587, 880].forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.05);
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime + idx * 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.05 + 0.08);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + idx * 0.05);
+          osc.stop(this.ctx.currentTime + idx * 0.05 + 0.08);
         });
-
-
-    if(insertError){
-
-      console.error(insertError);
-
-    }
-
-    medals = 1000;
-    isAdmin = false;
-
-    return;
-
-  }
-
-
-  medals =
-    Number(data.coins || 0);
-
-  isAdmin =
-    data.is_admin === true;
-
-}
-
-
-/* =====================================================
-   LOAD PROFILE
-===================================================== */
-
-async function loadProfile(){
-
-  if(!currentUser){
-    return;
-  }
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("coins,is_admin")
-      .eq("id",currentUser.id)
-      .single();
-
-
-  if(error){
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  medals =
-    Number(data.coins || 0);
-
-  isAdmin =
-    data.is_admin === true;
-
-
-  updateCoinDisplays();
-
-}
-
-
-/* =====================================================
-   SAVE COINS
-===================================================== */
-
-function saveCoins(){
-
-  if(!currentUser){
-    return;
-  }
-
-  const value =
-    Number(medals);
-
-
-  saveQueue =
-    saveQueue.then(async()=>{
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("profiles")
-          .update({
-            coins:value
-          })
-          .eq("id",currentUser.id);
-
-
-      if(error){
-
-        console.error(
-          "コイン保存エラー:",
-          error
-        );
-
       }
-
-    });
-
-}
-
-
-/* =====================================================
-   COIN DISPLAY
-===================================================== */
-
-function updateCoinDisplays(){
-
-  const hubCoins =
-    document.getElementById("hubCoins");
-
-  const gameCoins =
-    document.getElementById("gameCoins");
-
-
-  if(hubCoins){
-
-    hubCoins.textContent =
-      medals.toLocaleString();
-
-  }
-
-
-  if(gameCoins){
-
-    gameCoins.textContent =
-      medals.toLocaleString();
-
-  }
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-async function loginUser(){
-
-  const id =
-    document
-      .getElementById("loginId")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-  const message =
-    document
-      .getElementById("loginMessage");
-
-
-  if(!validId(id)){
-
-    message.textContent =
-      "IDは3～20文字で入力してください";
-
-    return;
-
-  }
-
-
-  if(!password){
-
-    message.textContent =
-      "パスワードを入力してください";
-
-    return;
-
-  }
-
-
-  message.textContent =
-    "ログイン中...";
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth
-      .signInWithPassword({
-
-        email:idToEmail(id),
-
-        password:password
-
-      });
-
-
-  if(error){
-
-    console.error(error);
-
-    message.textContent =
-      "ログインできません：" +
-      error.message;
-
-    return;
-
-  }
-
-
-  currentUser =
-    data.user;
-
-
-  await ensureProfile();
-
-  await loadProfile();
-
-  showHub();
-
-}
-
-
-/* =====================================================
-   REGISTER
-===================================================== */
-
-async function registerUser(){
-
-  const id =
-    document
-      .getElementById("loginId")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-  const message =
-    document
-      .getElementById("loginMessage");
-
-
-  if(!validId(id)){
-
-    message.textContent =
-      "IDは3～20文字で入力してください";
-
-    return;
-
-  }
-
-
-  if(password.length < 6){
-
-    message.textContent =
-      "パスワードは6文字以上にしてください";
-
-    return;
-
-  }
-
-
-  message.textContent =
-    "登録中...";
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth
-      .signUp({
-
-        email:idToEmail(id),
-
-        password:password
-
-      });
-
-
-  if(error){
-
-    console.error(error);
-
-    message.textContent =
-      "登録エラー：" +
-      error.message;
-
-    return;
-
-  }
-
-
-  if(data.user){
-
-    currentUser =
-      data.user;
-
-    await ensureProfile();
-
-    await loadProfile();
-
-    showHub();
-
-  }else{
-
-    message.textContent =
-      "登録しました。ログインしてください。";
-
-  }
-
-}
-
-
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-async function logoutUser(){
-
-  await supabaseClient.auth.signOut();
-
-  currentUser = null;
-
-  medals = 0;
-
-  isAdmin = false;
-
-
-  document
-    .getElementById("hubScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("gameScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("loginScreen")
-    .classList.remove("hidden");
-
-}
-
-
-/* =====================================================
-   SHOW HUB
-===================================================== */
-
-function showHub(){
-
-  document
-    .getElementById("loginScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("gameScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("hubScreen")
-    .classList.remove("hidden");
-
-
-  updateCoinDisplays();
-
-
-  const adminPanel =
-    document.getElementById("adminPanel");
-
-
-  if(isAdmin){
-
-    adminPanel.classList.remove("hidden");
-
-  }else{
-
-    adminPanel.classList.add("hidden");
-
-  }
-
-}
-
-
-/* =====================================================
-   OPEN GAME
-===================================================== */
-
-function openGame(){
-
-  resetGameState();
-
-
-  document
-    .getElementById("hubScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("gameScreen")
-    .classList.remove("hidden");
-
-
-  updateCoinDisplays();
-
-}
-
-
-/* =====================================================
-   BACK HUB
-===================================================== */
-
-function backToHub(){
-
-  resetGameState();
-
-
-  document
-    .getElementById("gameScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("hubScreen")
-    .classList.remove("hidden");
-
-
-  updateCoinDisplays();
-
-}
-
-
-/* =====================================================
-   CREATE COIN REQUEST
-===================================================== */
-
-async function createCoinRequest(){
-
-  const input =
-    document.getElementById("requestAmount");
-
-  const result =
-    document.getElementById("requestResult");
-
-  const amount =
-    Number(input.value);
-
-
-  if(
-    !Number.isInteger(amount) ||
-    amount <= 0 ||
-    amount > 1000000
-  ){
-
-    result.classList.remove("hidden");
-
-    result.textContent =
-      "1～1,000,000の整数を入力してください";
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .rpc(
-        "create_coin_request",
-        {
-          amount_input:amount
-        }
-      );
-
-
-  result.classList.remove("hidden");
-
-
-  if(error){
-
-    result.textContent =
-      "申請エラー：" +
-      error.message;
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  result.innerHTML =
-    "申請コード：<strong>" +
-    data +
-    "</strong><br>" +
-    "管理者にこのコードを伝えてください。";
-
-}
-
-
-/* =====================================================
-   APPROVE REQUEST
-===================================================== */
-
-async function approveCoinRequest(){
-
-  const input =
-    document.getElementById(
-      "requestCodeInput"
-    );
-
-  const result =
-    document.getElementById(
-      "adminResult"
-    );
-
-  const code =
-    input.value.trim();
-
-
-  if(!code){
-
-    result.classList.remove("hidden");
-
-    result.textContent =
-      "申請コードを入力してください";
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .rpc(
-        "approve_coin_request",
-        {
-          request_code_input:code
-        }
-      );
-
-
-  result.classList.remove("hidden");
-
-
-  if(error){
-
-    result.textContent =
-      "承認エラー：" +
-      error.message;
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  result.textContent =
-    "承認しました。新しい残高：" +
-    Number(data).toLocaleString();
-
-}
-
-
-/* =====================================================
-   PLAY GAME
-===================================================== */
-
-async function playGame(){
-
-  if(state === "normal"){
-
-    await normalGame();
-
-    return;
-
-  }
-
-
-  if(state === "bonus"){
-
-    await bonusGame();
-
-    return;
-
-  }
-
-
-  if(state === "replay"){
-
-    await replayGame();
-
-    return;
-
-  }
-
-
-  if(state === "absolute"){
-
-    await absoluteGame();
-
-    return;
-
-  }
-
-}
-
-
-/* =====================================================
-   NORMAL GAME
-===================================================== */
-
-async function normalGame(){
-
-  if(medals < BET){
-
-    setMessage(
-      "コインが足りません"
-    );
-
-    return;
-
-  }
-
-
-  medals -= BET;
-
-  updateCoinDisplays();
-
-  saveCoins();
-
-
-  const bonusChance =
-    BONUS_PROBABILITY[
-      CURRENT_SETTING
-    ];
-
-
-  const bonusRoll =
-    Math.random();
-
-
-  if(bonusRoll < bonusChance){
-
-    const result =
-      drawBonus();
-
-
-    if(result.type === "bonus"){
-
-      showBonusEffect();
-
-      startBonus(
-        result.bonus
-      );
-
-      return;
-
+      cherryAlert() {
+        if (this.isMuted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(880, this.ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.2);
+      }
+      fanfare() {
+        if (this.isMuted) return;
+        this.init();
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        notes.forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.08);
+          gain.gain.setValueAtTime(0.3, this.ctx.currentTime + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.08 + 0.5);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + i * 0.08);
+          osc.stop(this.ctx.currentTime + i * 0.08 + 0.5);
+        });
+      }
+      heartbeat() {
+        if (this.isMuted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(65, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.6, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.2);
+      }
     }
+    const audio = new SlotAudioEngine();
 
-
-    if(result.type === "absolute"){
-
-      startAbsolute();
-
-      return;
-
-    }
-
-  }
-
-
-  updateReels();
-
-  setMessage("ハズレ");
-
-  addHistory("ハズレ");
-
-}
-
-
-/* =====================================================
-   REELS
-===================================================== */
-
-function updateReels(){
-
-  const symbols = [
-    "BAR",
-    "🍒",
-    "🔔",
-    "🍋",
-    "★",
-    "7"
-  ];
-
-
-  document
-    .getElementById("reel1")
-    .textContent =
-      symbols[
-        Math.floor(
-          Math.random() *
-          symbols.length
-        )
-      ];
-
-
-  document
-    .getElementById("reel2")
-    .textContent =
-      symbols[
-        Math.floor(
-          Math.random() *
-          symbols.length
-        )
-      ];
-
-
-  document
-    .getElementById("reel3")
-    .textContent =
-      symbols[
-        Math.floor(
-          Math.random() *
-          symbols.length
-        )
-      ];
-
-}
-
-
-/* =====================================================
-   DRAW BONUS
-===================================================== */
-
-function drawBonus(){
-
-  const roll =
-    Math.random() * 100;
-
-  let total = 0;
-
-
-  for(
-    const bonus
-    of BONUS_TYPES
-  ){
-
-    total += bonus.weight;
-
-
-    if(roll < total){
-
-      return {
-        type:"bonus",
-        bonus:bonus
-      };
-
-    }
-
-  }
-
-
-  if(roll < 99.5){
-
-    return {
-      type:"none"
+    // Reel Symbols
+    const SYMBOLS = {
+      RED7: { name: '赤7', tag: '7', color: 'text-red-500 text-crimson-glow font-black', bg: 'bg-red-950/60' },
+      GHOUL: { name: '喰種', tag: '喰', color: 'text-purple-400 text-purple-glow font-black', bg: 'bg-purple-950/60' },
+      BAR: { name: 'BAR', tag: 'BAR', color: 'text-stone-300 font-black', bg: 'bg-zinc-800' },
+      CHERRY: { name: 'チェリー', tag: '🍒', color: 'text-rose-400 font-bold', bg: 'bg-rose-950/40' },
+      WATERMELON: { name: 'スイカ', tag: '🍉', color: 'text-emerald-400 font-bold', bg: 'bg-emerald-950/40' },
+      BELL: { name: 'ベル', tag: '🔔', color: 'text-amber-300 text-gold-glow font-bold', bg: 'bg-amber-950/40' },
+      REPLAY: { name: 'リプレイ', tag: '再', color: 'text-sky-400 font-bold', bg: 'bg-sky-950/40' }
     };
 
-  }
-
-
-  return {
-    type:"absolute"
-  };
-
-}
-
-
-/* =====================================================
-   START BONUS
-===================================================== */
-
-function startBonus(bonus){
-
-  state = "bonus";
-
-  bonusName =
-    bonus.name;
-
-  bonusRemaining =
-    bonus.rounds;
-
-
-  document
-    .getElementById("replayPanel")
-    .classList.add("hidden");
-
-
-  setState(
-    "BONUS",
-    bonus.name
-  );
-
-
-  setMessage(
-    "🎉 " +
-    bonus.name +
-    " START!"
-  );
-
-
-  addHistory(
-    bonus.name +
-    " START"
-  );
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   BONUS GAME
-===================================================== */
-
-async function bonusGame(){
-
-  if(bonusRemaining <= 0){
-
-    finishBonus();
-
-    return;
-
-  }
-
-
-  bonusRemaining--;
-
-  medals += 10;
-
-
-  updateCoinDisplays();
-
-  saveCoins();
-
-
-  setMessage(
-    bonusName +
-    " +10コイン"
-  );
-
-
-  addHistory(
-    bonusName +
-    " +10"
-  );
-
-
-  if(bonusRemaining <= 0){
-
-    finishBonus();
-
-    return;
-
-  }
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   FINISH BONUS
-===================================================== */
-
-function finishBonus(){
-
-  state = "replay";
-
-  bonusName = "";
-
-  bonusRemaining = 0;
-
-  replayRemaining = 30;
-
-
-  document
-    .getElementById("replayPanel")
-    .classList.remove("hidden");
-
-
-  updateReplayInfo();
-
-
-  setState(
-    "REPLAY",
-    "BONUS後REPLAY"
-  );
-
-
-  setMessage(
-    "BONUS終了！REPLAY 30G開始"
-  );
-
-
-  addHistory(
-    "REPLAY 30G START"
-  );
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   REPLAY
-   ★ コインを消費しない
-   ★ 通常時と同じ確率
-===================================================== */
-
-async function replayGame(){
-
-  if(replayRemaining <= 0){
-
-    finishReplay();
-
-    return;
-
-  }
-
-
-  replayRemaining--;
-
-
-  const bonusChance =
-    BONUS_PROBABILITY[
-      CURRENT_SETTING
+    // Full 21-stop strips for realistic layout
+    const REEL_STRIPS = [
+      ['RED7', 'CHERRY', 'BELL', 'REPLAY', 'WATERMELON', 'BAR', 'BELL', 'CHERRY', 'GHOUL', 'REPLAY', 'BELL', 'RED7', 'WATERMELON', 'BELL', 'CHERRY', 'BAR', 'REPLAY', 'BELL', 'GHOUL', 'WATERMELON', 'REPLAY'],
+      ['BAR', 'BELL', 'REPLAY', 'RED7', 'WATERMELON', 'BELL', 'CHERRY', 'GHOUL', 'BELL', 'REPLAY', 'BAR', 'BELL', 'WATERMELON', 'RED7', 'REPLAY', 'BELL', 'CHERRY', 'GHOUL', 'BELL', 'WATERMELON', 'REPLAY'],
+      ['GHOUL', 'BELL', 'REPLAY', 'WATERMELON', 'RED7', 'BELL', 'BAR', 'REPLAY', 'CHERRY', 'BELL', 'WATERMELON', 'GHOUL', 'BELL', 'REPLAY', 'RED7', 'BAR', 'BELL', 'CHERRY', 'WATERMELON', 'REPLAY', 'BELL']
     ];
 
+    // Master Machine State
+    const state = {
+      credit: 1000,
+      bet: 0,
+      gameCount: 0,
+      atCount: 0,
+      diffPayout: 0,
+      
+      // Mode: 'NORMAL' | 'CZ' | 'AT' | 'BITES'
+      mode: 'NORMAL',
+      isKakuganActive: false,
+      kakuganGamesRemaining: 0,
+      
+      // AT Status
+      atRemainingDiff: 0,
+      confrontationOpponent: null, // 'AYATO' | 'YAMORI' | 'ARIMA'
+      
+      // BITES Status
+      bitesRank: 1, // 1: +50, 2: +100, 3: +200, 4: +300, 5: +500(百足)
+      
+      // Reels Mechanics
+      reelsSpinning: [false, false, false],
+      reelPositions: [0, 0, 0],
+      reelIntervals: [null, null, null],
+      reelsStopped: [true, true, true],
+      
+      // Forced Lottery Override
+      forcedRole: null,
+      currentLotteryRole: null,
+      qteActive: false
+    };
 
-  const bonusRoll =
-    Math.random();
+    function renderReels() {
+      for (let r = 0; r < 3; r++) {
+        const stripContainer = document.getElementById(`reel-strip-${r}`);
+        stripContainer.innerHTML = '';
+        const currentPos = state.reelPositions[r];
+        const strip = REEL_STRIPS[r];
+        const len = strip.length;
 
-
-  if(bonusRoll < bonusChance){
-
-    const result =
-      drawBonus();
-
-
-    if(result.type === "bonus"){
-
-      showBonusEffect();
-
-      startBonus(
-        result.bonus
-      );
-
-      return;
-
+        // Display Top, Middle (Payline), and Bottom
+        for (let offset = -1; offset <= 1; offset++) {
+          const idx = (currentPos + offset + len) % len;
+          const symKey = strip[idx];
+          const sym = SYMBOLS[symKey];
+          const cell = document.createElement('div');
+          cell.className = `reel-symbol-cell ${sym.bg} border-b border-zinc-800/60 font-digital`;
+          cell.innerHTML = `
+            <span class="text-3xl ${sym.color}">${sym.tag}</span>
+            <span class="text-[9px] text-zinc-400 mt-0.5 tracking-tighter">${sym.name}</span>
+          `;
+          stripContainer.appendChild(cell);
+        }
+      }
     }
 
+    function updateUI() {
+      document.getElementById('disp-credit').innerText = state.credit;
+      document.getElementById('disp-game-count').innerText = state.gameCount;
+      document.getElementById('disp-at-count').innerText = state.atCount;
+      document.getElementById('disp-diff-count').innerText = state.diffPayout;
+      document.getElementById('at-diff-val').innerText = state.atRemainingDiff;
 
-    if(result.type === "absolute"){
+      // Mode Badge
+      const badge = document.getElementById('lcd-mode-badge');
+      if (state.mode === 'NORMAL') {
+        badge.innerText = '通常時';
+        badge.className = 'px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 text-[10px] font-bold';
+        document.getElementById('lcd-at-diff-remain').classList.add('hidden');
+      } else if (state.mode === 'CZ') {
+        badge.innerText = 'CZ: レミニセンス';
+        badge.className = 'px-2 py-0.5 rounded bg-purple-900 text-purple-200 text-[10px] font-bold animate-pulse';
+        document.getElementById('lcd-at-diff-remain').classList.add('hidden');
+      } else if (state.mode === 'AT') {
+        badge.innerText = 'AT: 東京喰種咬';
+        badge.className = 'px-2 py-0.5 rounded bg-red-800 text-white text-[10px] font-bold text-crimson-glow animate-pulse';
+        document.getElementById('lcd-at-diff-remain').classList.remove('hidden');
+      } else if (state.mode === 'BITES') {
+        badge.innerText = '特化: BITES';
+        badge.className = 'px-2 py-0.5 rounded bg-amber-600 text-black text-[10px] font-black animate-bounce';
+        document.getElementById('lcd-at-diff-remain').classList.remove('hidden');
+      }
 
-      startAbsoluteFromReplay();
-
-      return;
-
+      // Kakugan Indicator
+      const eyeUnit = document.getElementById('kakugan-unit');
+      const eyeIndicator = document.getElementById('kakugan-indicator');
+      const iris = document.getElementById('eye-iris');
+      if (state.isKakuganActive) {
+        eyeUnit.classList.add('kakugan-active');
+        eyeIndicator.innerText = `ON (${state.kakuganGamesRemaining}G)`;
+        eyeIndicator.className = 'text-[10px] font-digital font-black text-rose-500 animate-pulse';
+        iris.classList.add('bg-red-600', 'shadow-[0_0_12px_#ff003b]');
+      } else {
+        eyeUnit.classList.remove('kakugan-active');
+        eyeIndicator.innerText = 'OFF';
+        eyeIndicator.className = 'text-[10px] font-digital font-black text-zinc-600';
+        iris.classList.remove('bg-red-600', 'shadow-[0_0_12px_#ff003b]');
+      }
     }
 
-  }
-
-
-  updateReels();
-
-  setMessage("REPLAY");
-
-  addHistory("REPLAY");
-
-  updateReplayInfo();
-
-
-  if(replayRemaining <= 0){
-
-    finishReplay();
-
-    return;
-
-  }
-
-
-  setState(
-    "REPLAY",
-    "REPLAY中"
-  );
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   REPLAY INFO
-===================================================== */
-
-function updateReplayInfo(){
-
-  document
-    .getElementById("replayInfo")
-    .textContent =
-      "残り " +
-      replayRemaining +
-      "G";
-
-}
-
-
-/* =====================================================
-   FINISH REPLAY
-===================================================== */
-
-function finishReplay(){
-
-  state = "normal";
-
-  replayRemaining = 0;
-
-
-  document
-    .getElementById("replayPanel")
-    .classList.add("hidden");
-
-
-  setState(
-    "NORMAL",
-    "通常状態"
-  );
-
-
-  setMessage(
-    "REPLAY終了"
-  );
-
-
-  addHistory(
-    "REPLAY END"
-  );
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   ABSOLUTE
-===================================================== */
-
-function startAbsolute(){
-
-  state = "absolute";
-
-  absoluteRemaining = 10;
-
-
-  document
-    .getElementById("absolutePanel")
-    .classList.remove("hidden");
-
-
-  document
-    .getElementById("replayPanel")
-    .classList.add("hidden");
-
-
-  setState(
-    "ABSOLUTE",
-    "SPECIAL"
-  );
-
-
-  setMessage(
-    "⚡ ABSOLUTE TERRITORY"
-  );
-
-
-  updateAbsoluteInfo();
-
-  updatePlayButton();
-
-}
-
-
-function startAbsoluteFromReplay(){
-
-  startAbsolute();
-
-}
-
-
-/* =====================================================
-   ABSOLUTE GAME
-===================================================== */
-
-async function absoluteGame(){
-
-  if(absoluteRemaining <= 0){
-
-    finishAbsolute();
-
-    return;
-
-  }
-
-
-  absoluteRemaining--;
-
-  updateReels();
-
-  setMessage(
-    "ABSOLUTE TERRITORY"
-  );
-
-  addHistory(
-    "ABSOLUTE"
-  );
-
-  updateAbsoluteInfo();
-
-
-  if(absoluteRemaining <= 0){
-
-    finishAbsolute();
-
-    return;
-
-  }
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   ABSOLUTE INFO
-===================================================== */
-
-function updateAbsoluteInfo(){
-
-  document
-    .getElementById("absoluteInfo")
-    .textContent =
-      "残り " +
-      absoluteRemaining +
-      "G";
-
-}
-
-
-/* =====================================================
-   FINISH ABSOLUTE
-===================================================== */
-
-function finishAbsolute(){
-
-  state = "normal";
-
-  absoluteRemaining = 0;
-
-
-  document
-    .getElementById("absolutePanel")
-    .classList.add("hidden");
-
-
-  setState(
-    "NORMAL",
-    "通常状態"
-  );
-
-
-  setMessage(
-    "ABSOLUTE終了"
-  );
-
-
-  addHistory(
-    "ABSOLUTE END"
-  );
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   STATE
-===================================================== */
-
-function setState(title,message){
-
-  document
-    .getElementById("stateBox")
-    .textContent =
-      title;
-
-}
-
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-function setMessage(message){
-
-  document
-    .getElementById("gameMessage")
-    .textContent =
-      message;
-
-}
-
-
-/* =====================================================
-   PLAY BUTTON
-===================================================== */
-
-function updatePlayButton(){
-
-  const button =
-    document.getElementById(
-      "playButton"
-    );
-
-
-  if(!button){
-    return;
-  }
-
-
-  if(state === "normal"){
-
-    button.textContent =
-      "START";
-
-    button.disabled =
-      medals < BET;
-
-    return;
-
-  }
-
-
-  if(state === "bonus"){
-
-    button.textContent =
-      "BONUS";
-
-    button.disabled =
-      false;
-
-    return;
-
-  }
-
-
-  if(state === "replay"){
-
-    button.textContent =
-      "REPLAY";
-
-    /* REPLAYは無料 */
-
-    button.disabled =
-      false;
-
-    return;
-
-  }
-
-
-  if(state === "absolute"){
-
-    button.textContent =
-      "ABSOLUTE";
-
-    button.disabled =
-      false;
-
-  }
-
-}
-
-
-/* =====================================================
-   HISTORY
-===================================================== */
-
-function addHistory(text){
-
-  const list =
-    document.getElementById(
-      "historyList"
-    );
-
-
-  const item =
-    document.createElement(
-      "div"
-    );
-
-
-  item.className =
-    "history-item";
-
-
-  const time =
-    new Date()
-      .toLocaleTimeString();
-
-
-  item.textContent =
-    time +
-    " - " +
-    text;
-
-
-  list.prepend(item);
-
-}
-
-
-/* =====================================================
-   BONUS EFFECT
-===================================================== */
-
-function showBonusEffect(){
-
-  const overlay =
-    document.getElementById(
-      "effectOverlay"
-    );
-
-  const text =
-    document.getElementById(
-      "effectText"
-    );
-
-
-  text.textContent =
-    "BONUS!!";
-
-
-  overlay.classList.add(
-    "show"
-  );
-
-
-  setTimeout(()=>{
-
-    overlay.classList.remove(
-      "show"
-    );
-
-  },700);
-
-}
-
-
-/* =====================================================
-   RESET
-===================================================== */
-
-function resetGameState(){
-
-  state = "normal";
-
-  bonusName = "";
-
-  bonusRemaining = 0;
-
-  replayRemaining = 0;
-
-  absoluteRemaining = 0;
-
-
-  document
-    .getElementById("replayPanel")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("absolutePanel")
-    .classList.add("hidden");
-
-
-  setState(
-    "NORMAL",
-    "通常状態"
-  );
-
-
-  setMessage(
-    "STARTを押してください"
-  );
-
-
-  updatePlayButton();
-
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  ()=>{
-
-    document
-      .getElementById("betDisplay")
-      .textContent =
-        BET;
-
-    updateCoinDisplays();
-
-  }
-);
-
-</script>
-
+    function pressBet() {
+      if (state.bet > 0 || state.reelsSpinning.some(Boolean)) return;
+      if (state.credit < 3) {
+        alert('メダルが足りません！右上のメダル補充ボタンを押してください。');
+        return;
+      }
+      state.credit -= 3;
+      state.bet = 3;
+      audio.leverClick();
+      updateUI();
+      document.getElementById('lcd-nav-prompt').innerText = 'START LEVERを押せ！';
+    }
+
+    function pressLever() {
+      if (state.bet === 0) {
+        pressBet();
+        if (state.bet === 0) return;
+      }
+      if (state.reelsSpinning.some(Boolean)) return;
+
+      audio.leverClick();
+      state.gameCount++;
+      state.bet = 0; // consumed
+      state.reelsStopped = [false, false, false];
+
+      // Handle Kakugan Game countdown
+      if (state.isKakuganActive) {
+        state.kakuganGamesRemaining--;
+        if (state.kakuganGamesRemaining <= 0) {
+          state.isKakuganActive = false;
+        }
+      }
+
+      // Execute Internal Lottery
+      determineLotteryRole();
+
+      // Start reel rotation
+      for (let r = 0; r < 3; r++) {
+        state.reelsSpinning[r] = true;
+        document.getElementById(`btn-stop-${r}`).disabled = false;
+        state.reelIntervals[r] = setInterval(() => {
+          state.reelPositions[r] = (state.reelPositions[r] + 1) % REEL_STRIPS[r].length;
+          renderReels();
+        }, 55);
+      }
+
+      // AT Navigation Hint
+      if (state.mode === 'AT') {
+        showPushOrderNav();
+      }
+
+      updateUI();
+      document.getElementById('lcd-nav-prompt').innerText = 'ストップボタンを押せ！';
+    }
+
+    function determineLotteryRole() {
+      if (state.forcedRole) {
+        state.currentLotteryRole = state.forcedRole;
+        state.forcedRole = null;
+        announceRoleVisuals(state.currentLotteryRole);
+        return;
+      }
+
+      const rand = Math.random();
+
+      // Kakugan Mode: Cherry rate surges to ~1/2.6
+      if (state.isKakuganActive) {
+        if (rand < 0.38) {
+          state.currentLotteryRole = Math.random() < 0.4 ? 'STRONG_CHERRY' : 'WEAK_CHERRY';
+        } else if (rand < 0.65) {
+          state.currentLotteryRole = 'BELL';
+        } else if (rand < 0.85) {
+          state.currentLotteryRole = 'REPLAY';
+        } else {
+          state.currentLotteryRole = 'WATERMELON';
+        }
+        announceRoleVisuals(state.currentLotteryRole);
+        return;
+      }
+
+      // Normal Mode Standard Spec
+      if (rand < 0.0001) {
+        // Freeze flag
+        triggerLongFreeze();
+        return;
+      } else if (rand < 0.02) {
+        state.currentLotteryRole = 'STRONG_CHERRY'; // 1/50
+      } else if (rand < 0.06) {
+        state.currentLotteryRole = 'WEAK_CHERRY';
+      } else if (rand < 0.12) {
+        state.currentLotteryRole = 'WATERMELON';
+      } else if (rand < 0.16) {
+        state.currentLotteryRole = 'KAKUGAN_REPLAY'; // Lower replay triggers Kakugan
+      } else if (rand < 0.45) {
+        state.currentLotteryRole = 'REPLAY';
+      } else if (rand < 0.80) {
+        state.currentLotteryRole = 'BELL';
+      } else {
+        state.currentLotteryRole = 'HAZURE';
+      }
+
+      announceRoleVisuals(state.currentLotteryRole);
+    }
+
+    function announceRoleVisuals(role) {
+      const notice = document.getElementById('lcd-role-notice');
+      if (role.includes('CHERRY')) {
+        audio.cherryAlert();
+        flashLCD();
+        notice.innerText = role === 'STRONG_CHERRY' ? '【強チェリー】成立！' : '【チェリー】成立';
+      } else if (role === 'WATERMELON') {
+        notice.innerText = '【スイカ】成立';
+      } else if (role === 'KAKUGAN_REPLAY') {
+        notice.innerText = '【特殊リプレイ】赫眼煽り！';
+      } else {
+        notice.innerText = '';
+      }
+    }
+
+    function flashLCD() {
+      const overlay = document.getElementById('lcd-flash-overlay');
+      overlay.style.opacity = '1';
+      setTimeout(() => { overlay.style.opacity = '0'; }, 180);
+    }
+
+    function stopReel(reelIndex) {
+      if (!state.reelsSpinning[reelIndex]) return;
+
+      clearInterval(state.reelIntervals[reelIndex]);
+      state.reelsSpinning[reelIndex] = false;
+      state.reelsStopped[reelIndex] = true;
+      document.getElementById(`btn-stop-${reelIndex}`).disabled = true;
+      audio.reelStop();
+
+      // Align symbols to match current role if applicable
+      applySymbolSlippage(reelIndex, state.currentLotteryRole);
+      renderReels();
+
+      // When all 3 reels stopped
+      if (state.reelsStopped.every(Boolean)) {
+        setTimeout(evaluateGameRound, 200);
+      }
+    }
+
+    function applySymbolSlippage(reelIdx, role) {
+      const strip = REEL_STRIPS[reelIdx];
+      let target = null;
+      if (role === 'STRONG_CHERRY' || role === 'WEAK_CHERRY') target = 'CHERRY';
+      else if (role === 'WATERMELON') target = 'WATERMELON';
+      else if (role === 'BELL') target = 'BELL';
+      else if (role === 'REPLAY' || role === 'KAKUGAN_REPLAY') target = 'REPLAY';
+
+      if (!target) return;
+
+      // Find nearest target within 4 slippage steps
+      let cur = state.reelPositions[reelIdx];
+      for (let s = 0; s <= 4; s++) {
+        let checkIdx = (cur + s) % strip.length;
+        if (strip[checkIdx] === target) {
+          state.reelPositions[reelIdx] = checkIdx;
+          break;
+        }
+      }
+    }
+
+    function evaluateGameRound() {
+      const role = state.currentLotteryRole;
+      let payout = 0;
+
+      // Payout logic
+      if (role === 'BELL') {
+        payout = state.mode === 'AT' ? 12 : 8; // AT pure increase
+        audio.payoutChime();
+      } else if (role === 'REPLAY' || role === 'KAKUGAN_REPLAY') {
+        payout = 0;
+        state.bet = 3; // free replay
+      } else if (role.includes('CHERRY')) {
+        payout = 2;
+        audio.payoutChime();
+      } else if (role === 'WATERMELON') {
+        payout = 3;
+        audio.payoutChime();
+      }
+
+      state.credit += payout;
+      document.getElementById('disp-payout').innerText = payout;
+
+      // Check Kakugan activation
+      if (role === 'KAKUGAN_REPLAY' && !state.isKakuganActive) {
+        state.isKakuganActive = true;
+        state.kakuganGamesRemaining = 10;
+        audio.fanfare();
+        document.getElementById('lcd-action-title').innerText = '赫眼状態 突入!!';
+        document.getElementById('lcd-dialogue').innerText = '「血が…疼く…」チェリー超高確率(1/2.6)へ！';
+      }
+
+      // Handle Game Mode transitions
+      if (state.mode === 'NORMAL') {
+        handleNormalModeProgression(role);
+      } else if (state.mode === 'CZ') {
+        handleCZModeProgression(role);
+      } else if (state.mode === 'AT') {
+        handleATModeProgression(role, payout);
+      } else if (state.mode === 'BITES') {
+        handleBitesModeProgression(role);
+      }
+
+      updateUI();
+    }
+
+    function handleNormalModeProgression(role) {
+      if (role === 'STRONG_CHERRY') {
+        // High chance of CZ or direct AT
+        if (Math.random() < 0.65) {
+          triggerCZ('レミニセンス');
+        } else {
+          document.getElementById('lcd-action-title').innerText = '強チェリー成立!!';
+          document.getElementById('lcd-dialogue').innerText = '前兆ステージ「捜査官追跡」へ発展！';
+        }
+      } else if (state.gameCount > 0 && state.gameCount % 100 === 0) {
+        // Periodic zone CZ
+        triggerCZ('レミニセンス');
+      }
+    }
+
+    function handleCZModeProgression(role) {
+      if (role.includes('CHERRY') || role === 'WATERMELON' || role === 'BELL') {
+        // CZ Success!
+        audio.fanfare();
+        document.getElementById('lcd-action-title').innerText = '覚醒フリーズ 成功!!';
+        document.getElementById('lcd-dialogue').innerText = '金木研覚醒！AT「東京喰種咬」確定！';
+        setTimeout(() => {
+          startAT();
+        }, 1500);
+      } else {
+        document.getElementById('lcd-action-title').innerText = 'CZ レミニセンス';
+        document.getElementById('lcd-dialogue').innerText = '小役を引いてリールロックを昇格させろ！';
+      }
+    }
+
+    function handleATModeProgression(role, payout) {
+      // Subtraction of differential coins
+      if (payout > 0) {
+        state.atRemainingDiff = Math.max(0, state.atRemainingDiff - payout);
+        state.diffPayout += payout;
+      }
+
+      // Check Battle confrontation triggers
+      if (role.includes('CHERRY') || Math.random() < 0.15) {
+        triggerATBattle();
+      }
+
+      // End of AT
+      if (state.atRemainingDiff <= 0 && state.mode === 'AT') {
+        state.mode = 'NORMAL';
+        document.getElementById('lcd-stage-name').innerHTML = '<i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i><span>第20区 喫茶あんていく</span>';
+        document.getElementById('lcd-action-title').innerText = 'AT終了';
+        document.getElementById('lcd-dialogue').innerText = `獲得枚数: ${state.diffPayout}枚。通常時へ移行します。`;
+        lucide.createIcons();
+      }
+    }
+
+    function triggerATBattle() {
+      const opponents = ['絢都 (AYATO)', 'ヤモリ (YAMORI)', '有馬貴将 (ARIMA)'];
+      const enemy = opponents[Math.floor(Math.random() * opponents.length)];
+      document.getElementById('lcd-action-title').innerText = `喰種対決 VS ${enemy}`;
+      document.getElementById('lcd-dialogue').innerText = 'バトル勝利で報酬特化「BITES」突入！';
+
+      // QTE Prompt
+      state.qteActive = true;
+      const pushBtn = document.getElementById('pachislot-push-btn');
+      pushBtn.classList.add('btn-glow');
+    }
+
+    function handlePushButtonPress() {
+      audio.leverClick();
+      if (state.qteActive) {
+        state.qteActive = false;
+        const pushBtn = document.getElementById('pachislot-push-btn');
+        pushBtn.classList.remove('btn-glow');
+        audio.fanfare();
+        document.getElementById('lcd-action-title').innerText = '対決 勝利!!';
+        document.getElementById('lcd-dialogue').innerText = '喰種を撃破！上乗せ特化「BITES」へ！';
+        setTimeout(startBites, 1200);
+      }
+    }
+
+    function startBites() {
+      state.mode = 'BITES';
+      state.bitesRank = 1;
+      document.getElementById('lcd-bites-bar').classList.remove('hidden');
+      updateBitesDisplay();
+      audio.fanfare();
+    }
+
+    function updateBitesDisplay() {
+      const ranks = ['+50枚', '+100枚', '+200枚', '+300枚', '百足覚醒 (+500枚)'];
+      const currentText = ranks[state.bitesRank - 1];
+      document.getElementById('bites-rank-label').innerText = `${currentText} (LV.${state.bitesRank})`;
+      document.getElementById('lcd-action-title').innerText = '自力昇格 BITES';
+      document.getElementById('lcd-dialogue').innerText = '小役でランク昇格！ハズレで終了！';
+    }
+
+    function handleBitesModeProgression(role) {
+      if (role !== 'HAZURE') {
+        // Rank Up!
+        if (state.bitesRank < 5) {
+          state.bitesRank++;
+          audio.fanfare();
+          updateBitesDisplay();
+        } else {
+          // Maximum Hyakukade reached
+          finishBites(500);
+        }
+      } else {
+        // Miss: payout gained and return to AT
+        const bonuses = [50, 100, 200, 300, 500];
+        finishBites(bonuses[state.bitesRank - 1]);
+      }
+    }
+
+    function finishBites(reward) {
+      state.atRemainingDiff += reward;
+      audio.fanfare();
+      document.getElementById('lcd-action-title').innerText = `+${reward}枚 上乗せ獲得!!`;
+      document.getElementById('lcd-dialogue').innerText = `差枚数上乗せ！AT「東京喰種咬」へ復帰します。`;
+      document.getElementById('lcd-bites-bar').classList.add('hidden');
+      setTimeout(() => {
+        state.mode = 'AT';
+        updateUI();
+      }, 1500);
+    }
+
+    function showPushOrderNav() {
+      const orders = ['左・中・右', '中・左・右', '右・中・左'];
+      const sel = orders[Math.floor(Math.random() * orders.length)];
+      const navContainer = document.getElementById('push-order-nav');
+      document.getElementById('push-order-seq').innerText = sel;
+      navContainer.classList.remove('hidden');
+      setTimeout(() => { navContainer.classList.add('hidden'); }, 3000);
+    }
+
+    function triggerLongFreeze() {
+      audio.heartbeat();
+      const mon = document.getElementById('lcd-monitor');
+      mon.classList.add('bg-black');
+      document.getElementById('lcd-action-title').innerText = '「1000から7は？」';
+      document.getElementById('lcd-action-title').className = 'text-xl sm:text-2xl font-black text-rose-500 animate-pulse tracking-widest';
+      document.getElementById('lcd-dialogue').innerText = '……骨の折れる音……ブラックアウト……';
+
+      setTimeout(() => {
+        audio.fanfare();
+        startAT(500); // 500枚 premium start
+        document.getElementById('lcd-action-title').innerText = '隻眼の梟 覚醒AT!!';
+        document.getElementById('lcd-dialogue').innerText = 'プレミアムロングフリーズ降臨！大量出玉の領域へ！';
+      }, 2500);
+    }
+
+    function startAT(initialDiff = 150) {
+      state.mode = 'AT';
+      state.atCount++;
+      state.atRemainingDiff = initialDiff;
+      audio.fanfare();
+      document.getElementById('lcd-stage-name').innerHTML = '<i data-lucide="flame" class="w-3.5 h-3.5 text-rose-500"></i><span>狂気覚醒ステージ</span>';
+      document.getElementById('lcd-action-title').innerText = 'AT「東京喰種咬」突入!!';
+      document.getElementById('lcd-dialogue').innerText = `初期差枚数: ${initialDiff}枚。対決勝利でBITESを目指せ！`;
+      lucide.createIcons();
+      updateUI();
+    }
+
+    function triggerCZ(czName) {
+      state.mode = 'CZ';
+      document.getElementById('lcd-action-title').innerText = `CZ「${czName}」突入!!`;
+      document.getElementById('lcd-dialogue').innerText = 'リールロック・フリーズでATを掴み取れ！';
+      audio.cherryAlert();
+      updateUI();
+    }
+
+    // Showcase Debug Buttons
+    function forceRole(roleName) {
+      state.forcedRole = roleName;
+      alert(`次ゲームに【${roleName}】を強制セットしました。レバーを叩いてください！`);
+    }
+
+    function forceKakuganToggle() {
+      state.isKakuganActive = !state.isKakuganActive;
+      state.kakuganGamesRemaining = state.isKakuganActive ? 15 : 0;
+      updateUI();
+    }
+
+    function forceCZTrigger() {
+      triggerCZ('レミニセンス');
+    }
+
+    function forceATTrigger() {
+      startAT(150);
+    }
+
+    function forceBitesTrigger() {
+      if (state.mode !== 'AT') startAT(150);
+      startBites();
+    }
+
+    function addMedals(count) {
+      state.credit += count;
+      audio.fanfare();
+      updateUI();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderReels();
+      updateUI();
+    });
+  </script>
 </body>
 </html>
