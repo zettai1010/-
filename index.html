@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>P 東京喰種 -超狂気ver.-</title>
+  <title>P 東京喰種 -超狂気ver.- (P-GHOUL LT)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
   <style>
     body {
       font-family: 'Zen Old Mincho', serif;
-      background: radial-gradient(circle at 50% 15%, #180205 0%, #080102 55%, #000000 100%);
+      background: radial-gradient(circle at 50% 10%, #1c0207 0%, #080102 55%, #000000 100%);
       color: #f1f5f9;
       user-select: none;
       -webkit-user-select: none;
@@ -23,24 +23,24 @@
       font-family: 'Orbitron', monospace;
     }
 
-    /* Cabinet Bezel Styling */
+    /* Cabinet Bezel & Frame */
     .pachi-frame {
-      background: linear-gradient(180deg, #220308 0%, #0d0103 45%, #030001 100%);
+      background: linear-gradient(180deg, #260309 0%, #100104 40%, #030001 100%);
       box-shadow: 0 0 50px rgba(225, 29, 72, 0.45), inset 0 0 25px rgba(0, 0, 0, 0.95);
-      border: 3px solid #5c081e;
+      border: 3px solid #6b0722;
     }
 
     /* Kakugan Eye Lamp */
     .kakugan-lamp {
-      box-shadow: 0 0 15px #e11d48, inset 0 0 12px #ff003b;
+      box-shadow: 0 0 15px #e11d48, inset 0 0 10px #ff003b;
       transition: all 0.25s ease;
     }
     .kakugan-lamp.active {
-      animation: kakuganPulse 0.35s infinite alternate ease-in-out;
+      animation: kakuganPulse 0.3s infinite alternate ease-in-out;
     }
     @keyframes kakuganPulse {
       0% { box-shadow: 0 0 15px #be123c, inset 0 0 10px #e11d48; filter: brightness(1); }
-      100% { box-shadow: 0 0 45px #ff0055, inset 0 0 24px #ff3b6c; filter: brightness(1.6); }
+      100% { box-shadow: 0 0 45px #ff0055, inset 0 0 25px #ff3b6c; filter: brightness(1.7); }
     }
 
     /* Rainbow Digital Effect */
@@ -49,46 +49,50 @@
       background-size: 300% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: rainbow 1.6s linear infinite;
+      animation: rainbow 1.2s linear infinite;
     }
     @keyframes rainbow {
       0% { background-position: 0% 50%; }
       100% { background-position: 300% 50%; }
     }
 
-    /* 3D PUSH Button */
+    /* Gold LT Mode Text */
+    .text-gold {
+      background: linear-gradient(135deg, #ffe066 0%, #f59e0b 50%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+    }
+
+    /* Big 3D Pachinko PUSH Button (Main Spin & Trigger Input) */
     .pachi-push {
-      background: radial-gradient(circle at 45% 30%, #f43f5e 0%, #be123c 55%, #4c0519 100%);
-      box-shadow: 0 8px 0 #1f0208, 0 12px 25px rgba(225, 29, 72, 0.6), inset 0 3px 6px rgba(255, 255, 255, 0.5);
+      background: radial-gradient(circle at 45% 30%, #f43f5e 0%, #be123c 60%, #4c0519 100%);
+      box-shadow: 0 10px 0 #1f0208, 0 15px 30px rgba(225, 29, 72, 0.65), inset 0 3px 6px rgba(255, 255, 255, 0.5);
       transition: all 0.08s ease;
     }
     .pachi-push:active {
-      transform: translateY(4px);
-      box-shadow: 0 4px 0 #1f0208, 0 6px 12px rgba(225, 29, 72, 0.4);
+      transform: translateY(6px);
+      box-shadow: 0 4px 0 #1f0208, 0 8px 15px rgba(225, 29, 72, 0.4);
     }
     .pachi-push.active-glow {
-      animation: pushFlash 0.25s infinite alternate;
+      animation: pushFlash 0.2s infinite alternate;
     }
     @keyframes pushFlash {
-      0% { box-shadow: 0 8px 0 #1f0208, 0 0 20px #e11d48; transform: scale(1); }
-      100% { box-shadow: 0 8px 0 #1f0208, 0 0 45px #38bdf8, 0 0 65px #f43f5e; transform: scale(1.06); }
+      0% { box-shadow: 0 10px 0 #1f0208, 0 0 25px #e11d48; transform: scale(1); }
+      100% { box-shadow: 0 10px 0 #1f0208, 0 0 55px #38bdf8, 0 0 75px #f43f5e; transform: scale(1.08); }
     }
-
-    /* Pachinko Handle Dial */
-    .handle-dial {
-      background: radial-gradient(circle at 35% 30%, #52525b 0%, #27272a 60%, #09090b 100%);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.25);
+    .pachi-push.lt-glow {
+      animation: ltPushFlash 0.25s infinite alternate;
     }
-    .handle-dial.active {
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.7), inset 0 0 15px rgba(56, 189, 248, 0.4);
-      border-color: #38bdf8;
+    @keyframes ltPushFlash {
+      0% { box-shadow: 0 10px 0 #1f0208, 0 0 35px #f59e0b; }
+      100% { box-shadow: 0 10px 0 #1f0208, 0 0 65px #facc15, 0 0 90px #ff0055; transform: scale(1.1); }
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between items-center py-2 px-2 sm:px-4">
 
-  <!-- Header Bar -->
-  <header class="w-full max-w-5xl bg-zinc-950/90 border border-rose-950/80 py-2.5 px-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-xl backdrop-blur-md">
+  <header class="w-full max-w-5xl bg-zinc-950/95 border border-rose-950/80 py-2.5 px-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-xl backdrop-blur-md">
     <div class="flex items-center space-x-3">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-700 via-red-950 to-black p-0.5 border border-rose-500 flex items-center justify-center shadow-[0_0_15px_#e11d48]">
         <span class="text-xl font-black text-rose-300">喰</span>
@@ -96,10 +100,10 @@
       <div>
         <div class="flex items-center gap-2">
           <h1 class="font-black text-base sm:text-lg tracking-wider text-rose-500 leading-tight">
-            P 東京喰種 <span class="text-xs px-2 py-0.5 bg-rose-950 border border-rose-600 rounded text-rose-200">超狂気ver. (本格液晶パチンコ)</span>
+            P 東京喰種 <span class="text-xs px-2 py-0.5 bg-gradient-to-r from-amber-600 to-rose-700 border border-amber-400 rounded text-amber-100 font-digital font-black shadow-[0_0_10px_rgba(245,158,11,0.5)]">LT (ラッキートリガー) 搭載</span>
           </h1>
         </div>
-        <p class="text-[10px] font-digital tracking-widest text-zinc-400">大当り ALL 1500発 &bull; 超覚醒RUSH (ST100回 1/39.9)</p>
+        <p class="text-[10px] font-digital tracking-widest text-zinc-400">大当り ALL 1500発 &bull; 極・覚醒 LT (ST140回 1/29.9 継続率約90%)</p>
       </div>
     </div>
 
@@ -129,7 +133,6 @@
     </div>
   </header>
 
-  <!-- Top Data Board -->
   <div class="w-full max-w-5xl grid grid-cols-2 sm:grid-cols-5 gap-2 my-2 font-digital text-center text-xs">
     <div class="bg-zinc-950/90 border border-zinc-800 p-2.5 rounded-xl shadow-md">
       <span class="text-[10px] text-zinc-400 block">所持玉数 (BALLS)</span>
@@ -137,7 +140,7 @@
       <span class="text-[10px] text-zinc-500">発</span>
     </div>
     <div class="bg-zinc-950/90 border border-zinc-800 p-2.5 rounded-xl shadow-md">
-      <span class="text-[10px] text-zinc-400 block">総回転数 (TOTAL SPINS)</span>
+      <span class="text-[10px] text-zinc-400 block">総回転数 (SPINS)</span>
       <span id="disp-spins" class="text-xl font-black text-white">0</span>
       <span class="text-[10px] text-zinc-500">回</span>
     </div>
@@ -147,7 +150,7 @@
       <span class="text-[10px] text-zinc-500">回</span>
     </div>
     <div class="bg-zinc-950/90 border border-zinc-800 p-2.5 rounded-xl shadow-md">
-      <span class="text-[10px] text-zinc-400 block">RUSH継続連チャン</span>
+      <span class="text-[10px] text-zinc-400 block">LT継続連チャン</span>
       <span id="disp-rush" class="text-xl font-black text-emerald-400">0</span>
       <span class="text-[10px] text-zinc-500">連</span>
     </div>
@@ -157,17 +160,16 @@
     </div>
   </div>
 
-  <!-- Main Machine Stage -->
   <main class="w-full max-w-5xl flex flex-col lg:flex-row items-center justify-center gap-4 z-10 flex-grow my-auto">
     
-    <!-- Authentic Pachinko Cabinet -->
-    <div class="relative w-full max-w-[540px] pachi-frame p-4 rounded-3xl flex flex-col items-center">
+    <!-- Authentic Modern Pachinko Cabinet (No pins, No stops, 100% PUSH and LCD) -->
+    <div class="relative w-full max-w-[560px] pachi-frame p-4 rounded-3xl flex flex-col items-center">
       
       <!-- Top Bezel: Kakugan Eye Lamp Header -->
-      <div class="w-full flex items-center justify-between px-3.5 py-2 bg-black border border-rose-950 rounded-2xl mb-3 shadow-inner">
+      <div class="w-full flex items-center justify-between px-4 py-2 bg-black border border-rose-950 rounded-2xl mb-3 shadow-inner">
         <div class="flex items-center gap-2">
           <div id="kakugan-l" class="w-6 h-6 rounded-full bg-rose-950 border border-rose-600 kakugan-lamp flex items-center justify-center">
-            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
           </div>
           <span class="text-[11px] text-rose-400 font-bold tracking-widest font-digital">KAKUGAN EYE</span>
         </div>
@@ -175,57 +177,71 @@
           通常時 (1/1079)
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-[11px] text-rose-400 font-bold tracking-widest font-digital">狂気覚醒</span>
+          <span class="text-[11px] text-amber-400 font-bold tracking-widest font-digital">LT TRIGGER</span>
           <div id="kakugan-r" class="w-6 h-6 rounded-full bg-rose-950 border border-rose-600 kakugan-lamp flex items-center justify-center">
-            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
           </div>
         </div>
       </div>
 
       <!-- Massive Pachinko LCD Screen -->
-      <div class="relative w-full h-[360px] bg-black rounded-2xl border-2 border-rose-900 shadow-[0_0_35px_rgba(225,29,72,0.35)] overflow-hidden flex flex-col justify-between p-3.5 select-none">
+      <div class="relative w-full h-[370px] bg-black rounded-2xl border-2 border-rose-900 shadow-[0_0_35px_rgba(225,29,72,0.35)] overflow-hidden flex flex-col justify-between p-3.5 select-none">
         
         <!-- Screen Background Effects (Canvas for Petals/Sparks) -->
         <canvas id="lcd-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
-        <div id="lcd-flash" class="absolute inset-0 bg-red-600/60 opacity-0 pointer-events-none transition-opacity duration-150 z-20"></div>
+        <div id="lcd-flash" class="absolute inset-0 bg-red-600/70 opacity-0 pointer-events-none transition-opacity duration-150 z-20"></div>
 
-        <!-- LCD Header: Stage Name & ST Counter -->
+        <!-- LCD Header: Stage Name & ST/LT Counter -->
         <div class="relative z-10 flex items-center justify-between text-xs font-digital">
           <div id="lcd-mode-title" class="flex items-center gap-1.5 text-rose-400 font-bold">
             <i data-lucide="shield-alert" class="w-4 h-4"></i>
             <span>第20区 あんていく警戒ステージ</span>
           </div>
           <div id="lcd-st-box" class="hidden text-amber-400 font-black">
-            ST残り: <strong id="st-counter" class="text-lg text-white">100</strong> 回
+            LT残り: <strong id="st-counter" class="text-xl text-yellow-300">140</strong> 回
           </div>
         </div>
 
-        <!-- Center: 3 Pachinko Big Digital Reels -->
-        <div class="relative z-10 flex flex-col items-center justify-center my-auto">
+        <!-- Center: 3 Pachinko Big Digital Numbers & Interactive Challenge Stage -->
+        <div class="relative z-10 flex flex-col items-center justify-center my-auto w-full">
           
           <!-- Reach Banner Alert -->
           <div id="reach-banner" class="opacity-0 font-black text-xl text-yellow-300 tracking-widest mb-1 transition-opacity duration-200">
             ★ REACH !! ★
           </div>
 
-          <div class="flex items-center justify-center gap-3 sm:gap-5">
-            <!-- Left Digital Reel -->
+          <!-- Digital Number Reels Container -->
+          <div id="reels-row" class="flex items-center justify-center gap-3 sm:gap-5">
+            <!-- Left Digital -->
             <div id="reel-0" class="w-16 h-24 sm:w-20 sm:h-28 bg-zinc-950/90 border-2 border-rose-800 rounded-2xl flex items-center justify-center text-5xl sm:text-6xl font-black font-digital text-zinc-100 shadow-[inset_0_0_15px_rgba(225,29,72,0.4)]">
               3
             </div>
-            <!-- Center Digital Reel -->
+            <!-- Center Digital -->
             <div id="reel-1" class="w-16 h-24 sm:w-20 sm:h-28 bg-zinc-950/90 border-2 border-rose-800 rounded-2xl flex items-center justify-center text-5xl sm:text-6xl font-black font-digital text-zinc-100 shadow-[inset_0_0_15px_rgba(225,29,72,0.4)]">
               3
             </div>
-            <!-- Right Digital Reel -->
+            <!-- Right Digital -->
             <div id="reel-2" class="w-16 h-24 sm:w-20 sm:h-28 bg-zinc-950/90 border-2 border-rose-800 rounded-2xl flex items-center justify-center text-5xl sm:text-6xl font-black font-digital text-zinc-100 shadow-[inset_0_0_15px_rgba(225,29,72,0.4)]">
               4
             </div>
           </div>
 
+          <!-- LT Challenge Overlay (Displayed on Hit) -->
+          <div id="lt-challenge-box" class="hidden flex-col items-center justify-center text-center p-3 animate-pulse">
+            <span class="text-xs px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-400/50 rounded-full font-digital mb-2">
+              LUCKY TRIGGER CHALLENGE (突入率50%)
+            </span>
+            <div class="text-xl sm:text-2xl font-black text-white tracking-widest drop-shadow">
+              「1000から7を引いた数は――？」
+            </div>
+            <div class="mt-2 text-xs text-rose-300 font-bold">
+              下の <strong class="text-yellow-400 text-sm">【PUSHボタン】</strong> を押してLTを掴み取れ！
+            </div>
+          </div>
+
           <!-- LCD Message / Subtitle -->
           <div id="lcd-sub-msg" class="mt-3 text-xs sm:text-sm font-bold text-rose-300 tracking-wider text-center drop-shadow">
-            ハンドル右回し (または入賞ボタン) で玉打ち開始！
+            中央の【PUSHボタン】を押して抽選スタート！
           </div>
         </div>
 
@@ -245,47 +261,46 @@
 
       </div>
 
-      <!-- Lower Control Deck: Handle + PUSH Button + Launch Switch -->
-      <div class="w-full flex items-center justify-between gap-4 mt-3 pt-3 border-t border-rose-950">
+      <!-- Lower Control Deck: Big PUSH Button (Main Spin Control) + AUTO Toggle -->
+      <div class="w-full flex items-center justify-around gap-4 mt-3 pt-3 border-t border-rose-950">
         
-        <!-- Left: Quick Heso Launch / Auto Launch Toggle -->
-        <div class="flex flex-col gap-1.5">
-          <button id="btn-manual-launch" onclick="shootBallManual()" class="px-4 py-2 bg-gradient-to-r from-rose-900 to-red-800 hover:brightness-110 active:scale-95 text-white font-bold text-xs rounded-xl border border-rose-500 shadow-md flex items-center gap-1.5 transition">
-            <i data-lucide="crosshair" class="w-3.5 h-3.5 text-rose-300"></i>
-            <span>ヘソ入賞 (+1保留)</span>
+        <!-- Left: Quick Charge / Reserve Fill -->
+        <div class="flex flex-col items-center">
+          <button onclick="fillReservesMax()" class="px-3 py-2 bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-zinc-200 font-bold text-xs rounded-xl border border-zinc-700 shadow-md flex items-center gap-1.5 transition">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-yellow-400"></i>
+            <span>保留一括MAX</span>
           </button>
-          <span class="text-[9px] text-zinc-400 font-digital">1回転につき15玉消費</span>
+          <span class="text-[9px] text-zinc-500 font-digital mt-1">1回転=15玉消費</span>
         </div>
 
-        <!-- Center: Big 3D Pachinko PUSH Button -->
-        <button id="pachi-push-btn" onclick="pressPushButton()" class="pachi-push w-24 h-16 rounded-3xl text-white font-black text-sm tracking-widest flex flex-col items-center justify-center border-2 border-rose-400">
-          <i data-lucide="flame" class="w-5 h-5 text-amber-300"></i>
-          <span>PUSH</span>
+        <!-- Center: Super Big 3D Pachinko PUSH Button (Press to Spin / Press for Decision) -->
+        <button id="pachi-push-btn" onclick="handleCentralPushClick()" class="pachi-push w-28 h-20 rounded-3xl text-white font-black text-base tracking-widest flex flex-col items-center justify-center border-2 border-rose-400 active:scale-95 cursor-pointer">
+          <i data-lucide="flame" id="push-icon" class="w-6 h-6 text-amber-300"></i>
+          <span id="push-label">PUSH</span>
         </button>
 
-        <!-- Right: Rotatable Pachinko Handle (Click to start Continuous Auto Fire) -->
+        <!-- Right: AUTO Play Continuous Spin Mode -->
         <div class="flex flex-col items-center">
-          <button id="handle-btn" onclick="toggleHandleFire()" class="handle-dial w-16 h-16 rounded-full border-2 border-zinc-600 flex flex-col items-center justify-center active:scale-95 transition cursor-pointer">
-            <i data-lucide="rotate-cw" id="handle-icon" class="w-5 h-5 text-zinc-400"></i>
-            <span id="handle-status-text" class="text-[9px] font-digital font-bold text-zinc-300 mt-0.5">ハンドル停止</span>
+          <button id="btn-auto-play" onclick="toggleAutoPlay()" class="px-3.5 py-2 rounded-xl bg-zinc-900 border-2 border-zinc-700 hover:border-zinc-500 active:scale-95 transition flex items-center gap-1.5 text-xs font-bold text-zinc-300">
+            <i data-lucide="play" id="auto-icon" class="w-3.5 h-3.5 text-zinc-400"></i>
+            <span id="auto-status-text">AUTO OFF</span>
           </button>
-          <span class="text-[9px] text-zinc-400 font-digital mt-1">連射オート遊技</span>
+          <span class="text-[9px] text-zinc-500 font-digital mt-1">自動連続遊技</span>
         </div>
 
       </div>
 
     </div>
 
-    <!-- Right Control Panel: Odds & Debug Toolbox -->
     <div class="w-full lg:w-80 flex flex-col gap-3">
       
-      <!-- Verification Fast-Forward Toolbox -->
+      <!-- Verification Fast-Forward & LT Toolbox -->
       <div class="bg-zinc-950/90 border border-rose-950 rounded-2xl p-4 shadow-xl">
         <h3 class="text-amber-400 font-bold text-sm flex items-center gap-2 mb-2 pb-2 border-b border-zinc-800">
           <i data-lucide="sliders" class="w-4 h-4"></i>
-          <span>超狂気スペック検証パネル</span>
+          <span>超狂気 & LT検証パネル</span>
         </h3>
-        <p class="text-[11px] text-zinc-400 mb-3">1/1000前後の重厚スペックを待たずにテストできる検証ツールです。</p>
+        <p class="text-[11px] text-zinc-400 mb-3">1/1000前後の重厚確率やLT突入を即座にテストできます。</p>
         
         <div class="grid grid-cols-2 gap-2 text-xs font-bold font-digital">
           <button onclick="addSpecialHold()" class="py-2.5 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 transition text-center flex items-center justify-center gap-1">
@@ -298,9 +313,10 @@
             <span>即大当り直撃!</span>
           </button>
 
-          <button onclick="forceRUSH()" class="py-2.5 px-2 rounded-xl bg-gradient-to-r from-rose-900 to-red-800 hover:brightness-110 border border-rose-400 text-white transition text-center col-span-2 flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(225,29,72,0.5)]">
+          <!-- Direct LT Button -->
+          <button onclick="forceDirectLT()" class="py-2.5 px-2 rounded-xl bg-gradient-to-r from-amber-600 via-rose-700 to-red-800 hover:brightness-110 border border-amber-400 text-white transition text-center col-span-2 flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
             <i data-lucide="flame" class="w-4 h-4 text-amber-300"></i>
-            <span>超覚醒RUSH直撃 (ST100)</span>
+            <span>極・覚醒 LT直撃発動 (ST140)</span>
           </button>
 
           <button onclick="fastForwardSpins(100)" class="py-2 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-300 transition text-center col-span-2 flex items-center justify-center gap-1">
@@ -314,7 +330,7 @@
       <div class="bg-zinc-950/90 border border-zinc-900 rounded-2xl p-4 shadow-xl text-xs space-y-2 text-zinc-300">
         <h4 class="font-bold text-rose-400 flex items-center gap-1.5 pb-2 border-b border-zinc-800">
           <i data-lucide="info" class="w-4 h-4"></i>
-          <span>P 東京喰種 内部パチンコ仕様</span>
+          <span>P 東京喰種 LT スペック情報</span>
         </h4>
         <div class="space-y-1.5 font-digital text-[11px]">
           <div class="flex justify-between">
@@ -346,12 +362,16 @@
             <span class="text-rose-400 font-bold">1 / 873</span>
           </div>
           <div class="flex justify-between border-t border-zinc-800 pt-1">
-            <span class="text-zinc-400">超覚醒RUSH (ST100)</span>
-            <span class="text-amber-400 font-bold">1 / 39.9</span>
+            <span class="text-amber-400 font-bold">LT突入チャレンジ</span>
+            <span class="text-yellow-400 font-bold">成功率 50%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-amber-400 font-bold">極・覚醒 LT性能</span>
+            <span class="text-amber-300 font-bold">ST140回 (1/29.9 &bull; 約90%継続)</span>
           </div>
           <div class="flex justify-between">
             <span class="text-zinc-400">大当り出玉</span>
-            <span class="text-emerald-400 font-bold">ALL 1500発 (10R×10C)</span>
+            <span class="text-emerald-400 font-bold">ALL 1500発 (10R)</span>
           </div>
         </div>
       </div>
@@ -361,7 +381,6 @@
   </main>
 
   <script>
-    /* Web Audio Engine */
     class PachiAudioEngine {
       constructor() {
         this.ctx = null;
@@ -383,19 +402,19 @@
           icon.setAttribute('data-lucide', 'volume-x');
         } else {
           icon.setAttribute('data-lucide', 'volume-2');
-          this.playChime();
+          this.playPushClick();
         }
         lucide.createIcons();
       }
-      playHesoIn() {
+      playPushClick() {
         if (this.isMuted) return;
         this.init();
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, this.ctx.currentTime); // D5
-        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08); // A5
-        gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
@@ -407,9 +426,9 @@
         this.init();
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(320, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(90, this.ctx.currentTime + 0.07);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(280, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.07);
         gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.07);
         osc.connect(gain);
@@ -423,54 +442,65 @@
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(1050, this.ctx.currentTime + 0.25);
+        osc.frequency.setValueAtTime(580, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(1100, this.ctx.currentTime + 0.28);
         gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.28);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
-        osc.stop(this.ctx.currentTime + 0.25);
+        osc.stop(this.ctx.currentTime + 0.28);
       }
-      playPushImpact() {
+      playHeartbeat() {
+        if (this.isMuted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(95, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(45, this.ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.12);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.12);
+      }
+      playImpact() {
         if (this.isMuted) return;
         this.init();
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
+        osc.frequency.setValueAtTime(160, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(35, this.ctx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.35);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
-        osc.stop(this.ctx.currentTime + 0.2);
+        osc.stop(this.ctx.currentTime + 0.35);
       }
-      playFanfare() {
+      playLTFanfare() {
         if (this.isMuted) return;
         this.init();
-        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
         notes.forEach((freq, idx) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.09);
-          gain.gain.setValueAtTime(0.22, this.ctx.currentTime + idx * 0.09);
-          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.09 + 0.6);
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.08);
+          gain.gain.setValueAtTime(0.25, this.ctx.currentTime + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.08 + 0.7);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
-          osc.start(this.ctx.currentTime + idx * 0.09);
-          osc.stop(this.ctx.currentTime + idx * 0.09 + 0.6);
+          osc.start(this.ctx.currentTime + idx * 0.08);
+          osc.stop(this.ctx.currentTime + idx * 0.08 + 0.7);
         });
-      }
-      playChime() {
-        this.playHesoIn();
       }
     }
     const audio = new PachiAudioEngine();
 
-    /* Mathematical Probability Table */
     const PROB_TABLE = {
       1: 1079,
       2: 1056,
@@ -481,7 +511,6 @@
       7: 873
     };
 
-    /* State Management */
     const state = {
       setting: 1,
       balls: 1500,
@@ -489,41 +518,42 @@
       totalSpins: 0,
       bonusCount: 0,
       rushStreak: 0,
-      mode: 'NORMAL', // 'NORMAL' | 'FEVER' | 'RUSH'
+      mode: 'NORMAL', // 'NORMAL' | 'LT_CHALLENGE' | 'LT_RUSH' | 'FEVER_DIGEST'
       rushRemain: 0,
       
-      // Pachinko Reserves (Max 4)
+      // Reserves & Spin Logic
       reserves: [],
       isSpinning: false,
-      handleActive: false,
-      handleTimer: null,
+      autoPlay: false,
+      autoInterval: null,
       
-      // Verification Overrides
+      // Testing overrides
       forcedHit: false,
-      qteActive: false
+      forcedLTWin: false
     };
 
-    /* Background Canvas Animation (Floating Crimson Petals) */
     const canvas = document.getElementById('lcd-canvas');
     const ctx = canvas.getContext('2d');
-    let petals = [];
+    let particles = [];
 
-    function initPetals() {
+    function initParticles() {
       canvas.width = canvas.parentElement.clientWidth;
       canvas.height = canvas.parentElement.clientHeight;
-      petals = Array.from({ length: 24 }, () => ({
+      particles = Array.from({ length: 28 }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 3 + 2,
+        r: Math.random() * 3 + 1.5,
         speedX: Math.random() * 1.5 - 0.75,
-        speedY: Math.random() * 1.2 + 0.8,
-        color: Math.random() > 0.3 ? 'rgba(225, 29, 72, 0.65)' : 'rgba(244, 63, 94, 0.4)'
+        speedY: Math.random() * 1.4 + 0.7,
+        color: state.mode === 'LT_RUSH' 
+          ? 'rgba(245, 158, 11, 0.7)' 
+          : (Math.random() > 0.3 ? 'rgba(225, 29, 72, 0.65)' : 'rgba(244, 63, 94, 0.4)')
       }));
     }
 
-    function renderPetals() {
+    function renderParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      petals.forEach(p => {
+      particles.forEach(p => {
         p.x += p.speedX;
         p.y += p.speedY;
         if (p.y > canvas.height) { p.y = -5; p.x = Math.random() * canvas.width; }
@@ -535,26 +565,38 @@
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       });
-      requestAnimationFrame(renderPetals);
+      requestAnimationFrame(renderParticles);
     }
 
-    /* Pachinko Handle & Reserves System */
-    function shootBallManual() {
-      if (state.mode === 'FEVER') return;
+    function handleCentralPushClick() {
+      audio.init();
+      audio.playPushClick();
+
+      // If in LT Challenge mode, pressing PUSH resolves the challenge
+      if (state.mode === 'LT_CHALLENGE') {
+        resolveLTChallenge();
+        return;
+      }
+
+      // Normal mode / LT mode: Add spin reserve or trigger immediate variation
+      enqueueSpin();
+    }
+
+    function enqueueSpin() {
+      if (state.mode === 'FEVER_DIGEST') return;
+
       if (state.balls < 15) {
         const sub = document.getElementById('lcd-sub-msg');
         if (sub) sub.innerText = '持玉不足！「玉貸」ボタンで補充してください。';
-        stopHandle();
+        stopAutoPlay();
         return;
       }
-      
-      // Consume 15 balls per spin entry
-      state.balls -= 15;
-      updateHeaderUI();
-      audio.playHesoIn();
 
+      // Add to reserve buffer if under max (4)
       if (state.reserves.length < 4) {
-        // Lottery for reserve quality
+        state.balls -= 15;
+        updateHeaderUI();
+
         const rand = Math.random();
         let grade = 'WHITE';
         if (rand < 0.02) grade = 'RAINBOW';
@@ -569,40 +611,62 @@
       checkAndTriggerSpin();
     }
 
-    function toggleHandleFire() {
-      state.handleActive = !state.handleActive;
-      const handleBtn = document.getElementById('handle-btn');
-      const handleText = document.getElementById('handle-status-text');
-
-      if (state.handleActive) {
-        audio.init();
-        handleBtn.classList.add('active');
-        handleText.innerText = '右打ち稼働中';
-        handleText.classList.add('text-sky-400');
-        state.handleTimer = setInterval(() => {
-          if (state.reserves.length < 4) {
-            shootBallManual();
-          }
-        }, 650);
-      } else {
-        stopHandle();
+    function fillReservesMax() {
+      audio.init();
+      audio.playPushClick();
+      while (state.reserves.length < 4 && state.balls >= 15) {
+        state.balls -= 15;
+        const rand = Math.random();
+        let grade = rand < 0.04 ? 'RED' : (rand < 0.3 ? 'GREEN' : 'BLUE');
+        state.reserves.push(grade);
       }
+      updateHeaderUI();
+      renderReserves();
+      checkAndTriggerSpin();
     }
 
-    function stopHandle() {
-      state.handleActive = false;
-      clearInterval(state.handleTimer);
-      const handleBtn = document.getElementById('handle-btn');
-      const handleText = document.getElementById('handle-status-text');
-      handleBtn.classList.remove('active');
-      handleText.innerText = 'ハンドル停止';
-      handleText.classList.remove('text-sky-400');
+    function toggleAutoPlay() {
+      state.autoPlay = !state.autoPlay;
+      const btn = document.getElementById('btn-auto-play');
+      const text = document.getElementById('auto-status-text');
+      const icon = document.getElementById('auto-icon');
+
+      if (state.autoPlay) {
+        audio.init();
+        btn.classList.add('border-rose-500', 'bg-rose-950/40');
+        text.innerText = 'AUTO 稼働中';
+        text.classList.add('text-rose-400');
+        icon.setAttribute('data-lucide', 'pause');
+        state.autoInterval = setInterval(() => {
+          if (state.mode !== 'LT_CHALLENGE' && state.mode !== 'FEVER_DIGEST') {
+            if (state.reserves.length < 4) {
+              enqueueSpin();
+            }
+          }
+        }, 550);
+      } else {
+        stopAutoPlay();
+      }
+      lucide.createIcons();
+    }
+
+    function stopAutoPlay() {
+      state.autoPlay = false;
+      clearInterval(state.autoInterval);
+      const btn = document.getElementById('btn-auto-play');
+      const text = document.getElementById('auto-status-text');
+      const icon = document.getElementById('auto-icon');
+      btn.classList.remove('border-rose-500', 'bg-rose-950/40');
+      text.innerText = 'AUTO OFF';
+      text.classList.remove('text-rose-400');
+      icon.setAttribute('data-lucide', 'play');
+      lucide.createIcons();
     }
 
     function renderReserves() {
       for (let i = 0; i < 4; i++) {
         const slot = document.getElementById(`hold-${i}`);
-        slot.className = 'w-5 h-5 rounded-full border flex items-center justify-center ';
+        slot.className = 'w-5 h-5 rounded-full border flex items-center justify-center transition-all ';
         if (i < state.reserves.length) {
           const col = state.reserves[i];
           if (col === 'RAINBOW') {
@@ -622,9 +686,8 @@
       }
     }
 
-    /* Main Pachinko Digital Variation Process */
     function checkAndTriggerSpin() {
-      if (state.isSpinning || state.reserves.length === 0 || state.mode === 'FEVER') return;
+      if (state.isSpinning || state.reserves.length === 0 || state.mode === 'LT_CHALLENGE' || state.mode === 'FEVER_DIGEST') return;
 
       state.isSpinning = true;
       const currentGrade = state.reserves.shift();
@@ -632,33 +695,29 @@
       state.totalSpins++;
       updateHeaderUI();
 
-      // Determine hit or miss
       let isHit = false;
       if (state.forcedHit) {
         isHit = true;
         state.forcedHit = false;
-      } else if (state.mode === 'RUSH') {
-        isHit = Math.random() < (1 / 39.9);
+      } else if (state.mode === 'LT_RUSH') {
+        // High speed LT Probability: 1 / 29.9
+        isHit = Math.random() < (1 / 29.9);
       } else {
         const denom = PROB_TABLE[state.setting];
         isHit = Math.random() < (1 / denom);
       }
 
-      // Check if reach occurs (almost 100% on hit, ~15% on miss)
-      const isReach = isHit || (Math.random() < 0.16);
-
-      // Start Pachinko screen variations
-      runDigitalVariation(currentGrade, isHit, isReach);
+      const isReach = isHit || (Math.random() < 0.18);
+      runVariation(currentGrade, isHit, isReach);
     }
 
-    function runDigitalVariation(grade, isHit, isReach) {
+    function runVariation(grade, isHit, isReach) {
       const r0 = document.getElementById('reel-0');
       const r1 = document.getElementById('reel-1');
       const r2 = document.getElementById('reel-2');
       const subMsg = document.getElementById('lcd-sub-msg');
       const reachBanner = document.getElementById('reach-banner');
 
-      // Lamp lighting on hot reserves
       if (grade === 'RED' || grade === 'RAINBOW') {
         document.getElementById('kakugan-l').classList.add('active');
         document.getElementById('kakugan-r').classList.add('active');
@@ -667,73 +726,69 @@
       [r0, r1, r2].forEach(r => r.classList.remove('text-rainbow'));
       reachBanner.style.opacity = '0';
 
-      // Reel digital number cycling
       const spinInterval = setInterval(() => {
         r0.innerText = Math.floor(Math.random() * 9) + 1;
         r1.innerText = Math.floor(Math.random() * 9) + 1;
         r2.innerText = Math.floor(Math.random() * 9) + 1;
       }, 50);
 
-      // ST is ultra fast (1 second)
-      if (state.mode === 'RUSH') {
-        subMsg.innerText = '超覚醒即当りZONE――！';
+      // Fast LT Instant Spin
+      if (state.mode === 'LT_RUSH') {
+        subMsg.innerText = '⚡ 極・覚醒 即当りZONE――！';
         setTimeout(() => {
           clearInterval(spinInterval);
           if (isHit) {
             r0.innerText = 7; r1.innerText = 7; r2.innerText = 7;
             [r0, r1, r2].forEach(r => r.classList.add('text-rainbow'));
-            finishSpin(true);
+            audio.playLTFanfare();
+            processJackpot();
           } else {
             r0.innerText = Math.floor(Math.random() * 9) + 1;
             r1.innerText = (parseInt(r0.innerText) + 1) % 9 + 1;
             r2.innerText = (parseInt(r0.innerText) + 3) % 9 + 1;
             finishSpin(false);
           }
-        }, 1100);
+        }, 900);
         return;
       }
 
-      // Normal mode progression
-      subMsg.innerText = '変動中… 喰種捜査網拡大！';
+      // Normal Mode Variation
+      subMsg.innerText = '変動中… 喰種警戒網発令！';
 
-      // Step 1: Left stop (1.0s)
+      // Reel 1 Stop
       setTimeout(() => {
         const leftNum = isHit ? 7 : (Math.floor(Math.random() * 9) + 1);
         r0.innerText = leftNum;
         audio.playReelStop();
 
-        // Step 2: Right stop (1.6s)
+        // Reel 3 Stop
         setTimeout(() => {
           const rightNum = isReach ? leftNum : ((leftNum + Math.floor(Math.random() * 8) + 1) % 9 + 1);
           r2.innerText = rightNum;
           audio.playReelStop();
 
           if (isReach) {
-            // REACH Trigger!
             audio.playReachAlert();
             reachBanner.style.opacity = '1';
-            subMsg.innerHTML = '<span class="text-rose-400 font-black animate-pulse">激闘リーチ発展！ヤモリを撃破せよ！</span>';
-            state.qteActive = true;
+            subMsg.innerHTML = '<span class="text-rose-400 font-black animate-pulse">激闘リーチ発展！ヤモリを殲滅せよ！</span>';
             document.getElementById('pachi-push-btn').classList.add('active-glow');
 
-            // Middle reel slow scroll
             setTimeout(() => {
               clearInterval(spinInterval);
-              state.qteActive = false;
               document.getElementById('pachi-push-btn').classList.remove('active-glow');
 
               if (isHit) {
                 r1.innerText = leftNum;
                 [r0, r1, r2].forEach(r => r.classList.add('text-rainbow'));
-                finishSpin(true);
+                audio.playLTFanfare();
+                processJackpot();
               } else {
                 r1.innerText = (leftNum % 9) + 1;
                 finishSpin(false);
               }
-            }, 2500);
+            }, 2400);
 
           } else {
-            // No Reach Miss
             clearInterval(spinInterval);
             r1.innerText = (leftNum + 2) % 9 + 1;
             finishSpin(false);
@@ -741,7 +796,7 @@
 
         }, 600);
 
-      }, 1000);
+      }, 900);
     }
 
     function finishSpin(isHit) {
@@ -749,90 +804,158 @@
       document.getElementById('kakugan-r').classList.remove('active');
       document.getElementById('reach-banner').style.opacity = '0';
 
-      if (isHit) {
-        audio.playFanfare();
-        triggerJackpotBonus();
-      } else {
-        if (state.mode === 'RUSH') {
-          state.rushRemain--;
-          document.getElementById('st-counter').innerText = state.rushRemain;
-          if (state.rushRemain <= 0) {
-            endRUSH();
-          }
+      if (!isHit && state.mode === 'LT_RUSH') {
+        state.rushRemain--;
+        document.getElementById('st-counter').innerText = state.rushRemain;
+        if (state.rushRemain <= 0) {
+          endLT();
         }
-        state.isSpinning = false;
-        setTimeout(checkAndTriggerSpin, 250);
       }
+
+      state.isSpinning = false;
+      setTimeout(checkAndTriggerSpin, 250);
     }
 
-    /* Jackpot & RUSH System */
-    function triggerJackpotBonus() {
+    function processJackpot() {
       state.bonusCount++;
-      state.mode = 'FEVER';
-      state.balls += 1500; // ALL 1500 BALLS payout
+      state.balls += 1500; // ALL 1500 BALLS
       updateHeaderUI();
 
-      const title = document.getElementById('lcd-mode-title');
-      const sub = document.getElementById('lcd-sub-msg');
+      // If already in LT, loop LT jackpot directly
+      if (state.mode === 'LT_RUSH') {
+        state.rushStreak++;
+        state.rushRemain = 140; // Reset LT ST counter
+        document.getElementById('st-counter').innerText = '140';
+        document.getElementById('lcd-sub-msg').innerHTML = '<span class="text-yellow-300 font-black animate-bounce">★ LT継続！ ALL 1500発 GET ★</span>';
+        setTimeout(() => {
+          state.isSpinning = false;
+          checkAndTriggerSpin();
+        }, 1500);
+        return;
+      }
 
-      title.innerHTML = '<span class="text-yellow-300 font-black animate-pulse">★ HYPER BONUS 1500発 ★</span>';
-      sub.innerHTML = '<span class="text-emerald-400 font-bold">10R消化完了！ 金木研 覚醒！</span>';
+      // First time jackpot in Normal: Enter LT Challenge!
+      enterLTChallenge();
+    }
 
-      setTimeout(() => {
-        // High rate RUSH entry (65% or guaranteed in RUSH)
-        if (state.rushStreak > 0 || Math.random() < 0.65) {
-          startRUSH();
+    function enterLTChallenge() {
+      state.mode = 'LT_CHALLENGE';
+      state.isSpinning = false;
+      
+      // Hide Reels, Display LT Challenge Stage
+      document.getElementById('reels-row').classList.add('hidden');
+      document.getElementById('lt-challenge-box').classList.remove('hidden');
+      document.getElementById('lt-challenge-box').classList.add('flex');
+
+      document.getElementById('lcd-mode-title').innerHTML = '<span class="text-amber-400 font-black animate-pulse">⚡ LT (ラッキートリガー) 突入チャレンジ ⚡</span>';
+      document.getElementById('lcd-sub-msg').innerText = '心音高鳴る… PUSHボタンで運命を切り開け！';
+      
+      const pushBtn = document.getElementById('pachi-push-btn');
+      pushBtn.classList.add('lt-glow');
+      document.getElementById('push-label').innerText = 'LT CHANCE';
+
+      // Play heartbeats
+      audio.playHeartbeat();
+      const hbInterval = setInterval(() => {
+        if (state.mode === 'LT_CHALLENGE') {
+          audio.playHeartbeat();
         } else {
+          clearInterval(hbInterval);
+        }
+      }, 700);
+    }
+
+    function resolveLTChallenge() {
+      const pushBtn = document.getElementById('pachi-push-btn');
+      pushBtn.classList.remove('lt-glow');
+      document.getElementById('push-label').innerText = 'PUSH';
+      audio.playImpact();
+
+      // 50% LT Success lottery or forced
+      const isSuccess = state.forcedLTWin || (Math.random() < 0.50);
+      state.forcedLTWin = false;
+
+      const subMsg = document.getElementById('lcd-sub-msg');
+
+      if (isSuccess) {
+        audio.playLTFanfare();
+        subMsg.innerHTML = '<span class="text-yellow-300 font-black text-lg animate-bounce">⚡ 極・覚醒 LT (ラッキートリガー) 発動！！ ⚡</span>';
+        
+        // Screen Flash
+        const flash = document.getElementById('lcd-flash');
+        flash.style.opacity = '1';
+        setTimeout(() => { flash.style.opacity = '0'; }, 300);
+
+        setTimeout(() => {
+          activateLTMode();
+        }, 1500);
+
+      } else {
+        // Challenge Failed: Regular Bonus Finish
+        subMsg.innerHTML = '<span class="text-zinc-400 font-bold">無念… LT突入ならず。通常時へ移行します。</span>';
+        setTimeout(() => {
+          document.getElementById('lt-challenge-box').classList.add('hidden');
+          document.getElementById('lt-challenge-box').classList.remove('flex');
+          document.getElementById('reels-row').classList.remove('hidden');
           state.mode = 'NORMAL';
-          title.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i><span>第20区 あんていく警戒ステージ</span>';
-          sub.innerText = '通常遊技へ移行します。';
+          document.getElementById('lcd-mode-title').innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i><span>第20区 あんていく警戒ステージ</span>';
+          document.getElementById('lcd-sub-msg').innerText = '中央の【PUSHボタン】を押して抽選スタート！';
           lucide.createIcons();
           state.isSpinning = false;
           checkAndTriggerSpin();
-        }
-      }, 2600);
+        }, 2200);
+      }
     }
 
-    function startRUSH() {
-      state.mode = 'RUSH';
-      state.rushStreak++;
-      state.rushRemain = 100;
+    function activateLTMode() {
+      state.mode = 'LT_RUSH';
+      state.rushStreak = 1;
+      state.rushRemain = 140;
 
-      document.getElementById('lcd-mode-title').innerHTML = '<span class="text-rose-500 font-black animate-pulse">☠ 超覚醒 東京喰種RUSH ☠</span>';
+      // Restore Reels
+      document.getElementById('lt-challenge-box').classList.add('hidden');
+      document.getElementById('lt-challenge-box').classList.remove('flex');
+      document.getElementById('reels-row').classList.remove('hidden');
+
+      document.getElementById('lcd-mode-title').innerHTML = '<span class="text-gold font-black animate-pulse">⚡ 極・覚醒 東京喰種 LT (ST140) ⚡</span>';
       document.getElementById('lcd-st-box').classList.remove('hidden');
-      document.getElementById('st-counter').innerText = '100';
-      document.getElementById('status-badge').innerText = '超覚醒RUSH (ST 1/39.9)';
-      document.getElementById('status-badge').className = 'px-3 py-0.5 rounded-full bg-rose-900 text-rose-200 text-[11px] font-digital font-bold animate-pulse';
-      document.getElementById('lcd-sub-msg').innerText = 'ST100回 超高速変動中！';
+      document.getElementById('st-counter').innerText = '140';
+      document.getElementById('status-badge').innerText = '極・覚醒 LT (1/29.9)';
+      document.getElementById('status-badge').className = 'px-3 py-0.5 rounded-full bg-amber-900 border border-amber-400 text-amber-200 text-[11px] font-digital font-bold animate-pulse';
+      document.getElementById('lcd-sub-msg').innerText = 'LT高確率1/29.9 超高速連射中！';
 
-      audio.playReachAlert();
-      state.isSpinning = false;
+      initParticles(); // Switch to golden particles
+      lucide.createIcons();
       updateHeaderUI();
+      state.isSpinning = false;
       checkAndTriggerSpin();
     }
 
-    function endRUSH() {
+    function endLT() {
       state.mode = 'NORMAL';
       document.getElementById('lcd-st-box').classList.add('hidden');
       document.getElementById('lcd-mode-title').innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i><span>第20区 あんていく警戒ステージ</span>';
-      document.getElementById('lcd-sub-msg').innerText = `RUSH終了 (合計 ${state.rushStreak}連チャン)`;
+      document.getElementById('lcd-sub-msg').innerText = `LT終了 (合計 ${state.rushStreak}連チャン / +${(state.rushStreak * 1500).toLocaleString()}発)`;
       document.getElementById('status-badge').innerText = `通常時 (1/${PROB_TABLE[state.setting]})`;
       document.getElementById('status-badge').className = 'px-3 py-0.5 rounded-full bg-zinc-900 border border-zinc-700 text-zinc-300 text-[11px] font-digital font-bold';
       state.rushStreak = 0;
+      initParticles();
       lucide.createIcons();
       updateHeaderUI();
     }
 
-    /* PUSH Button Trigger */
-    function pressPushButton() {
-      audio.init();
-      audio.playPushImpact();
-      const flash = document.getElementById('lcd-flash');
-      flash.style.opacity = '1';
-      setTimeout(() => { flash.style.opacity = '0'; }, 160);
+    function forceJackpot() {
+      state.forcedHit = true;
+      if (!state.isSpinning) {
+        enqueueSpin();
+      }
     }
 
-    /* Verification Tools */
+    function forceDirectLT() {
+      state.forcedLTWin = true;
+      forceJackpot();
+    }
+
     function addSpecialHold() {
       if (state.reserves.length >= 4) {
         const sub = document.getElementById('lcd-sub-msg');
@@ -843,17 +966,6 @@
       renderReserves();
       audio.playReachAlert();
       checkAndTriggerSpin();
-    }
-
-    function forceJackpot() {
-      state.forcedHit = true;
-      if (!state.isSpinning) {
-        shootBallManual();
-      }
-    }
-
-    function forceRUSH() {
-      startRUSH();
     }
 
     function fastForwardSpins(count) {
@@ -874,7 +986,7 @@
 
     function borrowBalls() {
       audio.init();
-      audio.playChime();
+      audio.playPushClick();
       state.balls += 500;
       state.invest += 2000;
       updateHeaderUI();
@@ -883,7 +995,9 @@
     function changeSetting(val) {
       state.setting = parseInt(val, 10);
       const prob = PROB_TABLE[state.setting];
-      document.getElementById('status-badge').innerText = `通常時 (1/${prob})`;
+      if (state.mode === 'NORMAL') {
+        document.getElementById('status-badge').innerText = `通常時 (1/${prob})`;
+      }
     }
 
     function updateHeaderUI() {
@@ -896,13 +1010,13 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-      initPetals();
-      renderPetals();
+      initParticles();
+      renderParticles();
       updateHeaderUI();
       renderReserves();
     });
 
-    window.addEventListener('resize', initPetals);
+    window.addEventListener('resize', initParticles);
   </script>
 </body>
 </html>
