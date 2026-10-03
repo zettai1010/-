@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>P 東京喰種 -極・狂気LT仕様-</title>
+  <title>P 東京喰種 -超狂気7段階設定 PUSHタイプ-</title>
   <style>
     * {
       box-sizing: border-box;
@@ -21,17 +21,17 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 12px;
+      padding: 10px;
       overflow-x: hidden;
     }
     .cabinet {
       width: 100%;
-      max-width: 460px;
+      max-width: 470px;
       background: linear-gradient(180deg, #2b0409 0%, #111113 25%, #160205 85%, #2b0409 100%);
       border: 3px solid #ff1a40;
       box-shadow: 0 0 35px rgba(255, 0, 50, 0.45), inset 0 0 20px rgba(0, 0, 0, 0.9);
       border-radius: 20px;
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -48,15 +48,15 @@
       padding: 8px 12px;
       font-size: 13px;
     }
-    .badge-setting select {
-      background: #250207;
-      color: #ff4d6d;
+    .setting-select-box select {
+      background: #200206;
+      color: #ffd700;
       border: 1px solid #ff1a40;
       padding: 3px 6px;
       border-radius: 4px;
-      font-weight: bold;
-      outline: none;
+      font-weight: 800;
       font-size: 12px;
+      outline: none;
     }
     .counter-display {
       display: flex;
@@ -85,9 +85,9 @@
       box-shadow: inset 0 0 25px rgba(255, 0, 40, 0.35);
     }
     .status-banner {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
-      padding: 4px 16px;
+      padding: 4px 14px;
       border-radius: 20px;
       background: rgba(0,0,0,0.7);
       border: 1px solid #ff2a4b;
@@ -98,7 +98,7 @@
       border-color: #ffd700 !important;
       color: #ffd700 !important;
       background: rgba(40, 30, 0, 0.85) !important;
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
       animation: pulse 1s infinite alternate;
     }
 
@@ -120,12 +120,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 64px;
+      font-size: 60px;
       font-weight: 900;
       color: #fff;
       text-shadow: 0 0 15px #ff1a40, 0 0 30px #ff0033;
       box-shadow: 0 6px 15px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,50,80,0.4);
       transition: transform 0.1s ease;
+    }
+    .digit-box.charge-box {
+      background: linear-gradient(180deg, #112233 0%, #004466 50%, #112233 100%);
+      border-color: #00e5ff;
+      color: #80f0ff;
+      font-size: 24px;
+      text-shadow: 0 0 15px #00d2ff;
     }
     .digit-box.spinning {
       filter: blur(2px);
@@ -133,16 +140,16 @@
       color: #ff8599;
     }
 
-    /* リーチ・覚醒・LT演出オーバーレイ */
+    /* 演出メッセージ */
     .overlay-message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 900;
       text-align: center;
-      width: 100%;
+      width: 90%;
       pointer-events: none;
       z-index: 10;
       display: none;
@@ -160,11 +167,11 @@
       justify-content: space-between;
       font-size: 13px;
       font-weight: bold;
-      color: #bbb;
+      color: #ccc;
       z-index: 2;
     }
 
-    /* 大型PUSHボタン */
+    /* PUSHボタン操作エリア */
     .push-area {
       display: flex;
       flex-direction: column;
@@ -173,14 +180,14 @@
       margin: 4px 0;
     }
     .giant-push-btn {
-      width: 120px;
-      height: 120px;
+      width: 135px;
+      height: 135px;
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #ff4d6d, #b3001e 60%, #4a000a);
-      border: 4px solid #ff99aa;
-      box-shadow: 0 8px 0 #59000d, 0 12px 25px rgba(255, 0, 40, 0.6);
+      border: 5px solid #ff99aa;
+      box-shadow: 0 9px 0 #59000d, 0 15px 30px rgba(255, 0, 40, 0.65);
       color: #fff;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 900;
       cursor: pointer;
       display: flex;
@@ -192,22 +199,22 @@
       text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     }
     .giant-push-btn:active {
-      transform: translateY(6px);
-      box-shadow: 0 2px 0 #59000d, 0 5px 15px rgba(255, 0, 40, 0.4);
+      transform: translateY(7px);
+      box-shadow: 0 2px 0 #59000d, 0 6px 15px rgba(255, 0, 40, 0.5);
     }
     .giant-push-btn.ready-judge {
-      animation: judgeGlow 0.4s infinite alternate;
+      animation: judgeGlow 0.35s infinite alternate;
       border-color: #ffd700;
       background: radial-gradient(circle at 35% 35%, #ff3300, #ff0055 60%, #660011);
     }
     .push-subtext {
       font-size: 11px;
-      font-weight: 700;
-      color: #ffd;
-      margin-top: 2px;
+      font-weight: 800;
+      color: #ffe6ea;
+      margin-top: 3px;
     }
 
-    /* 操作コントロール */
+    /* 補助操作コントロール */
     .controls-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -219,7 +226,7 @@
       border: 1px solid #555;
       padding: 12px;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -278,21 +285,21 @@
       100% { transform: translateY(-2px); }
     }
     @keyframes reachPop {
-      0% { transform: translate(-50%, -50%) scale(0.9); }
-      100% { transform: translate(-50%, -50%) scale(1.1); }
+      0% { transform: translate(-50%, -50%) scale(0.92); }
+      100% { transform: translate(-50%, -50%) scale(1.08); }
     }
     @keyframes judgeGlow {
-      0% { box-shadow: 0 0 10px #ff0055, 0 8px 0 #59000d; }
-      100% { box-shadow: 0 0 35px #ffd700, 0 8px 0 #59000d; }
+      0% { box-shadow: 0 0 12px #ff0055, 0 9px 0 #59000d; }
+      100% { box-shadow: 0 0 35px #ffd700, 0 9px 0 #59000d; }
     }
   </style>
 </head>
 <body>
 
   <div class="cabinet">
-    <!-- ヘッダー情報 -->
+    <!-- ヘッダー情報：7段階設定セレクト ＆ カウンター -->
     <div class="header-bar">
-      <div class="badge-setting">
+      <div class="setting-select-box">
         設定:
         <select id="settingSelect">
           <option value="1079">設定1 (1/1079)</option>
@@ -305,43 +312,46 @@
         </select>
       </div>
       <div class="counter-display">
-        <div>玉: <span id="ballsVal" class="counter-val">1500</span></div>
+        <div>玉: <span id="ballsVal" class="counter-val">2000</span></div>
         <div>回転: <span id="spinsVal" class="counter-val">0</span></div>
       </div>
     </div>
 
     <!-- メイン液晶画面 -->
     <div class="lcd-screen" id="lcdScreen">
-      <div id="modeBanner" class="status-banner">通常モード (1回15玉)</div>
+      <div id="modeBanner" class="status-banner">通常モード (PUSHで回転 / 1回15玉)</div>
 
       <!-- デジタル図柄 -->
-      <div class="reels-wrapper">
+      <div class="reels-wrapper" id="reelsWrapper">
         <div class="digit-box" id="reel1">7</div>
         <div class="digit-box" id="reel2">7</div>
         <div class="digit-box" id="reel3">7</div>
       </div>
 
       <!-- 演出テキスト -->
-      <div id="reachOverlay" class="overlay-message reach-text">激 熱 リーチ!!</div>
+      <div id="reachOverlay" class="overlay-message reach-text">ヤモリ覚醒バトルリーチ!!</div>
       <div id="judgeOverlay" class="overlay-message" style="color:#ffd700; text-shadow:0 0 25px #ff0055;">
-        PUSHでLTを掴み取れ!!
+        【運命のLTジャッジ 51%】<br>中央のPUSHボタンを押せ!!
+      </div>
+      <div id="bonusOverlay" class="overlay-message" style="color:#ffd700; text-shadow:0 0 30px #ffaa00;">
+        <span id="bonusName">HYPER 3000 BONUS!!</span>
       </div>
 
       <div class="screen-footer">
         <div>獲得出玉: <span id="bonusPayout" style="color:#ffd700;">0</span> 発</div>
-        <div>ST残り: <span id="rushCount" style="color:#ff3355;">-</span> 回</div>
+        <div>ST残り: <span id="rushCount" style="color:#ff3355;">-</span> / 130</div>
       </div>
     </div>
 
-    <!-- PUSHボタン -->
+    <!-- 中央 PUSHボタン（メイン操作部） -->
     <div class="push-area">
       <button id="pushBtn" class="giant-push-btn">
         <span>PUSH</span>
-        <span class="push-subtext" id="pushLabel">押して変動</span>
+        <span class="push-subtext" id="pushLabel">押して変動 (15玉)</span>
       </button>
     </div>
 
-    <!-- コントロールボタン -->
+    <!-- 補助コントロールボタン -->
     <div class="controls-grid">
       <button id="spinBtn" class="btn btn-spin">
         SPIN (1回転)
@@ -353,15 +363,16 @@
 
     <!-- テスト検証バー -->
     <div class="debug-bar">
-      <button class="btn-dbg" id="dbgHitBtn">🎯 即・大当り</button>
-      <button class="btn-dbg" id="dbgLtBtn">⚡ 即・極LT突入</button>
-      <button class="btn-dbg" id="dbgSkipBtn">⏩ 100回転スキップ</button>
+      <button class="btn-dbg" id="dbgHitBtn">🎯 即・図柄揃い(1500発)</button>
+      <button class="btn-dbg" id="dbgChargeBtn">⚡ 即・喰種チャージ(300発)</button>
+      <button class="btn-dbg" id="dbgLtBtn">👑 即・LT(ST130回)直行</button>
+      <button class="btn-dbg" id="dbgSkipBtn">⏩ 50回転スキップ</button>
       <button class="btn-dbg" id="dbgRefillBtn">🪙 +1500玉補充</button>
     </div>
   </div>
 
   <script>
-    // --- Web Audio サウンド生成 ---
+    // --- Web Audio サウンドシンセサイザー ---
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let actx = null;
     function initAudio() {
@@ -388,20 +399,23 @@
       setTimeout(() => playBeep(55, 'triangle', 0.25, 0.35), 180);
     }
     function playFanfare() {
-      const notes = [440, 554, 659, 880];
+      const notes = [440, 554, 659, 880, 1108];
       notes.forEach((f, idx) => {
-        setTimeout(() => playBeep(f, 'sawtooth', 0.3, 0.2), idx * 120);
+        setTimeout(() => playBeep(f, 'sawtooth', 0.35, 0.25), idx * 110);
       });
     }
 
-    // --- ゲーム状態管理 ---
+    // --- スペック定数 ---
+    const PROB_NORMAL_CHARGE = 1 / 399.9; // 喰種チャージ
+    const PROB_RUSH_HIT = 1 / 95.3;       // ST中実質確率 (ST130回 / 継続率約75%)
+    const LT_RUSH_RATE = 0.51;            // 初当り時 LT突入率 約51%
+
     const STATE_NORMAL = 'NORMAL';
-    const STATE_JUDGE = 'JUDGE';       // LTチャレンジ
-    const STATE_RUSH_NORMAL = 'RUSH';  // 通常RUSH (ST50回, 1/39.9)
-    const STATE_RUSH_LT = 'LT';        // 極・覚醒LT (ST140回, 1/29.9)
+    const STATE_JUDGE = 'JUDGE';          // 初当り後 PUSHでLTジャッジ
+    const STATE_RUSH_LT = 'LT';           // 極・覚醒 ラッキートリガー (ST130回)
 
     let currentMode = STATE_NORMAL;
-    let balls = 1500;
+    let balls = 2000;
     let totalSpins = 0;
     let rushRemaining = 0;
     let bonusPayoutTotal = 0;
@@ -419,6 +433,8 @@
     const modeBanner = document.getElementById('modeBanner');
     const reachOverlay = document.getElementById('reachOverlay');
     const judgeOverlay = document.getElementById('judgeOverlay');
+    const bonusOverlay = document.getElementById('bonusOverlay');
+    const bonusName = document.getElementById('bonusName');
     const pushBtn = document.getElementById('pushBtn');
     const pushLabel = document.getElementById('pushLabel');
     const spinBtn = document.getElementById('spinBtn');
@@ -431,52 +447,40 @@
       ballsVal.innerText = balls;
       spinsVal.innerText = totalSpins;
       bonusPayout.innerText = bonusPayoutTotal;
-      rushCount.innerText = (currentMode === STATE_RUSH_NORMAL || currentMode === STATE_RUSH_LT) ? rushRemaining : '-';
+      rushCount.innerText = (currentMode === STATE_RUSH_LT) ? rushRemaining : '-';
 
       if (currentMode === STATE_NORMAL) {
         modeBanner.className = 'status-banner';
-        modeBanner.innerText = '通常モード (1回15玉)';
-        pushLabel.innerText = '押して変動';
+        modeBanner.innerText = `通常モード (設定${settingSelect.selectedIndex + 1}: 1/${settingSelect.value} / PUSHで変動)`;
+        pushLabel.innerText = '押して変動 (15玉)';
         pushBtn.classList.remove('ready-judge');
       } else if (currentMode === STATE_JUDGE) {
         modeBanner.className = 'status-banner mode-lt';
-        modeBanner.innerText = '運命のLTチャレンジ！';
+        modeBanner.innerText = '運命のLTジャッジ (突入率約51%)';
         pushLabel.innerText = '一撃を叩き込め！';
         pushBtn.classList.add('ready-judge');
       } else if (currentMode === STATE_RUSH_LT) {
         modeBanner.className = 'status-banner mode-lt';
-        modeBanner.innerText = '極・覚醒 東京喰種 LT (無料消化中)';
-        pushLabel.innerText = '高速即当り待機';
-        pushBtn.classList.remove('ready-judge');
-      } else if (currentMode === STATE_RUSH_NORMAL) {
-        modeBanner.className = 'status-banner';
-        modeBanner.style.borderColor = '#00e5ff';
-        modeBanner.style.color = '#00e5ff';
-        modeBanner.innerText = '東京喰種 RUSH (無料消化中)';
-        pushLabel.innerText = '高速即当り待機';
+        modeBanner.innerText = '極・東京喰種 LT (ST130回・実質1/95.3)';
+        pushLabel.innerText = 'PUSHで高速変動 (無料)';
         pushBtn.classList.remove('ready-judge');
       }
     }
 
-    // 内部抽選確率の取得
-    function getDenominator() {
-      if (currentMode === STATE_RUSH_LT) return 29.9;
-      if (currentMode === STATE_RUSH_NORMAL) return 39.9;
-      return parseFloat(settingSelect.value); // 1079〜873
-    }
+    settingSelect.addEventListener('change', updateUI);
 
-    // 変動処理 (SPIN)
-    function executeSpin(forceWin = false) {
+    // 変動処理 (PUSH / SPIN)
+    function executeSpin(forceType = null) {
       if (isSpinning) return;
       initAudio();
 
-      // チャレンジ待機中はPUSHでジャッジ
+      // LTジャッジ待機中は PUSHで判定
       if (currentMode === STATE_JUDGE) {
         handleLtJudge();
         return;
       }
 
-      // 通常時は15玉消費、RUSH/LT中は完全無料
+      // 通常時は15玉消費、ST中は完全無料
       if (currentMode === STATE_NORMAL) {
         if (balls < 15) {
           alert('玉が足りません。「+1500玉補充」を押してください。');
@@ -484,8 +488,7 @@
           return;
         }
         balls -= 15;
-      } else {
-        // RUSH中減算
+      } else if (currentMode === STATE_RUSH_LT) {
         rushRemaining--;
       }
 
@@ -493,21 +496,53 @@
       isSpinning = true;
       updateUI();
 
-      // 抽選実行
-      const denom = getDenominator();
-      const isWin = forceWin || (Math.random() < (1 / denom));
+      // 内部抽選実行
+      let isHit = false;
+      let isCharge = false;
 
-      // リール回転開始
+      if (forceType === 'HIT') {
+        isHit = true;
+      } else if (forceType === 'CHARGE') {
+        isCharge = true;
+      } else {
+        const rand = Math.random();
+        if (currentMode === STATE_NORMAL) {
+          // ご指定の7段階設定（1/1079 〜 1/873）
+          const normalHitProb = 1 / parseFloat(settingSelect.value);
+          if (rand < normalHitProb) {
+            isHit = true;
+          } else if (rand < (normalHitProb + PROB_NORMAL_CHARGE)) {
+            isCharge = true;
+          }
+        } else if (currentMode === STATE_RUSH_LT) {
+          if (rand < PROB_RUSH_HIT) {
+            isHit = true; // ST中は図柄揃いのみ
+          }
+        }
+      }
+
+      // 図柄回転演出
       playBeep(260, 'square', 0.08, 0.2);
+      resetReelBoxes();
       reel1.classList.add('spinning');
       reel2.classList.add('spinning');
       reel3.classList.add('spinning');
 
-      const isReach = isWin || (Math.random() < 0.15); // 当選または15%でリーチ発展
-      const targetDigit = isWin ? 7 : Math.floor(Math.random() * 9) + 1;
+      const isReach = isHit || (!isCharge && Math.random() < 0.12);
+      const targetDigit = isHit ? 7 : Math.floor(Math.random() * 9) + 1;
 
-      // 図柄停止シーケンス
+      // リール停止シーケンス
       setTimeout(() => {
+        if (isCharge) {
+          // 喰種チャージ停止演出
+          reel1.classList.remove('spinning');
+          reel2.classList.remove('spinning');
+          reel3.classList.remove('spinning');
+          setChargeDisplay();
+          handleChargeHit();
+          return;
+        }
+
         // 左停止
         reel1.classList.remove('spinning');
         reel1.innerText = targetDigit;
@@ -532,10 +567,10 @@
             reel2.classList.remove('spinning');
             reachOverlay.style.display = 'none';
 
-            if (isWin) {
+            if (isHit) {
               reel2.innerText = targetDigit;
               playFanfare();
-              handleHit();
+              handleMainHit();
             } else {
               let d2 = Math.floor(Math.random() * 9) + 1;
               if (d2 === targetDigit) d2 = (d2 % 9) + 1;
@@ -543,68 +578,113 @@
               playBeep(220, 'sine', 0.06, 0.2);
               isSpinning = false;
 
-              // RUSH駆け抜け判定
-              if ((currentMode === STATE_RUSH_NORMAL || currentMode === STATE_RUSH_LT) && rushRemaining <= 0) {
+              // ST駆け抜け判定
+              if (currentMode === STATE_RUSH_LT && rushRemaining <= 0) {
                 currentMode = STATE_NORMAL;
-                alert('RUSH終了 通常時へ転落しました。');
+                alert('ST130回終了 通常モードへ移行します。');
               }
               updateUI();
             }
-          }, isReach ? 800 : 250);
-        }, 200);
-      }, 300);
+          }, isReach ? 750 : 200);
+        }, 180);
+      }, 260);
     }
 
-    // 大当り当選時の処理
-    function handleHit() {
-      // 1500発払出
-      balls += 1500;
-      bonusPayoutTotal += 1500;
-      updateUI();
+    function resetReelBoxes() {
+      [reel1, reel2, reel3].forEach(r => {
+        r.classList.remove('charge-box');
+      });
+    }
 
+    function setChargeDisplay() {
+      reel1.classList.add('charge-box');
+      reel2.classList.add('charge-box');
+      reel3.classList.add('charge-box');
+      reel1.innerText = '喰';
+      reel2.innerText = '種';
+      reel3.innerText = '充';
+    }
+
+    // 図柄揃い大当り処理
+    function handleMainHit() {
+      stopAuto();
       if (currentMode === STATE_NORMAL) {
-        // 通常からの初当りはLTチャレンジへ突入
-        stopAuto();
+        // 通常時初当り：1500発 (10R) + PUSHでLTジャッジへ
+        balls += 1500;
+        bonusPayoutTotal += 1500;
         currentMode = STATE_JUDGE;
         judgeOverlay.style.display = 'block';
         updateUI();
         isSpinning = false;
       } else {
-        // RUSH中の連チャンはそのままST回数再セット
-        if (currentMode === STATE_RUSH_LT) {
-          rushRemaining = 140;
-        } else {
-          rushRemaining = 50;
-        }
+        // ST中大当り：オール3000発以上！ (3000個 約90% / 6000個 約10%)
+        const is6000 = Math.random() < 0.10;
+        const payout = is6000 ? 6000 : 3000;
+        balls += payout;
+        bonusPayoutTotal += payout;
+
+        bonusName.innerText = is6000 ? '極限覚醒 6000 BONUS!!' : 'HYPER 3000 BONUS!!';
+        bonusOverlay.style.display = 'block';
+
         setTimeout(() => {
+          bonusOverlay.style.display = 'none';
+          rushRemaining = 130; // ST130回転リセット
           isSpinning = false;
           updateUI();
-        }, 700);
+        }, 1200);
       }
     }
 
-    // LT突入チャレンジ判定（50%で極LT、失敗で通常RUSH）
+    // 喰種チャージ大当り処理（約300発）
+    function handleChargeHit() {
+      stopAuto();
+      balls += 300;
+      bonusPayoutTotal += 300;
+      playBeep(480, 'sine', 0.25, 0.3);
+
+      // チャージからのごく稀なLT昇格（約1%）
+      const isMiracleLt = Math.random() < 0.01;
+
+      setTimeout(() => {
+        if (isMiracleLt) {
+          playFanfare();
+          alert('喰種チャージ消化中にブラックアウト！ ラッキートリガー昇格！');
+          currentMode = STATE_RUSH_LT;
+          rushRemaining = 130;
+        } else {
+          alert('喰種チャージ完了（約300個獲得） 通常時へ復帰します。');
+          currentMode = STATE_NORMAL;
+        }
+        resetReelBoxes();
+        reel1.innerText = '7';
+        reel2.innerText = '7';
+        reel3.innerText = '7';
+        isSpinning = false;
+        updateUI();
+      }, 700);
+    }
+
+    // LT突入チャレンジ判定（約51%）
     function handleLtJudge() {
       judgeOverlay.style.display = 'none';
       playHeartbeat();
 
-      const isLtSuccess = Math.random() < 0.5;
+      const isSuccess = Math.random() < LT_RUSH_RATE;
 
-      if (isLtSuccess) {
+      if (isSuccess) {
         currentMode = STATE_RUSH_LT;
-        rushRemaining = 140;
+        rushRemaining = 130;
         playFanfare();
-        alert('極・覚醒 東京喰種 LT 突入!! (ST140回・高確率1/29.9)');
+        alert('【LT発動】極・覚醒 東京喰種 LT 突入!!\n(ST130回・実質1/95.3・ALL3000個OVER)');
       } else {
-        currentMode = STATE_RUSH_NORMAL;
-        rushRemaining = 50;
-        playBeep(440, 'triangle', 0.3, 0.3);
-        alert('東京喰種 RUSH 突入 (ST50回・高確率1/39.9)');
+        currentMode = STATE_NORMAL;
+        playBeep(200, 'sawtooth', 0.3, 0.3);
+        alert('LT突入ならず… 通常モードへ戻ります。');
       }
       updateUI();
     }
 
-    // オートモード切り替え
+    // オート切り替え
     function toggleAuto() {
       if (isAuto) {
         stopAuto();
@@ -617,7 +697,7 @@
           if (!isSpinning && currentMode !== STATE_JUDGE) {
             executeSpin();
           }
-        }, 1100);
+        }, 1000);
       }
     }
     function stopAuto() {
@@ -627,23 +707,24 @@
       if (autoInterval) clearInterval(autoInterval);
     }
 
-    // イベントリスナー紐付け
-    spinBtn.addEventListener('click', () => executeSpin());
+    // イベントリスナー
     pushBtn.addEventListener('click', () => executeSpin());
+    spinBtn.addEventListener('click', () => executeSpin());
     autoBtn.addEventListener('click', toggleAuto);
 
-    // テスト検証ボタン群
-    document.getElementById('dbgHitBtn').addEventListener('click', () => executeSpin(true));
+    // テスト検証ボタン
+    document.getElementById('dbgHitBtn').addEventListener('click', () => executeSpin('HIT'));
+    document.getElementById('dbgChargeBtn').addEventListener('click', () => executeSpin('CHARGE'));
     document.getElementById('dbgLtBtn').addEventListener('click', () => {
       currentMode = STATE_RUSH_LT;
-      rushRemaining = 140;
+      rushRemaining = 130;
       updateUI();
-      alert('極・覚醒 LTに直撃突入しました！');
+      alert('極・覚醒 LT（ST130回）に直撃突入しました！');
     });
     document.getElementById('dbgSkipBtn').addEventListener('click', () => {
-      totalSpins += 100;
+      totalSpins += 50;
       if (currentMode === STATE_NORMAL) {
-        balls = Math.max(0, balls - 1500);
+        balls = Math.max(0, balls - (50 * 15));
       }
       updateUI();
     });
