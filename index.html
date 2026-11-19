@@ -1,739 +1,974 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>P 東京喰種 -超狂気7段階設定 PUSHタイプ-</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚔️ RPG CASINO - RTP 99.5% 五分五分仕様</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
     body {
-      background: radial-gradient(circle at center, #1b0004 0%, #050505 100%);
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+      background-color: #0b1120;
+      color: #f8fafc;
+      user-select: none;
     }
-    .cabinet {
-      width: 100%;
-      max-width: 470px;
-      background: linear-gradient(180deg, #2b0409 0%, #111113 25%, #160205 85%, #2b0409 100%);
-      border: 3px solid #ff1a40;
-      box-shadow: 0 0 35px rgba(255, 0, 50, 0.45), inset 0 0 20px rgba(0, 0, 0, 0.9);
-      border-radius: 20px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
+    .font-mono-num {
+      font-family: 'JetBrains Mono', monospace;
     }
-    /* ヘッダー情報 */
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0,0,0,0.65);
-      border: 1px solid #4a0d16;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 13px;
+    /* スロット大当たりアニメーション */
+    @keyframes jackpotGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.45), inset 0 0 10px rgba(245, 158, 11, 0.25); border-color: #f59e0b; }
+      50% { box-shadow: 0 0 35px rgba(16, 185, 129, 0.9), inset 0 0 20px rgba(16, 185, 129, 0.45); border-color: #10b981; }
     }
-    .setting-select-box select {
-      background: #200206;
-      color: #ffd700;
-      border: 1px solid #ff1a40;
-      padding: 3px 6px;
-      border-radius: 4px;
-      font-weight: 800;
-      font-size: 12px;
-      outline: none;
+    .jackpot-active {
+      animation: jackpotGlow 0.55s infinite;
     }
-    .counter-display {
-      display: flex;
-      gap: 12px;
-      font-weight: bold;
+    /* マインズタイル */
+    .mine-tile {
+      transition: transform 0.1s ease, background-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .counter-val {
-      color: #ff3355;
-      font-family: monospace;
-      font-size: 15px;
+    .mine-tile:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
     }
-
-    /* メイン液晶画面 */
-    .lcd-screen {
-      height: 310px;
-      background: radial-gradient(circle at center, #26050b 0%, #000000 95%);
-      border: 2px solid #ff2a4b;
-      border-radius: 14px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px;
-      overflow: hidden;
-      box-shadow: inset 0 0 25px rgba(255, 0, 40, 0.35);
+    .mine-tile:not(:disabled):active {
+      transform: scale(0.95);
     }
-    .status-banner {
-      font-size: 12px;
-      font-weight: 800;
-      padding: 4px 14px;
-      border-radius: 20px;
-      background: rgba(0,0,0,0.7);
-      border: 1px solid #ff2a4b;
-      color: #ff5e78;
-      letter-spacing: 1px;
+    /* クラッシュ背景グリッド */
+    .crash-grid {
+      background-image: 
+        linear-gradient(to right, rgba(51, 65, 85, 0.28) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(51, 65, 85, 0.28) 1px, transparent 1px);
+      background-size: 26px 26px;
     }
-    .mode-lt {
-      border-color: #ffd700 !important;
-      color: #ffd700 !important;
-      background: rgba(40, 30, 0, 0.85) !important;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
-      animation: pulse 1s infinite alternate;
-    }
-
-    /* デジタル図柄表示 */
-    .reels-wrapper {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-      margin: auto 0;
-      z-index: 2;
-    }
-    .digit-box {
-      width: 82px;
-      height: 110px;
-      background: linear-gradient(180deg, #1f0206 0%, #450912 50%, #1f0206 100%);
-      border: 2px solid #ff3b5c;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 60px;
-      font-weight: 900;
-      color: #fff;
-      text-shadow: 0 0 15px #ff1a40, 0 0 30px #ff0033;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,50,80,0.4);
-      transition: transform 0.1s ease;
-    }
-    .digit-box.charge-box {
-      background: linear-gradient(180deg, #112233 0%, #004466 50%, #112233 100%);
-      border-color: #00e5ff;
-      color: #80f0ff;
-      font-size: 24px;
-      text-shadow: 0 0 15px #00d2ff;
-    }
-    .digit-box.spinning {
-      filter: blur(2px);
-      animation: digitShake 0.08s infinite;
-      color: #ff8599;
-    }
-
-    /* 演出メッセージ */
-    .overlay-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      font-weight: 900;
-      text-align: center;
-      width: 90%;
-      pointer-events: none;
-      z-index: 10;
-      display: none;
-    }
-    .reach-text {
-      color: #ff1133;
-      text-shadow: 0 0 20px #ff0000, 0 0 40px #fff;
-      animation: reachPop 0.4s infinite alternate;
-    }
-
-    /* 下部ステータス表示 */
-    .screen-footer {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: bold;
-      color: #ccc;
-      z-index: 2;
-    }
-
-    /* PUSHボタン操作エリア */
-    .push-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: 4px 0;
-    }
-    .giant-push-btn {
-      width: 135px;
-      height: 135px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #ff4d6d, #b3001e 60%, #4a000a);
-      border: 5px solid #ff99aa;
-      box-shadow: 0 9px 0 #59000d, 0 15px 30px rgba(255, 0, 40, 0.65);
-      color: #fff;
-      font-size: 24px;
-      font-weight: 900;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      outline: none;
-      transition: all 0.06s ease;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    }
-    .giant-push-btn:active {
-      transform: translateY(7px);
-      box-shadow: 0 2px 0 #59000d, 0 6px 15px rgba(255, 0, 40, 0.5);
-    }
-    .giant-push-btn.ready-judge {
-      animation: judgeGlow 0.35s infinite alternate;
-      border-color: #ffd700;
-      background: radial-gradient(circle at 35% 35%, #ff3300, #ff0055 60%, #660011);
-    }
-    .push-subtext {
-      font-size: 11px;
-      font-weight: 800;
-      color: #ffe6ea;
-      margin-top: 3px;
-    }
-
-    /* 補助操作コントロール */
-    .controls-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 10px;
-    }
-    .btn {
-      background: linear-gradient(180deg, #333 0%, #1a1a1a 100%);
-      color: #fff;
-      border: 1px solid #555;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background 0.1s ease;
-    }
-    .btn:active {
-      background: #111;
-    }
-    .btn-spin {
-      background: linear-gradient(180deg, #d90429 0%, #7a0014 100%);
-      border-color: #ff4d6d;
-      box-shadow: 0 4px 12px rgba(217, 4, 41, 0.4);
-      font-size: 17px;
-    }
-    .btn-auto.active {
-      background: linear-gradient(180deg, #00b4d8 0%, #0077b6 100%);
-      border-color: #90e0ef;
-      box-shadow: 0 0 12px #00b4d8;
-    }
-
-    /* 検証デバッグバー */
-    .debug-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      background: rgba(0,0,0,0.5);
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px dashed #444;
-    }
-    .btn-dbg {
-      background: #222;
-      border: 1px solid #666;
-      color: #bbb;
-      font-size: 11px;
-      padding: 5px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      flex: 1 1 auto;
-    }
-    .btn-dbg:hover {
-      background: #333;
-      color: #fff;
-    }
-
-    @keyframes pulse {
-      from { transform: scale(1); }
-      to { transform: scale(1.03); }
-    }
-    @keyframes digitShake {
-      0% { transform: translateY(-2px); }
-      50% { transform: translateY(2px); }
-      100% { transform: translateY(-2px); }
-    }
-    @keyframes reachPop {
-      0% { transform: translate(-50%, -50%) scale(0.92); }
-      100% { transform: translate(-50%, -50%) scale(1.08); }
-    }
-    @keyframes judgeGlow {
-      0% { box-shadow: 0 0 12px #ff0055, 0 9px 0 #59000d; }
-      100% { box-shadow: 0 0 35px #ffd700, 0 9px 0 #59000d; }
-    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b1120; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center pb-12">
 
-  <div class="cabinet">
-    <!-- ヘッダー情報：7段階設定セレクト ＆ カウンター -->
-    <div class="header-bar">
-      <div class="setting-select-box">
-        設定:
-        <select id="settingSelect">
-          <option value="1079">設定1 (1/1079)</option>
-          <option value="1056">設定2 (1/1056)</option>
-          <option value="1022">設定3 (1/1022)</option>
-          <option value="999">設定4 (1/999)</option>
-          <option value="961">設定5 (1/961)</option>
-          <option value="924">設定6 (1/924)</option>
-          <option value="873">設定7 (1/873)</option>
-        </select>
-      </div>
-      <div class="counter-display">
-        <div>玉: <span id="ballsVal" class="counter-val">2000</span></div>
-        <div>回転: <span id="spinsVal" class="counter-val">0</span></div>
-      </div>
-    </div>
-
-    <!-- メイン液晶画面 -->
-    <div class="lcd-screen" id="lcdScreen">
-      <div id="modeBanner" class="status-banner">通常モード (PUSHで回転 / 1回15玉)</div>
-
-      <!-- デジタル図柄 -->
-      <div class="reels-wrapper" id="reelsWrapper">
-        <div class="digit-box" id="reel1">7</div>
-        <div class="digit-box" id="reel2">7</div>
-        <div class="digit-box" id="reel3">7</div>
+  <!-- ヘッダー -->
+  <header class="w-full bg-[#1e293b]/95 backdrop-blur border-b border-slate-700/80 sticky top-0 z-30">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- ロゴ＆RTPバッジ -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-xl shadow-inner">
+          ⚔️
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2.5">
+          <h1 class="text-lg sm:text-xl font-black tracking-tight text-amber-400 leading-none">⚔️ RPG CASINO</h1>
+          <span class="inline-block w-fit text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/50">
+            RTP 99.5% 五分五分
+          </span>
+        </div>
       </div>
 
-      <!-- 演出テキスト -->
-      <div id="reachOverlay" class="overlay-message reach-text">ヤモリ覚醒バトルリーチ!!</div>
-      <div id="judgeOverlay" class="overlay-message" style="color:#ffd700; text-shadow:0 0 25px #ff0055;">
-        【運命のLTジャッジ 51%】<br>中央のPUSHボタンを押せ!!
-      </div>
-      <div id="bonusOverlay" class="overlay-message" style="color:#ffd700; text-shadow:0 0 30px #ffaa00;">
-        <span id="bonusName">HYPER 3000 BONUS!!</span>
-      </div>
+      <!-- 右側コントロール（サウンド・補給・残高） -->
+      <div class="flex items-center gap-2">
+        <button id="sound-toggle" onclick="toggleSound()" title="効果音 ON/OFF"
+          class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 transition text-sm">
+          🔊
+        </button>
 
-      <div class="screen-footer">
-        <div>獲得出玉: <span id="bonusPayout" style="color:#ffd700;">0</span> 発</div>
-        <div>ST残り: <span id="rushCount" style="color:#ff3355;">-</span> / 130</div>
+        <div class="px-3 py-1.5 rounded-xl bg-[#0b1120] border border-slate-700 flex items-center gap-1.5 shadow-inner">
+          <span class="text-xs text-slate-400 font-semibold hidden sm:inline">所持チップ</span>
+          <span id="balance-display" class="font-mono-num text-base sm:text-lg font-extrabold text-emerald-400">10,000</span>
+          <span class="text-xs font-bold text-amber-400">G</span>
+        </div>
+
+        <button onclick="refillBalance()"
+          class="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 text-xs sm:text-sm font-extrabold transition active:scale-95">
+          +5,000 G
+        </button>
       </div>
     </div>
+  </header>
 
-    <!-- 中央 PUSHボタン（メイン操作部） -->
-    <div class="push-area">
-      <button id="pushBtn" class="giant-push-btn">
-        <span>PUSH</span>
-        <span class="push-subtext" id="pushLabel">押して変動 (15玉)</span>
+  <!-- トースト通知 -->
+  <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- メインコンテンツ -->
+  <main class="w-full max-w-2xl px-4 mt-6 flex flex-col gap-5">
+
+    <!-- ゲーム切り替えタブ -->
+    <nav class="grid grid-cols-3 gap-2 p-1.5 bg-[#1e293b] rounded-2xl border border-slate-700/80 shadow-lg">
+      <button onclick="switchTab('crash')" id="tab-crash"
+        class="tab-btn py-3 px-2 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-1.5 transition bg-amber-500 text-slate-950 shadow">
+        <span>🚀</span><span>CRASH</span>
       </button>
-    </div>
-
-    <!-- 補助コントロールボタン -->
-    <div class="controls-grid">
-      <button id="spinBtn" class="btn btn-spin">
-        SPIN (1回転)
+      <button onclick="switchTab('slots')" id="tab-slots"
+        class="tab-btn py-3 px-2 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-1.5 transition text-slate-300 hover:bg-slate-800">
+        <span>🎰</span><span>SLOTS</span>
       </button>
-      <button id="autoBtn" class="btn btn-auto">
-        AUTO OFF
+      <button onclick="switchTab('mines')" id="tab-mines"
+        class="tab-btn py-3 px-2 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-1.5 transition text-slate-300 hover:bg-slate-800">
+        <span>💣</span><span>MINES</span>
       </button>
-    </div>
+    </nav>
 
-    <!-- テスト検証バー -->
-    <div class="debug-bar">
-      <button class="btn-dbg" id="dbgHitBtn">🎯 即・図柄揃い(1500発)</button>
-      <button class="btn-dbg" id="dbgChargeBtn">⚡ 即・喰種チャージ(300発)</button>
-      <button class="btn-dbg" id="dbgLtBtn">👑 即・LT(ST130回)直行</button>
-      <button class="btn-dbg" id="dbgSkipBtn">⏩ 50回転スキップ</button>
-      <button class="btn-dbg" id="dbgRefillBtn">🪙 +1500玉補充</button>
-    </div>
-  </div>
+    <!-- ========================================== -->
+    <!-- 1. CRASH (クラッシュ)                      -->
+    <!-- ========================================== -->
+    <section id="panel-crash" class="bg-[#1e293b] rounded-2xl border border-slate-700/80 p-5 sm:p-6 shadow-xl">
+      <!-- 過去の爆発倍率履歴ピル -->
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <span class="text-xs font-bold text-slate-400">直近履歴</span>
+        <div id="crash-history-pills" class="flex items-center gap-1.5 overflow-x-auto py-1">
+          <!-- JSで生成 -->
+        </div>
+      </div>
+
+      <!-- メインモニター -->
+      <div id="crash-screen" class="crash-grid relative h-48 sm:h-56 rounded-2xl bg-[#0b1120] border-2 border-slate-700 flex flex-col items-center justify-center overflow-hidden mb-5 transition-colors">
+        <div id="crash-rocket" class="text-3xl mb-1 transition-transform duration-75">🚀</div>
+        <div id="crash-multiplier" class="font-mono-num text-5xl sm:text-6xl font-black tracking-tight text-white">1.00x</div>
+        <div id="crash-subtext" class="mt-2 text-xs sm:text-sm font-semibold text-slate-400">還元率 99.5% フェア勝負（即死率 0.5%）</div>
+        <div id="crash-live-win" class="hidden mt-1.5 font-mono-num text-sm font-bold text-emerald-400 bg-emerald-950/90 px-3 py-0.5 rounded-full border border-emerald-500/40">
+          現在配当: +0 G
+        </div>
+      </div>
+
+      <!-- ベット操作 -->
+      <div class="flex flex-col sm:flex-row gap-2.5 mb-4">
+        <div class="flex-1 flex items-center bg-[#0b1120] rounded-xl border border-slate-700 p-1.5">
+          <span class="pl-3 pr-2 text-xs font-bold text-slate-400">BET</span>
+          <input type="number" id="crash-bet" value="500" min="10" step="10"
+            class="w-full bg-transparent font-mono-num text-lg font-bold text-white focus:outline-none text-right pr-2" />
+          <span class="pr-3 text-xs font-bold text-amber-400">G</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 sm:w-44">
+          <button id="crash-half-btn" onclick="adjustBet('crash-bet', 0.5)" class="py-2.5 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold transition">1/2</button>
+          <button id="crash-double-btn" onclick="adjustBet('crash-bet', 2)" class="py-2.5 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold transition">2x</button>
+          <button id="crash-max-btn" onclick="setMaxBet('crash-bet')" class="py-2.5 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold text-amber-400 transition">MAX</button>
+        </div>
+      </div>
+
+      <button id="crash-action-btn" onclick="toggleCrash()"
+        class="w-full py-4 rounded-xl font-black text-lg tracking-wide bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition active:scale-[0.99]">
+        BET & START
+      </button>
+      <div id="crash-result-msg" class="mt-3 text-center text-sm font-bold min-h-[22px]"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2. SLOTS (スロット)                        -->
+    <!-- ========================================== -->
+    <section id="panel-slots" class="hidden bg-[#1e293b] rounded-2xl border border-slate-700/80 p-5 sm:p-6 shadow-xl">
+      <!-- 精密配当＆出現率テーブル -->
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 mb-5 text-center">
+        <div class="bg-[#0b1120] border border-slate-700/80 rounded-xl py-2 px-1">
+          <div class="text-lg">🍒</div>
+          <div class="font-mono-num text-xs font-extrabold text-slate-200">2.5x</div>
+          <div class="text-[10px] text-slate-400">18.0%</div>
+        </div>
+        <div class="bg-[#0b1120] border border-slate-700/80 rounded-xl py-2 px-1">
+          <div class="text-lg">🍋</div>
+          <div class="font-mono-num text-xs font-extrabold text-slate-200">4x</div>
+          <div class="text-[10px] text-slate-400">7.0%</div>
+        </div>
+        <div class="bg-[#0b1120] border border-slate-700/80 rounded-xl py-2 px-1">
+          <div class="text-lg">🍇</div>
+          <div class="font-mono-num text-xs font-extrabold text-slate-200">8x</div>
+          <div class="text-[10px] text-slate-400">2.0%</div>
+        </div>
+        <div class="bg-[#0b1120] border border-slate-700/80 rounded-xl py-2 px-1">
+          <div class="text-lg">🔔</div>
+          <div class="font-mono-num text-xs font-extrabold text-amber-300">15x</div>
+          <div class="text-[10px] text-slate-400">0.4%</div>
+        </div>
+        <div class="bg-[#0b1120] border border-slate-700/80 rounded-xl py-2 px-1">
+          <div class="text-lg">💎</div>
+          <div class="font-mono-num text-xs font-extrabold text-cyan-300">40x</div>
+          <div class="text-[10px] text-slate-400">0.075%</div>
+        </div>
+        <div class="bg-[#0b1120] border border-amber-500/50 rounded-xl py-2 px-1">
+          <div class="text-lg">7️⃣</div>
+          <div class="font-mono-num text-xs font-black text-amber-400">100x</div>
+          <div class="text-[10px] text-amber-400/80">0.015%</div>
+        </div>
+      </div>
+
+      <!-- スロット筐体 -->
+      <div id="slot-machine-box" class="bg-[#0b1120] border-2 border-slate-700 rounded-2xl p-6 mb-5 flex flex-col items-center">
+        <div class="flex items-center justify-center gap-3 sm:gap-5 my-2">
+          <div id="reel-0" class="w-20 h-24 sm:w-24 sm:h-28 rounded-2xl bg-slate-900 border-2 border-amber-500/70 flex items-center justify-center text-4xl sm:text-5xl shadow-inner">7️⃣</div>
+          <div id="reel-1" class="w-20 h-24 sm:w-24 sm:h-28 rounded-2xl bg-slate-900 border-2 border-amber-500/70 flex items-center justify-center text-4xl sm:text-5xl shadow-inner">7️⃣</div>
+          <div id="reel-2" class="w-20 h-24 sm:w-24 sm:h-28 rounded-2xl bg-slate-900 border-2 border-amber-500/70 flex items-center justify-center text-4xl sm:text-5xl shadow-inner">7️⃣</div>
+        </div>
+        <p class="text-xs text-slate-400 mt-3">3つ揃い専用・合計期待値 <span class="text-emerald-400 font-bold">99.5%</span> の純粋五分五分設計</p>
+      </div>
+
+      <!-- ベット操作 -->
+      <div class="flex flex-col sm:flex-row gap-2.5 mb-4">
+        <div class="flex-1 flex items-center bg-[#0b1120] rounded-xl border border-slate-700 p-1.5">
+          <span class="pl-3 pr-2 text-xs font-bold text-slate-400">BET</span>
+          <input type="number" id="slots-bet" value="500" min="10" step="10"
+            class="w-full bg-transparent font-mono-num text-lg font-bold text-white focus:outline-none text-right pr-2" />
+          <span class="pr-3 text-xs font-bold text-amber-400">G</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 sm:w-44">
+          <button onclick="adjustBet('slots-bet', 0.5)" class="py-2.5 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold transition">1/2</button>
+          <button onclick="adjustBet('slots-bet', 2)" class="py-2.5 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold transition">2x</button>
+          <button onclick="setMaxBet('slots-bet')" class="py-2.5 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold text-amber-400 transition">MAX</button>
+        </div>
+      </div>
+
+      <button id="slots-spin-btn" onclick="spinSlots()"
+        class="w-full py-4 rounded-xl font-black text-lg tracking-wide bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/20 transition active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed">
+        🎰 SPIN (回す)
+      </button>
+      <div id="slots-result-msg" class="mt-3 text-center text-sm font-bold min-h-[22px]"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3. MINES (マインズ / 爆弾避け)              -->
+    <!-- ========================================== -->
+    <section id="panel-mines" class="hidden bg-[#1e293b] rounded-2xl border border-slate-700/80 p-5 sm:p-6 shadow-xl">
+      <!-- ステータスバー -->
+      <div class="grid grid-cols-3 gap-2 mb-4 bg-[#0b1120] p-3 rounded-xl border border-slate-700/80 text-center">
+        <div>
+          <div class="text-[11px] text-slate-400 font-semibold">現在の倍率</div>
+          <div id="mines-current-mult" class="font-mono-num text-base sm:text-lg font-black text-amber-400">1.00x</div>
+        </div>
+        <div>
+          <div class="text-[11px] text-slate-400 font-semibold">次の宝石で</div>
+          <div id="mines-next-mult" class="font-mono-num text-base sm:text-lg font-black text-cyan-400">-</div>
+        </div>
+        <div>
+          <div class="text-[11px] text-slate-400 font-semibold">獲得可能配当</div>
+          <div id="mines-payout" class="font-mono-num text-base sm:text-lg font-black text-emerald-400">0 G</div>
+        </div>
+      </div>
+
+      <!-- 5x5 グリッド -->
+      <div id="mines-grid" class="grid grid-cols-5 gap-2 max-w-[330px] mx-auto my-5">
+        <!-- JSで25マス生成 -->
+      </div>
+
+      <!-- 爆弾数選択＆ベット操作 -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 mb-4">
+        <div class="sm:col-span-5 flex items-center justify-between bg-[#0b1120] rounded-xl border border-slate-700 px-3 py-2">
+          <span class="text-xs font-bold text-slate-400">💣 爆弾数</span>
+          <select id="mines-count" onchange="updateMinesPreview()"
+            class="bg-slate-800 text-white font-mono-num font-bold text-xs sm:text-sm rounded-lg px-2.5 py-1.5 border border-slate-600 focus:outline-none">
+            <option value="1">1個 (安全重視)</option>
+            <option value="3" selected>3個 (標準)</option>
+            <option value="5">5個 (ハイリスク)</option>
+            <option value="10">10個 (超ハイリスク)</option>
+          </select>
+        </div>
+
+        <div class="sm:col-span-7 flex gap-1.5">
+          <div class="flex-1 flex items-center bg-[#0b1120] rounded-xl border border-slate-700 p-1.5">
+            <span class="pl-2.5 pr-1.5 text-xs font-bold text-slate-400">BET</span>
+            <input type="number" id="mines-bet" value="500" min="10" step="10" oninput="updateMinesPreview()"
+              class="w-full bg-transparent font-mono-num text-base font-bold text-white focus:outline-none text-right pr-1.5" />
+            <span class="pr-2.5 text-xs font-bold text-amber-400">G</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1">
+            <button id="mines-half-btn" onclick="adjustBet('mines-bet', 0.5); updateMinesPreview()" class="px-2 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold transition">1/2</button>
+            <button id="mines-double-btn" onclick="adjustBet('mines-bet', 2); updateMinesPreview()" class="px-2 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold transition">2x</button>
+            <button id="mines-max-btn" onclick="setMaxBet('mines-bet'); updateMinesPreview()" class="px-2 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-xs font-bold text-amber-400 transition">MAX</button>
+          </div>
+        </div>
+      </div>
+
+      <button id="mines-action-btn" onclick="handleMinesAction()"
+        class="w-full py-4 rounded-xl font-black text-lg tracking-wide bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition active:scale-[0.99]">
+        GAME START
+      </button>
+      <div id="mines-result-msg" class="mt-3 text-center text-sm font-bold min-h-[22px]"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- サーバーログ風プレイ履歴                   -->
+    <!-- ========================================== -->
+    <section class="bg-[#1e293b] rounded-2xl border border-slate-700/80 p-5 shadow-xl">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs sm:text-sm font-bold text-slate-300 flex items-center gap-2">
+          <span>📜</span>
+          <span>直近のプレイログ</span>
+        </h2>
+        <button onclick="clearHistory()" class="text-xs text-slate-400 hover:text-slate-200 transition">クリア</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-700 text-[11px] text-slate-400 uppercase">
+              <th class="py-2 px-2">ゲーム</th>
+              <th class="py-2 px-2">ベット額</th>
+              <th class="py-2 px-2">結果</th>
+              <th class="py-2 px-2 text-right">収支</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody" class="text-xs sm:text-sm divide-y divide-slate-800">
+            <tr>
+              <td colspan="4" class="py-5 text-center text-slate-500 text-xs">まだプレイ履歴がありません。上のゲームで遊んでみよう！</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
 
   <script>
-    // --- Web Audio サウンドシンセサイザー ---
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let actx = null;
+    // ==========================================
+    // サウンドエンジン (Web Audio API)
+    // ==========================================
+    let soundEnabled = true;
+    let audioCtx = null;
+
     function initAudio() {
-      if (!actx) actx = new AudioCtx();
-      if (actx.state === 'suspended') actx.resume();
-    }
-    function playBeep(freq, type = 'sine', duration = 0.08, vol = 0.2) {
-      if (!actx) return;
-      try {
-        const osc = actx.createOscillator();
-        const gain = actx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, actx.currentTime);
-        gain.gain.setValueAtTime(vol, actx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(actx.destination);
-        osc.start();
-        osc.stop(actx.currentTime + duration);
-      } catch (e) {}
-    }
-    function playHeartbeat() {
-      playBeep(65, 'triangle', 0.2, 0.4);
-      setTimeout(() => playBeep(55, 'triangle', 0.25, 0.35), 180);
-    }
-    function playFanfare() {
-      const notes = [440, 554, 659, 880, 1108];
-      notes.forEach((f, idx) => {
-        setTimeout(() => playBeep(f, 'sawtooth', 0.35, 0.25), idx * 110);
-      });
-    }
-
-    // --- スペック定数 ---
-    const PROB_NORMAL_CHARGE = 1 / 399.9; // 喰種チャージ
-    const PROB_RUSH_HIT = 1 / 95.3;       // ST中実質確率 (ST130回 / 継続率約75%)
-    const LT_RUSH_RATE = 0.51;            // 初当り時 LT突入率 約51%
-
-    const STATE_NORMAL = 'NORMAL';
-    const STATE_JUDGE = 'JUDGE';          // 初当り後 PUSHでLTジャッジ
-    const STATE_RUSH_LT = 'LT';           // 極・覚醒 ラッキートリガー (ST130回)
-
-    let currentMode = STATE_NORMAL;
-    let balls = 2000;
-    let totalSpins = 0;
-    let rushRemaining = 0;
-    let bonusPayoutTotal = 0;
-    let isSpinning = false;
-    let isAuto = false;
-    let autoInterval = null;
-
-    // DOM要素
-    const settingSelect = document.getElementById('settingSelect');
-    const ballsVal = document.getElementById('ballsVal');
-    const spinsVal = document.getElementById('spinsVal');
-    const reel1 = document.getElementById('reel1');
-    const reel2 = document.getElementById('reel2');
-    const reel3 = document.getElementById('reel3');
-    const modeBanner = document.getElementById('modeBanner');
-    const reachOverlay = document.getElementById('reachOverlay');
-    const judgeOverlay = document.getElementById('judgeOverlay');
-    const bonusOverlay = document.getElementById('bonusOverlay');
-    const bonusName = document.getElementById('bonusName');
-    const pushBtn = document.getElementById('pushBtn');
-    const pushLabel = document.getElementById('pushLabel');
-    const spinBtn = document.getElementById('spinBtn');
-    const autoBtn = document.getElementById('autoBtn');
-    const bonusPayout = document.getElementById('bonusPayout');
-    const rushCount = document.getElementById('rushCount');
-
-    // UI更新
-    function updateUI() {
-      ballsVal.innerText = balls;
-      spinsVal.innerText = totalSpins;
-      bonusPayout.innerText = bonusPayoutTotal;
-      rushCount.innerText = (currentMode === STATE_RUSH_LT) ? rushRemaining : '-';
-
-      if (currentMode === STATE_NORMAL) {
-        modeBanner.className = 'status-banner';
-        modeBanner.innerText = `通常モード (設定${settingSelect.selectedIndex + 1}: 1/${settingSelect.value} / PUSHで変動)`;
-        pushLabel.innerText = '押して変動 (15玉)';
-        pushBtn.classList.remove('ready-judge');
-      } else if (currentMode === STATE_JUDGE) {
-        modeBanner.className = 'status-banner mode-lt';
-        modeBanner.innerText = '運命のLTジャッジ (突入率約51%)';
-        pushLabel.innerText = '一撃を叩き込め！';
-        pushBtn.classList.add('ready-judge');
-      } else if (currentMode === STATE_RUSH_LT) {
-        modeBanner.className = 'status-banner mode-lt';
-        modeBanner.innerText = '極・東京喰種 LT (ST130回・実質1/95.3)';
-        pushLabel.innerText = 'PUSHで高速変動 (無料)';
-        pushBtn.classList.remove('ready-judge');
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
       }
     }
 
-    settingSelect.addEventListener('change', updateUI);
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-toggle').innerText = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) {
+        initAudio();
+        playTone(600, 'sine', 0.08, 0.1);
+      }
+    }
 
-    // 変動処理 (PUSH / SPIN)
-    function executeSpin(forceType = null) {
-      if (isSpinning) return;
+    function playTone(freq, type = 'sine', duration = 0.1, volume = 0.12, delay = 0) {
+      if (!soundEnabled) return;
       initAudio();
+      if (!audioCtx) return;
 
-      // LTジャッジ待機中は PUSHで判定
-      if (currentMode === STATE_JUDGE) {
-        handleLtJudge();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+
+      gain.gain.setValueAtTime(volume, audioCtx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime + delay);
+      osc.stop(audioCtx.currentTime + delay + duration);
+    }
+
+    const sfx = {
+      click: () => playTone(520, 'triangle', 0.06, 0.08),
+      tick: () => playTone(320, 'sine', 0.04, 0.05),
+      gem: (combo = 1) => {
+        const base = 520 + combo * 45;
+        playTone(base, 'sine', 0.12, 0.14, 0);
+        playTone(base * 1.25, 'sine', 0.18, 0.14, 0.06);
+      },
+      win: () => {
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+          playTone(f, 'triangle', 0.22, 0.15, i * 0.07);
+        });
+      },
+      jackpot: () => {
+        const notes = [523, 659, 784, 1046, 784, 1046, 1318];
+        notes.forEach((f, i) => playTone(f, 'square', 0.18, 0.12, i * 0.08));
+      },
+      boom: () => {
+        if (!soundEnabled) return;
+        initAudio();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(32, audioCtx.currentTime + 0.45);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.45);
+      }
+    };
+
+    // ==========================================
+    // 共通状態管理（残高・通知・履歴）
+    // ==========================================
+    let balance = 10000;
+    let historyLogs = [];
+
+    function updateBalanceDisplay() {
+      document.getElementById('balance-display').innerText = Math.floor(balance).toLocaleString();
+    }
+
+    function changeBalance(delta) {
+      balance = Math.max(0, Math.floor(balance + delta));
+      updateBalanceDisplay();
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      const styles = {
+        info: 'bg-slate-800 border-slate-600 text-slate-100',
+        success: 'bg-emerald-950/95 border-emerald-500 text-emerald-300',
+        error: 'bg-rose-950/95 border-rose-500 text-rose-300',
+        gold: 'bg-amber-950/95 border-amber-500 text-amber-300'
+      };
+      el.className = `px-4 py-2.5 rounded-xl border shadow-xl text-xs sm:text-sm font-bold transition-all duration-300 ${styles[type] || styles.info}`;
+      el.innerText = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-8px)';
+        setTimeout(() => el.remove(), 300);
+      }, 2500);
+    }
+
+    function refillBalance() {
+      sfx.win();
+      changeBalance(5000);
+      showToast('💰 +5,000 G を補充しました！', 'gold');
+      addHistory('💰 補充', 0, 'チップ補給', +5000);
+    }
+
+    function adjustBet(inputId, factor) {
+      sfx.click();
+      const input = document.getElementById(inputId);
+      if (input.disabled) return;
+      const current = Number(input.value) || 100;
+      const next = Math.max(10, Math.floor(current * factor));
+      input.value = Math.min(next, Math.max(10, balance));
+    }
+
+    function setMaxBet(inputId) {
+      sfx.click();
+      const input = document.getElementById(inputId);
+      if (input.disabled) return;
+      input.value = Math.max(10, balance);
+    }
+
+    function validateBet(inputId) {
+      const val = Math.floor(Number(document.getElementById(inputId).value));
+      if (isNaN(val) || val < 10) {
+        showToast('⚠️ 最低ベット額は 10 G です', 'error');
+        return null;
+      }
+      if (val > balance) {
+        showToast('⚠️ 残高不足です！右上の「+5,000 G」ボタンで補充できます', 'error');
+        return null;
+      }
+      return val;
+    }
+
+    function addHistory(gameName, bet, resultText, profit) {
+      historyLogs.unshift({ gameName, bet, resultText, profit });
+      if (historyLogs.length > 12) historyLogs.pop();
+      renderHistory();
+    }
+
+    function clearHistory() {
+      sfx.click();
+      historyLogs = [];
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const tbody = document.getElementById('history-tbody');
+      if (historyLogs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-5 text-center text-slate-500 text-xs">まだプレイ履歴がありません。上のゲームで遊んでみよう！</td></tr>`;
         return;
       }
-
-      // 通常時は15玉消費、ST中は完全無料
-      if (currentMode === STATE_NORMAL) {
-        if (balls < 15) {
-          alert('玉が足りません。「+1500玉補充」を押してください。');
-          stopAuto();
-          return;
-        }
-        balls -= 15;
-      } else if (currentMode === STATE_RUSH_LT) {
-        rushRemaining--;
-      }
-
-      totalSpins++;
-      isSpinning = true;
-      updateUI();
-
-      // 内部抽選実行
-      let isHit = false;
-      let isCharge = false;
-
-      if (forceType === 'HIT') {
-        isHit = true;
-      } else if (forceType === 'CHARGE') {
-        isCharge = true;
-      } else {
-        const rand = Math.random();
-        if (currentMode === STATE_NORMAL) {
-          // ご指定の7段階設定（1/1079 〜 1/873）
-          const normalHitProb = 1 / parseFloat(settingSelect.value);
-          if (rand < normalHitProb) {
-            isHit = true;
-          } else if (rand < (normalHitProb + PROB_NORMAL_CHARGE)) {
-            isCharge = true;
-          }
-        } else if (currentMode === STATE_RUSH_LT) {
-          if (rand < PROB_RUSH_HIT) {
-            isHit = true; // ST中は図柄揃いのみ
-          }
-        }
-      }
-
-      // 図柄回転演出
-      playBeep(260, 'square', 0.08, 0.2);
-      resetReelBoxes();
-      reel1.classList.add('spinning');
-      reel2.classList.add('spinning');
-      reel3.classList.add('spinning');
-
-      const isReach = isHit || (!isCharge && Math.random() < 0.12);
-      const targetDigit = isHit ? 7 : Math.floor(Math.random() * 9) + 1;
-
-      // リール停止シーケンス
-      setTimeout(() => {
-        if (isCharge) {
-          // 喰種チャージ停止演出
-          reel1.classList.remove('spinning');
-          reel2.classList.remove('spinning');
-          reel3.classList.remove('spinning');
-          setChargeDisplay();
-          handleChargeHit();
-          return;
-        }
-
-        // 左停止
-        reel1.classList.remove('spinning');
-        reel1.innerText = targetDigit;
-        playBeep(320, 'sine', 0.05, 0.2);
-
-        setTimeout(() => {
-          // 右停止
-          reel3.classList.remove('spinning');
-          if (isReach) {
-            reel3.innerText = targetDigit;
-            reachOverlay.style.display = 'block';
-            playHeartbeat();
-          } else {
-            let d3 = Math.floor(Math.random() * 9) + 1;
-            if (d3 === targetDigit) d3 = (d3 % 9) + 1;
-            reel3.innerText = d3;
-            playBeep(320, 'sine', 0.05, 0.2);
-          }
-
-          // 中停止（当落告知）
-          setTimeout(() => {
-            reel2.classList.remove('spinning');
-            reachOverlay.style.display = 'none';
-
-            if (isHit) {
-              reel2.innerText = targetDigit;
-              playFanfare();
-              handleMainHit();
-            } else {
-              let d2 = Math.floor(Math.random() * 9) + 1;
-              if (d2 === targetDigit) d2 = (d2 % 9) + 1;
-              reel2.innerText = d2;
-              playBeep(220, 'sine', 0.06, 0.2);
-              isSpinning = false;
-
-              // ST駆け抜け判定
-              if (currentMode === STATE_RUSH_LT && rushRemaining <= 0) {
-                currentMode = STATE_NORMAL;
-                alert('ST130回終了 通常モードへ移行します。');
-              }
-              updateUI();
-            }
-          }, isReach ? 750 : 200);
-        }, 180);
-      }, 260);
+      tbody.innerHTML = historyLogs.map(item => {
+        const isPlus = item.profit >= 0;
+        const profitColor = isPlus ? 'text-emerald-400' : 'text-rose-400';
+        const sign = isPlus ? '+' : '';
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-2 px-2 font-bold text-slate-200">${item.gameName}</td>
+            <td class="py-2 px-2 font-mono-num text-slate-400">${item.bet > 0 ? item.bet.toLocaleString() + ' G' : '-'}</td>
+            <td class="py-2 px-2 text-slate-300">${item.resultText}</td>
+            <td class="py-2 px-2 font-mono-num font-bold text-right ${profitColor}">${sign}${item.profit.toLocaleString()} G</td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    function resetReelBoxes() {
-      [reel1, reel2, reel3].forEach(r => {
-        r.classList.remove('charge-box');
+    // タブ切り替え
+    function switchTab(tabName) {
+      sfx.click();
+      ['crash', 'slots', 'mines'].forEach(name => {
+        const panel = document.getElementById(`panel-${name}`);
+        const btn = document.getElementById(`tab-${name}`);
+        if (name === tabName) {
+          panel.classList.remove('hidden');
+          btn.className = 'tab-btn py-3 px-2 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-1.5 transition bg-amber-500 text-slate-950 shadow';
+        } else {
+          panel.classList.add('hidden');
+          btn.className = 'tab-btn py-3 px-2 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-1.5 transition text-slate-300 hover:bg-slate-800';
+        }
       });
     }
 
-    function setChargeDisplay() {
-      reel1.classList.add('charge-box');
-      reel2.classList.add('charge-box');
-      reel3.classList.add('charge-box');
-      reel1.innerText = '喰';
-      reel2.innerText = '種';
-      reel3.innerText = '充';
+    // ==========================================
+    // 1. CRASH (RTP 99.5%・完全五分五分・即死猶予なし)
+    // ==========================================
+    let crashState = {
+      running: false,
+      bet: 0,
+      multiplier: 1.00,
+      crashPoint: 1.00,
+      timer: null,
+      history: [
+        { val: 2.34, win: true },
+        { val: 1.18, win: false },
+        { val: 5.80, win: true },
+        { val: 1.00, win: false }
+      ]
+    };
+
+    function renderCrashHistory() {
+      const container = document.getElementById('crash-history-pills');
+      container.innerHTML = crashState.history.map(item => {
+        const cls = item.win
+          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+          : 'bg-rose-500/20 text-rose-400 border-rose-500/40';
+        return `<span class="px-2.5 py-0.5 rounded-full text-xs font-mono-num font-bold border ${cls} whitespace-nowrap">${item.val.toFixed(2)}x</span>`;
+      }).join('');
     }
 
-    // 図柄揃い大当り処理
-    function handleMainHit() {
-      stopAuto();
-      if (currentMode === STATE_NORMAL) {
-        // 通常時初当り：1500発 (10R) + PUSHでLTジャッジへ
-        balls += 1500;
-        bonusPayoutTotal += 1500;
-        currentMode = STATE_JUDGE;
-        judgeOverlay.style.display = 'block';
-        updateUI();
-        isSpinning = false;
-      } else {
-        // ST中大当り：オール3000発以上！ (3000個 約90% / 6000個 約10%)
-        const is6000 = Math.random() < 0.10;
-        const payout = is6000 ? 6000 : 3000;
-        balls += payout;
-        bonusPayoutTotal += payout;
-
-        bonusName.innerText = is6000 ? '極限覚醒 6000 BONUS!!' : 'HYPER 3000 BONUS!!';
-        bonusOverlay.style.display = 'block';
-
-        setTimeout(() => {
-          bonusOverlay.style.display = 'none';
-          rushRemaining = 130; // ST130回転リセット
-          isSpinning = false;
-          updateUI();
-        }, 1200);
-      }
+    function setCrashControlsDisabled(disabled) {
+      document.getElementById('crash-bet').disabled = disabled;
+      document.getElementById('crash-half-btn').disabled = disabled;
+      document.getElementById('crash-double-btn').disabled = disabled;
+      document.getElementById('crash-max-btn').disabled = disabled;
     }
 
-    // 喰種チャージ大当り処理（約300発）
-    function handleChargeHit() {
-      stopAuto();
-      balls += 300;
-      bonusPayoutTotal += 300;
-      playBeep(480, 'sine', 0.25, 0.3);
+    function toggleCrash() {
+      const btn = document.getElementById('crash-action-btn');
+      const multEl = document.getElementById('crash-multiplier');
+      const subEl = document.getElementById('crash-subtext');
+      const screenEl = document.getElementById('crash-screen');
+      const liveWinEl = document.getElementById('crash-live-win');
+      const rocketEl = document.getElementById('crash-rocket');
+      const msgEl = document.getElementById('crash-result-msg');
 
-      // チャージからのごく稀なLT昇格（約1%）
-      const isMiracleLt = Math.random() < 0.01;
+      if (!crashState.running) {
+        const bet = validateBet('crash-bet');
+        if (!bet) return;
 
-      setTimeout(() => {
-        if (isMiracleLt) {
-          playFanfare();
-          alert('喰種チャージ消化中にブラックアウト！ ラッキートリガー昇格！');
-          currentMode = STATE_RUSH_LT;
-          rushRemaining = 130;
-        } else {
-          alert('喰種チャージ完了（約300個獲得） 通常時へ復帰します。');
-          currentMode = STATE_NORMAL;
+        changeBalance(-bet);
+
+        // 期待値 99.5% のクラッシュポイント算出 (0.5%の確率で 1.00x 即死)
+        const r = Math.random();
+        const point = r < 0.005 ? 1.00 : Math.max(1.01, Math.floor((0.995 / (1 - r)) * 100) / 100);
+
+        // 即死判定：猶予フレームなしで即座に爆発処理
+        if (point <= 1.00) {
+          sfx.boom();
+          multEl.innerText = '1.00x';
+          multEl.className = 'font-mono-num text-5xl sm:text-6xl font-black tracking-tight text-rose-500';
+          screenEl.className = 'crash-grid relative h-48 sm:h-56 rounded-2xl bg-rose-950/35 border-2 border-rose-500 flex flex-col items-center justify-center overflow-hidden mb-5 transition-colors';
+          rocketEl.innerText = '💥';
+          rocketEl.style.transform = 'none';
+          subEl.innerText = 'INSTANT CRASH AT 1.00x';
+          liveWinEl.classList.add('hidden');
+
+          msgEl.className = 'mt-3 text-center text-sm font-bold text-rose-400';
+          msgEl.innerText = `💥 開始直後に即爆発 (1.00x)！ -${bet.toLocaleString()} G`;
+
+          crashState.history.unshift({ val: 1.00, win: false });
+          if (crashState.history.length > 7) crashState.history.pop();
+          renderCrashHistory();
+          addHistory('🚀 CRASH', bet, '1.00x 即爆発', -bet);
+          return;
         }
-        resetReelBoxes();
-        reel1.innerText = '7';
-        reel2.innerText = '7';
-        reel3.innerText = '7';
-        isSpinning = false;
-        updateUI();
-      }, 700);
-    }
 
-    // LT突入チャレンジ判定（約51%）
-    function handleLtJudge() {
-      judgeOverlay.style.display = 'none';
-      playHeartbeat();
+        // 通常上昇開始
+        sfx.click();
+        crashState.running = true;
+        crashState.bet = bet;
+        crashState.multiplier = 1.00;
+        crashState.crashPoint = point;
+        setCrashControlsDisabled(true);
 
-      const isSuccess = Math.random() < LT_RUSH_RATE;
+        screenEl.className = 'crash-grid relative h-48 sm:h-56 rounded-2xl bg-[#0b1120] border-2 border-amber-500/70 flex flex-col items-center justify-center overflow-hidden mb-5 transition-colors';
+        multEl.className = 'font-mono-num text-5xl sm:text-6xl font-black tracking-tight text-white';
+        multEl.innerText = '1.00x';
+        rocketEl.innerText = '🚀';
+        subEl.innerText = '上昇中... 爆発前に CASH OUT を押せ！';
+        liveWinEl.classList.remove('hidden');
+        liveWinEl.innerText = `現在配当: +${bet.toLocaleString()} G`;
+        msgEl.innerText = '';
 
-      if (isSuccess) {
-        currentMode = STATE_RUSH_LT;
-        rushRemaining = 130;
-        playFanfare();
-        alert('【LT発動】極・覚醒 東京喰種 LT 突入!!\n(ST130回・実質1/95.3・ALL3000個OVER)');
-      } else {
-        currentMode = STATE_NORMAL;
-        playBeep(200, 'sawtooth', 0.3, 0.3);
-        alert('LT突入ならず… 通常モードへ戻ります。');
-      }
-      updateUI();
-    }
+        btn.innerText = '💰 CASH OUT (利確)';
+        btn.className = 'w-full py-4 rounded-xl font-black text-lg tracking-wide bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/30 transition active:scale-[0.99]';
 
-    // オート切り替え
-    function toggleAuto() {
-      if (isAuto) {
-        stopAuto();
-      } else {
-        initAudio();
-        isAuto = true;
-        autoBtn.classList.add('active');
-        autoBtn.innerText = 'AUTO ON';
-        autoInterval = setInterval(() => {
-          if (!isSpinning && currentMode !== STATE_JUDGE) {
-            executeSpin();
+        let tickCount = 0;
+        crashState.timer = setInterval(() => {
+          const speed = 0.01 + (crashState.multiplier * 0.0065);
+          crashState.multiplier = Math.round((crashState.multiplier + speed) * 100) / 100;
+          tickCount++;
+
+          if (tickCount % 4 === 0) sfx.tick();
+
+          if (crashState.multiplier >= crashState.crashPoint) {
+            // 爆発
+            clearInterval(crashState.timer);
+            crashState.running = false;
+            setCrashControlsDisabled(false);
+
+            const finalCrash = crashState.crashPoint;
+            multEl.innerText = finalCrash.toFixed(2) + 'x';
+            multEl.className = 'font-mono-num text-5xl sm:text-6xl font-black tracking-tight text-rose-500';
+            screenEl.className = 'crash-grid relative h-48 sm:h-56 rounded-2xl bg-rose-950/35 border-2 border-rose-500 flex flex-col items-center justify-center overflow-hidden mb-5 transition-colors';
+            rocketEl.innerText = '💥';
+            rocketEl.style.transform = 'none';
+            subEl.innerText = `CRASHED AT ${finalCrash.toFixed(2)}x`;
+            liveWinEl.classList.add('hidden');
+
+            msgEl.className = 'mt-3 text-center text-sm font-bold text-rose-400';
+            msgEl.innerText = `💥 ${finalCrash.toFixed(2)}x で爆発！ -${crashState.bet.toLocaleString()} G`;
+
+            btn.innerText = 'BET & START';
+            btn.className = 'w-full py-4 rounded-xl font-black text-lg tracking-wide bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition active:scale-[0.99]';
+
+            sfx.boom();
+            crashState.history.unshift({ val: finalCrash, win: false });
+            if (crashState.history.length > 7) crashState.history.pop();
+            renderCrashHistory();
+            addHistory('🚀 CRASH', crashState.bet, `${finalCrash.toFixed(2)}x で爆発`, -crashState.bet);
+          } else {
+            multEl.innerText = crashState.multiplier.toFixed(2) + 'x';
+            const currentWin = Math.floor(crashState.bet * crashState.multiplier);
+            liveWinEl.innerText = `現在配当: +${currentWin.toLocaleString()} G`;
+            const shake = Math.min(4, (crashState.multiplier - 1) * 0.8);
+            rocketEl.style.transform = `translate(${(Math.random() - 0.5) * shake}px, ${(Math.random() - 0.5) * shake}px)`;
           }
-        }, 1000);
+        }, 50);
+
+      } else {
+        // 利確 (CASH OUT)
+        clearInterval(crashState.timer);
+        crashState.running = false;
+        setCrashControlsDisabled(false);
+
+        const cashedMult = crashState.multiplier;
+        const payout = Math.floor(crashState.bet * cashedMult);
+        const profit = payout - crashState.bet;
+        changeBalance(payout);
+
+        multEl.className = 'font-mono-num text-5xl sm:text-6xl font-black tracking-tight text-emerald-400';
+        screenEl.className = 'crash-grid relative h-48 sm:h-56 rounded-2xl bg-emerald-950/35 border-2 border-emerald-500 flex flex-col items-center justify-center overflow-hidden mb-5 transition-colors';
+        rocketEl.style.transform = 'none';
+        subEl.innerText = `CASHED OUT AT ${cashedMult.toFixed(2)}x (爆発地点: ${crashState.crashPoint.toFixed(2)}x)`;
+        liveWinEl.classList.add('hidden');
+
+        msgEl.className = 'mt-3 text-center text-sm font-bold text-emerald-400';
+        msgEl.innerText = `🎉 ${cashedMult.toFixed(2)}x で利確成功！ +${payout.toLocaleString()} G 獲得！`;
+
+        btn.innerText = 'BET & START';
+        btn.className = 'w-full py-4 rounded-xl font-black text-lg tracking-wide bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition active:scale-[0.99]';
+
+        sfx.win();
+        crashState.history.unshift({ val: cashedMult, win: true });
+        if (crashState.history.length > 7) crashState.history.pop();
+        renderCrashHistory();
+        addHistory('🚀 CRASH', crashState.bet, `${cashedMult.toFixed(2)}x 利確`, profit);
       }
     }
-    function stopAuto() {
-      isAuto = false;
-      autoBtn.classList.remove('active');
-      autoBtn.innerText = 'AUTO OFF';
-      if (autoInterval) clearInterval(autoInterval);
+
+    // ==========================================
+    // 2. SLOTS (厳密RTP 99.5%・3つ揃い専用テーブル)
+    // ==========================================
+    const SLOT_SYMBOLS = ['🍒', '🍋', '🍇', '🔔', '💎', '7️⃣'];
+    const SLOT_PAYOUTS = { '🍒': 2.5, '🍋': 4, '🍇': 8, '🔔': 15, '💎': 40, '7️⃣': 100 };
+    let isSpinning = false;
+
+    function getFairSlotResult() {
+      // 確率 × 配当の合計 = 45.0% + 28.0% + 16.0% + 6.0% + 3.0% + 1.5% = 99.5%
+      const r = Math.random() * 100;
+      if (r < 18.0) return ['🍒', '🍒', '🍒'];
+      if (r < 25.0) return ['🍋', '🍋', '🍋'];
+      if (r < 27.0) return ['🍇', '🍇', '🍇'];
+      if (r < 27.4) return ['🔔', '🔔', '🔔'];
+      if (r < 27.475) return ['💎', '💎', '💎'];
+      if (r < 27.49) return ['7️⃣', '7️⃣', '7️⃣'];
+
+      // ハズレ出目（3つ揃わない組み合わせを生成）
+      const s1 = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+      const s2 = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+      let s3 = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+      while (s1 === s2 && s2 === s3) {
+        s3 = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+      }
+      return [s1, s2, s3];
     }
 
-    // イベントリスナー
-    pushBtn.addEventListener('click', () => executeSpin());
-    spinBtn.addEventListener('click', () => executeSpin());
-    autoBtn.addEventListener('click', toggleAuto);
+    function spinSlots() {
+      if (isSpinning) return;
+      const bet = validateBet('slots-bet');
+      if (!bet) return;
 
-    // テスト検証ボタン
-    document.getElementById('dbgHitBtn').addEventListener('click', () => executeSpin('HIT'));
-    document.getElementById('dbgChargeBtn').addEventListener('click', () => executeSpin('CHARGE'));
-    document.getElementById('dbgLtBtn').addEventListener('click', () => {
-      currentMode = STATE_RUSH_LT;
-      rushRemaining = 130;
-      updateUI();
-      alert('極・覚醒 LT（ST130回）に直撃突入しました！');
-    });
-    document.getElementById('dbgSkipBtn').addEventListener('click', () => {
-      totalSpins += 50;
-      if (currentMode === STATE_NORMAL) {
-        balls = Math.max(0, balls - (50 * 15));
+      sfx.click();
+      changeBalance(-bet);
+      isSpinning = true;
+
+      const spinBtn = document.getElementById('slots-spin-btn');
+      const box = document.getElementById('slot-machine-box');
+      const msgEl = document.getElementById('slots-result-msg');
+      spinBtn.disabled = true;
+      box.classList.remove('jackpot-active');
+      msgEl.className = 'mt-3 text-center text-sm font-bold text-slate-400';
+      msgEl.innerText = 'リール回転中...';
+
+      const targets = getFairSlotResult();
+      const stopSteps = [12, 20, 28];
+      let step = 0;
+
+      const timer = setInterval(() => {
+        step++;
+        if (step % 2 === 0) sfx.tick();
+
+        for (let i = 0; i < 3; i++) {
+          const reelEl = document.getElementById(`reel-${i}`);
+          if (step < stopSteps[i]) {
+            reelEl.innerText = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+          } else if (step === stopSteps[i]) {
+            reelEl.innerText = targets[i];
+            playTone(440 + i * 110, 'triangle', 0.08, 0.12);
+          }
+        }
+
+        if (step >= stopSteps[2]) {
+          clearInterval(timer);
+          isSpinning = false;
+          spinBtn.disabled = false;
+
+          const [r0, r1, r2] = targets;
+          if (r0 === r1 && r1 === r2) {
+            const mult = SLOT_PAYOUTS[r0];
+            const payout = Math.floor(bet * mult);
+            changeBalance(payout);
+            box.classList.add('jackpot-active');
+            msgEl.className = 'mt-3 text-center text-sm font-black text-amber-400';
+            msgEl.innerText = `🎉 大当たり！ ${r0}${r1}${r2} (${mult}x) +${payout.toLocaleString()} G 獲得！`;
+            sfx.jackpot();
+            addHistory('🎰 SLOTS', bet, `${r0} 3つ揃い (${mult}x)`, payout - bet);
+          } else {
+            msgEl.className = 'mt-3 text-center text-sm font-bold text-rose-400';
+            msgEl.innerText = `💀 ハズレ (${r0}${r1}${r2})`;
+            addHistory('🎰 SLOTS', bet, `${r0}${r1}${r2} ハズレ`, -bet);
+          }
+        }
+      }, 50);
+    }
+
+    // ==========================================
+    // 3. MINES (組み合わせ確率の逆数 × 0.995)
+    // ==========================================
+    let minesState = {
+      active: false,
+      bet: 0,
+      minesCount: 3,
+      board: [],
+      revealed: Array(25).fill(false),
+      gemsFound: 0
+    };
+
+    function calcMinesMultiplier(minesCount, gemsFound) {
+      if (gemsFound === 0) return 1.00;
+      let prob = 1.0;
+      for (let i = 0; i < gemsFound; i++) {
+        prob *= (25 - minesCount - i) / (25 - i);
       }
-      updateUI();
-    });
-    document.getElementById('dbgRefillBtn').addEventListener('click', () => {
-      balls += 1500;
-      updateUI();
-    });
+      return (0.995 / prob);
+    }
 
-    updateUI();
+    function initMinesGrid() {
+      const grid = document.getElementById('mines-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 25; i++) {
+        const btn = document.createElement('button');
+        btn.id = `mine-cell-${i}`;
+        btn.onclick = () => clickMineCell(i);
+        btn.disabled = true;
+        btn.className = 'mine-tile aspect-square rounded-xl bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-2xl sm:text-3xl font-bold shadow cursor-pointer disabled:cursor-default';
+        btn.innerText = '';
+        grid.appendChild(btn);
+      }
+      updateMinesPreview();
+    }
+
+    function updateMinesPreview() {
+      const minesCount = Number(document.getElementById('mines-count').value);
+      const bet = Math.max(10, Number(document.getElementById('mines-bet').value) || 0);
+      const currentMult = calcMinesMultiplier(minesCount, minesState.gemsFound);
+      const nextMult = calcMinesMultiplier(minesCount, minesState.gemsFound + 1);
+
+      document.getElementById('mines-current-mult').innerText = currentMult.toFixed(2) + 'x';
+      document.getElementById('mines-next-mult').innerText = (minesState.gemsFound + minesCount < 25) ? nextMult.toFixed(2) + 'x' : 'MAX';
+      document.getElementById('mines-payout').innerText = minesState.active
+        ? Math.floor(minesState.bet * currentMult).toLocaleString() + ' G'
+        : Math.floor(bet * nextMult).toLocaleString() + ' G';
+    }
+
+    function setMinesControlsDisabled(disabled) {
+      document.getElementById('mines-count').disabled = disabled;
+      document.getElementById('mines-bet').disabled = disabled;
+      document.getElementById('mines-half-btn').disabled = disabled;
+      document.getElementById('mines-double-btn').disabled = disabled;
+      document.getElementById('mines-max-btn').disabled = disabled;
+    }
+
+    function handleMinesAction() {
+      if (!minesState.active) {
+        const bet = validateBet('mines-bet');
+        if (!bet) return;
+
+        sfx.click();
+        changeBalance(-bet);
+
+        const minesCount = Number(document.getElementById('mines-count').value);
+        const board = Array(25).fill('gem');
+        let placed = 0;
+        while (placed < minesCount) {
+          const idx = Math.floor(Math.random() * 25);
+          if (board[idx] === 'gem') {
+            board[idx] = 'mine';
+            placed++;
+          }
+        }
+
+        minesState = {
+          active: true,
+          bet,
+          minesCount,
+          board,
+          revealed: Array(25).fill(false),
+          gemsFound: 0
+        };
+
+        setMinesControlsDisabled(true);
+        document.getElementById('mines-result-msg').innerText = '';
+
+        for (let i = 0; i < 25; i++) {
+          const cell = document.getElementById(`mine-cell-${i}`);
+          cell.disabled = false;
+          cell.innerText = '';
+          cell.className = 'mine-tile aspect-square rounded-xl bg-slate-700 hover:bg-slate-600 border-2 border-slate-600 flex items-center justify-center text-2xl sm:text-3xl font-bold shadow cursor-pointer';
+        }
+
+        const btn = document.getElementById('mines-action-btn');
+        btn.innerText = '💎 パネルを開けてください';
+        btn.disabled = true;
+        btn.className = 'w-full py-4 rounded-xl font-black text-lg tracking-wide bg-slate-700 text-slate-400 cursor-not-allowed';
+        updateMinesPreview();
+
+      } else {
+        if (minesState.gemsFound === 0) return;
+        const mult = calcMinesMultiplier(minesState.minesCount, minesState.gemsFound);
+        const payout = Math.floor(minesState.bet * mult);
+        const profit = payout - minesState.bet;
+
+        changeBalance(payout);
+        sfx.win();
+        revealAllMines(-1);
+
+        const msgEl = document.getElementById('mines-result-msg');
+        msgEl.className = 'mt-3 text-center text-sm font-bold text-emerald-400';
+        msgEl.innerText = `🎉 ${minesState.gemsFound}個発見 (${mult.toFixed(2)}x) で利確！ +${payout.toLocaleString()} G 獲得！`;
+
+        addHistory('💣 MINES', minesState.bet, `💎×${minesState.gemsFound} (${mult.toFixed(2)}x)`, profit);
+        resetMinesButton();
+      }
+    }
+
+    function clickMineCell(idx) {
+      if (!minesState.active || minesState.revealed[idx]) return;
+
+      minesState.revealed[idx] = true;
+      const cell = document.getElementById(`mine-cell-${idx}`);
+      cell.disabled = true;
+
+      if (minesState.board[idx] === 'mine') {
+        sfx.boom();
+        cell.innerText = '💥';
+        cell.className = 'aspect-square rounded-xl bg-rose-600 border-2 border-rose-300 flex items-center justify-center text-2xl sm:text-3xl shadow-lg';
+
+        revealAllMines(idx);
+        const msgEl = document.getElementById('mines-result-msg');
+        msgEl.className = 'mt-3 text-center text-sm font-bold text-rose-400';
+        msgEl.innerText = `💥 爆弾を踏みました！ -${minesState.bet.toLocaleString()} G`;
+
+        addHistory('💣 MINES', minesState.bet, `💥 爆弾ヒット (💎×${minesState.gemsFound})`, -minesState.bet);
+        resetMinesButton();
+      } else {
+        minesState.gemsFound++;
+        sfx.gem(minesState.gemsFound);
+        cell.innerText = '💎';
+        cell.className = 'aspect-square rounded-xl bg-emerald-950 border-2 border-emerald-400 flex items-center justify-center text-2xl sm:text-3xl shadow-inner';
+
+        const mult = calcMinesMultiplier(minesState.minesCount, minesState.gemsFound);
+        const payout = Math.floor(minesState.bet * mult);
+
+        if (minesState.gemsFound + minesState.minesCount >= 25) {
+          changeBalance(payout);
+          sfx.jackpot();
+          revealAllMines(-1);
+          const msgEl = document.getElementById('mines-result-msg');
+          msgEl.className = 'mt-3 text-center text-sm font-black text-amber-400';
+          msgEl.innerText = `👑 全マス制覇 (${mult.toFixed(2)}x)！ +${payout.toLocaleString()} G 獲得！`;
+          addHistory('💣 MINES', minesState.bet, `全クリア (${mult.toFixed(2)}x)`, payout - minesState.bet);
+          resetMinesButton();
+          return;
+        }
+
+        const btn = document.getElementById('mines-action-btn');
+        btn.disabled = false;
+        btn.innerText = `💰 CASH OUT (+${payout.toLocaleString()} G)`;
+        btn.className = 'w-full py-4 rounded-xl font-black text-lg tracking-wide bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/30 transition active:scale-[0.99]';
+        updateMinesPreview();
+      }
+    }
+
+    function revealAllMines(explodedIdx) {
+      for (let i = 0; i < 25; i++) {
+        const cell = document.getElementById(`mine-cell-${i}`);
+        cell.disabled = true;
+        if (i === explodedIdx) continue;
+        if (!minesState.revealed[i]) {
+          if (minesState.board[i] === 'mine') {
+            cell.innerText = '💣';
+            cell.className = 'aspect-square rounded-xl bg-slate-900/90 border border-rose-500/40 flex items-center justify-center text-xl sm:text-2xl opacity-75';
+          } else {
+            cell.innerText = '💎';
+            cell.className = 'aspect-square rounded-xl bg-slate-900/70 border border-slate-700/60 flex items-center justify-center text-xl sm:text-2xl opacity-40';
+          }
+        }
+      }
+    }
+
+    function resetMinesButton() {
+      minesState.active = false;
+      minesState.gemsFound = 0;
+      setMinesControlsDisabled(false);
+      const btn = document.getElementById('mines-action-btn');
+      btn.disabled = false;
+      btn.innerText = 'GAME START';
+      btn.className = 'w-full py-4 rounded-xl font-black text-lg tracking-wide bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/20 transition active:scale-[0.99]';
+      updateMinesPreview();
+    }
+
+    // 初期化
+    window.addEventListener('DOMContentLoaded', () => {
+      updateBalanceDisplay();
+      renderCrashHistory();
+      initMinesGrid();
+    });
   </script>
 </body>
 </html>
