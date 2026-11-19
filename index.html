@@ -3,1043 +3,930 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RPG CASINO - アカウント＆データ保存版</title>
+<title>ログイン — NEVERLAND CASINO</title>
 <style>
   :root {
-    --bg: #0b1120;
-    --panel: #1e293b;
-    --panel-dark: #0f172a;
-    --accent: #f59e0b;
+    --bg-top: #141627;
+    --bg-main: #0c0d14;
+    --card-bg: #131520;
+    --input-bg: #1a1d2b;
+    --border: #26293a;
+    --gold: #f5b942;
+    --gold-hover: #eab035;
     --green: #10b981;
     --red: #ef4444;
-    --blue: #3b82f6;
-    --text: #f8fafc;
-    --muted: #94a3b8;
+    --text: #f1f5f9;
+    --muted: #8b92a5;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
-    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background: radial-gradient(circle at top center, #1d1f36 0%, var(--bg-main) 55%);
     color: var(--text);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding-bottom: 40px;
   }
 
-  /* ログイン・アカウント選択画面 */
-  #auth-screen {
-    width: 92%;
-    max-width: 440px;
-    margin-top: 48px;
-    background: var(--panel);
-    padding: 28px 24px;
-    border-radius: 18px;
-    border: 1px solid #334155;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-  }
-  .auth-title {
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--accent);
-    margin-bottom: 6px;
-  }
-  .auth-sub {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.85rem;
-    margin-bottom: 22px;
-  }
-  .saved-accounts {
-    margin-bottom: 20px;
-  }
-  .saved-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  .account-card {
+  /* トップナビゲーションバー */
+  .navbar {
+    width: 100%;
+    padding: 16px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--panel-dark);
-    border: 1px solid #334155;
-    padding: 12px 14px;
-    border-radius: 10px;
-    margin-bottom: 8px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .brand {
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    transition: 0.15s;
+  }
+  .nav-btn.gold {
+    background: var(--gold);
+    color: #11131a;
+    border-color: var(--gold);
+  }
+  .nav-btn.gold:hover { background: var(--gold-hover); }
+
+  /* 認証（ログイン・新規登録）コンテナ */
+  .auth-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .auth-header {
+    width: 100%;
+    max-width: 390px;
+    margin-bottom: 14px;
+  }
+  .auth-header h1 {
+    margin: 0 0 4px;
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+  .auth-header p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .auth-card {
+    width: 100%;
+    max-width: 390px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 20px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+  }
+  .field-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .field-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 7px;
+    border: 1px solid #2e3348;
+    background: #eef2ff;
+    color: #0f172a;
+    font-size: 0.88rem;
+    font-weight: 600;
+    outline: none;
+  }
+  .field-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(245, 185, 66, 0.25);
+  }
+  .field-hint {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin: 6px 0 14px;
+    line-height: 1.45;
+  }
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 14px 0 16px;
+    cursor: pointer;
+  }
+  .checkbox-row input {
+    margin-top: 2px;
+    accent-color: var(--gold);
+  }
+  .checkbox-text strong {
+    display: block;
+    font-size: 0.76rem;
+    color: var(--text);
+  }
+  .checkbox-text span {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 11px;
+    border: none;
+    border-radius: 7px;
+    background: var(--gold);
+    color: #11131a;
+    font-size: 0.88rem;
+    font-weight: 800;
     cursor: pointer;
     transition: 0.15s;
   }
-  .account-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-1px);
-  }
-  .acc-name { font-weight: bold; font-size: 1rem; }
-  .acc-bal { color: var(--green); font-weight: bold; font-size: 0.9rem; }
-  .form-group { margin-bottom: 14px; }
-  .form-group label {
-    display: block;
-    font-size: 0.82rem;
+  .submit-btn:hover { background: var(--gold-hover); }
+  .forgot-note {
+    text-align: center;
+    font-size: 0.7rem;
     color: var(--muted);
-    margin-bottom: 6px;
+    margin-top: 10px;
+    line-height: 1.45;
   }
-  .auth-input {
-    width: 100%;
-    padding: 11px 12px;
-    border-radius: 8px;
-    border: 1px solid #475569;
-    background: var(--panel-dark);
-    color: var(--text);
-    font-size: 1rem;
+  .switch-mode {
+    margin-top: 16px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .switch-badge {
+    background: var(--gold);
+    color: #11131a;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.72rem;
   }
 
-  /* メインヘッダー */
-  header {
+  /* フッター免責事項 */
+  .footer {
     width: 100%;
     max-width: 760px;
-    padding: 14px 18px;
+    margin: 24px auto 0;
+    padding: 16px 20px 28px;
+    border-top: 1px solid var(--border);
+    font-size: 0.68rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .footer a {
+    color: #cbd5e1;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 6px;
+  }
+
+  /* カジノ本体（ログイン後） */
+  .hidden { display: none !important; }
+  .casino-wrapper {
+    width: 100%;
+    max-width: 680px;
+    margin: 10px auto 30px;
+    padding: 0 16px;
+  }
+  .status-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    border-bottom: 1px solid #334155;
-    background: rgba(15, 23, 42, 0.95);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .logo {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .user-pill {
-    font-size: 0.82rem;
-    background: #334155;
-    color: var(--text);
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-weight: bold;
-  }
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .balance-box {
-    background: var(--panel);
-    padding: 7px 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
     border-radius: 10px;
-    font-weight: bold;
-    border: 1px solid #475569;
-    font-size: 0.9rem;
+    margin-bottom: 14px;
   }
-  .balance-box span {
+  .mcid-tag {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .bal-display {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .bal-display span {
     color: var(--green);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     margin-left: 4px;
   }
-  .small-btn {
-    background: #334155;
+  .mini-btn {
+    background: #1e2235;
     color: var(--text);
-    border: 1px solid #475569;
-    padding: 7px 10px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: bold;
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: 0.15s;
   }
-  .small-btn:hover { background: #475569; }
-  .logout-btn { border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
+  .mini-btn:hover { border-color: var(--gold); }
 
-  /* タブ */
-  .tabs {
+  .game-tabs {
     display: flex;
-    gap: 6px;
-    margin: 18px 0 14px;
-    width: 92%;
-    max-width: 600px;
+    gap: 8px;
+    margin-bottom: 14px;
   }
-  .tab-btn {
+  .g-tab {
     flex: 1;
-    padding: 11px 6px;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    background: var(--panel);
-    color: var(--text);
-    font-weight: bold;
+    padding: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
     cursor: pointer;
-    font-size: 0.88rem;
-    transition: 0.15s;
   }
-  .tab-btn.active {
-    background: var(--accent);
-    color: #000;
-    border-color: var(--accent);
+  .g-tab.active {
+    background: var(--gold);
+    color: #11131a;
+    border-color: var(--gold);
   }
 
-  .game-container {
-    width: 92%;
-    max-width: 600px;
-    background: var(--panel);
-    padding: 22px;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
-    border: 1px solid #334155;
+  .panel-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
     text-align: center;
   }
-  .hidden { display: none !important; }
-
-  /* CRASH */
-  .crash-history {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    justify-content: flex-end;
-  }
-  .hist-pill {
-    font-size: 0.78rem;
-    font-weight: bold;
-    padding: 3px 9px;
-    border-radius: 999px;
-    background: #0f172a;
-    border: 1px solid #334155;
-    white-space: nowrap;
-  }
-  .hist-win { color: var(--green); border-color: rgba(16, 185, 129, 0.4); }
-  .hist-lose { color: var(--red); border-color: rgba(239, 68, 68, 0.4); }
-  .crash-display {
-    height: 165px;
-    background: var(--panel-dark);
-    border-radius: 12px;
+  .crash-screen {
+    height: 155px;
+    background: #0b0c12;
+    border: 1px solid var(--border);
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 18px;
-    border: 2px solid #334155;
+    margin-bottom: 14px;
   }
-  #multiplier { font-size: 3.6rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+  #multiplier { font-size: 3.3rem; font-weight: 900; }
   .crashed { color: var(--red); }
   .cashed { color: var(--green); }
 
-  /* SLOTS */
-  .reels { display: flex; justify-content: center; gap: 14px; margin: 16px 0 12px; }
+  .reels { display: flex; justify-content: center; gap: 12px; margin: 14px 0; }
   .reel {
-    width: 90px;
-    height: 110px;
-    background: var(--panel-dark);
-    border: 3px solid var(--accent);
-    border-radius: 14px;
-    font-size: 3.3rem;
+    width: 84px;
+    height: 100px;
+    background: #0b0c12;
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    font-size: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .payout-table {
-    font-size: 0.8rem;
-    color: var(--muted);
-    background: var(--panel-dark);
-    padding: 8px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-  }
 
-  /* MINES */
-  .mines-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--panel-dark);
-    padding: 10px 14px;
-    border-radius: 10px;
-    margin-bottom: 14px;
-    font-size: 0.9rem;
-  }
-  .mines-top select {
-    background: var(--panel);
-    color: var(--text);
-    border: 1px solid #475569;
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-weight: bold;
-  }
   .mines-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    max-width: 330px;
-    margin: 0 auto 16px;
+    gap: 7px;
+    max-width: 310px;
+    margin: 12px auto 14px;
   }
   .mine-tile {
     aspect-ratio: 1;
-    background: #334155;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.5rem;
+    background: #1e2235;
+    border: 1px solid #2e3348;
+    border-radius: 8px;
+    font-size: 1.4rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 0 #1e293b;
   }
-  .mine-tile:hover:not(:disabled) { background: #475569; transform: translateY(-2px); }
-  .mine-tile:disabled { cursor: default; }
-  .mine-tile.gem { background: rgba(16, 185, 129, 0.25); border: 2px solid var(--green); box-shadow: none; }
-  .mine-tile.bomb { background: rgba(239, 68, 68, 0.25); border: 2px solid var(--red); box-shadow: none; }
-  .mine-tile.dim { opacity: 0.45; }
+  .mine-tile.gem { background: rgba(16, 185, 129, 0.2); border-color: var(--green); }
+  .mine-tile.bomb { background: rgba(239, 68, 68, 0.2); border-color: var(--red); }
+  .mine-tile.dim { opacity: 0.4; }
 
-  /* マイページ・戦績・履歴 */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 18px;
-  }
-  .stat-card {
-    background: var(--panel-dark);
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #334155;
-  }
-  .stat-title { font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; }
-  .stat-val { font-size: 1.15rem; font-weight: 800; }
-  .log-list {
-    max-height: 240px;
-    overflow-y: auto;
-    background: var(--panel-dark);
-    border-radius: 10px;
-    border: 1px solid #334155;
-    padding: 8px;
-    text-align: left;
-    margin-bottom: 16px;
-  }
-  .log-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 10px;
-    border-bottom: 1px solid #1e293b;
-    font-size: 0.84rem;
-  }
-  .log-item:last-child { border-bottom: none; }
-  .backup-box {
-    background: var(--panel-dark);
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #334155;
-    text-align: left;
-  }
-  .backup-box textarea {
-    width: 100%;
-    height: 60px;
-    background: #0b1120;
-    color: var(--muted);
-    border: 1px solid #475569;
-    border-radius: 6px;
-    padding: 6px;
-    font-size: 0.75rem;
-    margin: 8px 0;
-    resize: none;
-  }
-
-  /* 共通コントロール */
-  .bet-controls { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; }
-  input[type="number"] {
-    width: 140px;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #475569;
-    background: var(--panel-dark);
-    color: white;
-    font-size: 1.1rem;
-    font-weight: bold;
+  .bet-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+  .bet-input {
+    width: 130px;
+    padding: 9px;
+    background: #0b0c12;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
     text-align: center;
   }
-  .quick-btn {
-    background: #334155;
-    color: white;
+  .play-btn {
+    width: 100%;
+    padding: 12px;
     border: none;
     border-radius: 8px;
-    padding: 0 12px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.85rem;
-  }
-  .action-btn {
-    width: 100%;
-    padding: 13px;
-    font-size: 1.1rem;
+    background: var(--gold);
+    color: #11131a;
     font-weight: 800;
-    border: none;
-    border-radius: 10px;
+    font-size: 0.95rem;
     cursor: pointer;
-    background: var(--green);
-    color: #000;
-    transition: 0.15s;
   }
-  .action-btn:disabled { background: #475569; color: var(--muted); cursor: not-allowed; }
-  .action-btn.cashout { background: var(--accent); color: #000; }
-  .msg { margin-top: 12px; font-weight: bold; min-height: 22px; font-size: 0.92rem; }
+  .play-btn.cashout { background: var(--green); color: #052e16; }
+  .play-btn:disabled { background: #26293a; color: var(--muted); cursor: not-allowed; }
+  .msg-line { margin-top: 10px; font-size: 0.86rem; font-weight: 700; min-height: 20px; }
+
+  /* 履歴リスト */
+  .log-box {
+    max-height: 220px;
+    overflow-y: auto;
+    background: #0b0c12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: left;
+  }
+  .log-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 8px;
+    border-bottom: 1px solid #181b28;
+    font-size: 0.8rem;
+  }
+  .log-row:last-child { border-bottom: none; }
+
+  /* モーダル（利用規約・免責事項） */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 50;
+  }
+  .modal-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 460px;
+    width: 100%;
+    padding: 20px;
+  }
 </style>
 </head>
 <body>
 
-<!-- 1. アカウント作成・ログイン画面 -->
-<div id="auth-screen">
-  <div class="auth-title">⚔️ RPG CASINO</div>
-  <div class="auth-sub">個人アカウントごとに所持金・戦績・履歴を自動保存</div>
+<!-- ナビゲーション -->
+<nav class="navbar">
+  <div class="brand" onclick="location.reload()">NEVERLAND CASINO</div>
+  <div class="nav-actions" id="nav-guest">
+    <button class="nav-btn" onclick="setAuthMode('login')">ログイン</button>
+    <button class="nav-btn gold" onclick="setAuthMode('register')">新規登録</button>
+  </div>
+  <div class="nav-actions hidden" id="nav-user">
+    <span style="font-size:0.8rem; color:var(--muted);" id="nav-mcid"></span>
+    <button class="nav-btn" onclick="logout()">ログアウト</button>
+  </div>
+</nav>
 
-  <div id="saved-accounts-section" class="saved-accounts hidden">
-    <div class="saved-label">💾 保存済みアカウント（タップしてログイン）</div>
-    <div id="saved-accounts-list"></div>
+<!-- 認証画面（画像デザイン再現） -->
+<main class="auth-wrapper" id="auth-view">
+  <div class="auth-header">
+    <h1 id="auth-heading">ログイン</h1>
+    <p id="auth-sub">登録したMCIDとパスワードを入れてください。</p>
   </div>
 
-  <div style="border-top: 1px solid #334155; padding-top: 16px;">
-    <div class="saved-label">✨ 新規アカウント作成 / ログイン</div>
-    <div class="form-group">
-      <label>プレイヤー名（マイクラIDなど）</label>
-      <input type="text" id="login-username" class="auth-input" placeholder="例: Zettai_Player" maxlength="20">
+  <div class="auth-card">
+    <label class="field-label" for="mcid-input">MCID</label>
+    <input type="text" id="mcid-input" class="field-input" placeholder="例: Steve / BE_Steve" maxlength="24">
+    <div class="field-hint">
+      統合版（BE）の方は、先頭の「BE_」も入れてください（例：BE_Steve）。
     </div>
-    <div class="form-group">
-      <label>暗証番号（4桁PIN）</label>
-      <input type="password" id="login-pin" class="auth-input" placeholder="例: 1234" maxlength="8">
+
+    <label class="field-label" for="pass-input">パスワード</label>
+    <input type="password" id="pass-input" class="field-input" placeholder="••••••••" maxlength="32">
+
+    <label class="checkbox-row">
+      <input type="checkbox" id="remember-check" checked>
+      <div class="checkbox-text">
+        <strong>ログインしたままにする</strong>
+        <span>この端末では30日間、自動でログインします。共有端末では使わないでください。</span>
+      </div>
+    </label>
+
+    <button class="submit-btn" id="auth-submit-btn" onclick="handleAuthSubmit()">ログイン</button>
+    <div id="auth-error" style="color:var(--red); font-size:0.76rem; font-weight:700; text-align:center; margin-top:8px;"></div>
+
+    <div class="forgot-note">
+      パスワードを忘れたときは、Discordで運営に再設定を頼んでください。
     </div>
-    <button class="action-btn" onclick="loginOrRegister()">ログイン / アカウント作成</button>
-    <div id="auth-msg" class="msg" style="text-align:center; color:var(--red);"></div>
   </div>
-</div>
 
-<!-- 2. メインゲーム画面 -->
-<div id="main-app" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-  <header>
-    <div class="logo">
-      ⚔️ RPG CASINO
-      <span class="user-pill" id="header-username">Player</span>
-    </div>
-    <div class="header-right">
-      <div class="balance-box">所持: <span id="balance">10,000</span> G</div>
-      <button class="small-btn" onclick="refillBalance()">+5,000 G</button>
-      <button class="small-btn logout-btn" onclick="logout()">切替</button>
-    </div>
-  </header>
+  <div class="switch-mode" id="switch-to-register">
+    <span>はじめての方は</span>
+    <span class="switch-badge" onclick="setAuthMode('register')">新規登録</span>
+  </div>
+  <div class="switch-mode hidden" id="switch-to-login">
+    <span>すでにアカウントをお持ちの方は</span>
+    <span class="switch-badge" onclick="setAuthMode('login')">ログイン</span>
+  </div>
+</main>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('crash', this)">🚀 CRASH</button>
-    <button class="tab-btn" onclick="switchTab('slot', this)">🎰 SLOTS</button>
-    <button class="tab-btn" onclick="switchTab('mines', this)">💣 MINES</button>
-    <button class="tab-btn" onclick="switchTab('profile', this)">📊 マイページ</button>
+<!-- カジノプレイ画面（ログイン後に表示） -->
+<section class="casino-wrapper hidden" id="casino-view">
+  <div class="status-bar">
+    <div>
+      <div class="mcid-tag" id="player-mcid">MCID: Steve</div>
+      <div style="font-size:0.72rem; color:var(--muted);">RTP 99.5% 五分五分バランス</div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div class="bal-display">所持残高: <span id="bal-text">10,000</span> ネバー</div>
+      <button class="mini-btn" onclick="depositDemo()">+5,000 補充</button>
+    </div>
+  </div>
+
+  <div class="game-tabs">
+    <button class="g-tab active" onclick="openGameTab('crash', this)">🚀 CRASH</button>
+    <button class="g-tab" onclick="openGameTab('slot', this)">🎰 SLOTS</button>
+    <button class="g-tab" onclick="openGameTab('mines', this)">💣 MINES</button>
+    <button class="g-tab" onclick="openGameTab('history', this)">📜 履歴・戦績</button>
   </div>
 
   <!-- CRASH -->
-  <div id="crash-game" class="game-container">
-    <div class="crash-history" id="crash-history"></div>
-    <div class="crash-display">
+  <div id="tab-crash" class="panel-box">
+    <div class="crash-screen">
       <div id="multiplier">1.00x</div>
-      <div id="crash-status" style="color:var(--muted); font-size:0.88rem;">RTP 99.5% 五分五分バランス（即死率 0.5%）</div>
+      <div style="font-size:0.78rem; color:var(--muted);">爆発する前に CASH OUT で利確</div>
     </div>
-    <div class="bet-controls">
-      <input type="number" id="crash-bet" value="500" min="10">
-      <button class="quick-btn" onclick="adjustBet('crash-bet', 0.5)">1/2</button>
-      <button class="quick-btn" onclick="adjustBet('crash-bet', 2)">2x</button>
-      <button class="quick-btn" onclick="setMaxBet('crash-bet')">MAX</button>
+    <div class="bet-row">
+      <input type="number" id="crash-bet" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scaleBet('crash-bet', 0.5)">1/2</button>
+      <button class="mini-btn" onclick="scaleBet('crash-bet', 2)">2x</button>
+      <button class="mini-btn" onclick="maxBet('crash-bet')">MAX</button>
     </div>
-    <button id="crash-btn" class="action-btn" onclick="handleCrashAction()">BET & START</button>
-    <div id="crash-msg" class="msg"></div>
+    <button id="crash-btn" class="play-btn" onclick="toggleCrash()">BET & START</button>
+    <div id="crash-msg" class="msg-line"></div>
   </div>
 
   <!-- SLOTS -->
-  <div id="slot-game" class="game-container hidden">
+  <div id="tab-slot" class="panel-box hidden">
     <div class="reels">
-      <div class="reel" id="reel1">7️⃣</div>
-      <div class="reel" id="reel2">7️⃣</div>
-      <div class="reel" id="reel3">7️⃣</div>
+      <div class="reel" id="r1">7️⃣</div>
+      <div class="reel" id="r2">7️⃣</div>
+      <div class="reel" id="r3">7️⃣</div>
     </div>
-    <div class="payout-table">
-      <strong>3つ揃い（RTP 99.5% 五分五分設計）</strong><br>
+    <div style="font-size:0.75rem; color:var(--muted); margin-bottom:12px;">
       🍒 2.5x | 🍋 4x | 🍇 8x | 🔔 15x | 💎 40x | 7️⃣ 100x
     </div>
-    <div class="bet-controls">
-      <input type="number" id="slot-bet" value="500" min="10">
-      <button class="quick-btn" onclick="adjustBet('slot-bet', 0.5)">1/2</button>
-      <button class="quick-btn" onclick="adjustBet('slot-bet', 2)">2x</button>
-      <button class="quick-btn" onclick="setMaxBet('slot-bet')">MAX</button>
+    <div class="bet-row">
+      <input type="number" id="slot-bet" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scaleBet('slot-bet', 0.5)">1/2</button>
+      <button class="mini-btn" onclick="scaleBet('slot-bet', 2)">2x</button>
+      <button class="mini-btn" onclick="maxBet('slot-bet')">MAX</button>
     </div>
-    <button id="slot-btn" class="action-btn" onclick="spinSlot()">SPIN</button>
-    <div id="slot-msg" class="msg"></div>
+    <button id="slot-btn" class="play-btn" onclick="spinSlot()">SPIN</button>
+    <div id="slot-msg" class="msg-line"></div>
   </div>
 
   <!-- MINES -->
-  <div id="mines-game" class="game-container hidden">
-    <div class="mines-top">
+  <div id="tab-mines" class="panel-box hidden">
+    <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:8px;">
       <div>
         爆弾数:
-        <select id="bomb-count" onchange="resetMinesPreview()">
-          <option value="1">1個 (安全重視)</option>
-          <option value="3" selected>3個 (標準)</option>
-          <option value="5">5個 (ハイリスク)</option>
-          <option value="10">10個 (超ハイリスク)</option>
+        <select id="bomb-select" style="background:#0b0c12; color:#fff; border:1px solid var(--border); padding:3px 6px; border-radius:5px;">
+          <option value="1">1個</option>
+          <option value="3" selected>3個</option>
+          <option value="5">5個</option>
+          <option value="10">10個</option>
         </select>
       </div>
       <div>現在倍率: <strong id="mines-mult" style="color:var(--green);">1.00x</strong></div>
     </div>
     <div class="mines-grid" id="mines-grid"></div>
-    <div class="bet-controls">
-      <input type="number" id="mines-bet" value="500" min="10">
-      <button class="quick-btn" onclick="adjustBet('mines-bet', 0.5)">1/2</button>
-      <button class="quick-btn" onclick="adjustBet('mines-bet', 2)">2x</button>
-      <button class="quick-btn" onclick="setMaxBet('mines-bet')">MAX</button>
+    <div class="bet-row">
+      <input type="number" id="mines-bet" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scaleBet('mines-bet', 0.5)">1/2</button>
+      <button class="mini-btn" onclick="scaleBet('mines-bet', 2)">2x</button>
+      <button class="mini-btn" onclick="maxBet('mines-bet')">MAX</button>
     </div>
-    <button id="mines-btn" class="action-btn" onclick="handleMinesAction()">GAME START</button>
-    <div id="mines-msg" class="msg"></div>
+    <button id="mines-btn" class="play-btn" onclick="toggleMines()">GAME START</button>
+    <div id="mines-msg" class="msg-line"></div>
   </div>
 
-  <!-- マイページ・プレイ履歴 -->
-  <div id="profile-game" class="game-container hidden">
-    <h3 style="margin-top:0; color:var(--accent);">📊 個人戦績＆プレイデータ</h3>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-title">累計ベット額</div>
-        <div class="stat-val" id="stat-wagered">0 G</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">累計獲得額</div>
-        <div class="stat-val" id="stat-won" style="color:var(--green);">0 G</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">トータル収支</div>
-        <div class="stat-val" id="stat-profit">0 G</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">最高倍率 / プレイ数</div>
-        <div class="stat-val" id="stat-best">1.00x / 0回</div>
-      </div>
+  <!-- 履歴・戦績 -->
+  <div id="tab-history" class="panel-box hidden">
+    <div style="display:flex; justify-content:space-around; margin-bottom:14px; font-size:0.82rem;">
+      <div>累計ベット<br><strong id="stat-bet">0</strong></div>
+      <div>累計獲得<br><strong id="stat-win" style="color:var(--green);">0</strong></div>
+      <div>収支<br><strong id="stat-net">0</strong></div>
     </div>
+    <div class="log-box" id="log-container"></div>
+  </div>
+</section>
 
-    <div style="text-align:left; font-size:0.85rem; font-weight:bold; margin-bottom:6px; color:var(--muted);">
-      📜 直近のプレイ履歴（自動保存）
-    </div>
-    <div class="log-list" id="play-log-list">
-      <div style="color:var(--muted); text-align:center; padding:20px;">まだプレイ履歴がありません</div>
-    </div>
+<!-- フッター（画像記載の免責・規約構成） -->
+<footer class="footer">
+  このサイトはNeverland RPGのゲーム内通貨（ネバー）を使う非公式のWebカジノで、Neverland RPGの運営とは関係ありません。現実のお金とも一切関係ありません。<br>
+  不具合の報告やお問い合わせはDiscordへ。
+  <a onclick="openModal('terms')">利用規約</a>
+  <a onclick="openModal('disclaimer')">免責事項</a>
+</footer>
 
-    <div class="backup-box">
-      <div style="font-size:0.82rem; font-weight:bold; color:var(--text);">💾 セーブデータのバックアップ・引き継ぎ</div>
-      <div style="font-size:0.75rem; color:var(--muted);">別ブラウザへデータを移すときにコードをコピー・貼り付けできます</div>
-      <textarea id="backup-code" placeholder="「書き出し」を押すとここにセーブコードが出ます"></textarea>
-      <div style="display:flex; gap:8px;">
-        <button class="small-btn" style="flex:1;" onclick="exportSaveData()">📤 データ書き出し</button>
-        <button class="small-btn" style="flex:1; background:var(--blue); border-color:var(--blue);" onclick="importSaveData()">📥 データ復元</button>
-      </div>
-    </div>
+<!-- 利用規約・免責事項モーダル -->
+<div id="info-modal" class="modal-backdrop hidden" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <h3 id="modal-title" style="margin-top:0; color:var(--gold);">利用規約</h3>
+    <p id="modal-body" style="font-size:0.8rem; color:var(--muted); line-height:1.6;"></p>
+    <button class="submit-btn" onclick="closeModal()">閉じる</button>
   </div>
 </div>
 
 <script>
-  const STORAGE_KEY = "rpg_casino_accounts_v1";
-  const SESSION_KEY = "rpg_casino_current_user_v1";
+  const DB_KEY = "nl_casino_users_v1";
+  const SESSION_KEY = "nl_casino_session_v1";
+  let authMode = "login";
+  let users = JSON.parse(localStorage.getItem(DB_KEY) || "{}");
+  let currentMcid = null;
 
-  let accounts = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-  let currentUser = null;
-
-  // ==========================================
-  // アカウント管理・保存ロジック
-  // ==========================================
-  function saveAllAccounts() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+  function saveDB() {
+    localStorage.setItem(DB_KEY, JSON.stringify(users));
   }
 
-  function renderSavedAccountList() {
-    const names = Object.keys(accounts);
-    const sec = document.getElementById('saved-accounts-section');
-    const list = document.getElementById('saved-accounts-list');
-    if (names.length === 0) {
-      sec.classList.add('hidden');
-      return;
+  function setAuthMode(mode) {
+    authMode = mode;
+    document.getElementById("auth-error").innerText = "";
+    if (mode === "login") {
+      document.getElementById("auth-heading").innerText = "ログイン";
+      document.getElementById("auth-sub").innerText = "登録したMCIDとパスワードを入れてください。";
+      document.getElementById("auth-submit-btn").innerText = "ログイン";
+      document.getElementById("switch-to-register").classList.remove("hidden");
+      document.getElementById("switch-to-login").classList.add("hidden");
+    } else {
+      document.getElementById("auth-heading").innerText = "新規登録";
+      document.getElementById("auth-sub").innerText = "使用するMCIDと任意のパスワードを設定してください。";
+      document.getElementById("auth-submit-btn").innerText = "新規登録してはじめる";
+      document.getElementById("switch-to-register").classList.add("hidden");
+      document.getElementById("switch-to-login").classList.remove("hidden");
     }
-    sec.classList.remove('hidden');
-    list.innerHTML = '';
-    names.forEach(name => {
-      const acc = accounts[name];
-      const div = document.createElement('div');
-      div.className = 'account-card';
-      div.innerHTML = `
-        <div>
-          <div class="acc-name">👤 ${escapeHtml(name)}</div>
-          <div style="font-size:0.75rem; color:var(--muted);">プレイ回数: ${acc.plays || 0}回</div>
-        </div>
-        <div class="acc-bal">${Math.floor(acc.balance).toLocaleString()} G →</div>
-      `;
-      div.onclick = () => {
-        document.getElementById('login-username').value = name;
-        document.getElementById('login-pin').focus();
-      };
-      list.appendChild(div);
-    });
   }
 
-  function loginOrRegister() {
-    const username = document.getElementById('login-username').value.trim();
-    const pin = document.getElementById('login-pin').value.trim();
-    const msg = document.getElementById('auth-msg');
+  function handleAuthSubmit() {
+    const mcid = document.getElementById("mcid-input").value.trim();
+    const pass = document.getElementById("pass-input").value.trim();
+    const err = document.getElementById("auth-error");
 
-    if (!username || !pin) {
-      msg.innerText = "プレイヤー名とPINを入力してください";
+    if (!mcid || !pass) {
+      err.innerText = "MCIDとパスワードを入力してください。";
       return;
     }
 
-    if (accounts[username]) {
-      if (accounts[username].pin !== pin) {
-        msg.innerText = "❌ 暗証番号（PIN）が違います";
+    if (authMode === "register") {
+      if (users[mcid]) {
+        err.innerText = "このMCIDはすでに登録されています。ログインしてください。";
         return;
       }
-    } else {
-      // 新規アカウント初期化
-      accounts[username] = {
-        pin: pin,
+      users[mcid] = {
+        password: pass,
         balance: 10000,
-        totalWagered: 0,
-        totalWon: 0,
-        bestMult: 1.00,
-        plays: 0,
+        wagered: 0,
+        won: 0,
         logs: []
       };
-      saveAllAccounts();
+      saveDB();
+    } else {
+      if (!users[mcid]) {
+        err.innerText = "MCIDが見つかりません。「新規登録」からアカウントを作成してください。";
+        return;
+      }
+      if (users[mcid].password !== pass) {
+        err.innerText = "パスワードが正しくありません。";
+        return;
+      }
     }
 
-    currentUser = username;
-    localStorage.setItem(SESSION_KEY, username);
-    msg.innerText = "";
-    enterApp();
+    currentMcid = mcid;
+    if (document.getElementById("remember-check").checked) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        mcid,
+        expires: Date.now() + 30 * 24 * 60 * 60 * 1000
+      }));
+    }
+    showCasino();
   }
 
-  function enterApp() {
-    document.getElementById('auth-screen').classList.add('hidden');
-    document.getElementById('main-app').classList.remove('hidden');
-    document.getElementById('header-username').innerText = "👤 " + currentUser;
-    syncUI();
+  function showCasino() {
+    document.getElementById("auth-view").classList.add("hidden");
+    document.getElementById("nav-guest").classList.add("hidden");
+    document.getElementById("casino-view").classList.remove("hidden");
+    document.getElementById("nav-user").classList.remove("hidden");
+    document.getElementById("nav-mcid").innerText = currentMcid;
+    document.getElementById("player-mcid").innerText = "MCID: " + currentMcid;
+    refreshStats();
   }
 
   function logout() {
-    if (crashRunning) clearInterval(crashTimer);
-    crashRunning = false;
-    minesActive = false;
-    currentUser = null;
     localStorage.removeItem(SESSION_KEY);
-    document.getElementById('main-app').classList.add('hidden');
-    document.getElementById('auth-screen').classList.remove('hidden');
-    document.getElementById('login-pin').value = "";
-    renderSavedAccountList();
+    currentMcid = null;
+    location.reload();
   }
 
-  function getUserData() {
-    return accounts[currentUser];
-  }
+  function refreshStats() {
+    const u = users[currentMcid];
+    if (!u) return;
+    document.getElementById("bal-text").innerText = Math.floor(u.balance).toLocaleString();
+    document.getElementById("stat-bet").innerText = Math.floor(u.wagered).toLocaleString();
+    document.getElementById("stat-win").innerText = Math.floor(u.won).toLocaleString();
+    const net = Math.floor(u.won - u.wagered);
+    const netEl = document.getElementById("stat-net");
+    netEl.innerText = (net >= 0 ? "+" : "") + net.toLocaleString();
+    netEl.style.color = net >= 0 ? "var(--green)" : "var(--red)";
 
-  function syncUI() {
-    const data = getUserData();
-    if (!data) return;
-    document.getElementById('balance').innerText = Math.floor(data.balance).toLocaleString();
-    document.getElementById('stat-wagered').innerText = Math.floor(data.totalWagered).toLocaleString() + " G";
-    document.getElementById('stat-won').innerText = Math.floor(data.totalWon).toLocaleString() + " G";
-
-    const profit = Math.floor(data.totalWon - data.totalWagered);
-    const profitEl = document.getElementById('stat-profit');
-    profitEl.innerText = (profit >= 0 ? "+" : "") + profit.toLocaleString() + " G";
-    profitEl.style.color = profit >= 0 ? "var(--green)" : "var(--red)";
-
-    document.getElementById('stat-best').innerText = `${(data.bestMult || 1).toFixed(2)}x / ${data.plays || 0}回`;
-
-    const logList = document.getElementById('play-log-list');
-    if (!data.logs || data.logs.length === 0) {
-      logList.innerHTML = '<div style="color:var(--muted); text-align:center; padding:20px;">まだプレイ履歴がありません</div>';
+    const box = document.getElementById("log-container");
+    if (u.logs.length === 0) {
+      box.innerHTML = '<div style="text-align:center; color:var(--muted); padding:16px; font-size:0.78rem;">プレイ履歴はまだありません</div>';
     } else {
-      logList.innerHTML = data.logs.map(l => `
-        <div class="log-item">
-          <div>
-            <strong>${l.game}</strong> <span style="color:var(--muted); font-size:0.75rem;">(${l.time})</span><br>
-            <span style="color:var(--muted); font-size:0.78rem;">賭け: ${l.bet.toLocaleString()} G / 倍率: ${l.mult.toFixed(2)}x</span>
-          </div>
-          <div style="font-weight:bold; color:${l.win > 0 ? 'var(--green)' : 'var(--red)'};">
-            ${l.win > 0 ? '+' + l.win.toLocaleString() + ' G' : '-' + l.bet.toLocaleString() + ' G'}
-          </div>
+      box.innerHTML = u.logs.map(l => `
+        <div class="log-row">
+          <span><strong>${l.game}</strong> (${l.time}) / ベット ${l.bet.toLocaleString()}</span>
+          <span style="font-weight:700; color:${l.win > 0 ? 'var(--green)' : 'var(--red)'};">
+            ${l.win > 0 ? '+' + l.win.toLocaleString() : '-' + l.bet.toLocaleString()}
+          </span>
         </div>
-      `).join('');
+      `).join("");
     }
   }
 
-  function recordGameResult(gameName, bet, win, mult) {
-    const data = getUserData();
-    data.totalWagered += bet;
-    data.totalWon += win;
-    data.plays += 1;
-    if (win > 0 && mult > data.bestMult) {
-      data.bestMult = mult;
-    }
-    const now = new Date();
-    const timeStr = `${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-    data.logs.unshift({ game: gameName, bet, win, mult, time: timeStr });
-    if (data.logs.length > 50) data.logs.pop();
-    saveAllAccounts();
-    syncUI();
+  function addBalance(diff) {
+    users[currentMcid].balance += diff;
+    saveDB();
+    refreshStats();
   }
 
-  function updateBalance(amount) {
-    const data = getUserData();
-    data.balance += amount;
-    saveAllAccounts();
-    syncUI();
+  function depositDemo() {
+    addBalance(5000);
   }
 
-  function refillBalance() {
-    updateBalance(5000);
+  function pushLog(game, bet, win) {
+    const u = users[currentMcid];
+    u.wagered += bet;
+    u.won += win;
+    const d = new Date();
+    const time = `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+    u.logs.unshift({ game, bet, win, time });
+    if (u.logs.length > 40) u.logs.pop();
+    saveDB();
+    refreshStats();
   }
 
-  function exportSaveData() {
-    const payload = { username: currentUser, data: getUserData() };
-    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-    document.getElementById('backup-code').value = encoded;
-    alert("セーブコードを書き出しました！コピーして保管してください。");
-  }
-
-  function importSaveData() {
-    try {
-      const raw = document.getElementById('backup-code').value.trim();
-      const decoded = JSON.parse(decodeURIComponent(escape(atob(raw))));
-      if (!decoded.username || !decoded.data) throw new Error();
-      accounts[decoded.username] = decoded.data;
-      currentUser = decoded.username;
-      localStorage.setItem(SESSION_KEY, currentUser);
-      saveAllAccounts();
-      enterApp();
-      alert(`アカウント「${currentUser}」のデータを復元しました！`);
-    } catch (e) {
-      alert("❌ セーブコードが正しくありません");
-    }
-  }
-
-  function escapeHtml(str) {
-    return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
-  }
-
-  // ==========================================
-  // タブ＆ベット操作
-  // ==========================================
-  function switchTab(game, btnEl) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btnEl.classList.add('active');
-    ['crash', 'slot', 'mines', 'profile'].forEach(g => {
-      document.getElementById(g + '-game').classList.toggle('hidden', g !== game);
+  function openGameTab(tab, el) {
+    document.querySelectorAll(".g-tab").forEach(b => b.classList.remove("active"));
+    el.classList.add("active");
+    ["crash", "slot", "mines", "history"].forEach(t => {
+      document.getElementById("tab-" + t).classList.toggle("hidden", t !== tab);
     });
-    if (game === 'profile') syncUI();
+    if (tab === "history") refreshStats();
   }
 
-  function adjustBet(id, factor) {
-    const input = document.getElementById(id);
-    input.value = Math.max(10, Math.floor(Number(input.value) * factor));
+  function scaleBet(id, f) {
+    const el = document.getElementById(id);
+    el.value = Math.max(10, Math.floor(Number(el.value) * f));
   }
-  function setMaxBet(id) {
-    document.getElementById(id).value = Math.max(10, Math.floor(getUserData().balance));
-  }
-
-  // ==========================================
-  // 1. CRASH (RTP 99.5%・五分五分)
-  // ==========================================
-  let crashRunning = false;
-  let currentMult = 1.00;
-  let crashPoint = 1.00;
-  let crashBet = 0;
-  let crashTimer = null;
-
-  function addCrashHistory(val, isWin) {
-    const hist = document.getElementById('crash-history');
-    const pill = document.createElement('span');
-    pill.className = 'hist-pill ' + (isWin ? 'hist-win' : 'hist-lose');
-    pill.innerText = val.toFixed(2) + 'x';
-    hist.prepend(pill);
-    if (hist.children.length > 7) hist.removeChild(hist.lastChild);
+  function maxBet(id) {
+    document.getElementById(id).value = Math.max(10, Math.floor(users[currentMcid].balance));
   }
 
-  function handleCrashAction() {
-    const btn = document.getElementById('crash-btn');
-    const multEl = document.getElementById('multiplier');
-    const msgEl = document.getElementById('crash-msg');
-    const bal = getUserData().balance;
+  // --- CRASH ---
+  let crashActive = false, mult = 1.00, targetCrash = 1.00, cBet = 0, cTimer = null;
+  function toggleCrash() {
+    const btn = document.getElementById("crash-btn");
+    const mEl = document.getElementById("multiplier");
+    const msg = document.getElementById("crash-msg");
 
-    if (!crashRunning) {
-      crashBet = Number(document.getElementById('crash-bet').value);
-      if (crashBet <= 0 || crashBet > bal) {
-        msgEl.innerText = "⚠️ 残高不足または無効なベット額です";
+    if (!crashActive) {
+      cBet = Number(document.getElementById("crash-bet").value);
+      if (cBet <= 0 || cBet > users[currentMcid].balance) {
+        msg.innerText = "残高不足です";
         return;
       }
-
-      updateBalance(-crashBet);
+      addBalance(-cBet);
       const r = Math.random();
-      crashPoint = r < 0.005 ? 1.00 : Math.max(1.01, 0.995 / (1 - r));
-
-      if (crashPoint <= 1.00) {
-        multEl.innerText = "1.00x";
-        multEl.className = "crashed";
-        msgEl.innerText = `💥 開始直後に即爆発 (1.00x)！ -${crashBet.toLocaleString()} G`;
-        addCrashHistory(1.00, false);
-        recordGameResult("🚀 CRASH", crashBet, 0, 1.00);
+      targetCrash = r < 0.005 ? 1.00 : Math.max(1.01, 0.995 / (1 - r));
+      if (targetCrash <= 1.00) {
+        mEl.innerText = "1.00x";
+        mEl.className = "crashed";
+        msg.innerText = `💥 即爆発 (1.00x)！ -${cBet.toLocaleString()} ネバー`;
+        pushLog("CRASH", cBet, 0);
         return;
       }
-
-      crashRunning = true;
-      currentMult = 1.00;
-      multEl.className = "";
-      multEl.innerText = "1.00x";
-      msgEl.innerText = "";
-      btn.innerText = "💰 CASH OUT (利確)";
-      btn.classList.add('cashout');
-
-      crashTimer = setInterval(() => {
-        currentMult += 0.01 * (currentMult * 0.55);
-        if (currentMult >= crashPoint) {
-          clearInterval(crashTimer);
-          crashRunning = false;
-          multEl.innerText = crashPoint.toFixed(2) + "x";
-          multEl.className = "crashed";
-          msgEl.innerText = `💥 ${crashPoint.toFixed(2)}x で爆発！ -${crashBet.toLocaleString()} G`;
-          addCrashHistory(crashPoint, false);
-          recordGameResult("🚀 CRASH", crashBet, 0, crashPoint);
+      crashActive = true;
+      mult = 1.00;
+      mEl.className = "";
+      msg.innerText = "";
+      btn.innerText = "CASH OUT (利確)";
+      btn.classList.add("cashout");
+      cTimer = setInterval(() => {
+        mult += 0.01 * (mult * 0.55);
+        if (mult >= targetCrash) {
+          clearInterval(cTimer);
+          crashActive = false;
+          mEl.innerText = targetCrash.toFixed(2) + "x";
+          mEl.className = "crashed";
+          msg.innerText = `💥 ${targetCrash.toFixed(2)}x で爆発！ -${cBet.toLocaleString()} ネバー`;
+          pushLog("CRASH", cBet, 0);
           btn.innerText = "BET & START";
-          btn.classList.remove('cashout');
+          btn.classList.remove("cashout");
         } else {
-          multEl.innerText = currentMult.toFixed(2) + "x";
+          mEl.innerText = mult.toFixed(2) + "x";
         }
       }, 50);
     } else {
-      clearInterval(crashTimer);
-      crashRunning = false;
-      const win = Math.floor(crashBet * currentMult);
-      updateBalance(win);
-      multEl.className = "cashed";
-      msgEl.innerText = `🎉 ${currentMult.toFixed(2)}x で利確成功！ +${win.toLocaleString()} G 獲得！`;
-      addCrashHistory(currentMult, true);
-      recordGameResult("🚀 CRASH", crashBet, win, currentMult);
+      clearInterval(cTimer);
+      crashActive = false;
+      const win = Math.floor(cBet * mult);
+      addBalance(win);
+      mEl.className = "cashed";
+      msg.innerText = `🎉 ${mult.toFixed(2)}x 利確！ +${win.toLocaleString()} ネバー`;
+      pushLog("CRASH", cBet, win);
       btn.innerText = "BET & START";
-      btn.classList.remove('cashout');
+      btn.classList.remove("cashout");
     }
   }
 
-  // ==========================================
-  // 2. SLOTS (RTP 99.5%・五分五分)
-  // ==========================================
-  const symbols = ["🍒", "🍋", "🍇", "🔔", "💎", "7️⃣"];
-  const slotPayouts = { "🍒": 2.5, "🍋": 4, "🍇": 8, "🔔": 15, "💎": 40, "7️⃣": 100 };
-
-  function getFairSlotResult() {
+  // --- SLOTS ---
+  const syms = ["🍒", "🍋", "🍇", "🔔", "💎", "7️⃣"];
+  const pays = { "🍒": 2.5, "🍋": 4, "🍇": 8, "🔔": 15, "💎": 40, "7️⃣": 100 };
+  function rollSlot() {
     const r = Math.random() * 100;
-    if (r < 18.0) return ["🍒", "🍒", "🍒"];
-    if (r < 25.0) return ["🍋", "🍋", "🍋"];
-    if (r < 27.0) return ["🍇", "🍇", "🍇"];
-    if (r < 27.4) return ["🔔", "🔔", "🔔"];
-    if (r < 27.475) return ["💎", "💎", "💎"];
-    if (r < 27.49) return ["7️⃣", "7️⃣", "7️⃣"];
-
-    let s1 = symbols[Math.floor(Math.random() * symbols.length)];
-    let s2 = symbols[Math.floor(Math.random() * symbols.length)];
-    let s3 = symbols[Math.floor(Math.random() * symbols.length)];
-    while (s1 === s2 && s2 === s3) {
-      s3 = symbols[Math.floor(Math.random() * symbols.length)];
-    }
-    return [s1, s2, s3];
+    if (r < 18.0) return ["🍒","🍒","🍒"];
+    if (r < 25.0) return ["🍋","🍋","🍋"];
+    if (r < 27.0) return ["🍇","🍇","🍇"];
+    if (r < 27.4) return ["🔔","🔔","🔔"];
+    if (r < 27.475) return ["💎","💎","💎"];
+    if (r < 27.49) return ["7️⃣","7️⃣","7️⃣"];
+    let a = syms[Math.floor(Math.random()*6)], b = syms[Math.floor(Math.random()*6)], c = syms[Math.floor(Math.random()*6)];
+    while (a === b && b === c) c = syms[Math.floor(Math.random()*6)];
+    return [a, b, c];
   }
-
   function spinSlot() {
-    const bet = Number(document.getElementById('slot-bet').value);
-    const msgEl = document.getElementById('slot-msg');
-    const btn = document.getElementById('slot-btn');
-
-    if (bet <= 0 || bet > getUserData().balance) {
-      msgEl.innerText = "⚠️ 残高不足または無効なベット額です";
-      return;
-    }
-
-    updateBalance(-bet);
+    const bet = Number(document.getElementById("slot-bet").value);
+    const msg = document.getElementById("slot-msg");
+    const btn = document.getElementById("slot-btn");
+    if (bet <= 0 || bet > users[currentMcid].balance) { msg.innerText = "残高不足です"; return; }
+    addBalance(-bet);
     btn.disabled = true;
-    msgEl.innerText = "回転中...";
-
-    let ticks = 0;
-    const spinInterval = setInterval(() => {
-      document.getElementById('reel1').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-      document.getElementById('reel2').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-      document.getElementById('reel3').innerText = symbols[Math.floor(Math.random() * symbols.length)];
-      ticks++;
-
-      if (ticks > 14) {
-        clearInterval(spinInterval);
-        const [r1, r2, r3] = getFairSlotResult();
-        document.getElementById('reel1').innerText = r1;
-        document.getElementById('reel2').innerText = r2;
-        document.getElementById('reel3').innerText = r3;
-
-        if (r1 === r2 && r2 === r3) {
-          const mult = slotPayouts[r1];
-          const win = Math.floor(bet * mult);
-          updateBalance(win);
-          msgEl.innerText = `🎉 大当たり！ ${r1} 揃い (${mult}x) +${win.toLocaleString()} G！`;
-          recordGameResult("🎰 SLOTS", bet, win, mult);
+    msg.innerText = "回転中...";
+    let t = 0;
+    const iv = setInterval(() => {
+      document.getElementById("r1").innerText = syms[Math.floor(Math.random()*6)];
+      document.getElementById("r2").innerText = syms[Math.floor(Math.random()*6)];
+      document.getElementById("r3").innerText = syms[Math.floor(Math.random()*6)];
+      if (++t > 12) {
+        clearInterval(iv);
+        const [s1, s2, s3] = rollSlot();
+        document.getElementById("r1").innerText = s1;
+        document.getElementById("r2").innerText = s2;
+        document.getElementById("r3").innerText = s3;
+        if (s1 === s2 && s2 === s3) {
+          const win = Math.floor(bet * pays[s1]);
+          addBalance(win);
+          msg.innerText = `🎉 ${s1} 揃い (${pays[s1]}x)！ +${win.toLocaleString()} ネバー`;
+          pushLog("SLOTS", bet, win);
         } else {
-          msgEl.innerText = "💀 ハズレ...";
-          recordGameResult("🎰 SLOTS", bet, 0, 0);
+          msg.innerText = "ハズレ...";
+          pushLog("SLOTS", bet, 0);
         }
         btn.disabled = false;
       }
     }, 55);
   }
 
-  // ==========================================
-  // 3. MINES (RTP 99.5%・五分五分)
-  // ==========================================
-  let minesActive = false;
-  let minesBet = 0;
-  let bombPositions = new Set();
-  let revealedCount = 0;
-  let currentMinesMult = 1.00;
-
-  function initMinesGrid() {
-    const grid = document.getElementById('mines-grid');
-    grid.innerHTML = '';
+  // --- MINES ---
+  let mActive = false, mBet = 0, bombs = new Set(), opened = 0, mMult = 1.00;
+  function buildGrid() {
+    const g = document.getElementById("mines-grid");
+    g.innerHTML = "";
     for (let i = 0; i < 25; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'mine-tile';
-      btn.disabled = true;
-      btn.onclick = () => clickMineTile(i, btn);
-      grid.appendChild(btn);
+      const b = document.createElement("button");
+      b.className = "mine-tile";
+      b.disabled = true;
+      b.onclick = () => clickTile(i, b);
+      g.appendChild(b);
     }
   }
-
-  function resetMinesPreview() {
-    if (!minesActive) {
-      document.getElementById('mines-mult').innerText = "1.00x";
-      initMinesGrid();
-    }
+  function calcM(bCount, k) {
+    let p = 1;
+    for (let i = 0; i < k; i++) p *= (25 - bCount - i) / (25 - i);
+    return 0.995 / p;
   }
-
-  function calcMinesMultiplier(bombs, safeOpened) {
-    if (safeOpened === 0) return 1.00;
-    let prob = 1.0;
-    for (let i = 0; i < safeOpened; i++) {
-      prob *= (25 - bombs - i) / (25 - i);
-    }
-    return (0.995 / prob);
-  }
-
-  function handleMinesAction() {
-    const btn = document.getElementById('mines-btn');
-    const msgEl = document.getElementById('mines-msg');
-
-    if (!minesActive) {
-      minesBet = Number(document.getElementById('mines-bet').value);
-      if (minesBet <= 0 || minesBet > getUserData().balance) {
-        msgEl.innerText = "⚠️ 残高不足または無効なベット額です";
-        return;
-      }
-
-      updateBalance(-minesBet);
-      const bombs = Number(document.getElementById('bomb-count').value);
-      bombPositions.clear();
-      while (bombPositions.size < bombs) {
-        bombPositions.add(Math.floor(Math.random() * 25));
-      }
-
-      minesActive = true;
-      revealedCount = 0;
-      currentMinesMult = 1.00;
-      document.getElementById('mines-mult').innerText = "1.00x";
-      document.getElementById('bomb-count').disabled = true;
-      msgEl.innerText = "💎 宝石を探してください！";
-
-      const tiles = document.querySelectorAll('.mine-tile');
-      tiles.forEach(t => {
-        t.className = 'mine-tile';
-        t.innerText = '';
-        t.disabled = false;
-      });
-
-      btn.innerText = "💰 CASH OUT (利確)";
-      btn.classList.add('cashout');
+  function toggleMines() {
+    const btn = document.getElementById("mines-btn");
+    const msg = document.getElementById("mines-msg");
+    if (!mActive) {
+      mBet = Number(document.getElementById("mines-bet").value);
+      if (mBet <= 0 || mBet > users[currentMcid].balance) { msg.innerText = "残高不足です"; return; }
+      addBalance(-mBet);
+      const bCount = Number(document.getElementById("bomb-select").value);
+      bombs.clear();
+      while (bombs.size < bCount) bombs.add(Math.floor(Math.random() * 25));
+      mActive = true; opened = 0; mMult = 1.00;
+      document.getElementById("mines-mult").innerText = "1.00x";
+      document.getElementById("bomb-select").disabled = true;
+      msg.innerText = "パネルを開けてください";
+      document.querySelectorAll(".mine-tile").forEach(t => { t.className = "mine-tile"; t.innerText = ""; t.disabled = false; });
+      btn.innerText = "CASH OUT (利確)";
+      btn.classList.add("cashout");
     } else {
-      if (revealedCount === 0) {
-        msgEl.innerText = "⚠️ 最低1マス開けてから利確してください";
-        return;
-      }
-      const win = Math.floor(minesBet * currentMinesMult);
-      updateBalance(win);
-      recordGameResult("💣 MINES", minesBet, win, currentMinesMult);
-      endMinesGame(`🎉 ${currentMinesMult.toFixed(2)}x で利確！ +${win.toLocaleString()} G 獲得！`);
+      if (opened === 0) { msg.innerText = "1マス以上開けてください"; return; }
+      const win = Math.floor(mBet * mMult);
+      addBalance(win);
+      pushLog("MINES", mBet, win);
+      finishMines(`🎉 ${mMult.toFixed(2)}x 利確！ +${win.toLocaleString()} ネバー`);
     }
   }
-
-  function clickMineTile(index, tileEl) {
-    if (!minesActive || tileEl.disabled) return;
-    const bombs = Number(document.getElementById('bomb-count').value);
-
-    if (bombPositions.has(index)) {
-      tileEl.classList.add('bomb');
-      tileEl.innerText = '💣';
-      recordGameResult("💣 MINES", minesBet, 0, 0);
-      endMinesGame(`💥 爆弾を踏みました！ -${minesBet.toLocaleString()} G`);
+  function clickTile(idx, el) {
+    if (!mActive || el.disabled) return;
+    const bCount = Number(document.getElementById("bomb-select").value);
+    if (bombs.has(idx)) {
+      el.classList.add("bomb"); el.innerText = "💣";
+      pushLog("MINES", mBet, 0);
+      finishMines(`💥 爆弾！ -${mBet.toLocaleString()} ネバー`);
     } else {
-      tileEl.classList.add('gem');
-      tileEl.innerText = '💎';
-      tileEl.disabled = true;
-      revealedCount++;
-      currentMinesMult = calcMinesMultiplier(bombs, revealedCount);
-      document.getElementById('mines-mult').innerText = currentMinesMult.toFixed(2) + "x";
-
-      if (revealedCount === 25 - bombs) {
-        const win = Math.floor(minesBet * currentMinesMult);
-        updateBalance(win);
-        recordGameResult("💣 MINES", minesBet, win, currentMinesMult);
-        endMinesGame(`👑 全マス制覇！ +${win.toLocaleString()} G 獲得！`);
+      el.classList.add("gem"); el.innerText = "💎"; el.disabled = true;
+      opened++;
+      mMult = calcM(bCount, opened);
+      document.getElementById("mines-mult").innerText = mMult.toFixed(2) + "x";
+      if (opened === 25 - bCount) {
+        const win = Math.floor(mBet * mMult);
+        addBalance(win);
+        pushLog("MINES", mBet, win);
+        finishMines(`👑 全開け達成！ +${win.toLocaleString()} ネバー`);
       }
     }
   }
-
-  function endMinesGame(message) {
-    minesActive = false;
-    document.getElementById('bomb-count').disabled = false;
-    document.getElementById('mines-msg').innerText = message;
-
-    const tiles = document.querySelectorAll('.mine-tile');
-    tiles.forEach((t, idx) => {
+  function finishMines(text) {
+    mActive = false;
+    document.getElementById("bomb-select").disabled = false;
+    document.getElementById("mines-msg").innerText = text;
+    document.querySelectorAll(".mine-tile").forEach((t, i) => {
       t.disabled = true;
-      if (!t.classList.contains('gem') && !t.classList.contains('bomb')) {
-        t.classList.add('dim');
-        t.innerText = bombPositions.has(idx) ? '💣' : '💎';
+      if (!t.classList.contains("gem") && !t.classList.contains("bomb")) {
+        t.classList.add("dim");
+        t.innerText = bombs.has(i) ? "💣" : "💎";
       }
     });
-
-    const btn = document.getElementById('mines-btn');
+    const btn = document.getElementById("mines-btn");
     btn.innerText = "GAME START";
-    btn.classList.remove('cashout');
+    btn.classList.remove("cashout");
   }
 
-  // 初期起動時のセッション復元
-  initMinesGrid();
-  const savedSession = localStorage.getItem(SESSION_KEY);
-  if (savedSession && accounts[savedSession]) {
-    currentUser = savedSession;
-    enterApp();
-  } else {
-    renderSavedAccountList();
+  function openModal(type) {
+    document.getElementById("info-modal").classList.remove("hidden");
+    if (type === "terms") {
+      document.getElementById("modal-title").innerText = "利用規約";
+      document.getElementById("modal-body").innerText = "本サービスはゲーム内通貨のみを対象とした娯楽用Webアプリです。現金（リアルマネー）の賭博・換金・RMT行為は一切禁止されています。複数アカウントを用いた不正行為が確認された場合、残高を無効化することがあります。";
+    } else {
+      document.getElementById("modal-title").innerText = "免責事項";
+      document.getElementById("modal-body").innerText = "本サイトは非公式のファンメイドWebシステムであり、ゲームサーバー運営元とは一切関係ありません。通信障害やブラウザデータ消去等によるデータ損失について運営者は責任を負いません。";
+    }
+  }
+  function closeModal() {
+    document.getElementById("info-modal").classList.add("hidden");
+  }
+
+  buildGrid();
+  const saved = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+  if (saved && saved.expires > Date.now() && users[saved.mcid]) {
+    currentMcid = saved.mcid;
+    showCasino();
   }
 </script>
-
 </body>
 </html>
