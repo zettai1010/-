@@ -13,6 +13,7 @@
     --gold: #f5b942;
     --green: #10b981;
     --red: #ef4444;
+    --blue: #3b82f6;
     --text: #f8fafc;
     --muted: #8b92a5;
   }
@@ -30,27 +31,37 @@
   }
   .hidden { display: none !important; }
 
-  /* ログイン画面 */
+  /* 認証カード */
   .auth-card {
     width: 100%;
     max-width: 380px;
-    margin-top: 50px;
+    margin-top: 40px;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 26px 22px;
+    padding: 24px 22px;
   }
-  .auth-card h2 {
-    margin: 0 0 6px;
-    color: var(--gold);
-    text-align: center;
-    font-size: 1.35rem;
+  .auth-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    background: var(--dark);
+    padding: 4px;
+    border-radius: 8px;
   }
-  .auth-sub {
-    text-align: center;
-    font-size: 0.78rem;
+  .auth-tab {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
     color: var(--muted);
-    margin-bottom: 20px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .auth-tab.active {
+    background: var(--gold);
+    color: #111;
   }
   .label {
     display: block;
@@ -107,15 +118,16 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
   .tab {
     flex: 1;
-    padding: 10px;
+    padding: 10px 4px;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 8px;
     font-weight: 700;
+    font-size: 0.85rem;
     cursor: pointer;
   }
   .tab.active { background: var(--gold); color: #111; border-color: var(--gold); }
@@ -205,19 +217,41 @@
     text-align: center;
   }
   .msg { margin-top: 12px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
+  .info-box {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: left;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
 </style>
 </head>
 <body>
 
-<!-- ログイン / 自動新規登録 -->
+<!-- ログイン / 新規登録画面 -->
 <div class="auth-card" id="login-view">
-  <h2>⚔️ RPG CASINO</h2>
-  <div class="auth-sub">MCIDとパスワードを入力（未登録なら自動作成）</div>
+  <h2 style="margin:0 0 14px; color:var(--gold); text-align:center;">⚔️ RPG CASINO</h2>
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="tab-log" onclick="switchAuth('login')">ログイン</button>
+    <button class="auth-tab" id="tab-reg" onclick="switchAuth('register')">新規登録</button>
+  </div>
+
   <label class="label">MCID（統合版は先頭に BE_ ）</label>
   <input id="mcid" class="input" placeholder="例: Steve / BE_Steve">
+
   <label class="label">パスワード</label>
   <input id="pass" type="password" class="input" placeholder="••••••••">
-  <button class="btn-main" onclick="login()">ログインして遊ぶ</button>
+
+  <div id="reg-extra" class="hidden">
+    <label class="label">パスワード（確認用）</label>
+    <input id="pass2" type="password" class="input" placeholder="もう一度入力">
+  </div>
+
+  <button class="btn-main" id="auth-submit" onclick="submitAuth()">ログイン</button>
   <div id="err" style="color:var(--red); font-size:0.8rem; text-align:center; margin-top:10px;"></div>
 </div>
 
@@ -226,10 +260,10 @@
   <div class="header">
     <div>
       <div style="font-weight:800; color:var(--gold); font-size:0.9rem;" id="u-name"></div>
-      <div class="bal"><span id="bal">10,000</span> G</div>
+      <div class="bal"><span id="bal">0</span> G</div>
     </div>
     <div style="display:flex; gap:6px;">
-      <button class="mini-btn" onclick="addBal(5000)">+5,000 G</button>
+      <button class="mini-btn" style="border-color:var(--gold); color:var(--gold);" onclick="tab('deposit', document.getElementById('dep-tab-btn'))">💰 入金申請</button>
       <button class="mini-btn" onclick="logout()">ログアウト</button>
     </div>
   </div>
@@ -238,6 +272,7 @@
     <button class="tab active" onclick="tab('crash', this)">🚀 CRASH</button>
     <button class="tab" onclick="tab('slot', this)">🎰 SLOTS</button>
     <button class="tab" onclick="tab('mines', this)">💣 MINES</button>
+    <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
   </div>
 
   <!-- 1. CRASH -->
@@ -296,11 +331,34 @@
     <button class="btn-main" id="m-btn" onclick="toggleMines()">START</button>
     <div class="msg" id="m-msg"></div>
   </div>
+
+  <!-- 4. 入出金申請（Discordへ通知送信） -->
+  <div id="deposit" class="panel hidden">
+    <h3 style="margin-top:0; color:var(--gold);">💰 入金・出金申請</h3>
+    <div class="info-box">
+      1. 下に希望金額を入れて「運営に通知を送る」を押します。<br>
+      2. 運営のDiscordに自動で通知が届きます。<br>
+      3. マイクラ内で指定IDへ送金後、残高が反映されます。
+    </div>
+    <label class="label" style="text-align:left;">申請タイプ</label>
+    <select id="req-type" class="input">
+      <option value="💰 入金申請">💰 入金（マイクラ → カジノ）</option>
+      <option value="💸 出金申請">💸 出金（カジノ → マイクラ）</option>
+    </select>
+    <label class="label" style="text-align:left;">金額 (G)</label>
+    <input id="req-amount" type="number" class="input" value="10000" min="100">
+    <button class="btn-main" id="req-btn" onclick="sendDepositNotice()">📩 運営に通知を送る</button>
+    <div class="msg" id="req-msg"></div>
+  </div>
 </div>
 
 <script>
-  const DB_KEY = "rpg_casino_db_v2";
-  const ME_KEY = "rpg_casino_me_v2";
+  // ★ここにあなたのDiscord Webhook URLを貼り付けてください★
+  const DISCORD_WEBHOOK_URL = "";
+
+  const DB_KEY = "rpg_casino_db_v3";
+  const ME_KEY = "rpg_casino_me_v3";
+  let authMode = "login";
   let db = JSON.parse(localStorage.getItem(DB_KEY) || "{}");
   let me = localStorage.getItem(ME_KEY);
 
@@ -308,20 +366,37 @@
   function sync() { document.getElementById("bal").innerText = Math.floor(db[me].bal).toLocaleString(); }
   function addBal(v) { db[me].bal += v; save(); sync(); }
 
-  function login() {
+  // ログイン / 新規登録切り替え
+  function switchAuth(mode) {
+    authMode = mode;
+    document.getElementById("err").innerText = "";
+    document.getElementById("tab-log").classList.toggle("active", mode === "login");
+    document.getElementById("tab-reg").classList.toggle("active", mode === "register");
+    document.getElementById("reg-extra").classList.toggle("hidden", mode === "login");
+    document.getElementById("auth-submit").innerText = mode === "login" ? "ログイン" : "アカウントを新規作成";
+  }
+
+  function submitAuth() {
     const id = document.getElementById("mcid").value.trim();
     const pw = document.getElementById("pass").value.trim();
+    const pw2 = document.getElementById("pass2").value.trim();
     const err = document.getElementById("err");
+
     if (!id || !pw) { err.innerText = "MCIDとパスワードを入力してください"; return; }
-    if (!db[id]) {
-      db[id] = { pw, bal: 10000 };
-    } else if (db[id].pw !== pw) {
-      err.innerText = "パスワードが違います";
-      return;
+
+    if (authMode === "register") {
+      if (pw !== pw2) { err.innerText = "確認用パスワードが一致しません"; return; }
+      if (db[id]) { err.innerText = "そのMCIDはすでに登録されています"; return; }
+      db[id] = { pw, bal: 0 }; // 初期残高 0 G（入金後に反映）
+      save();
+      notifyDiscord(`🆕 **新規アカウント登録**\nMCID: \`${id}\``);
+    } else {
+      if (!db[id]) { err.innerText = "未登録のMCIDです。「新規登録」から作成してください"; return; }
+      if (db[id].pw !== pw) { err.innerText = "パスワードが違います"; return; }
     }
+
     me = id;
     localStorage.setItem(ME_KEY, me);
-    save();
     startApp();
   }
 
@@ -339,8 +414,60 @@
 
   function tab(name, btn) {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    ["crash", "slot", "mines"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    if (btn) btn.classList.add("active");
+    ["crash", "slot", "mines", "deposit"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+  }
+
+  // Discord Webhook 送信関数
+  async function notifyDiscord(text) {
+    if (!DISCORD_WEBHOOK_URL) return false;
+    try {
+      await fetch(DISCORD_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: text })
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function sendDepositNotice() {
+    const type = document.getElementById("req-type").value;
+    const amount = Number(document.getElementById("req-amount").value);
+    const msg = document.getElementById("req-msg");
+    const btn = document.getElementById("req-btn");
+
+    if (amount <= 0) { msg.innerText = "正しい金額を入力してください"; return; }
+    if (type.includes("出金") && amount > db[me].bal) {
+      msg.innerText = "所持残高以上の出金はできません";
+      return;
+    }
+
+    btn.disabled = true;
+    msg.innerText = "送信中...";
+
+    const now = new Date().toLocaleString("ja-JP");
+    const payload = `━━━━━━━━━━━━━━\n**${type}**\n👤 MCID: \`${me}\`\n💵 金額: **${amount.toLocaleString()} G**\n🕒 日時: ${now}\n━━━━━━━━━━━━━━`;
+
+    if (!DISCORD_WEBHOOK_URL) {
+      msg.style.color = "var(--gold)";
+      msg.innerText = "⚠️ コード内の DISCORD_WEBHOOK_URL を設定するとDiscordに通知が届きます";
+      btn.disabled = false;
+      return;
+    }
+
+    const ok = await notifyDiscord(payload);
+    if (ok) {
+      if (type.includes("出金")) addBal(-amount);
+      msg.style.color = "var(--green)";
+      msg.innerText = "✅ 運営のDiscordに通知を送信しました！";
+    } else {
+      msg.style.color = "var(--red)";
+      msg.innerText = "❌ 送信に失敗しました。URLを確認してください";
+    }
+    btn.disabled = false;
   }
 
   function scale(id, f) { const e = document.getElementById(id); e.value = Math.max(10, Math.floor(e.value * f)); }
@@ -354,7 +481,7 @@
     const btn = document.getElementById("c-btn"), el = document.getElementById("mult"), msg = document.getElementById("c-msg");
     if (!cRun) {
       cBet = Number(document.getElementById("c-bet").value);
-      if (cBet <= 0 || cBet > db[me].bal) { msg.innerText = "残高不足です"; return; }
+      if (cBet <= 0 || cBet > db[me].bal) { msg.innerText = "残高不足です（入金申請からチャージしてください）"; return; }
       addBal(-cBet);
       const r = Math.random();
       cTarget = r < 0.005 ? 1.00 : Math.max(1.01, 0.995 / (1 - r));
