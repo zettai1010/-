@@ -5,193 +5,496 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RPG CASINO</title>
 <style>
+  :root {
+    --bg: #0f111a;
+    --card: #171a26;
+    --dark: #0b0d14;
+    --border: #282c3f;
+    --gold: #f5b942;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #f8fafc;
+    --muted: #8b92a5;
+  }
+  * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: sans-serif;
-    background: #0f111a;
-    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
-    padding: 30px 16px;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
   }
-  .box {
+  .hidden { display: none !important; }
+
+  /* ログイン画面 */
+  .auth-card {
     width: 100%;
-    max-width: 400px;
-    background: #171a26;
-    border: 1px solid #2a2e42;
-    border-radius: 12px;
-    padding: 20px;
+    max-width: 380px;
+    margin-top: 50px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px 22px;
+  }
+  .auth-card h2 {
+    margin: 0 0 6px;
+    color: var(--gold);
     text-align: center;
+    font-size: 1.35rem;
   }
-  .hidden { display: none; }
-  input, select {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 6px;
-    border: 1px solid #2a2e42;
-    background: #0b0d14;
-    color: #fff;
-    font-size: 1rem;
-    box-sizing: border-box;
+  .auth-sub {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 20px;
   }
-  button {
-    width: 100%;
-    padding: 11px;
-    margin-top: 8px;
-    border: none;
-    border-radius: 6px;
-    background: #f5b942;
-    color: #111;
+  .label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 5px;
     font-weight: bold;
-    font-size: 1rem;
+  }
+  .input {
+    width: 100%;
+    padding: 11px 12px;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--dark);
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+  .btn-main {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--gold);
+    color: #111;
+    font-weight: 800;
+    font-size: 0.95rem;
     cursor: pointer;
   }
-  .top {
+  .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
+  .btn-green { background: var(--green) !important; color: #052e16 !important; }
+
+  /* ヘッダー・タブ */
+  .app-wrap { width: 100%; max-width: 480px; }
+  .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-    font-weight: bold;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+  .bal { font-weight: 800; font-size: 0.95rem; }
+  .bal span { color: var(--green); font-size: 1.15rem; }
+  .mini-btn {
+    background: #222638;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  .tab {
+    flex: 1;
+    padding: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .tab.active { background: var(--gold); color: #111; border-color: var(--gold); }
+
+  /* ゲームパネル */
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
   }
   .screen {
-    background: #0b0d14;
-    padding: 24px;
-    border-radius: 8px;
-    font-size: 2.6rem;
-    font-weight: bold;
-    margin-bottom: 12px;
+    height: 150px;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    font-weight: 900;
+    margin-bottom: 14px;
   }
-  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
-  .tabs button { background: #222638; color: #fff; margin: 0; padding: 8px; font-size: 0.9rem; }
-  .tabs button.active { background: #f5b942; color: #111; }
-  .green { background: #10b981 !important; }
+  .crashed { color: var(--red); }
+  .cashed { color: var(--green); }
+
+  .reels { display: flex; justify-content: center; gap: 10px; margin: 14px 0; }
+  .reel {
+    width: 84px;
+    height: 100px;
+    background: var(--dark);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mines-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+  .mines-top select {
+    background: var(--dark);
+    color: #fff;
+    border: 1px solid var(--border);
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .mines-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+    max-width: 300px;
+    margin: 0 auto 14px;
+  }
+  .tile {
+    aspect-ratio: 1;
+    background: #222638;
+    border: 1px solid #2f354d;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tile.gem { background: rgba(16, 185, 129, 0.22); border-color: var(--green); }
+  .tile.bomb { background: rgba(239, 68, 68, 0.22); border-color: var(--red); }
+  .tile.dim { opacity: 0.4; }
+
+  .bet-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
+  .bet-input {
+    width: 130px;
+    padding: 9px;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  .msg { margin-top: 12px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
 </style>
 </head>
 <body>
 
-<!-- ログイン（未登録なら自動作成） -->
-<div class="box" id="login-view">
-  <h2 style="margin-top:0; color:#f5b942;">RPG CASINO</h2>
-  <input id="mcid" placeholder="MCID (統合版は BE_)">
-  <input id="pass" type="password" placeholder="パスワード">
-  <button onclick="login()">ログイン / 新規登録</button>
-  <p id="err" style="color:#ef4444; font-size:0.85rem;"></p>
+<!-- ログイン / 自動新規登録 -->
+<div class="auth-card" id="login-view">
+  <h2>⚔️ RPG CASINO</h2>
+  <div class="auth-sub">MCIDとパスワードを入力（未登録なら自動作成）</div>
+  <label class="label">MCID（統合版は先頭に BE_ ）</label>
+  <input id="mcid" class="input" placeholder="例: Steve / BE_Steve">
+  <label class="label">パスワード</label>
+  <input id="pass" type="password" class="input" placeholder="••••••••">
+  <button class="btn-main" onclick="login()">ログインして遊ぶ</button>
+  <div id="err" style="color:var(--red); font-size:0.8rem; text-align:center; margin-top:10px;"></div>
 </div>
 
-<!-- ゲーム画面 -->
-<div class="box hidden" id="game-view">
-  <div class="top">
-    <span id="u-name"></span>
-    <span style="color:#10b981;"><span id="bal">0</span> G</span>
-    <button style="width:auto; padding:4px 8px; margin:0; font-size:0.8rem; background:#222638; color:#fff;" onclick="logout()">出る</button>
+<!-- メイン画面 -->
+<div class="app-wrap hidden" id="game-view">
+  <div class="header">
+    <div>
+      <div style="font-weight:800; color:var(--gold); font-size:0.9rem;" id="u-name"></div>
+      <div class="bal"><span id="bal">10,000</span> G</div>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <button class="mini-btn" onclick="addBal(5000)">+5,000 G</button>
+      <button class="mini-btn" onclick="logout()">ログアウト</button>
+    </div>
   </div>
 
   <div class="tabs">
-    <button class="active" onclick="tab('crash', this)">CRASH</button>
-    <button onclick="tab('slot', this)">SLOT</button>
+    <button class="tab active" onclick="tab('crash', this)">🚀 CRASH</button>
+    <button class="tab" onclick="tab('slot', this)">🎰 SLOTS</button>
+    <button class="tab" onclick="tab('mines', this)">💣 MINES</button>
   </div>
 
-  <!-- CRASH -->
-  <div id="crash">
+  <!-- 1. CRASH -->
+  <div id="crash" class="panel">
     <div class="screen" id="mult">1.00x</div>
-    <input id="c-bet" type="number" value="500" placeholder="ベット額">
-    <button id="c-btn" onclick="crash()">START</button>
-    <p id="c-msg" style="font-size:0.9rem;"></p>
+    <div class="bet-row">
+      <input id="c-bet" type="number" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scale('c-bet', 0.5)">1/2</button>
+      <button class="mini-btn" onclick="scale('c-bet', 2)">2x</button>
+      <button class="mini-btn" onclick="maxB('c-bet')">MAX</button>
+    </div>
+    <button class="btn-main" id="c-btn" onclick="toggleCrash()">START</button>
+    <div class="msg" id="c-msg"></div>
   </div>
 
-  <!-- SLOT -->
-  <div id="slot" class="hidden">
-    <div class="screen" id="reels">7️⃣ 7️⃣ 7️⃣</div>
-    <input id="s-bet" type="number" value="500" placeholder="ベット額">
-    <button onclick="slot()">SPIN</button>
-    <p id="s-msg" style="font-size:0.9rem;"></p>
+  <!-- 2. SLOTS -->
+  <div id="slot" class="panel hidden">
+    <div class="reels">
+      <div class="reel" id="r1">7️⃣</div>
+      <div class="reel" id="r2">7️⃣</div>
+      <div class="reel" id="r3">7️⃣</div>
+    </div>
+    <div style="font-size:0.76rem; color:var(--muted); margin-bottom:12px;">
+      🍒 2.5x | 🍋 4x | 🍇 8x | 🔔 15x | 💎 40x | 7️⃣ 100x
+    </div>
+    <div class="bet-row">
+      <input id="s-bet" type="number" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scale('s-bet', 0.5)">1/2</button>
+      <button class="mini-btn" onclick="scale('s-bet', 2)">2x</button>
+      <button class="mini-btn" onclick="maxB('s-bet')">MAX</button>
+    </div>
+    <button class="btn-main" id="s-btn" onclick="spinSlot()">SPIN</button>
+    <div class="msg" id="s-msg"></div>
+  </div>
+
+  <!-- 3. MINES -->
+  <div id="mines" class="panel hidden">
+    <div class="mines-top">
+      <div>爆弾数:
+        <select id="b-num">
+          <option value="1">1個</option>
+          <option value="3" selected>3個</option>
+          <option value="5">5個</option>
+          <option value="10">10個</option>
+        </select>
+      </div>
+      <div>現在倍率: <strong id="m-mult" style="color:var(--green);">1.00x</strong></div>
+    </div>
+    <div class="mines-grid" id="m-grid"></div>
+    <div class="bet-row">
+      <input id="m-bet" type="number" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scale('m-bet', 0.5)">1/2</button>
+      <button class="mini-btn" onclick="scale('m-bet', 2)">2x</button>
+      <button class="mini-btn" onclick="maxB('m-bet')">MAX</button>
+    </div>
+    <button class="btn-main" id="m-btn" onclick="toggleMines()">START</button>
+    <div class="msg" id="m-msg"></div>
   </div>
 </div>
 
 <script>
-  let db = JSON.parse(localStorage.getItem("casino_db") || "{}");
-  let me = localStorage.getItem("casino_me");
+  const DB_KEY = "rpg_casino_db_v2";
+  const ME_KEY = "rpg_casino_me_v2";
+  let db = JSON.parse(localStorage.getItem(DB_KEY) || "{}");
+  let me = localStorage.getItem(ME_KEY);
 
-  function save() { localStorage.setItem("casino_db", JSON.stringify(db)); }
+  function save() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
   function sync() { document.getElementById("bal").innerText = Math.floor(db[me].bal).toLocaleString(); }
+  function addBal(v) { db[me].bal += v; save(); sync(); }
 
   function login() {
     const id = document.getElementById("mcid").value.trim();
     const pw = document.getElementById("pass").value.trim();
-    if (!id || !pw) return;
-    if (!db[id]) db[id] = { pw, bal: 10000 };
-    else if (db[id].pw !== pw) { document.getElementById("err").innerText = "パスワード違い"; return; }
+    const err = document.getElementById("err");
+    if (!id || !pw) { err.innerText = "MCIDとパスワードを入力してください"; return; }
+    if (!db[id]) {
+      db[id] = { pw, bal: 10000 };
+    } else if (db[id].pw !== pw) {
+      err.innerText = "パスワードが違います";
+      return;
+    }
     me = id;
-    localStorage.setItem("casino_me", me);
+    localStorage.setItem(ME_KEY, me);
     save();
-    start();
+    startApp();
   }
 
-  function start() {
+  function startApp() {
     document.getElementById("login-view").classList.add("hidden");
     document.getElementById("game-view").classList.remove("hidden");
-    document.getElementById("u-name").innerText = me;
+    document.getElementById("u-name").innerText = "MCID: " + me;
     sync();
   }
 
-  function logout() { localStorage.removeItem("casino_me"); location.reload(); }
-
-  function tab(name, btn) {
-    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById("crash").classList.toggle("hidden", name !== "crash");
-    document.getElementById("slot").classList.toggle("hidden", name !== "slot");
+  function logout() {
+    localStorage.removeItem(ME_KEY);
+    location.reload();
   }
 
-  // CRASH (五分五分 RTP 99.5%)
-  let run = false, m = 1, target = 1, bet = 0, iv;
-  function crash() {
+  function tab(name, btn) {
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    ["crash", "slot", "mines"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+  }
+
+  function scale(id, f) { const e = document.getElementById(id); e.value = Math.max(10, Math.floor(e.value * f)); }
+  function maxB(id) { document.getElementById(id).value = Math.max(10, Math.floor(db[me].bal)); }
+
+  // ==========================================
+  // 1. CRASH (五分五分 RTP 99.5%)
+  // ==========================================
+  let cRun = false, cMult = 1, cTarget = 1, cBet = 0, cIv = null;
+  function toggleCrash() {
     const btn = document.getElementById("c-btn"), el = document.getElementById("mult"), msg = document.getElementById("c-msg");
-    if (!run) {
-      bet = Number(document.getElementById("c-bet").value);
-      if (bet <= 0 || bet > db[me].bal) { msg.innerText = "残高不足"; return; }
-      db[me].bal -= bet; save(); sync();
+    if (!cRun) {
+      cBet = Number(document.getElementById("c-bet").value);
+      if (cBet <= 0 || cBet > db[me].bal) { msg.innerText = "残高不足です"; return; }
+      addBal(-cBet);
       const r = Math.random();
-      target = r < 0.005 ? 1 : Math.max(1.01, 0.995 / (1 - r));
-      if (target <= 1) { el.innerText = "1.00x"; msg.innerText = "💥 即爆発"; return; }
-      run = true; m = 1; msg.innerText = "";
-      btn.innerText = "CASH OUT"; btn.classList.add("green");
-      iv = setInterval(() => {
-        m += 0.01 * m * 0.55;
-        if (m >= target) {
-          clearInterval(iv); run = false;
-          el.innerText = target.toFixed(2) + "x"; msg.innerText = "💥 爆発";
-          btn.innerText = "START"; btn.classList.remove("green");
-        } else el.innerText = m.toFixed(2) + "x";
+      cTarget = r < 0.005 ? 1.00 : Math.max(1.01, 0.995 / (1 - r));
+      if (cTarget <= 1.00) {
+        el.innerText = "1.00x"; el.className = "screen crashed";
+        msg.innerText = `💥 即爆発 (-${cBet.toLocaleString()} G)`;
+        return;
+      }
+      cRun = true; cMult = 1.00; el.className = "screen"; msg.innerText = "";
+      btn.innerText = "CASH OUT (利確)"; btn.classList.add("btn-green");
+      cIv = setInterval(() => {
+        cMult += 0.01 * (cMult * 0.55);
+        if (cMult >= cTarget) {
+          clearInterval(cIv); cRun = false;
+          el.innerText = cTarget.toFixed(2) + "x"; el.className = "screen crashed";
+          msg.innerText = `💥 ${cTarget.toFixed(2)}x で爆発 (-${cBet.toLocaleString()} G)`;
+          btn.innerText = "START"; btn.classList.remove("btn-green");
+        } else {
+          el.innerText = cMult.toFixed(2) + "x";
+        }
       }, 50);
     } else {
-      clearInterval(iv); run = false;
-      const win = Math.floor(bet * m);
-      db[me].bal += win; save(); sync();
-      msg.innerText = `🎉 +${win.toLocaleString()} G`;
-      btn.innerText = "START"; btn.classList.remove("green");
+      clearInterval(cIv); cRun = false;
+      const win = Math.floor(cBet * cMult);
+      addBal(win);
+      el.className = "screen cashed";
+      msg.innerText = `🎉 ${cMult.toFixed(2)}x 利確！ +${win.toLocaleString()} G`;
+      btn.innerText = "START"; btn.classList.remove("btn-green");
     }
   }
 
-  // SLOT (五分五分 RTP 99.5%)
-  const syms = ["🍒","🍋","🍇","🔔","💎","7️⃣"], pays = {"🍒":2.5,"🍋":4,"🍇":8,"🔔":15,"💎":40,"7️⃣":100};
-  function slot() {
-    const b = Number(document.getElementById("s-bet").value), msg = document.getElementById("s-msg");
-    if (b <= 0 || b > db[me].bal) { msg.innerText = "残高不足"; return; }
-    db[me].bal -= b;
-    const r = Math.random() * 100;
-    let res = r < 18 ? ["🍒","🍒","🍒"] : r < 25 ? ["🍋","🍋","🍋"] : r < 27 ? ["🍇","🍇","🍇"] : r < 27.4 ? ["🔔","🔔","🔔"] : r < 27.475 ? ["💎","💎","💎"] : r < 27.49 ? ["7️⃣","7️⃣","7️⃣"] : ["🍒","🍋","7️⃣"];
-    document.getElementById("reels").innerText = res.join(" ");
-    if (res[0] === res[1] && res[1] === res[2]) {
-      const win = Math.floor(b * pays[res[0]]);
-      db[me].bal += win;
-      msg.innerText = `🎉 +${win.toLocaleString()} G`;
-    } else msg.innerText = "ハズレ";
-    save(); sync();
+  // ==========================================
+  // 2. SLOTS (五分五分 RTP 99.5%)
+  // ==========================================
+  const syms = ["🍒","🍋","🍇","🔔","💎","7️⃣"];
+  const pays = {"🍒":2.5,"🍋":4,"🍇":8,"🔔":15,"💎":40,"7️⃣":100};
+  function spinSlot() {
+    const bet = Number(document.getElementById("s-bet").value), msg = document.getElementById("s-msg"), btn = document.getElementById("s-btn");
+    if (bet <= 0 || bet > db[me].bal) { msg.innerText = "残高不足です"; return; }
+    addBal(-bet); btn.disabled = true; msg.innerText = "回転中...";
+    let t = 0;
+    const iv = setInterval(() => {
+      ["r1","r2","r3"].forEach(id => document.getElementById(id).innerText = syms[Math.floor(Math.random()*6)]);
+      if (++t > 12) {
+        clearInterval(iv);
+        const r = Math.random() * 100;
+        let res;
+        if (r < 18.0) res = ["🍒","🍒","🍒"];
+        else if (r < 25.0) res = ["🍋","🍋","🍋"];
+        else if (r < 27.0) res = ["🍇","🍇","🍇"];
+        else if (r < 27.4) res = ["🔔","🔔","🔔"];
+        else if (r < 27.475) res = ["💎","💎","💎"];
+        else if (r < 27.49) res = ["7️⃣","7️⃣","7️⃣"];
+        else {
+          res = [syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)]];
+          while (res[0] === res[1] && res[1] === res[2]) res[2] = syms[Math.floor(Math.random()*6)];
+        }
+        ["r1","r2","r3"].forEach((id, i) => document.getElementById(id).innerText = res[i]);
+        if (res[0] === res[1] && res[1] === res[2]) {
+          const win = Math.floor(bet * pays[res[0]]);
+          addBal(win);
+          msg.innerText = `🎉 ${res[0]} 揃い (${pays[res[0]]}x)！ +${win.toLocaleString()} G`;
+        } else {
+          msg.innerText = "ハズレ...";
+        }
+        btn.disabled = false;
+      }
+    }, 55);
   }
 
-  if (me && db[me]) start();
+  // ==========================================
+  // 3. MINES (五分五分 RTP 99.5%)
+  // ==========================================
+  let mRun = false, mBet = 0, bSet = new Set(), openCnt = 0, mCur = 1;
+  const grid = document.getElementById("m-grid");
+  for (let i = 0; i < 25; i++) {
+    const b = document.createElement("button");
+    b.className = "tile"; b.disabled = true;
+    b.onclick = () => {
+      if (!mRun || b.disabled) return;
+      const bNum = Number(document.getElementById("b-num").value);
+      if (bSet.has(i)) {
+        b.classList.add("bomb"); b.innerText = "💣";
+        endMines(`💥 爆弾！ -${mBet.toLocaleString()} G`);
+      } else {
+        b.classList.add("gem"); b.innerText = "💎"; b.disabled = true;
+        openCnt++;
+        let p = 1;
+        for (let k = 0; k < openCnt; k++) p *= (25 - bNum - k) / (25 - k);
+        mCur = 0.995 / p;
+        document.getElementById("m-mult").innerText = mCur.toFixed(2) + "x";
+        if (openCnt === 25 - bNum) {
+          const w = Math.floor(mBet * mCur);
+          addBal(w);
+          endMines(`👑 全開け達成！ +${w.toLocaleString()} G`);
+        }
+      }
+    };
+    grid.appendChild(b);
+  }
+
+  function toggleMines() {
+    const btn = document.getElementById("m-btn"), msg = document.getElementById("m-msg");
+    if (!mRun) {
+      mBet = Number(document.getElementById("m-bet").value);
+      if (mBet <= 0 || mBet > db[me].bal) { msg.innerText = "残高不足です"; return; }
+      addBal(-mBet);
+      const bNum = Number(document.getElementById("b-num").value);
+      bSet.clear();
+      while (bSet.size < bNum) bSet.add(Math.floor(Math.random() * 25));
+      mRun = true; openCnt = 0; mCur = 1.00;
+      document.getElementById("m-mult").innerText = "1.00x";
+      document.getElementById("b-num").disabled = true;
+      msg.innerText = "パネルを開けてください";
+      document.querySelectorAll(".tile").forEach(t => { t.className = "tile"; t.innerText = ""; t.disabled = false; });
+      btn.innerText = "CASH OUT (利確)"; btn.classList.add("btn-green");
+    } else {
+      if (openCnt === 0) { msg.innerText = "1マス以上開けてください"; return; }
+      const w = Math.floor(mBet * mCur);
+      addBal(w);
+      endMines(`🎉 ${mCur.toFixed(2)}x 利確！ +${w.toLocaleString()} G`);
+    }
+  }
+
+  function endMines(text) {
+    mRun = false;
+    document.getElementById("b-num").disabled = false;
+    document.getElementById("m-msg").innerText = text;
+    document.querySelectorAll(".tile").forEach((t, i) => {
+      t.disabled = true;
+      if (!t.classList.contains("gem") && !t.classList.contains("bomb")) {
+        t.classList.add("dim");
+        t.innerText = bSet.has(i) ? "💣" : "💎";
+      }
+    });
+    const btn = document.getElementById("m-btn");
+    btn.innerText = "START"; btn.classList.remove("btn-green");
+  }
+
+  if (me && db[me]) startApp();
 </script>
 </body>
 </html>
