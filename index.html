@@ -107,17 +107,17 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tabs { display: flex; gap: 5px; margin-bottom: 14px; flex-wrap: wrap; }
   .tab {
     flex: 1;
-    min-width: 75px;
+    min-width: 68px;
     padding: 10px 4px;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 8px;
     font-weight: 700;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     cursor: pointer;
   }
   .tab.active { background: var(--gold); color: #111; border-color: var(--gold); }
@@ -188,6 +188,49 @@
     text-align: center;
   }
   .msg { margin-top: 12px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
+
+  /* ランキング用スタイル */
+  .rank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+    text-align: left;
+  }
+  .rank-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 9px;
+    font-size: 0.9rem;
+  }
+  .rank-item.me {
+    border-color: var(--gold);
+    background: rgba(245, 185, 66, 0.08);
+  }
+  .rank-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+  }
+  .rank-badge {
+    width: 28px;
+    text-align: center;
+    font-weight: 900;
+    color: var(--muted);
+  }
+  .rank-1 { color: #ffd700; font-size: 1.15rem; }
+  .rank-2 { color: #c0c0c0; font-size: 1.1rem; }
+  .rank-3 { color: #cd7f32; font-size: 1.05rem; }
+  .rank-bal {
+    font-weight: 800;
+    color: var(--green);
+  }
+
   .user-list {
     max-height: 200px;
     overflow-y: auto;
@@ -251,6 +294,7 @@
     <button class="tab active" onclick="tab('crash', this)">🚀 CRASH</button>
     <button class="tab" onclick="tab('slot', this)">🎰 SLOTS</button>
     <button class="tab" onclick="tab('mines', this)">💣 MINES</button>
+    <button class="tab" onclick="tab('ranking', this)">🏆 順位</button>
     <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
     <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
   </div>
@@ -312,7 +356,16 @@
     <div class="msg" id="m-msg"></div>
   </div>
 
-  <!-- 4. 入出金申請 -->
+  <!-- 4. 所持金ランキング -->
+  <div id="ranking" class="panel hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h3 style="margin:0; color:var(--gold);">🏆 所持金ランキング TOP20</h3>
+      <button class="mini-btn" onclick="loadRanking()">🔄 更新</button>
+    </div>
+    <div class="rank-list" id="rank-list">読み込み中...</div>
+  </div>
+
+  <!-- 5. 入出金申請 -->
   <div id="deposit" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">💰 入金・出金申請</h3>
     <label class="label" style="text-align:left;">申請タイプ</label>
@@ -326,7 +379,7 @@
     <div class="msg" id="req-msg"></div>
   </div>
 
-  <!-- 5. 運営専用管理パネル -->
+  <!-- 6. 運営専用管理パネル -->
   <div id="admin" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高追加・操作</h3>
     <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
@@ -341,12 +394,12 @@
 
 <script>
   // ==========================================
-  // ★ ここだけ自分のものに書き換えてください（3箇所） ★
+  // ★ 設定（Discord Webhook URLだけ新しいものを貼ってください） ★
   // ==========================================
   const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
-  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
+  const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -438,8 +491,50 @@
   function tab(name, btn) {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
-    ["crash", "slot", "mines", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    ["crash", "slot", "mines", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    if (name === "ranking") loadRanking();
     if (name === "admin") loadAllUsers();
+  }
+
+  // 🏆 ランキング読み込み
+  async function loadRanking() {
+    const box = document.getElementById("rank-list");
+    box.innerHTML = "<div style='text-align:center; color:var(--muted); padding:16px;'>読み込み中...</div>";
+    const { data, error } = await sb
+      .from("casino_users")
+      .select("mcid, balance")
+      .order("balance", { ascending: false })
+      .limit(20);
+
+    if (error || !data) {
+      box.innerHTML = "<div style='color:var(--red); text-align:center;'>読み込みに失敗しました</div>";
+      return;
+    }
+
+    if (data.length === 0) {
+      box.innerHTML = "<div style='color:var(--muted); text-align:center;'>データがありません</div>";
+      return;
+    }
+
+    box.innerHTML = data.map((u, idx) => {
+      const rank = idx + 1;
+      let badge = `${rank}位`;
+      let cls = "rank-badge";
+      if (rank === 1) { badge = "🥇"; cls += " rank-1"; }
+      else if (rank === 2) { badge = "🥈"; cls += " rank-2"; }
+      else if (rank === 3) { badge = "🥉"; cls += " rank-3"; }
+
+      const isMe = u.mcid === me ? " me" : "";
+      return `
+        <div class="rank-item${isMe}">
+          <div class="rank-left">
+            <span class="${cls}">${badge}</span>
+            <span>${u.mcid}${u.mcid === me ? " <small style='color:var(--gold);'>(あなた)</small>" : ""}</span>
+          </div>
+          <div class="rank-bal">${Number(u.balance).toLocaleString()} G</div>
+        </div>
+      `;
+    }).join("");
   }
 
   async function loadAllUsers() {
