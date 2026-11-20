@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RPG CASINO</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --bg: #0f111a;
@@ -13,7 +14,6 @@
     --gold: #f5b942;
     --green: #10b981;
     --red: #ef4444;
-    --blue: #3b82f6;
     --text: #f8fafc;
     --muted: #8b92a5;
   }
@@ -31,7 +31,6 @@
   }
   .hidden { display: none !important; }
 
-  /* 認証カード */
   .auth-card {
     width: 100%;
     max-width: 380px;
@@ -59,17 +58,8 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .auth-tab.active {
-    background: var(--gold);
-    color: #111;
-  }
-  .label {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
+  .auth-tab.active { background: var(--gold); color: #111; }
+  .label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 5px; font-weight: bold; }
   .input {
     width: 100%;
     padding: 11px 12px;
@@ -94,8 +84,7 @@
   .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
   .btn-green { background: var(--green) !important; color: #052e16 !important; }
 
-  /* ヘッダー・タブ */
-  .app-wrap { width: 100%; max-width: 480px; }
+  .app-wrap { width: 100%; max-width: 500px; }
   .header {
     display: flex;
     justify-content: space-between;
@@ -118,21 +107,21 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
   .tab {
     flex: 1;
+    min-width: 75px;
     padding: 10px 4px;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 8px;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     cursor: pointer;
   }
   .tab.active { background: var(--gold); color: #111; border-color: var(--gold); }
 
-  /* ゲームパネル */
   .panel {
     background: var(--card);
     border: 1px solid var(--border);
@@ -168,27 +157,9 @@
     justify-content: center;
   }
 
-  .mines-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-  }
-  .mines-top select {
-    background: var(--dark);
-    color: #fff;
-    border: 1px solid var(--border);
-    padding: 4px 8px;
-    border-radius: 6px;
-  }
-  .mines-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 7px;
-    max-width: 300px;
-    margin: 0 auto 14px;
-  }
+  .mines-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 10px; }
+  .mines-top select { background: var(--dark); color: #fff; border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; }
+  .mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; max-width: 300px; margin: 0 auto 14px; }
   .tile {
     aspect-ratio: 1;
     background: #222638;
@@ -217,17 +188,25 @@
     text-align: center;
   }
   .msg { margin-top: 12px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
-  .info-box {
+  .user-list {
+    max-height: 200px;
+    overflow-y: auto;
     background: var(--dark);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 12px;
-    font-size: 0.82rem;
-    color: var(--muted);
+    padding: 8px;
     text-align: left;
-    margin-bottom: 14px;
-    line-height: 1.5;
+    margin-top: 14px;
+    font-size: 0.82rem;
   }
+  .user-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-bottom: 1px solid #1a1e2e;
+    cursor: pointer;
+  }
+  .user-row:hover { background: #171a26; }
 </style>
 </head>
 <body>
@@ -260,10 +239,10 @@
   <div class="header">
     <div>
       <div style="font-weight:800; color:var(--gold); font-size:0.9rem;" id="u-name"></div>
-      <div class="bal"><span id="bal">0</span> G</div>
+      <div class="bal"><span id="bal">0</span> G <button class="mini-btn" style="padding:2px 6px; margin-left:4px;" onclick="refreshBalance()">🔄</button></div>
     </div>
     <div style="display:flex; gap:6px;">
-      <button class="mini-btn" style="border-color:var(--gold); color:var(--gold);" onclick="tab('deposit', document.getElementById('dep-tab-btn'))">💰 入金申請</button>
+      <button class="mini-btn" style="border-color:var(--gold); color:var(--gold);" onclick="tab('deposit', document.getElementById('dep-tab-btn'))">💰 入出金</button>
       <button class="mini-btn" onclick="logout()">ログアウト</button>
     </div>
   </div>
@@ -273,6 +252,7 @@
     <button class="tab" onclick="tab('slot', this)">🎰 SLOTS</button>
     <button class="tab" onclick="tab('mines', this)">💣 MINES</button>
     <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
+    <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
   </div>
 
   <!-- 1. CRASH -->
@@ -332,14 +312,9 @@
     <div class="msg" id="m-msg"></div>
   </div>
 
-  <!-- 4. 入出金申請（Discordへ通知送信） -->
+  <!-- 4. 入出金申請 -->
   <div id="deposit" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">💰 入金・出金申請</h3>
-    <div class="info-box">
-      1. 下に希望金額を入れて「運営に通知を送る」を押します。<br>
-      2. 運営のDiscordに自動で通知が届きます。<br>
-      3. マイクラ内で指定IDへ送金後、残高が反映されます。
-    </div>
     <label class="label" style="text-align:left;">申請タイプ</label>
     <select id="req-type" class="input">
       <option value="💰 入金申請">💰 入金（マイクラ → カジノ）</option>
@@ -350,23 +325,35 @@
     <button class="btn-main" id="req-btn" onclick="sendDepositNotice()">📩 運営に通知を送る</button>
     <div class="msg" id="req-msg"></div>
   </div>
+
+  <!-- 5. 運営専用管理パネル（ADMIN_MCIDでログイン時のみ表示） -->
+  <div id="admin" class="panel hidden">
+    <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高追加・操作</h3>
+    <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
+    <input id="adm-target" class="input" placeholder="下のリストからタップでも選択可">
+    <label class="label" style="text-align:left;">増減金額（減らす場合はマイナス -1000）</label>
+    <input id="adm-amount" type="number" class="input" value="10000">
+    <button class="btn-main" onclick="adminAddBalance()">✅ 残高を反映する</button>
+    <div class="msg" id="adm-msg"></div>
+    <div class="user-list" id="adm-user-list">読み込み中...</div>
+  </div>
 </div>
 
 <script>
-  // ★ここにあなたのDiscord Webhook URLを貼り付けてください★
-  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
+  // ==========================================
+  // sb_publishable_hzvWmXR05qO1F3n5Law-DA_kU4B4s_B
+  // ==========================================
+  const SUPABASE_URL = "https://vjbejlzlddaniyqmbvr.supabase.co";
+  const SUPABASE_ANON_KEY = "ここに公開可能キー(sb_publishable_...)を貼る";
+  const ADMIN_MCID = "ここにあなたのMCIDを貼る";
+  const DISCORD_WEBHOOK_URL = "ここにDiscordのWebhook URLを貼る";
 
-  const DB_KEY = "rpg_casino_db_v3";
-  const ME_KEY = "rpg_casino_me_v3";
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const ME_KEY = "rpg_casino_cloud_mcid";
   let authMode = "login";
-  let db = JSON.parse(localStorage.getItem(DB_KEY) || "{}");
   let me = localStorage.getItem(ME_KEY);
+  let myBalance = 0;
 
-  function save() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
-  function sync() { document.getElementById("bal").innerText = Math.floor(db[me].bal).toLocaleString(); }
-  function addBal(v) { db[me].bal += v; save(); sync(); }
-
-  // ログイン / 新規登録切り替え
   function switchAuth(mode) {
     authMode = mode;
     document.getElementById("err").innerText = "";
@@ -376,35 +363,64 @@
     document.getElementById("auth-submit").innerText = mode === "login" ? "ログイン" : "アカウントを新規作成";
   }
 
-  function submitAuth() {
+  async function submitAuth() {
     const id = document.getElementById("mcid").value.trim();
     const pw = document.getElementById("pass").value.trim();
     const pw2 = document.getElementById("pass2").value.trim();
     const err = document.getElementById("err");
+    const btn = document.getElementById("auth-submit");
 
     if (!id || !pw) { err.innerText = "MCIDとパスワードを入力してください"; return; }
+    btn.disabled = true;
+    err.innerText = "通信中...";
 
     if (authMode === "register") {
-      if (pw !== pw2) { err.innerText = "確認用パスワードが一致しません"; return; }
-      if (db[id]) { err.innerText = "そのMCIDはすでに登録されています"; return; }
-      db[id] = { pw, bal: 0 }; // 初期残高 0 G（入金後に反映）
-      save();
-      notifyDiscord(`🆕 **新規アカウント登録**\nMCID: \`${id}\``);
+      if (pw !== pw2) { err.innerText = "確認用パスワードが一致しません"; btn.disabled = false; return; }
+      const { data: existing } = await sb.from("casino_users").select("mcid").eq("mcid", id).maybeSingle();
+      if (existing) { err.innerText = "このMCIDはすでに登録されています"; btn.disabled = false; return; }
+
+      const { error } = await sb.from("casino_users").insert({ mcid: id, password: pw, balance: 0 });
+      if (error) { err.innerText = "登録エラー: " + error.message; btn.disabled = false; return; }
+      notifyDiscord(`🆕 **新規登録**\nMCID: \`${id}\``);
     } else {
-      if (!db[id]) { err.innerText = "未登録のMCIDです。「新規登録」から作成してください"; return; }
-      if (db[id].pw !== pw) { err.innerText = "パスワードが違います"; return; }
+      const { data: user, error } = await sb.from("casino_users").select("*").eq("mcid", id).maybeSingle();
+      if (error || !user) { err.innerText = "MCIDが見つかりません"; btn.disabled = false; return; }
+      if (user.password !== pw) { err.innerText = "パスワードが違います"; btn.disabled = false; return; }
     }
 
     me = id;
     localStorage.setItem(ME_KEY, me);
-    startApp();
+    btn.disabled = false;
+    err.innerText = "";
+    await startApp();
   }
 
-  function startApp() {
+  async function startApp() {
     document.getElementById("login-view").classList.add("hidden");
     document.getElementById("game-view").classList.remove("hidden");
     document.getElementById("u-name").innerText = "MCID: " + me;
-    sync();
+    if (me === ADMIN_MCID) {
+      document.getElementById("admin-tab-btn").classList.remove("hidden");
+    }
+    await refreshBalance();
+  }
+
+  async function refreshBalance() {
+    const { data } = await sb.from("casino_users").select("balance").eq("mcid", me).single();
+    if (data) {
+      myBalance = Number(data.balance);
+      document.getElementById("bal").innerText = Math.floor(myBalance).toLocaleString();
+    }
+  }
+
+  async function updateCloudBalance(diff) {
+    await refreshBalance();
+    const nextBal = Math.max(0, Math.floor(myBalance + diff));
+    const { error } = await sb.from("casino_users").update({ balance: nextBal }).eq("mcid", me);
+    if (!error) {
+      myBalance = nextBal;
+      document.getElementById("bal").innerText = myBalance.toLocaleString();
+    }
   }
 
   function logout() {
@@ -415,10 +431,39 @@
   function tab(name, btn) {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
-    ["crash", "slot", "mines", "deposit"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    ["crash", "slot", "mines", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    if (name === "admin") loadAllUsers();
   }
 
-  // Discord Webhook 送信関数
+  async function loadAllUsers() {
+    const box = document.getElementById("adm-user-list");
+    const { data } = await sb.from("casino_users").select("mcid, balance").order("balance", { ascending: false });
+    if (!data) return;
+    box.innerHTML = data.map(u => `
+      <div class="user-row" onclick="document.getElementById('adm-target').value='${u.mcid}'">
+        <span>👤 <strong>${u.mcid}</strong></span>
+        <span style="color:var(--green);">${Number(u.balance).toLocaleString()} G</span>
+      </div>
+    `).join("");
+  }
+
+  async function adminAddBalance() {
+    const target = document.getElementById("adm-target").value.trim();
+    const diff = Number(document.getElementById("adm-amount").value);
+    const msg = document.getElementById("adm-msg");
+    if (!target || !diff) return;
+
+    const { data: u } = await sb.from("casino_users").select("balance").eq("mcid", target).maybeSingle();
+    if (!u) { msg.style.color = "var(--red)"; msg.innerText = "そのMCIDは見つかりません"; return; }
+
+    const next = Math.max(0, Number(u.balance) + diff);
+    await sb.from("casino_users").update({ balance: next }).eq("mcid", target);
+    msg.style.color = "var(--green)";
+    msg.innerText = `✅ ${target} の残高を ${next.toLocaleString()} G に更新しました`;
+    if (target === me) await refreshBalance();
+    await loadAllUsers();
+  }
+
   async function notifyDiscord(text) {
     if (!DISCORD_WEBHOOK_URL) return false;
     try {
@@ -428,9 +473,7 @@
         body: JSON.stringify({ content: text })
       });
       return true;
-    } catch (e) {
-      return false;
-    }
+    } catch (e) { return false; }
   }
 
   async function sendDepositNotice() {
@@ -439,50 +482,40 @@
     const msg = document.getElementById("req-msg");
     const btn = document.getElementById("req-btn");
 
-    if (amount <= 0) { msg.innerText = "正しい金額を入力してください"; return; }
-    if (type.includes("出金") && amount > db[me].bal) {
-      msg.innerText = "所持残高以上の出金はできません";
+    if (amount <= 0) return;
+    await refreshBalance();
+    if (type.includes("出金") && amount > myBalance) {
+      msg.style.color = "var(--red)";
+      msg.innerText = "残高不足です";
       return;
     }
 
     btn.disabled = true;
-    msg.innerText = "送信中...";
-
-    const now = new Date().toLocaleString("ja-JP");
-    const payload = `━━━━━━━━━━━━━━\n**${type}**\n👤 MCID: \`${me}\`\n💵 金額: **${amount.toLocaleString()} G**\n🕒 日時: ${now}\n━━━━━━━━━━━━━━`;
-
-    if (!DISCORD_WEBHOOK_URL) {
-      msg.style.color = "var(--gold)";
-      msg.innerText = "⚠️ コード内の DISCORD_WEBHOOK_URL を設定するとDiscordに通知が届きます";
-      btn.disabled = false;
-      return;
-    }
-
+    const payload = `━━━━━━━━━━━━━━\n**${type}**\n👤 MCID: \`${me}\`\n💵 金額: **${amount.toLocaleString()} G**\n━━━━━━━━━━━━━━`;
     const ok = await notifyDiscord(payload);
     if (ok) {
-      if (type.includes("出金")) addBal(-amount);
+      if (type.includes("出金")) await updateCloudBalance(-amount);
       msg.style.color = "var(--green)";
-      msg.innerText = "✅ 運営のDiscordに通知を送信しました！";
+      msg.innerText = "✅ 運営のDiscordに通知しました！";
     } else {
-      msg.style.color = "var(--red)";
-      msg.innerText = "❌ 送信に失敗しました。URLを確認してください";
+      msg.style.color = "var(--gold)";
+      msg.innerText = "⚠️ Webhook URLが未設定か送信に失敗しました";
     }
     btn.disabled = false;
   }
 
   function scale(id, f) { const e = document.getElementById(id); e.value = Math.max(10, Math.floor(e.value * f)); }
-  function maxB(id) { document.getElementById(id).value = Math.max(10, Math.floor(db[me].bal)); }
+  function maxB(id) { document.getElementById(id).value = Math.max(10, Math.floor(myBalance)); }
 
-  // ==========================================
-  // 1. CRASH (五分五分 RTP 99.5%)
-  // ==========================================
+  // 1. CRASH (RTP 99.5%)
   let cRun = false, cMult = 1, cTarget = 1, cBet = 0, cIv = null;
-  function toggleCrash() {
+  async function toggleCrash() {
     const btn = document.getElementById("c-btn"), el = document.getElementById("mult"), msg = document.getElementById("c-msg");
     if (!cRun) {
+      await refreshBalance();
       cBet = Number(document.getElementById("c-bet").value);
-      if (cBet <= 0 || cBet > db[me].bal) { msg.innerText = "残高不足です（入金申請からチャージしてください）"; return; }
-      addBal(-cBet);
+      if (cBet <= 0 || cBet > myBalance) { msg.innerText = "残高不足です"; return; }
+      await updateCloudBalance(-cBet);
       const r = Math.random();
       cTarget = r < 0.005 ? 1.00 : Math.max(1.01, 0.995 / (1 - r));
       if (cTarget <= 1.00) {
@@ -499,31 +532,29 @@
           el.innerText = cTarget.toFixed(2) + "x"; el.className = "screen crashed";
           msg.innerText = `💥 ${cTarget.toFixed(2)}x で爆発 (-${cBet.toLocaleString()} G)`;
           btn.innerText = "START"; btn.classList.remove("btn-green");
-        } else {
-          el.innerText = cMult.toFixed(2) + "x";
-        }
+        } else el.innerText = cMult.toFixed(2) + "x";
       }, 50);
     } else {
       clearInterval(cIv); cRun = false;
       const win = Math.floor(cBet * cMult);
-      addBal(win);
+      await updateCloudBalance(win);
       el.className = "screen cashed";
       msg.innerText = `🎉 ${cMult.toFixed(2)}x 利確！ +${win.toLocaleString()} G`;
       btn.innerText = "START"; btn.classList.remove("btn-green");
     }
   }
 
-  // ==========================================
-  // 2. SLOTS (五分五分 RTP 99.5%)
-  // ==========================================
+  // 2. SLOTS (RTP 99.5%)
   const syms = ["🍒","🍋","🍇","🔔","💎","7️⃣"];
   const pays = {"🍒":2.5,"🍋":4,"🍇":8,"🔔":15,"💎":40,"7️⃣":100};
-  function spinSlot() {
+  async function spinSlot() {
     const bet = Number(document.getElementById("s-bet").value), msg = document.getElementById("s-msg"), btn = document.getElementById("s-btn");
-    if (bet <= 0 || bet > db[me].bal) { msg.innerText = "残高不足です"; return; }
-    addBal(-bet); btn.disabled = true; msg.innerText = "回転中...";
+    await refreshBalance();
+    if (bet <= 0 || bet > myBalance) { msg.innerText = "残高不足です"; return; }
+    await updateCloudBalance(-bet);
+    btn.disabled = true; msg.innerText = "回転中...";
     let t = 0;
-    const iv = setInterval(() => {
+    const iv = setInterval(async () => {
       ["r1","r2","r3"].forEach(id => document.getElementById(id).innerText = syms[Math.floor(Math.random()*6)]);
       if (++t > 12) {
         clearInterval(iv);
@@ -542,25 +573,21 @@
         ["r1","r2","r3"].forEach((id, i) => document.getElementById(id).innerText = res[i]);
         if (res[0] === res[1] && res[1] === res[2]) {
           const win = Math.floor(bet * pays[res[0]]);
-          addBal(win);
+          await updateCloudBalance(win);
           msg.innerText = `🎉 ${res[0]} 揃い (${pays[res[0]]}x)！ +${win.toLocaleString()} G`;
-        } else {
-          msg.innerText = "ハズレ...";
-        }
+        } else msg.innerText = "ハズレ...";
         btn.disabled = false;
       }
     }, 55);
   }
 
-  // ==========================================
-  // 3. MINES (五分五分 RTP 99.5%)
-  // ==========================================
+  // 3. MINES (RTP 99.5%)
   let mRun = false, mBet = 0, bSet = new Set(), openCnt = 0, mCur = 1;
   const grid = document.getElementById("m-grid");
   for (let i = 0; i < 25; i++) {
     const b = document.createElement("button");
     b.className = "tile"; b.disabled = true;
-    b.onclick = () => {
+    b.onclick = async () => {
       if (!mRun || b.disabled) return;
       const bNum = Number(document.getElementById("b-num").value);
       if (bSet.has(i)) {
@@ -575,7 +602,7 @@
         document.getElementById("m-mult").innerText = mCur.toFixed(2) + "x";
         if (openCnt === 25 - bNum) {
           const w = Math.floor(mBet * mCur);
-          addBal(w);
+          await updateCloudBalance(w);
           endMines(`👑 全開け達成！ +${w.toLocaleString()} G`);
         }
       }
@@ -583,12 +610,13 @@
     grid.appendChild(b);
   }
 
-  function toggleMines() {
+  async function toggleMines() {
     const btn = document.getElementById("m-btn"), msg = document.getElementById("m-msg");
     if (!mRun) {
+      await refreshBalance();
       mBet = Number(document.getElementById("m-bet").value);
-      if (mBet <= 0 || mBet > db[me].bal) { msg.innerText = "残高不足です"; return; }
-      addBal(-mBet);
+      if (mBet <= 0 || mBet > myBalance) { msg.innerText = "残高不足です"; return; }
+      await updateCloudBalance(-mBet);
       const bNum = Number(document.getElementById("b-num").value);
       bSet.clear();
       while (bSet.size < bNum) bSet.add(Math.floor(Math.random() * 25));
@@ -601,7 +629,7 @@
     } else {
       if (openCnt === 0) { msg.innerText = "1マス以上開けてください"; return; }
       const w = Math.floor(mBet * mCur);
-      addBal(w);
+      await updateCloudBalance(w);
       endMines(`🎉 ${mCur.toFixed(2)}x 利確！ +${w.toLocaleString()} G`);
     }
   }
@@ -621,7 +649,7 @@
     btn.innerText = "START"; btn.classList.remove("btn-green");
   }
 
-  if (me && db[me]) startApp();
+  if (me) startApp();
 </script>
 </body>
 </html>
