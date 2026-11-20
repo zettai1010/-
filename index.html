@@ -14,6 +14,7 @@
     --gold: #f5b942;
     --green: #10b981;
     --red: #ef4444;
+    --blue: #3b82f6;
     --text: #f8fafc;
     --muted: #8b92a5;
   }
@@ -27,7 +28,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 16px;
+    padding: 20px 14px;
   }
   .hidden { display: none !important; }
 
@@ -83,8 +84,10 @@
   }
   .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
   .btn-green { background: var(--green) !important; color: #052e16 !important; }
+  .btn-red { background: var(--red) !important; color: #fff !important; }
+  .btn-blue { background: var(--blue) !important; color: #fff !important; }
 
-  .app-wrap { width: 100%; max-width: 500px; }
+  .app-wrap { width: 100%; max-width: 520px; }
   .header {
     display: flex;
     justify-content: space-between;
@@ -93,7 +96,7 @@
     border: 1px solid var(--border);
     padding: 12px 16px;
     border-radius: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .bal { font-weight: 800; font-size: 0.95rem; }
   .bal span { color: var(--green); font-size: 1.15rem; }
@@ -107,18 +110,22 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .tabs { display: flex; gap: 5px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
+  }
   .tab {
-    flex: 1;
-    min-width: 68px;
-    padding: 10px 4px;
+    padding: 9px 4px;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 8px;
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     cursor: pointer;
+    text-align: center;
   }
   .tab.active { background: var(--gold); color: #111; border-color: var(--gold); }
 
@@ -130,20 +137,21 @@
     text-align: center;
   }
   .screen {
-    height: 150px;
+    height: 140px;
     background: var(--dark);
     border: 1px solid var(--border);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3.2rem;
+    font-size: 3rem;
     font-weight: 900;
     margin-bottom: 14px;
   }
   .crashed { color: var(--red); }
   .cashed { color: var(--green); }
 
+  /* SLOTS */
   .reels { display: flex; justify-content: center; gap: 10px; margin: 14px 0; }
   .reel {
     width: 84px;
@@ -157,6 +165,7 @@
     justify-content: center;
   }
 
+  /* MINES */
   .mines-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 10px; }
   .mines-top select { background: var(--dark); color: #fff; border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; }
   .mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; max-width: 300px; margin: 0 auto 14px; }
@@ -174,6 +183,47 @@
   .tile.gem { background: rgba(16, 185, 129, 0.22); border-color: var(--green); }
   .tile.bomb { background: rgba(239, 68, 68, 0.22); border-color: var(--red); }
   .tile.dim { opacity: 0.4; }
+
+  /* DICE */
+  .dice-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 14px;
+    font-size: 0.8rem;
+  }
+  .dice-stats strong { display: block; font-size: 1.05rem; margin-top: 2px; color: var(--gold); }
+  .dice-slider {
+    width: 100%;
+    margin: 12px 0 18px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+
+  /* HI-LO */
+  .card-box {
+    width: 110px;
+    height: 150px;
+    margin: 0 auto 12px;
+    background: #f8fafc;
+    color: #111;
+    border-radius: 12px;
+    border: 3px solid var(--gold);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+  .card-box.red { color: #dc2626; }
+  .card-rank { font-size: 2.6rem; line-height: 1; }
+  .card-suit { font-size: 2rem; margin-top: 4px; }
+  .hilo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
 
   .bet-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
   .bet-input {
@@ -211,25 +261,12 @@
     border-color: var(--gold);
     background: rgba(245, 185, 66, 0.08);
   }
-  .rank-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 700;
-  }
-  .rank-badge {
-    width: 28px;
-    text-align: center;
-    font-weight: 900;
-    color: var(--muted);
-  }
+  .rank-left { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .rank-badge { width: 28px; text-align: center; font-weight: 900; color: var(--muted); }
   .rank-1 { color: #ffd700; font-size: 1.15rem; }
   .rank-2 { color: #c0c0c0; font-size: 1.1rem; }
   .rank-3 { color: #cd7f32; font-size: 1.05rem; }
-  .rank-bal {
-    font-weight: 800;
-    color: var(--green);
-  }
+  .rank-bal { font-weight: 800; color: var(--green); }
 
   .user-list {
     max-height: 200px;
@@ -294,6 +331,8 @@
     <button class="tab active" onclick="tab('crash', this)">🚀 CRASH</button>
     <button class="tab" onclick="tab('slot', this)">🎰 SLOTS</button>
     <button class="tab" onclick="tab('mines', this)">💣 MINES</button>
+    <button class="tab" onclick="tab('dice', this)">🎲 DICE</button>
+    <button class="tab" onclick="tab('hilo', this)">🃏 HI-LO</button>
     <button class="tab" onclick="tab('ranking', this)">🏆 順位</button>
     <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
     <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
@@ -356,7 +395,57 @@
     <div class="msg" id="m-msg"></div>
   </div>
 
-  <!-- 4. 所持金ランキング -->
+  <!-- 4. DICE（サイコロ） -->
+  <div id="dice" class="panel hidden">
+    <div class="screen" id="d-res" style="height:110px; font-size:2.8rem;">50.00</div>
+    <div class="dice-stats">
+      <div>目標（以下で勝ち）<strong id="d-target-txt">50.00</strong></div>
+      <div>勝率<strong id="d-chance-txt">50.0%</strong></div>
+      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.99x</strong></div>
+    </div>
+    <input type="range" id="d-slider" class="dice-slider" min="2" max="98" value="50" oninput="updateDiceCalc()">
+    <div class="bet-row">
+      <input id="d-bet" type="number" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scale('d-bet', 0.5)">1/2</button>
+      <button class="mini-btn" onclick="scale('d-bet', 2)">2x</button>
+      <button class="mini-btn" onclick="maxB('d-bet')">MAX</button>
+    </div>
+    <button class="btn-main" id="d-btn" onclick="rollDice()">🎲 ROLL DICE</button>
+    <div class="msg" id="d-msg"></div>
+  </div>
+
+  <!-- 5. HI-LO（ハイ＆ロー） -->
+  <div id="hilo" class="panel hidden">
+    <div style="font-size:0.85rem; margin-bottom:10px;">
+      現在倍率: <strong id="h-mult" style="color:var(--green); font-size:1.1rem;">1.00x</strong>
+    </div>
+    <div class="card-box" id="h-card">
+      <div class="card-rank" id="h-rank">7</div>
+      <div class="card-suit" id="h-suit">♠️</div>
+    </div>
+    <div id="h-start-area">
+      <div class="bet-row">
+        <input id="h-bet" type="number" class="bet-input" value="500" min="10">
+        <button class="mini-btn" onclick="scale('h-bet', 0.5)">1/2</button>
+        <button class="mini-btn" onclick="scale('h-bet', 2)">2x</button>
+        <button class="mini-btn" onclick="maxB('h-bet')">MAX</button>
+      </div>
+      <button class="btn-main" onclick="startHilo()">🃏 START HI-LO</button>
+    </div>
+    <div id="h-play-area" class="hidden">
+      <div class="hilo-btns">
+        <button class="btn-main btn-red" id="h-high-btn" onclick="guessHilo('high')">⬆️ HIGH (1.90x)</button>
+        <button class="btn-main btn-blue" id="h-low-btn" onclick="guessHilo('low')">⬇️ LOW (1.90x)</button>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="mini-btn" style="flex:1; padding:10px;" onclick="skipHilo()">⏭️ カード変更</button>
+        <button class="btn-main btn-green" style="flex:2;" id="h-cash-btn" onclick="cashoutHilo()" disabled>CASH OUT</button>
+      </div>
+    </div>
+    <div class="msg" id="h-msg"></div>
+  </div>
+
+  <!-- 6. 所持金ランキング -->
   <div id="ranking" class="panel hidden">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <h3 style="margin:0; color:var(--gold);">🏆 所持金ランキング TOP20</h3>
@@ -365,7 +454,7 @@
     <div class="rank-list" id="rank-list">読み込み中...</div>
   </div>
 
-  <!-- 5. 入出金申請 -->
+  <!-- 7. 入出金申請 -->
   <div id="deposit" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">💰 入金・出金申請</h3>
     <label class="label" style="text-align:left;">申請タイプ</label>
@@ -379,7 +468,7 @@
     <div class="msg" id="req-msg"></div>
   </div>
 
-  <!-- 6. 運営専用管理パネル -->
+  <!-- 8. 運営専用管理パネル -->
   <div id="admin" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高追加・操作</h3>
     <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
@@ -394,12 +483,12 @@
 
 <script>
   // ==========================================
-  // ★ 設定（Discord Webhook URLだけ新しいものを貼ってください） ★
+  // ★ 設定（新しいDiscord Webhook URLを貼ってください） ★
   // ==========================================
   const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
-  const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
+  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -491,7 +580,7 @@
   function tab(name, btn) {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
-    ["crash", "slot", "mines", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    ["crash", "slot", "mines", "dice", "hilo", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
     if (name === "ranking") loadRanking();
     if (name === "admin") loadAllUsers();
   }
@@ -508,11 +597,6 @@
 
     if (error || !data) {
       box.innerHTML = "<div style='color:var(--red); text-align:center;'>読み込みに失敗しました</div>";
-      return;
-    }
-
-    if (data.length === 0) {
-      box.innerHTML = "<div style='color:var(--muted); text-align:center;'>データがありません</div>";
       return;
     }
 
@@ -749,6 +833,128 @@
     });
     const btn = document.getElementById("m-btn");
     btn.innerText = "START"; btn.classList.remove("btn-green");
+  }
+
+  // 4. DICE (RTP 99.5%)
+  function updateDiceCalc() {
+    const val = Number(document.getElementById("d-slider").value);
+    const mult = (99.5 / val).toFixed(2);
+    document.getElementById("d-target-txt").innerText = val.toFixed(2);
+    document.getElementById("d-chance-txt").innerText = val.toFixed(1) + "%";
+    document.getElementById("d-mult-txt").innerText = mult + "x";
+  }
+
+  async function rollDice() {
+    const bet = Number(document.getElementById("d-bet").value);
+    const target = Number(document.getElementById("d-slider").value);
+    const resEl = document.getElementById("d-res");
+    const msg = document.getElementById("d-msg");
+    const btn = document.getElementById("d-btn");
+
+    await refreshBalance();
+    if (bet <= 0 || bet > myBalance) { msg.innerText = "残高不足です"; return; }
+    await updateCloudBalance(-bet);
+    btn.disabled = true;
+
+    const roll = Number((Math.random() * 100).toFixed(2));
+    resEl.innerText = roll.toFixed(2);
+    if (roll <= target) {
+      const mult = 99.5 / target;
+      const win = Math.floor(bet * mult);
+      await updateCloudBalance(win);
+      resEl.className = "screen cashed";
+      msg.innerText = `🎉 WIN! (${mult.toFixed(2)}x) +${win.toLocaleString()} G`;
+    } else {
+      resEl.className = "screen crashed";
+      msg.innerText = `💥 LOSE... (-${bet.toLocaleString()} G)`;
+    }
+    btn.disabled = false;
+  }
+
+  // 5. HI-LO (RTP 99.5%)
+  const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+  const suits = ["♠️","♥️","♦️","♣️"];
+  let hRun = false, hBet = 0, hVal = 7, hMult = 1.00, hWins = 0;
+
+  function renderHiloCard(val) {
+    const suit = suits[Math.floor(Math.random() * 4)];
+    const box = document.getElementById("h-card");
+    box.className = "card-box" + (suit === "♥️" || suit === "♦️" ? " red" : "");
+    document.getElementById("h-rank").innerText = ranks[val - 1];
+    document.getElementById("h-suit").innerText = suit;
+
+    // 同じ数字も勝ち扱い（KのときHIGHは13/13=100%になるため1.00x、それ以外は確率計算）
+    const highCount = 14 - val;
+    const lowCount = val;
+    const highMult = Math.max(1.01, (13 / highCount) * 0.995);
+    const lowMult = Math.max(1.01, (13 / lowCount) * 0.995);
+
+    document.getElementById("h-high-btn").innerText = `⬆️ HIGH (${highMult.toFixed(2)}x)`;
+    document.getElementById("h-low-btn").innerText = `⬇️ LOW (${lowMult.toFixed(2)}x)`;
+  }
+
+  async function startHilo() {
+    const msg = document.getElementById("h-msg");
+    await refreshBalance();
+    hBet = Number(document.getElementById("h-bet").value);
+    if (hBet <= 0 || hBet > myBalance) { msg.innerText = "残高不足です"; return; }
+    await updateCloudBalance(-hBet);
+
+    hRun = true;
+    hMult = 1.00;
+    hWins = 0;
+    hVal = Math.floor(Math.random() * 13) + 1;
+    renderHiloCard(hVal);
+
+    document.getElementById("h-mult").innerText = "1.00x";
+    document.getElementById("h-start-area").classList.add("hidden");
+    document.getElementById("h-play-area").classList.remove("hidden");
+    document.getElementById("h-cash-btn").disabled = true;
+    msg.innerText = "HIGH か LOW を選んでください";
+  }
+
+  function skipHilo() {
+    if (!hRun) return;
+    hVal = Math.floor(Math.random() * 13) + 1;
+    renderHiloCard(hVal);
+  }
+
+  async function guessHilo(dir) {
+    if (!hRun) return;
+    const nextVal = Math.floor(Math.random() * 13) + 1;
+    const highCount = 14 - hVal;
+    const lowCount = hVal;
+    const stepMult = dir === "high"
+      ? Math.max(1.01, (13 / highCount) * 0.995)
+      : Math.max(1.01, (13 / lowCount) * 0.995);
+
+    const win = dir === "high" ? (nextVal >= hVal) : (nextVal <= hVal);
+    hVal = nextVal;
+    renderHiloCard(hVal);
+
+    if (win) {
+      hWins++;
+      hMult = hMult * stepMult;
+      document.getElementById("h-mult").innerText = hMult.toFixed(2) + "x";
+      document.getElementById("h-cash-btn").disabled = false;
+      document.getElementById("h-cash-btn").innerText = `CASH OUT (${Math.floor(hBet * hMult).toLocaleString()} G)`;
+      document.getElementById("h-msg").innerText = `🎉 ${hWins}連勝！現在 ${hMult.toFixed(2)}x`;
+    } else {
+      hRun = false;
+      document.getElementById("h-start-area").classList.remove("hidden");
+      document.getElementById("h-play-area").classList.add("hidden");
+      document.getElementById("h-msg").innerText = `💥 外れ！ -${hBet.toLocaleString()} G`;
+    }
+  }
+
+  async function cashoutHilo() {
+    if (!hRun || hWins === 0) return;
+    hRun = false;
+    const win = Math.floor(hBet * hMult);
+    await updateCloudBalance(win);
+    document.getElementById("h-start-area").classList.remove("hidden");
+    document.getElementById("h-play-area").classList.add("hidden");
+    document.getElementById("h-msg").innerText = `🎉 ${hMult.toFixed(2)}x 利確！ +${win.toLocaleString()} G`;
   }
 
   if (me) startApp();
