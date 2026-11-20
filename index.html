@@ -110,6 +110,7 @@
     font-weight: 700;
     cursor: pointer;
   }
+  .mini-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .tabs {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -401,9 +402,9 @@
     <div class="dice-stats">
       <div>目標（以下で勝ち）<strong id="d-target-txt">50.00</strong></div>
       <div>勝率<strong id="d-chance-txt">50.0%</strong></div>
-      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.99x</strong></div>
+      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.86x</strong></div>
     </div>
-    <input type="range" id="d-slider" class="dice-slider" min="2" max="98" value="50" oninput="updateDiceCalc()">
+    <input type="range" id="d-slider" class="dice-slider" min="2" max="95" value="50" oninput="updateDiceCalc()">
     <div class="bet-row">
       <input id="d-bet" type="number" class="bet-input" value="500" min="10">
       <button class="mini-btn" onclick="scale('d-bet', 0.5)">1/2</button>
@@ -434,11 +435,11 @@
     </div>
     <div id="h-play-area" class="hidden">
       <div class="hilo-btns">
-        <button class="btn-main btn-red" id="h-high-btn" onclick="guessHilo('high')">⬆️ HIGH (1.90x)</button>
-        <button class="btn-main btn-blue" id="h-low-btn" onclick="guessHilo('low')">⬇️ LOW (1.90x)</button>
+        <button class="btn-main btn-red" id="h-high-btn" onclick="guessHilo('high')">⬆️ HIGH</button>
+        <button class="btn-main btn-blue" id="h-low-btn" onclick="guessHilo('low')">⬇️ LOW</button>
       </div>
       <div style="display:flex; gap:8px;">
-        <button class="mini-btn" style="flex:1; padding:10px;" onclick="skipHilo()">⏭️ カード変更</button>
+        <button class="mini-btn" id="h-skip-btn" style="flex:1; padding:10px;" onclick="skipHilo()">⏭️ 変更 (残り3)</button>
         <button class="btn-main btn-green" style="flex:2;" id="h-cash-btn" onclick="cashoutHilo()" disabled>CASH OUT</button>
       </div>
     </div>
@@ -488,7 +489,10 @@
   const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
-  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
+  const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
+
+  // 運営利益率調整（RTP 93.0% = ハウスエッジ 7%）
+  const HOUSE_RTP = 0.93;
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -693,7 +697,7 @@
   function scale(id, f) { const e = document.getElementById(id); e.value = Math.max(10, Math.floor(e.value * f)); }
   function maxB(id) { document.getElementById(id).value = Math.max(10, Math.floor(myBalance)); }
 
-  // 1. CRASH (RTP 99.5%)
+  // 1. CRASH (RTP 93% + 5%即爆発)
   let cRun = false, cMult = 1, cTarget = 1, cBet = 0, cIv = null;
   async function toggleCrash() {
     const btn = document.getElementById("c-btn"), el = document.getElementById("mult"), msg = document.getElementById("c-msg");
@@ -703,7 +707,7 @@
       if (cBet <= 0 || cBet > myBalance) { msg.innerText = "残高不足です"; return; }
       await updateCloudBalance(-cBet);
       const r = Math.random();
-      cTarget = r < 0.005 ? 1.00 : Math.max(1.01, 0.995 / (1 - r));
+      cTarget = r < 0.05 ? 1.00 : Math.max(1.01, HOUSE_RTP / (1 - r));
       if (cTarget <= 1.00) {
         el.innerText = "1.00x"; el.className = "screen crashed";
         msg.innerText = `💥 即爆発 (-${cBet.toLocaleString()} G)`;
@@ -730,7 +734,7 @@
     }
   }
 
-  // 2. SLOTS (RTP 99.5%)
+  // 2. SLOTS (RTP 93% 辛口バランス)
   const syms = ["🍒","🍋","🍇","🔔","💎","7️⃣"];
   const pays = {"🍒":2.5,"🍋":4,"🍇":8,"🔔":15,"💎":40,"7️⃣":100};
   async function spinSlot() {
@@ -746,12 +750,12 @@
         clearInterval(iv);
         const r = Math.random() * 100;
         let res;
-        if (r < 18.0) res = ["🍒","🍒","🍒"];
-        else if (r < 25.0) res = ["🍋","🍋","🍋"];
-        else if (r < 27.0) res = ["🍇","🍇","🍇"];
-        else if (r < 27.4) res = ["🔔","🔔","🔔"];
-        else if (r < 27.475) res = ["💎","💎","💎"];
-        else if (r < 27.49) res = ["7️⃣","7️⃣","7️⃣"];
+        if (r < 16.5) res = ["🍒","🍒","🍒"];
+        else if (r < 23.0) res = ["🍋","🍋","🍋"];
+        else if (r < 24.8) res = ["🍇","🍇","🍇"];
+        else if (r < 25.15) res = ["🔔","🔔","🔔"];
+        else if (r < 25.22) res = ["💎","💎","💎"];
+        else if (r < 25.23) res = ["7️⃣","7️⃣","7️⃣"];
         else {
           res = [syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)]];
           while (res[0] === res[1] && res[1] === res[2]) res[2] = syms[Math.floor(Math.random()*6)];
@@ -767,7 +771,7 @@
     }, 55);
   }
 
-  // 3. MINES (RTP 99.5%)
+  // 3. MINES (RTP 93%)
   let mRun = false, mBet = 0, bSet = new Set(), openCnt = 0, mCur = 1;
   const grid = document.getElementById("m-grid");
   for (let i = 0; i < 25; i++) {
@@ -784,7 +788,7 @@
         openCnt++;
         let p = 1;
         for (let k = 0; k < openCnt; k++) p *= (25 - bNum - k) / (25 - k);
-        mCur = 0.995 / p;
+        mCur = HOUSE_RTP / p;
         document.getElementById("m-mult").innerText = mCur.toFixed(2) + "x";
         if (openCnt === 25 - bNum) {
           const w = Math.floor(mBet * mCur);
@@ -835,10 +839,10 @@
     btn.innerText = "START"; btn.classList.remove("btn-green");
   }
 
-  // 4. DICE (RTP 99.5%)
+  // 4. DICE (RTP 93%)
   function updateDiceCalc() {
     const val = Number(document.getElementById("d-slider").value);
-    const mult = (99.5 / val).toFixed(2);
+    const mult = ((HOUSE_RTP * 100) / val).toFixed(2);
     document.getElementById("d-target-txt").innerText = val.toFixed(2);
     document.getElementById("d-chance-txt").innerText = val.toFixed(1) + "%";
     document.getElementById("d-mult-txt").innerText = mult + "x";
@@ -859,7 +863,7 @@
     const roll = Number((Math.random() * 100).toFixed(2));
     resEl.innerText = roll.toFixed(2);
     if (roll <= target) {
-      const mult = 99.5 / target;
+      const mult = (HOUSE_RTP * 100) / target;
       const win = Math.floor(bet * mult);
       await updateCloudBalance(win);
       resEl.className = "screen cashed";
@@ -871,10 +875,10 @@
     btn.disabled = false;
   }
 
-  // 5. HI-LO (RTP 99.5%)
+  // 5. HI-LO (抜け穴完全封鎖 + RTP 93%)
   const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
   const suits = ["♠️","♥️","♦️","♣️"];
-  let hRun = false, hBet = 0, hVal = 7, hMult = 1.00, hWins = 0;
+  let hRun = false, hBet = 0, hVal = 7, hMult = 1.00, hWins = 0, hSkips = 3;
 
   function renderHiloCard(val) {
     const suit = suits[Math.floor(Math.random() * 4)];
@@ -883,14 +887,30 @@
     document.getElementById("h-rank").innerText = ranks[val - 1];
     document.getElementById("h-suit").innerText = suit;
 
-    // 同じ数字も勝ち扱い（KのときHIGHは13/13=100%になるため1.00x、それ以外は確率計算）
-    const highCount = 14 - val;
-    const lowCount = val;
-    const highMult = Math.max(1.01, (13 / highCount) * 0.995);
-    const lowMult = Math.max(1.01, (13 / lowCount) * 0.995);
+    const highBtn = document.getElementById("h-high-btn");
+    const lowBtn = document.getElementById("h-low-btn");
 
-    document.getElementById("h-high-btn").innerText = `⬆️ HIGH (${highMult.toFixed(2)}x)`;
-    document.getElementById("h-low-btn").innerText = `⬇️ LOW (${lowMult.toFixed(2)}x)`;
+    // 引き分けは1.00x（セーフ）、純粋に大きい/小さいカード枚数で倍率計算
+    const strictlyHigher = 13 - val;
+    const strictlyLower = val - 1;
+
+    if (strictlyHigher === 0) {
+      highBtn.disabled = true;
+      highBtn.innerText = "⬆️ HIGH (選択不可)";
+    } else {
+      highBtn.disabled = false;
+      const highMult = (12 / strictlyHigher) * HOUSE_RTP;
+      highBtn.innerText = `⬆️ HIGH (${highMult.toFixed(2)}x)`;
+    }
+
+    if (strictlyLower === 0) {
+      lowBtn.disabled = true;
+      lowBtn.innerText = "⬇️ LOW (選択不可)";
+    } else {
+      lowBtn.disabled = false;
+      const lowMult = (12 / strictlyLower) * HOUSE_RTP;
+      lowBtn.innerText = `⬇️ LOW (${lowMult.toFixed(2)}x)`;
+    }
   }
 
   async function startHilo() {
@@ -903,6 +923,7 @@
     hRun = true;
     hMult = 1.00;
     hWins = 0;
+    hSkips = 3;
     hVal = Math.floor(Math.random() * 13) + 1;
     renderHiloCard(hVal);
 
@@ -910,28 +931,44 @@
     document.getElementById("h-start-area").classList.add("hidden");
     document.getElementById("h-play-area").classList.remove("hidden");
     document.getElementById("h-cash-btn").disabled = true;
+    document.getElementById("h-cash-btn").innerText = "CASH OUT";
+    const skipBtn = document.getElementById("h-skip-btn");
+    skipBtn.disabled = false;
+    skipBtn.innerText = `⏭️ 変更 (残り${hSkips})`;
     msg.innerText = "HIGH か LOW を選んでください";
   }
 
   function skipHilo() {
-    if (!hRun) return;
+    if (!hRun || hSkips <= 0) return;
+    hSkips--;
     hVal = Math.floor(Math.random() * 13) + 1;
     renderHiloCard(hVal);
+    const skipBtn = document.getElementById("h-skip-btn");
+    skipBtn.innerText = `⏭️ 変更 (残り${hSkips})`;
+    if (hSkips <= 0) skipBtn.disabled = true;
   }
 
   async function guessHilo(dir) {
     if (!hRun) return;
+    const prevVal = hVal;
     const nextVal = Math.floor(Math.random() * 13) + 1;
-    const highCount = 14 - hVal;
-    const lowCount = hVal;
-    const stepMult = dir === "high"
-      ? Math.max(1.01, (13 / highCount) * 0.995)
-      : Math.max(1.01, (13 / lowCount) * 0.995);
+    const strictlyHigher = 13 - prevVal;
+    const strictlyLower = prevVal - 1;
 
-    const win = dir === "high" ? (nextVal >= hVal) : (nextVal <= hVal);
+    const stepMult = dir === "high"
+      ? (12 / strictlyHigher) * HOUSE_RTP
+      : (12 / strictlyLower) * HOUSE_RTP;
+
     hVal = nextVal;
     renderHiloCard(hVal);
 
+    // 同じ数字（引き分け）は倍率据え置きで続行
+    if (nextVal === prevVal) {
+      document.getElementById("h-msg").innerText = `🤝 引き分け（同数）！倍率そのまま続行`;
+      return;
+    }
+
+    const win = dir === "high" ? (nextVal > prevVal) : (nextVal < prevVal);
     if (win) {
       hWins++;
       hMult = hMult * stepMult;
