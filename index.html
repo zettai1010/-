@@ -326,7 +326,7 @@
     <div class="msg" id="req-msg"></div>
   </div>
 
-  <!-- 5. 運営専用管理パネル（ADMIN_MCIDでログイン時のみ表示） -->
+  <!-- 5. 運営専用管理パネル -->
   <div id="admin" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高追加・操作</h3>
     <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
@@ -341,11 +341,10 @@
 
 <script>
   // ==========================================
-  // sb_publishable_hzvWmXR05qO1F3n5Law-DA_kU4B4s_B
+  // ★ ここだけ自分のものに書き換えてください（3箇所） ★
   // ==========================================
   const SUPABASE_URL = "https://vjbejlzlddaniyqmbvr.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM
-    ";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
   const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
 
@@ -375,25 +374,32 @@
     btn.disabled = true;
     err.innerText = "通信中...";
 
-    if (authMode === "register") {
-      if (pw !== pw2) { err.innerText = "確認用パスワードが一致しません"; btn.disabled = false; return; }
-      const { data: existing } = await sb.from("casino_users").select("mcid").eq("mcid", id).maybeSingle();
-      if (existing) { err.innerText = "このMCIDはすでに登録されています"; btn.disabled = false; return; }
+    try {
+      if (authMode === "register") {
+        if (pw !== pw2) { err.innerText = "確認用パスワードが一致しません"; btn.disabled = false; return; }
+        const { data: existing, error: selErr } = await sb.from("casino_users").select("mcid").eq("mcid", id).maybeSingle();
+        if (selErr) { err.innerText = "通信エラー: " + selErr.message; btn.disabled = false; return; }
+        if (existing) { err.innerText = "このMCIDはすでに登録されています"; btn.disabled = false; return; }
 
-      const { error } = await sb.from("casino_users").insert({ mcid: id, password: pw, balance: 0 });
-      if (error) { err.innerText = "登録エラー: " + error.message; btn.disabled = false; return; }
-      notifyDiscord(`🆕 **新規登録**\nMCID: \`${id}\``);
-    } else {
-      const { data: user, error } = await sb.from("casino_users").select("*").eq("mcid", id).maybeSingle();
-      if (error || !user) { err.innerText = "MCIDが見つかりません"; btn.disabled = false; return; }
-      if (user.password !== pw) { err.innerText = "パスワードが違います"; btn.disabled = false; return; }
+        const { error: insErr } = await sb.from("casino_users").insert({ mcid: id, password: pw, balance: 0 });
+        if (insErr) { err.innerText = "登録エラー: " + insErr.message; btn.disabled = false; return; }
+        notifyDiscord(`🆕 **新規登録**\nMCID: \`${id}\``);
+      } else {
+        const { data: user, error: logErr } = await sb.from("casino_users").select("*").eq("mcid", id).maybeSingle();
+        if (logErr) { err.innerText = "通信エラー: " + logErr.message; btn.disabled = false; return; }
+        if (!user) { err.innerText = "MCIDが見つかりません"; btn.disabled = false; return; }
+        if (user.password !== pw) { err.innerText = "パスワードが違います"; btn.disabled = false; return; }
+      }
+
+      me = id;
+      localStorage.setItem(ME_KEY, me);
+      btn.disabled = false;
+      err.innerText = "";
+      await startApp();
+    } catch (e) {
+      err.innerText = "エラー: " + e.message;
+      btn.disabled = false;
     }
-
-    me = id;
-    localStorage.setItem(ME_KEY, me);
-    btn.disabled = false;
-    err.innerText = "";
-    await startApp();
   }
 
   async function startApp() {
