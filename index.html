@@ -269,6 +269,20 @@
   .rank-3 { color: #cd7f32; font-size: 1.05rem; }
   .rank-bal { font-weight: 800; color: var(--green); }
 
+  .admin-box {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .preset-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
   .user-list {
     max-height: 200px;
     overflow-y: auto;
@@ -402,9 +416,9 @@
     <div class="dice-stats">
       <div>目標（以下で勝ち）<strong id="d-target-txt">50.00</strong></div>
       <div>勝率<strong id="d-chance-txt">50.0%</strong></div>
-      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.86x</strong></div>
+      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.56x</strong></div>
     </div>
-    <input type="range" id="d-slider" class="dice-slider" min="2" max="95" value="50" oninput="updateDiceCalc()">
+    <input type="range" id="d-slider" class="dice-slider" min="2" max="90" value="50" oninput="updateDiceCalc()">
     <div class="bet-row">
       <input id="d-bet" type="number" class="bet-input" value="500" min="10">
       <button class="mini-btn" onclick="scale('d-bet', 0.5)">1/2</button>
@@ -439,7 +453,7 @@
         <button class="btn-main btn-blue" id="h-low-btn" onclick="guessHilo('low')">⬇️ LOW</button>
       </div>
       <div style="display:flex; gap:8px;">
-        <button class="mini-btn" id="h-skip-btn" style="flex:1; padding:10px;" onclick="skipHilo()">⏭️ 変更 (残り3)</button>
+        <button class="mini-btn" id="h-skip-btn" style="flex:1; padding:10px;" onclick="skipHilo()">⏭️ 変更 (残り1)</button>
         <button class="btn-main btn-green" style="flex:2;" id="h-cash-btn" onclick="cashoutHilo()" disabled>CASH OUT</button>
       </div>
     </div>
@@ -471,7 +485,20 @@
 
   <!-- 8. 運営専用管理パネル -->
   <div id="admin" class="panel hidden">
-    <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高追加・操作</h3>
+    <h3 style="margin-top:0; color:var(--gold);">👑 運営用コントロール</h3>
+
+    <div class="admin-box">
+      <div style="font-size:0.82rem; font-weight:bold; color:var(--gold);">⚙️ 難易度（勝ちやすさ）切り替え</div>
+      <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">
+        現在設定: <strong id="cur-rtp-txt" style="color:#fff;">回収モード (RTP 78% / 即爆 12%)</strong>
+      </div>
+      <div class="preset-row">
+        <button class="mini-btn" style="border-color:var(--red); color:var(--red);" onclick="setHouseMode(0.78, 0.12, '回収モード (RTP 78% / 即爆 12%)')">🔥 回収(78%)</button>
+        <button class="mini-btn" onclick="setHouseMode(0.85, 0.08, '通常モード (RTP 85% / 即爆 8%)')">⚖️ 通常(85%)</button>
+        <button class="mini-btn" style="border-color:var(--green); color:var(--green);" onclick="setHouseMode(0.93, 0.05, 'イベント甘め (RTP 93% / 即爆 5%)')">🎉 甘め(93%)</button>
+      </div>
+    </div>
+
     <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
     <input id="adm-target" class="input" placeholder="下のリストからタップでも選択可">
     <label class="label" style="text-align:left;">増減金額（減らす場合はマイナス -1000）</label>
@@ -491,8 +518,19 @@
   const ADMIN_MCID = "Smile2525";
   const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
 
-  // 運営利益率調整（RTP 93.0% = ハウスエッジ 7%）
-  const HOUSE_RTP = 0.93;
+  // デフォルト：激辛回収モード（RTP 78% / CRASH即爆発 12%）
+  let HOUSE_RTP = 0.78;
+  let CRASH_INSTANT_BUST = 0.12;
+
+  function setHouseMode(rtp, bust, label) {
+    HOUSE_RTP = rtp;
+    CRASH_INSTANT_BUST = bust;
+    document.getElementById("cur-rtp-txt").innerText = label;
+    updateDiceCalc();
+    const msg = document.getElementById("adm-msg");
+    msg.style.color = "var(--gold)";
+    msg.innerText = `⚙️ ${label} に切り替えました`;
+  }
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -697,7 +735,7 @@
   function scale(id, f) { const e = document.getElementById(id); e.value = Math.max(10, Math.floor(e.value * f)); }
   function maxB(id) { document.getElementById(id).value = Math.max(10, Math.floor(myBalance)); }
 
-  // 1. CRASH (RTP 93% + 5%即爆発)
+  // 1. CRASH (回収モード: RTP 78% + 即爆 12%)
   let cRun = false, cMult = 1, cTarget = 1, cBet = 0, cIv = null;
   async function toggleCrash() {
     const btn = document.getElementById("c-btn"), el = document.getElementById("mult"), msg = document.getElementById("c-msg");
@@ -707,7 +745,7 @@
       if (cBet <= 0 || cBet > myBalance) { msg.innerText = "残高不足です"; return; }
       await updateCloudBalance(-cBet);
       const r = Math.random();
-      cTarget = r < 0.05 ? 1.00 : Math.max(1.01, HOUSE_RTP / (1 - r));
+      cTarget = r < CRASH_INSTANT_BUST ? 1.00 : Math.max(1.01, HOUSE_RTP / (1 - r));
       if (cTarget <= 1.00) {
         el.innerText = "1.00x"; el.className = "screen crashed";
         msg.innerText = `💥 即爆発 (-${cBet.toLocaleString()} G)`;
@@ -716,7 +754,7 @@
       cRun = true; cMult = 1.00; el.className = "screen"; msg.innerText = "";
       btn.innerText = "CASH OUT (利確)"; btn.classList.add("btn-green");
       cIv = setInterval(() => {
-        cMult += 0.01 * (cMult * 0.55);
+        cMult += 0.01 * (cMult * 0.65);
         if (cMult >= cTarget) {
           clearInterval(cIv); cRun = false;
           el.innerText = cTarget.toFixed(2) + "x"; el.className = "screen crashed";
@@ -734,7 +772,7 @@
     }
   }
 
-  // 2. SLOTS (RTP 93% 辛口バランス)
+  // 2. SLOTS (回収モード: 全体当選率 約18%)
   const syms = ["🍒","🍋","🍇","🔔","💎","7️⃣"];
   const pays = {"🍒":2.5,"🍋":4,"🍇":8,"🔔":15,"💎":40,"7️⃣":100};
   async function spinSlot() {
@@ -748,14 +786,15 @@
       ["r1","r2","r3"].forEach(id => document.getElementById(id).innerText = syms[Math.floor(Math.random()*6)]);
       if (++t > 12) {
         clearInterval(iv);
+        const scaleRate = HOUSE_RTP / 0.78;
         const r = Math.random() * 100;
         let res;
-        if (r < 16.5) res = ["🍒","🍒","🍒"];
-        else if (r < 23.0) res = ["🍋","🍋","🍋"];
-        else if (r < 24.8) res = ["🍇","🍇","🍇"];
-        else if (r < 25.15) res = ["🔔","🔔","🔔"];
-        else if (r < 25.22) res = ["💎","💎","💎"];
-        else if (r < 25.23) res = ["7️⃣","7️⃣","7️⃣"];
+        if (r < 12.0 * scaleRate) res = ["🍒","🍒","🍒"];
+        else if (r < 16.5 * scaleRate) res = ["🍋","🍋","🍋"];
+        else if (r < 17.8 * scaleRate) res = ["🍇","🍇","🍇"];
+        else if (r < 18.05 * scaleRate) res = ["🔔","🔔","🔔"];
+        else if (r < 18.10 * scaleRate) res = ["💎","💎","💎"];
+        else if (r < 18.11 * scaleRate) res = ["7️⃣","7️⃣","7️⃣"];
         else {
           res = [syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)]];
           while (res[0] === res[1] && res[1] === res[2]) res[2] = syms[Math.floor(Math.random()*6)];
@@ -771,7 +810,7 @@
     }, 55);
   }
 
-  // 3. MINES (RTP 93%)
+  // 3. MINES (回収モード: RTP 78%)
   let mRun = false, mBet = 0, bSet = new Set(), openCnt = 0, mCur = 1;
   const grid = document.getElementById("m-grid");
   for (let i = 0; i < 25; i++) {
@@ -839,7 +878,7 @@
     btn.innerText = "START"; btn.classList.remove("btn-green");
   }
 
-  // 4. DICE (RTP 93%)
+  // 4. DICE (回収モード: RTP 78%)
   function updateDiceCalc() {
     const val = Number(document.getElementById("d-slider").value);
     const mult = ((HOUSE_RTP * 100) / val).toFixed(2);
@@ -875,10 +914,10 @@
     btn.disabled = false;
   }
 
-  // 5. HI-LO (抜け穴完全封鎖 + RTP 93%)
+  // 5. HI-LO (回収モード: RTP 78% + 変更1回制限)
   const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
   const suits = ["♠️","♥️","♦️","♣️"];
-  let hRun = false, hBet = 0, hVal = 7, hMult = 1.00, hWins = 0, hSkips = 3;
+  let hRun = false, hBet = 0, hVal = 7, hMult = 1.00, hWins = 0, hSkips = 1;
 
   function renderHiloCard(val) {
     const suit = suits[Math.floor(Math.random() * 4)];
@@ -890,7 +929,6 @@
     const highBtn = document.getElementById("h-high-btn");
     const lowBtn = document.getElementById("h-low-btn");
 
-    // 引き分けは1.00x（セーフ）、純粋に大きい/小さいカード枚数で倍率計算
     const strictlyHigher = 13 - val;
     const strictlyLower = val - 1;
 
@@ -923,7 +961,7 @@
     hRun = true;
     hMult = 1.00;
     hWins = 0;
-    hSkips = 3;
+    hSkips = 1;
     hVal = Math.floor(Math.random() * 13) + 1;
     renderHiloCard(hVal);
 
@@ -962,7 +1000,6 @@
     hVal = nextVal;
     renderHiloCard(hVal);
 
-    // 同じ数字（引き分け）は倍率据え置きで続行
     if (nextVal === prevVal) {
       document.getElementById("h-msg").innerText = `🤝 引き分け（同数）！倍率そのまま続行`;
       return;
