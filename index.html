@@ -14,6 +14,8 @@
     --gold: #f5b942;
     --green: #10b981;
     --red: #dc2626;
+    --blue: #3b82f6;
+    --purple: #a855f7;
     --text: #f8fafc;
     --muted: #8b92a5;
   }
@@ -82,6 +84,8 @@
     cursor: pointer;
   }
   .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
+  .btn-purple { background: var(--purple) !important; color: #fff !important; }
+  .btn-green { background: var(--green) !important; color: #052e16 !important; }
 
   .app-wrap { width: 100%; max-width: 560px; }
   .header {
@@ -108,18 +112,20 @@
   }
   .tabs {
     display: flex;
-    gap: 6px;
+    gap: 5px;
     margin-bottom: 12px;
+    flex-wrap: wrap;
   }
   .tab {
     flex: 1;
-    padding: 10px 6px;
+    min-width: 72px;
+    padding: 10px 4px;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 8px;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     cursor: pointer;
     text-align: center;
   }
@@ -202,9 +208,7 @@
     color: #fff;
   }
 
-  /* ==========================================
-     🃏 チップ選択 & ベットテーブル
-     ========================================== */
+  /* チップ選択 & ベットテーブル */
   .chip-bar {
     display: flex;
     justify-content: center;
@@ -245,9 +249,7 @@
     margin-bottom: 10px;
     user-select: none;
   }
-  .grid-zero {
-    margin-bottom: 4px;
-  }
+  .grid-zero { margin-bottom: 4px; }
   .grid-nums {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -310,6 +312,116 @@
     border-radius: 8px;
     margin-bottom: 10px;
     font-size: 0.82rem;
+  }
+
+  /* ==========================================
+     🎁 マイクラRPGアイテムガチャ用スタイル
+     ========================================== */
+  .gacha-stage {
+    min-height: 155px;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 8px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .gacha-box-icon {
+    font-size: 4rem;
+    transition: transform 0.1s;
+  }
+  @keyframes shake {
+    0%, 100% { transform: rotate(0deg) scale(1.05); }
+    25% { transform: rotate(-12deg) scale(1.1); }
+    75% { transform: rotate(12deg) scale(1.1); }
+  }
+  .shaking { animation: shake 0.18s infinite; }
+
+  .gacha-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    width: 100%;
+  }
+  .gacha-card {
+    background: #171a26;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    font-size: 0.76rem;
+    font-weight: 800;
+  }
+  .gacha-card .emoji { font-size: 1.5rem; flex-shrink: 0; }
+  .rarity-MISS { border-color: #334155; color: var(--muted); }
+  .rarity-N { border-color: #94a3b8; color: #e2e8f0; }
+  .rarity-R { border-color: var(--blue); color: #60a5fa; }
+  .rarity-SR { border-color: var(--purple); color: #c084fc; box-shadow: 0 0 10px rgba(168,85,247,0.3); }
+  .rarity-SSR { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 14px rgba(245,185,66,0.5); }
+  .rarity-UR {
+    border-color: #f43f5e;
+    background: linear-gradient(135deg, rgba(244,63,94,0.25), rgba(245,185,66,0.25));
+    color: #fde047;
+    box-shadow: 0 0 18px rgba(244,63,94,0.7);
+  }
+
+  .gacha-rates {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.55;
+    text-align: left;
+  }
+  .gacha-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* 獲得アイテムインベントリ */
+  .inv-box {
+    margin-top: 14px;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: left;
+  }
+  .inv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--gold);
+  }
+  .inv-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  .inv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #171a26;
+    border: 1px solid var(--border);
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 0.8rem;
   }
 
   /* ランキング用スタイル */
@@ -401,6 +513,7 @@
 
   <div class="tabs">
     <button class="tab active" onclick="tab('roulette', this)">🎡 ルーレット</button>
+    <button class="tab" onclick="tab('gacha', this)">🎁 RPGガチャ</button>
     <button class="tab" onclick="tab('ranking', this)">🏆 順位</button>
     <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
     <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
@@ -416,7 +529,6 @@
 
     <div class="history-bar" id="rl-hist"></div>
 
-    <!-- チップ選択バー -->
     <div class="chip-bar">
       <button class="chip chip-100 active" onclick="selectChip(100, this)">100</button>
       <button class="chip chip-500" onclick="selectChip(500, this)">500</button>
@@ -426,7 +538,6 @@
       <button class="mini-btn" onclick="rebet()">🔁 前回と同じ</button>
     </div>
 
-    <!-- ベットテーブル -->
     <div class="table-felt">
       <div class="grid-zero">
         <div class="bet-cell cell-green" data-bet="n:0" onclick="placeBet('n:0')">0 (36x)</div>
@@ -456,7 +567,36 @@
     <div class="msg" id="rl-msg"></div>
   </div>
 
-  <!-- 2. 所持金ランキング -->
+  <!-- 2. マイクラRPGアイテムガチャ -->
+  <div id="gacha" class="panel hidden">
+    <h3 style="margin:0 0 10px; color:var(--gold);">⚔️ マイクラRPG 装備＆素材ガチャ</h3>
+
+    <div class="gacha-stage" id="gacha-stage">
+      <div class="gacha-box-icon">🎁</div>
+      <div style="font-size:0.82rem; color:var(--muted); margin-top:6px;">1回 1,000 G / 10連 10,000 G</div>
+    </div>
+
+    <div class="gacha-rates" id="gacha-rate-box"></div>
+
+    <div class="gacha-btns">
+      <button class="btn-main" id="gacha-btn-1" onclick="pullGacha(1)">🎲 1回引く (1,000 G)</button>
+      <button class="btn-main btn-purple" id="gacha-btn-10" onclick="pullGacha(10)">✨ 10連引く (10,000 G)</button>
+    </div>
+    <div class="msg" id="gacha-msg"></div>
+
+    <!-- 獲得済みアイテムインベントリ -->
+    <div class="inv-box">
+      <div class="inv-header">
+        <span>🎒 当選アイテム（未受取）</span>
+        <button class="mini-btn" style="border-color:var(--green); color:var(--green);" onclick="claimAllItems()">📦 まとめて受取申請</button>
+      </div>
+      <div class="inv-list" id="inv-list">
+        <div style="color:var(--muted); font-size:0.78rem; text-align:center; padding:10px;">まだアイテムがありません</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 所持金ランキング -->
   <div id="ranking" class="panel hidden">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <h3 style="margin:0; color:var(--gold);">🏆 所持金ランキング TOP20</h3>
@@ -465,7 +605,7 @@
     <div class="rank-list" id="rank-list">読み込み中...</div>
   </div>
 
-  <!-- 3. 入出金申請 -->
+  <!-- 4. 入出金申請 -->
   <div id="deposit" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">💰 入金・出金申請</h3>
     <label class="label" style="text-align:left;">申請タイプ</label>
@@ -479,7 +619,7 @@
     <div class="msg" id="req-msg"></div>
   </div>
 
-  <!-- 4. 運営専用管理パネル -->
+  <!-- 5. 運営専用管理パネル -->
   <div id="admin" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高操作</h3>
     <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
@@ -501,6 +641,28 @@
   const ADMIN_MCID = "Smile2525";
   const DISCORD_WEBHOOK_URL = "";
   const MAX_BET_LIMIT = 5000;
+
+  // ==========================================
+  // ★ マイクラRPGガチャ景品設定（名前・絵文字・確率%を自由に編集可能） ★
+  // ==========================================
+  const GACHA_UNIT = 1000;
+  const GACHA_ITEMS = [
+    { rarity: "UR",   emoji: "🗡️", name: "神話の聖剣エクスカリバー", rate: 0.3,  isMiss: false },
+    { rarity: "SSR",  emoji: "📕", name: "竜王の魔導書",             rate: 0.8,  isMiss: false },
+    { rarity: "SSR",  emoji: "🛡️", name: "賢者のミスリル防具箱",     rate: 0.9,  isMiss: false },
+    { rarity: "SR",   emoji: "💎", name: "上級強化クリスタル ×3",    rate: 3.0,  isMiss: false },
+    { rarity: "SR",   emoji: "🧪", name: "英雄の経験値ボトル ×16",   rate: 3.0,  isMiss: false },
+    { rarity: "R",    emoji: "🍷", name: "回復ポーションII ×5",      rate: 8.5,  isMiss: false },
+    { rarity: "R",    emoji: "🪨", name: "武器強化石 ×5",            rate: 8.5,  isMiss: false },
+    { rarity: "N",    emoji: "🥩", name: "焼き牛肉 ×16",             rate: 15.0, isMiss: false },
+    { rarity: "N",    emoji: "🪙", name: "冒険者の銅貨袋",           rate: 15.0, isMiss: false },
+    { rarity: "MISS", emoji: "🧟", name: "腐った肉（ハズレ）",       rate: 45.0, isMiss: true }
+  ];
+
+  // 排出率表を自動表示
+  document.getElementById("gacha-rate-box").innerHTML = GACHA_ITEMS.map(it =>
+    `<span>${it.emoji} <strong>[${it.rarity}]</strong> ${it.name} (${it.rate}%)</span>`
+  ).join(" ｜ ");
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -563,6 +725,7 @@
     if (me === ADMIN_MCID) {
       document.getElementById("admin-tab-btn").classList.remove("hidden");
     }
+    renderInventory();
     await refreshBalance();
   }
 
@@ -592,7 +755,7 @@
   function tab(name, btn) {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
-    ["roulette", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    ["roulette", "gacha", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
     if (name === "ranking") loadRanking();
     if (name === "admin") loadAllUsers();
   }
@@ -611,7 +774,6 @@
     return RED_NUMS.has(n) ? "red" : "black";
   }
 
-  // 1〜36の数字グリッド生成
   const numGrid = document.getElementById("num-grid");
   for (let n = 1; n <= 36; n++) {
     const col = getNumColor(n);
@@ -623,7 +785,6 @@
     numGrid.appendChild(cell);
   }
 
-  // Canvas円盤描画
   function drawWheelCanvas() {
     const canvas = document.getElementById("wheel-canvas");
     const ctx = canvas.getContext("2d");
@@ -631,7 +792,6 @@
     const sliceAngle = (2 * Math.PI) / 37;
 
     WHEEL_ORDER.forEach((num, idx) => {
-      // 0番が真上（-90度）の中心に来るようにオフセット
       const startAngle = -Math.PI / 2 - sliceAngle / 2 + idx * sliceAngle;
       const endAngle = startAngle + sliceAngle;
       const col = getNumColor(num);
@@ -646,7 +806,6 @@
       ctx.strokeStyle = "#f5b942";
       ctx.stroke();
 
-      // 数字テキスト描画
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(startAngle + sliceAngle / 2);
@@ -659,11 +818,8 @@
   }
   drawWheelCanvas();
 
-  // ==========================================
-  // 🃏 マルチベット操作ロジック
-  // ==========================================
   let currentChip = 100;
-  let bets = {}; // 例: { "n:7": 500, "o:red": 1000 }
+  let bets = {};
   let lastBets = {};
   let isSpinning = false;
   let currentRotation = 0;
@@ -750,12 +906,10 @@
     resBadge.innerText = "?";
     resBadge.style.background = "var(--dark)";
 
-    // 当選インデックス（0〜36）を決定
     const winIndex = Math.floor(Math.random() * 37);
     const winNum = WHEEL_ORDER[winIndex];
     const winCol = getNumColor(winNum);
 
-    // ターゲット角度を計算（最低6回転＋対象インデックスが真上に来る角度）
     const sliceDeg = 360 / 37;
     const targetMod = (360 - (winIndex * sliceDeg)) % 360;
     const currentMod = ((currentRotation % 360) + 360) % 360;
@@ -766,11 +920,9 @@
     canvas.style.transform = `rotate(${currentRotation}deg)`;
 
     setTimeout(async () => {
-      // 中央バッジ更新
       resBadge.innerText = winNum;
       resBadge.style.background = winCol === "green" ? "#059669" : winCol === "red" ? "#dc2626" : "#18181b";
 
-      // 履歴更新
       rlHistory.unshift({ num: winNum, col: winCol });
       if (rlHistory.length > 10) rlHistory.pop();
       document.getElementById("rl-hist").innerHTML = rlHistory.map(h => {
@@ -778,7 +930,6 @@
         return `<div class="hist-dot" style="background:${bg};">${h.num}</div>`;
       }).join("");
 
-      // 配当計算
       let totalPayout = 0;
       for (const [key, amt] of Object.entries(bets)) {
         const [type, val] = key.split(":");
@@ -810,6 +961,173 @@
       isSpinning = false;
       btn.disabled = false;
     }, 4300);
+  }
+
+  // ==========================================
+  // 🎁 マイクラRPGアイテムガチャ＆インベントリロジック
+  // ==========================================
+  let isPullingGacha = false;
+
+  function getInvKey() {
+    return "rpg_casino_inv_" + me;
+  }
+
+  function loadInventory() {
+    try {
+      return JSON.parse(localStorage.getItem(getInvKey()) || "{}");
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveInventory(inv) {
+    localStorage.setItem(getInvKey(), JSON.stringify(inv));
+    renderInventory();
+  }
+
+  function renderInventory() {
+    const inv = loadInventory();
+    const box = document.getElementById("inv-list");
+    const entries = Object.entries(inv).filter(([, count]) => count > 0);
+    if (entries.length === 0) {
+      box.innerHTML = `<div style="color:var(--muted); font-size:0.78rem; text-align:center; padding:10px;">まだ未受取のアイテムがありません</div>`;
+      return;
+    }
+    box.innerHTML = entries.map(([label, count]) => `
+      <div class="inv-row">
+        <span><strong>${label}</strong> × ${count}</span>
+        <button class="mini-btn" style="border-color:var(--gold); color:var(--gold);" onclick="claimSingleItem('${label}')">📩 受取申請</button>
+      </div>
+    `).join("");
+  }
+
+  function rollSingleGacha() {
+    const r = Math.random() * 100;
+    let acc = 0;
+    for (const item of GACHA_ITEMS) {
+      acc += item.rate;
+      if (r < acc) return item;
+    }
+    return GACHA_ITEMS[GACHA_ITEMS.length - 1];
+  }
+
+  async function pullGacha(times) {
+    if (isPullingGacha) return;
+    const cost = GACHA_UNIT * times;
+    const msg = document.getElementById("gacha-msg");
+    const stage = document.getElementById("gacha-stage");
+    const btn1 = document.getElementById("gacha-btn-1");
+    const btn10 = document.getElementById("gacha-btn-10");
+
+    await refreshBalance();
+    if (cost > myBalance) {
+      msg.style.color = "var(--red)";
+      msg.innerText = `残高不足です（${cost.toLocaleString()} G 必要）`;
+      return;
+    }
+
+    await updateCloudBalance(-cost);
+    isPullingGacha = true;
+    btn1.disabled = true;
+    btn10.disabled = true;
+    msg.style.color = "var(--muted)";
+    msg.innerText = "宝箱を開封中...";
+
+    stage.innerHTML = `<div class="gacha-box-icon shaking">🎁</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">抽選中...</div>`;
+
+    setTimeout(() => {
+      const results = [];
+      const inv = loadInventory();
+      let hitCount = 0;
+
+      for (let i = 0; i < times; i++) {
+        const item = rollSingleGacha();
+        results.push(item);
+        if (!item.isMiss) {
+          hitCount++;
+          const label = `${item.emoji} [${item.rarity}] ${item.name}`;
+          inv[label] = (inv[label] || 0) + 1;
+        }
+      }
+      saveInventory(inv);
+
+      if (times === 1) {
+        const it = results[0];
+        stage.innerHTML = `
+          <div class="gacha-card rarity-${it.rarity}" style="width:240px; padding:14px; justify-content:center;">
+            <div class="emoji" style="font-size:2.4rem;">${it.emoji}</div>
+            <div>
+              <div style="font-size:0.75rem;">[${it.rarity}]</div>
+              <div style="font-size:0.92rem; margin-top:2px;">${it.name}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        stage.innerHTML = `<div class="gacha-grid">` + results.map(it => `
+          <div class="gacha-card rarity-${it.rarity}">
+            <div class="emoji">${it.emoji}</div>
+            <div>
+              <div style="font-size:0.65rem;">[${it.rarity}]</div>
+              <div>${it.name}</div>
+            </div>
+          </div>
+        `).join("") + `</div>`;
+      }
+
+      if (hitCount > 0) {
+        msg.style.color = "var(--green)";
+        msg.innerText = `🎉 ${hitCount}個のRPGアイテムを獲得！下の持ち物から受取申請できます`;
+      } else {
+        msg.style.color = "var(--red)";
+        msg.innerText = `💀 ハズレ（腐った肉）のみでした...`;
+      }
+
+      isPullingGacha = false;
+      btn1.disabled = false;
+      btn10.disabled = false;
+    }, 850);
+  }
+
+  async function claimSingleItem(label) {
+    const inv = loadInventory();
+    const count = inv[label] || 0;
+    if (count <= 0) return;
+
+    const msg = document.getElementById("gacha-msg");
+    const payload = `━━━━━━━━━━━━━━\n**🎁 RPGガチャ景品 受取申請**\n👤 MCID: \`${me}\`\n🎒 アイテム: **${label} × ${count}**\n━━━━━━━━━━━━━━`;
+    const ok = await notifyDiscord(payload);
+    if (ok) {
+      delete inv[label];
+      saveInventory(inv);
+      msg.style.color = "var(--green)";
+      msg.innerText = `✅ 「${label} × ${count}」の受取申請を運営に送信しました！`;
+    } else {
+      msg.style.color = "var(--gold)";
+      msg.innerText = "⚠️ Webhook URLが未設定か送信に失敗しました";
+    }
+  }
+
+  async function claimAllItems() {
+    const inv = loadInventory();
+    const entries = Object.entries(inv).filter(([, count]) => count > 0);
+    const msg = document.getElementById("gacha-msg");
+    if (entries.length === 0) {
+      msg.style.color = "var(--muted)";
+      msg.innerText = "申請できるアイテムがありません";
+      return;
+    }
+
+    const listText = entries.map(([label, count]) => `・**${label}** × ${count}`).join("\n");
+    const payload = `━━━━━━━━━━━━━━\n**🎁 RPGガチャ景品 一括受取申請**\n👤 MCID: \`${me}\`\n${listText}\n━━━━━━━━━━━━━━`;
+    const ok = await notifyDiscord(payload);
+    if (ok) {
+      saveInventory({});
+      msg.style.color = "var(--green)";
+      msg.innerText = "✅ すべての獲得アイテムの受取申請を運営に送信しました！";
+    } else {
+      msg.style.color = "var(--gold)";
+      msg.innerText = "⚠️ Webhook URLが未設定か送信に失敗しました";
+    }
   }
 
   // 🏆 ランキング読み込み
