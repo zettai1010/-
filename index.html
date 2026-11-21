@@ -14,7 +14,6 @@
     --gold: #f5b942;
     --green: #10b981;
     --red: #ef4444;
-    --blue: #3b82f6;
     --text: #f8fafc;
     --muted: #8b92a5;
   }
@@ -83,9 +82,6 @@
     cursor: pointer;
   }
   .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
-  .btn-green { background: var(--green) !important; color: #052e16 !important; }
-  .btn-red { background: var(--red) !important; color: #fff !important; }
-  .btn-blue { background: var(--blue) !important; color: #fff !important; }
 
   .app-wrap { width: 100%; max-width: 520px; }
   .header {
@@ -110,21 +106,20 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .mini-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .tabs {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
     gap: 6px;
     margin-bottom: 14px;
   }
   .tab {
-    padding: 9px 4px;
+    flex: 1;
+    padding: 10px 6px;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--muted);
     border-radius: 8px;
     font-weight: 700;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     cursor: pointer;
     text-align: center;
   }
@@ -137,101 +132,72 @@
     padding: 20px;
     text-align: center;
   }
-  .limit-badge {
+  .msg { margin-top: 12px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
+
+  /* ルーレット用スタイル */
+  .wheel-box {
+    width: 120px;
+    height: 120px;
+    margin: 8px auto 14px;
+    border-radius: 50%;
+    border: 5px solid var(--gold);
+    background: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 900;
+    box-shadow: 0 0 20px rgba(245, 185, 66, 0.25);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .wheel-red { background: #dc2626; color: #fff; }
+  .wheel-black { background: #18181b; color: #fff; }
+  .wheel-green { background: #059669; color: #fff; }
+
+  .history-bar {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 14px;
+    min-height: 26px;
+  }
+  .hist-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
     font-size: 0.75rem;
-    color: var(--muted);
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .rl-choices {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
     margin-bottom: 10px;
   }
-  .screen {
-    height: 140px;
-    background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    font-weight: 900;
-    margin-bottom: 14px;
-  }
-  .crashed { color: var(--red); }
-  .cashed { color: var(--green); }
-
-  /* SLOTS */
-  .reels { display: flex; justify-content: center; gap: 10px; margin: 14px 0; }
-  .reel {
-    width: 84px;
-    height: 100px;
-    background: var(--dark);
-    border: 2px solid var(--gold);
-    border-radius: 10px;
-    font-size: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* MINES */
-  .mines-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 10px; }
-  .mines-top select { background: var(--dark); color: #fff; border: 1px solid var(--border); padding: 4px 8px; border-radius: 6px; }
-  .mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; max-width: 300px; margin: 0 auto 14px; }
-  .tile {
-    aspect-ratio: 1;
-    background: #222638;
-    border: 1px solid #2f354d;
+  .rl-btn {
+    padding: 12px 8px;
     border-radius: 8px;
-    font-size: 1.4rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .tile.gem { background: rgba(16, 185, 129, 0.22); border-color: var(--green); }
-  .tile.bomb { background: rgba(239, 68, 68, 0.22); border-color: var(--red); }
-  .tile.dim { opacity: 0.4; }
-
-  /* DICE */
-  .dice-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    border: 2px solid var(--border);
     background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 14px;
-    font-size: 0.8rem;
-  }
-  .dice-stats strong { display: block; font-size: 1.05rem; margin-top: 2px; color: var(--gold); }
-  .dice-slider {
-    width: 100%;
-    margin: 12px 0 18px;
-    accent-color: var(--gold);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.88rem;
     cursor: pointer;
   }
-
-  /* HI-LO */
-  .card-box {
-    width: 110px;
-    height: 150px;
-    margin: 0 auto 12px;
-    background: #f8fafc;
-    color: #111;
-    border-radius: 12px;
-    border: 3px solid var(--gold);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  .rl-btn.selected {
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(245, 185, 66, 0.4);
   }
-  .card-box.red { color: #dc2626; }
-  .card-rank { font-size: 2.6rem; line-height: 1; }
-  .card-suit { font-size: 2rem; margin-top: 4px; }
-  .hilo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .rl-btn.red { background: rgba(220, 38, 38, 0.25); }
+  .rl-btn.black { background: rgba(39, 39, 42, 0.7); }
+  .rl-btn.green { grid-column: span 2; background: rgba(16, 185, 129, 0.2); }
 
-  .bet-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
+  .bet-row { display: flex; justify-content: center; gap: 6px; margin: 12px 0; }
   .bet-input {
     width: 130px;
     padding: 9px;
@@ -243,7 +209,6 @@
     font-weight: 700;
     text-align: center;
   }
-  .msg { margin-top: 12px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
 
   /* ランキング用スタイル */
   .rank-list {
@@ -274,22 +239,8 @@
   .rank-3 { color: #cd7f32; font-size: 1.05rem; }
   .rank-bal { font-weight: 800; color: var(--green); }
 
-  .admin-box {
-    background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 14px;
-    text-align: left;
-  }
-  .preset-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-top: 8px;
-  }
   .user-list {
-    max-height: 200px;
+    max-height: 220px;
     overflow-y: auto;
     background: var(--dark);
     border: 1px solid var(--border);
@@ -342,135 +293,44 @@
       <div class="bal"><span id="bal">0</span> G <button class="mini-btn" style="padding:2px 6px; margin-left:4px;" onclick="refreshBalance()">🔄</button></div>
     </div>
     <div style="display:flex; gap:6px;">
-      <button class="mini-btn" style="border-color:var(--gold); color:var(--gold);" onclick="tab('deposit', document.getElementById('dep-tab-btn'))">💰 入出金</button>
       <button class="mini-btn" onclick="logout()">ログアウト</button>
     </div>
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="tab('crash', this)">🚀 CRASH</button>
-    <button class="tab" onclick="tab('slot', this)">🎰 SLOTS</button>
-    <button class="tab" onclick="tab('mines', this)">💣 MINES</button>
-    <button class="tab" onclick="tab('dice', this)">🎲 DICE</button>
-    <button class="tab" onclick="tab('hilo', this)">🃏 HI-LO</button>
+    <button class="tab active" onclick="tab('roulette', this)">🎡 ルーレット</button>
     <button class="tab" onclick="tab('ranking', this)">🏆 順位</button>
     <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
     <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
   </div>
 
-  <!-- 1. CRASH -->
-  <div id="crash" class="panel">
-    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
-    <div class="screen" id="mult">1.00x</div>
+  <!-- 1. ルーレット（お試し版） -->
+  <div id="roulette" class="panel">
+    <div style="font-size:0.75rem; color:var(--muted); margin-bottom:4px;">最大ベット上限: <strong>5,000 G</strong></div>
+
+    <div class="wheel-box" id="rl-wheel">?</div>
+    <div class="history-bar" id="rl-hist"></div>
+
+    <div class="rl-choices">
+      <button class="rl-btn red selected" onclick="selectBetType('red', this)">🔴 RED (2.0x)</button>
+      <button class="rl-btn black" onclick="selectBetType('black', this)">⚫ BLACK (2.0x)</button>
+      <button class="rl-btn" onclick="selectBetType('even', this)">🔢 EVEN 偶数 (2.0x)</button>
+      <button class="rl-btn" onclick="selectBetType('odd', this)">🔢 ODD 奇数 (2.0x)</button>
+      <button class="rl-btn green" onclick="selectBetType('zero', this)">🟢 0 一点狙い (30.0x)</button>
+    </div>
+
     <div class="bet-row">
-      <input id="c-bet" type="number" class="bet-input" value="500" min="10">
-      <button class="mini-btn" onclick="scale('c-bet', 0.5)">1/2</button>
-      <button class="mini-btn" onclick="scale('c-bet', 2)">2x</button>
-      <button class="mini-btn" onclick="maxB('c-bet')">MAX</button>
+      <input id="rl-bet" type="number" class="bet-input" value="500" min="10">
+      <button class="mini-btn" onclick="scaleBet(0.5)">1/2</button>
+      <button class="mini-btn" onclick="scaleBet(2)">2x</button>
+      <button class="mini-btn" onclick="maxBet()">MAX</button>
     </div>
-    <button class="btn-main" id="c-btn" onclick="toggleCrash()">START</button>
-    <div class="msg" id="c-msg"></div>
+
+    <button class="btn-main" id="rl-spin-btn" onclick="spinRoulette()">🎡 SPIN ROULETTE</button>
+    <div class="msg" id="rl-msg"></div>
   </div>
 
-  <!-- 2. SLOTS -->
-  <div id="slot" class="panel hidden">
-    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
-    <div class="reels">
-      <div class="reel" id="r1">7️⃣</div>
-      <div class="reel" id="r2">7️⃣</div>
-      <div class="reel" id="r3">7️⃣</div>
-    </div>
-    <div style="font-size:0.76rem; color:var(--muted); margin-bottom:12px;">
-      🍒 2x | 🍋 3.5x | 🍇 7x | 🔔 15x | 💎 35x | 7️⃣ 80x
-    </div>
-    <div class="bet-row">
-      <input id="s-bet" type="number" class="bet-input" value="500" min="10">
-      <button class="mini-btn" onclick="scale('s-bet', 0.5)">1/2</button>
-      <button class="mini-btn" onclick="scale('s-bet', 2)">2x</button>
-      <button class="mini-btn" onclick="maxB('s-bet')">MAX</button>
-    </div>
-    <button class="btn-main" id="s-btn" onclick="spinSlot()">SPIN</button>
-    <div class="msg" id="s-msg"></div>
-  </div>
-
-  <!-- 3. MINES -->
-  <div id="mines" class="panel hidden">
-    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
-    <div class="mines-top">
-      <div>爆弾数:
-        <select id="b-num">
-          <option value="3" selected>3個</option>
-          <option value="5">5個</option>
-          <option value="8">8個</option>
-          <option value="12">12個</option>
-        </select>
-      </div>
-      <div>現在倍率: <strong id="m-mult" style="color:var(--green);">1.00x</strong></div>
-    </div>
-    <div class="mines-grid" id="m-grid"></div>
-    <div class="bet-row">
-      <input id="m-bet" type="number" class="bet-input" value="500" min="10">
-      <button class="mini-btn" onclick="scale('m-bet', 0.5)">1/2</button>
-      <button class="mini-btn" onclick="scale('m-bet', 2)">2x</button>
-      <button class="mini-btn" onclick="maxB('m-bet')">MAX</button>
-    </div>
-    <button class="btn-main" id="m-btn" onclick="toggleMines()">START</button>
-    <div class="msg" id="m-msg"></div>
-  </div>
-
-  <!-- 4. DICE（サイコロ） -->
-  <div id="dice" class="panel hidden">
-    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
-    <div class="screen" id="d-res" style="height:110px; font-size:2.8rem;">50.00</div>
-    <div class="dice-stats">
-      <div>目標（以下で勝ち）<strong id="d-target-txt">50.00</strong></div>
-      <div>勝率<strong id="d-chance-txt">50.0%</strong></div>
-      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.30x</strong></div>
-    </div>
-    <input type="range" id="d-slider" class="dice-slider" min="5" max="75" value="50" oninput="updateDiceCalc()">
-    <div class="bet-row">
-      <input id="d-bet" type="number" class="bet-input" value="500" min="10">
-      <button class="mini-btn" onclick="scale('d-bet', 0.5)">1/2</button>
-      <button class="mini-btn" onclick="scale('d-bet', 2)">2x</button>
-      <button class="mini-btn" onclick="maxB('d-bet')">MAX</button>
-    </div>
-    <button class="btn-main" id="d-btn" onclick="rollDice()">🎲 ROLL DICE</button>
-    <div class="msg" id="d-msg"></div>
-  </div>
-
-  <!-- 5. HI-LO（ハイ＆ロー） -->
-  <div id="hilo" class="panel hidden">
-    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G（2連勝以上で利確可能）</div>
-    <div style="font-size:0.85rem; margin-bottom:10px;">
-      現在倍率: <strong id="h-mult" style="color:var(--green); font-size:1.1rem;">1.00x</strong>
-    </div>
-    <div class="card-box" id="h-card">
-      <div class="card-rank" id="h-rank">7</div>
-      <div class="card-suit" id="h-suit">♠️</div>
-    </div>
-    <div id="h-start-area">
-      <div class="bet-row">
-        <input id="h-bet" type="number" class="bet-input" value="500" min="10">
-        <button class="mini-btn" onclick="scale('h-bet', 0.5)">1/2</button>
-        <button class="mini-btn" onclick="scale('h-bet', 2)">2x</button>
-        <button class="mini-btn" onclick="maxB('h-bet')">MAX</button>
-      </div>
-      <button class="btn-main" onclick="startHilo()">🃏 START HI-LO</button>
-    </div>
-    <div id="h-play-area" class="hidden">
-      <div class="hilo-btns">
-        <button class="btn-main btn-red" id="h-high-btn" onclick="guessHilo('high')">⬆️ HIGH</button>
-        <button class="btn-main btn-blue" id="h-low-btn" onclick="guessHilo('low')">⬇️ LOW</button>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button class="mini-btn" id="h-skip-btn" style="flex:1; padding:10px;" onclick="skipHilo()">⏭️ 変更 (残り1)</button>
-        <button class="btn-main btn-green" style="flex:2;" id="h-cash-btn" onclick="cashoutHilo()" disabled>あと2勝で利確</button>
-      </div>
-    </div>
-    <div class="msg" id="h-msg"></div>
-  </div>
-
-  <!-- 6. 所持金ランキング -->
+  <!-- 2. 所持金ランキング -->
   <div id="ranking" class="panel hidden">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <h3 style="margin:0; color:var(--gold);">🏆 所持金ランキング TOP20</h3>
@@ -479,7 +339,7 @@
     <div class="rank-list" id="rank-list">読み込み中...</div>
   </div>
 
-  <!-- 7. 入出金申請 -->
+  <!-- 3. 入出金申請 -->
   <div id="deposit" class="panel hidden">
     <h3 style="margin-top:0; color:var(--gold);">💰 入金・出金申請</h3>
     <label class="label" style="text-align:left;">申請タイプ</label>
@@ -493,29 +353,9 @@
     <div class="msg" id="req-msg"></div>
   </div>
 
-  <!-- 8. 運営専用管理パネル -->
+  <!-- 4. 運営専用管理パネル -->
   <div id="admin" class="panel hidden">
-    <h3 style="margin-top:0; color:var(--gold);">👑 運営用コントロール</h3>
-
-    <div class="admin-box">
-      <div style="font-size:0.82rem; font-weight:bold; color:var(--gold);">⚙️ 難易度（勝ちやすさ）切り替え</div>
-      <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">
-        現在: <strong id="cur-rtp-txt" style="color:#fff;">💀 鬼辛回収 (RTP 65% / 即爆 20%)</strong>
-      </div>
-      <div class="preset-row">
-        <button class="mini-btn" style="border-color:var(--red); color:var(--red);" onclick="setHouseMode(0.65, 0.20, '💀 鬼辛回収 (RTP 65% / 即爆 20%)')">💀 鬼辛(65%)</button>
-        <button class="mini-btn" onclick="setHouseMode(0.78, 0.12, '🔥 回収モード (RTP 78% / 即爆 12%)')">🔥 回収(78%)</button>
-        <button class="mini-btn" style="border-color:var(--green); color:var(--green);" onclick="setHouseMode(0.88, 0.06, '🎉 イベント甘め (RTP 88% / 即爆 6%)')">🎉 甘め(88%)</button>
-      </div>
-
-      <div style="font-size:0.82rem; font-weight:bold; color:var(--gold); margin-top:12px;">🛑 1回の最大ベット上限（倍賭け対策）</div>
-      <div class="preset-row">
-        <button class="mini-btn" onclick="setMaxBet(1000)">1,000 G</button>
-        <button class="mini-btn" onclick="setMaxBet(5000)">5,000 G</button>
-        <button class="mini-btn" onclick="setMaxBet(50000)">50,000 G</button>
-      </div>
-    </div>
-
+    <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高操作</h3>
     <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
     <input id="adm-target" class="input" placeholder="下のリストからタップでも選択可">
     <label class="label" style="text-align:left;">増減金額（減らす場合はマイナス -1000）</label>
@@ -534,29 +374,7 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
   const DISCORD_WEBHOOK_URL = "";
-
-  // デフォルト：鬼辛回収モード（RTP 65% / CRASH即爆 20% / 最大ベット 5,000G）
-  let HOUSE_RTP = 0.65;
-  let CRASH_INSTANT_BUST = 0.20;
-  let MAX_BET_LIMIT = 5000;
-
-  function setHouseMode(rtp, bust, label) {
-    HOUSE_RTP = rtp;
-    CRASH_INSTANT_BUST = bust;
-    document.getElementById("cur-rtp-txt").innerText = label;
-    updateDiceCalc();
-    const msg = document.getElementById("adm-msg");
-    msg.style.color = "var(--gold)";
-    msg.innerText = `⚙️ ${label} に切り替えました`;
-  }
-
-  function setMaxBet(limit) {
-    MAX_BET_LIMIT = limit;
-    document.querySelectorAll(".max-bet-lbl").forEach(el => el.innerText = limit.toLocaleString());
-    const msg = document.getElementById("adm-msg");
-    msg.style.color = "var(--gold)";
-    msg.innerText = `🛑 最大ベット上限を ${limit.toLocaleString()} G に設定しました`;
-  }
+  const MAX_BET_LIMIT = 5000;
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -648,9 +466,102 @@
   function tab(name, btn) {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
-    ["crash", "slot", "mines", "dice", "hilo", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    ["roulette", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
     if (name === "ranking") loadRanking();
     if (name === "admin") loadAllUsers();
+  }
+
+  // ==========================================
+  // 🎡 ルーレットロジック（0〜36のヨーロピアン形式）
+  // ==========================================
+  const RED_NUMS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+  let selectedBetType = "red";
+  let rlHistory = [];
+
+  function getNumColor(n) {
+    if (n === 0) return "green";
+    return RED_NUMS.has(n) ? "red" : "black";
+  }
+
+  function selectBetType(type, btn) {
+    selectedBetType = type;
+    document.querySelectorAll(".rl-btn").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+  }
+
+  function scaleBet(factor) {
+    const el = document.getElementById("rl-bet");
+    el.value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(el.value * factor)));
+  }
+
+  function maxBet() {
+    document.getElementById("rl-bet").value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(myBalance)));
+  }
+
+  async function spinRoulette() {
+    const bet = Number(document.getElementById("rl-bet").value);
+    const msg = document.getElementById("rl-msg");
+    const btn = document.getElementById("rl-spin-btn");
+    const wheel = document.getElementById("rl-wheel");
+
+    await refreshBalance();
+    if (bet <= 0 || bet > myBalance) {
+      msg.style.color = "var(--red)";
+      msg.innerText = "残高不足です";
+      return;
+    }
+    if (bet > MAX_BET_LIMIT) {
+      msg.style.color = "var(--red)";
+      msg.innerText = `最大ベット上限は ${MAX_BET_LIMIT.toLocaleString()} G です`;
+      return;
+    }
+
+    await updateCloudBalance(-bet);
+    btn.disabled = true;
+    msg.style.color = "var(--muted)";
+    msg.innerText = "回転中...";
+
+    let ticks = 0;
+    const iv = setInterval(async () => {
+      const tempNum = Math.floor(Math.random() * 37);
+      const tempCol = getNumColor(tempNum);
+      wheel.innerText = tempNum;
+      wheel.className = "wheel-box wheel-" + tempCol;
+
+      if (++ticks > 16) {
+        clearInterval(iv);
+        const resultNum = Math.floor(Math.random() * 37);
+        const resultCol = getNumColor(resultNum);
+        wheel.innerText = resultNum;
+        wheel.className = "wheel-box wheel-" + resultCol;
+
+        // 履歴追加（最新8件）
+        rlHistory.unshift({ num: resultNum, col: resultCol });
+        if (rlHistory.length > 8) rlHistory.pop();
+        document.getElementById("rl-hist").innerHTML = rlHistory.map(h => {
+          const bg = h.col === "red" ? "#dc2626" : h.col === "black" ? "#27272a" : "#059669";
+          return `<div class="hist-dot" style="background:${bg};">${h.num}</div>`;
+        }).join("");
+
+        let mult = 0;
+        if (selectedBetType === "red" && resultCol === "red") mult = 2.0;
+        else if (selectedBetType === "black" && resultCol === "black") mult = 2.0;
+        else if (selectedBetType === "even" && resultNum !== 0 && resultNum % 2 === 0) mult = 2.0;
+        else if (selectedBetType === "odd" && resultNum % 2 === 1) mult = 2.0;
+        else if (selectedBetType === "zero" && resultNum === 0) mult = 30.0;
+
+        if (mult > 0) {
+          const win = Math.floor(bet * mult);
+          await updateCloudBalance(win);
+          msg.style.color = "var(--green)";
+          msg.innerText = `🎉 出目「${resultNum}」的中 (${mult.toFixed(1)}x)！ +${win.toLocaleString()} G`;
+        } else {
+          msg.style.color = "var(--red)";
+          msg.innerText = `💥 出目「${resultNum}」ハズレ... (-${bet.toLocaleString()} G)`;
+        }
+        btn.disabled = false;
+      }
+    }, 65);
   }
 
   // 🏆 ランキング読み込み
@@ -756,322 +667,6 @@
       msg.innerText = "⚠️ Webhook URLが未設定か送信に失敗しました";
     }
     btn.disabled = false;
-  }
-
-  function scale(id, f) {
-    const e = document.getElementById(id);
-    e.value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(e.value * f)));
-  }
-  function maxB(id) {
-    document.getElementById(id).value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(myBalance)));
-  }
-  function checkBetValid(bet, msgEl) {
-    if (bet <= 0 || bet > myBalance) { msgEl.innerText = "残高不足です"; return false; }
-    if (bet > MAX_BET_LIMIT) { msgEl.innerText = `最大ベット上限は ${MAX_BET_LIMIT.toLocaleString()} G です`; return false; }
-    return true;
-  }
-
-  // 1. CRASH (鬼辛回収: RTP 65% + 即爆 20%)
-  let cRun = false, cMult = 1, cTarget = 1, cBet = 0, cIv = null;
-  async function toggleCrash() {
-    const btn = document.getElementById("c-btn"), el = document.getElementById("mult"), msg = document.getElementById("c-msg");
-    if (!cRun) {
-      await refreshBalance();
-      cBet = Number(document.getElementById("c-bet").value);
-      if (!checkBetValid(cBet, msg)) return;
-      await updateCloudBalance(-cBet);
-      const r = Math.random();
-      cTarget = r < CRASH_INSTANT_BUST ? 1.00 : Math.max(1.01, HOUSE_RTP / (1 - r));
-      if (cTarget <= 1.00) {
-        el.innerText = "1.00x"; el.className = "screen crashed";
-        msg.innerText = `💥 即爆発 (-${cBet.toLocaleString()} G)`;
-        return;
-      }
-      cRun = true; cMult = 1.00; el.className = "screen"; msg.innerText = "";
-      btn.innerText = "CASH OUT (利確)"; btn.classList.add("btn-green");
-      cIv = setInterval(() => {
-        cMult += 0.01 * (cMult * 0.72);
-        if (cMult >= cTarget) {
-          clearInterval(cIv); cRun = false;
-          el.innerText = cTarget.toFixed(2) + "x"; el.className = "screen crashed";
-          msg.innerText = `💥 ${cTarget.toFixed(2)}x で爆発 (-${cBet.toLocaleString()} G)`;
-          btn.innerText = "START"; btn.classList.remove("btn-green");
-        } else el.innerText = cMult.toFixed(2) + "x";
-      }, 50);
-    } else {
-      clearInterval(cIv); cRun = false;
-      const win = Math.floor(cBet * cMult);
-      await updateCloudBalance(win);
-      el.className = "screen cashed";
-      msg.innerText = `🎉 ${cMult.toFixed(2)}x 利確！ +${win.toLocaleString()} G`;
-      btn.innerText = "START"; btn.classList.remove("btn-green");
-    }
-  }
-
-  // 2. SLOTS (鬼辛回収: 全体当選率 約15%)
-  const syms = ["🍒","🍋","🍇","🔔","💎","7️⃣"];
-  const pays = {"🍒":2,"🍋":3.5,"🍇":7,"🔔":15,"💎":35,"7️⃣":80};
-  async function spinSlot() {
-    const bet = Number(document.getElementById("s-bet").value), msg = document.getElementById("s-msg"), btn = document.getElementById("s-btn");
-    await refreshBalance();
-    if (!checkBetValid(bet, msg)) return;
-    await updateCloudBalance(-bet);
-    btn.disabled = true; msg.innerText = "回転中...";
-    let t = 0;
-    const iv = setInterval(async () => {
-      ["r1","r2","r3"].forEach(id => document.getElementById(id).innerText = syms[Math.floor(Math.random()*6)]);
-      if (++t > 12) {
-        clearInterval(iv);
-        const scaleRate = HOUSE_RTP / 0.65;
-        const r = Math.random() * 100;
-        let res;
-        if (r < 10.5 * scaleRate) res = ["🍒","🍒","🍒"];
-        else if (r < 14.0 * scaleRate) res = ["🍋","🍋","🍋"];
-        else if (r < 15.0 * scaleRate) res = ["🍇","🍇","🍇"];
-        else if (r < 15.2 * scaleRate) res = ["🔔","🔔","🔔"];
-        else if (r < 15.24 * scaleRate) res = ["💎","💎","💎"];
-        else if (r < 15.25 * scaleRate) res = ["7️⃣","7️⃣","7️⃣"];
-        else {
-          res = [syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)]];
-          while (res[0] === res[1] && res[1] === res[2]) res[2] = syms[Math.floor(Math.random()*6)];
-        }
-        ["r1","r2","r3"].forEach((id, i) => document.getElementById(id).innerText = res[i]);
-        if (res[0] === res[1] && res[1] === res[2]) {
-          const win = Math.floor(bet * pays[res[0]]);
-          await updateCloudBalance(win);
-          msg.innerText = `🎉 ${res[0]} 揃い (${pays[res[0]]}x)！ +${win.toLocaleString()} G`;
-        } else msg.innerText = "ハズレ...";
-        btn.disabled = false;
-      }
-    }, 55);
-  }
-
-  // 3. MINES (鬼辛回収: RTP 65% + 最小爆弾3個)
-  let mRun = false, mBet = 0, bSet = new Set(), openCnt = 0, mCur = 1;
-  const grid = document.getElementById("m-grid");
-  for (let i = 0; i < 25; i++) {
-    const b = document.createElement("button");
-    b.className = "tile"; b.disabled = true;
-    b.onclick = async () => {
-      if (!mRun || b.disabled) return;
-      const bNum = Number(document.getElementById("b-num").value);
-      if (bSet.has(i)) {
-        b.classList.add("bomb"); b.innerText = "💣";
-        endMines(`💥 爆弾！ -${mBet.toLocaleString()} G`);
-      } else {
-        b.classList.add("gem"); b.innerText = "💎"; b.disabled = true;
-        openCnt++;
-        let p = 1;
-        for (let k = 0; k < openCnt; k++) p *= (25 - bNum - k) / (25 - k);
-        mCur = HOUSE_RTP / p;
-        document.getElementById("m-mult").innerText = mCur.toFixed(2) + "x";
-        if (openCnt === 25 - bNum) {
-          const w = Math.floor(mBet * mCur);
-          await updateCloudBalance(w);
-          endMines(`👑 全開け達成！ +${w.toLocaleString()} G`);
-        }
-      }
-    };
-    grid.appendChild(b);
-  }
-
-  async function toggleMines() {
-    const btn = document.getElementById("m-btn"), msg = document.getElementById("m-msg");
-    if (!mRun) {
-      await refreshBalance();
-      mBet = Number(document.getElementById("m-bet").value);
-      if (!checkBetValid(mBet, msg)) return;
-      await updateCloudBalance(-mBet);
-      const bNum = Number(document.getElementById("b-num").value);
-      bSet.clear();
-      while (bSet.size < bNum) bSet.add(Math.floor(Math.random() * 25));
-      mRun = true; openCnt = 0; mCur = 1.00;
-      document.getElementById("m-mult").innerText = "1.00x";
-      document.getElementById("b-num").disabled = true;
-      msg.innerText = "パネルを開けてください";
-      document.querySelectorAll(".tile").forEach(t => { t.className = "tile"; t.innerText = ""; t.disabled = false; });
-      btn.innerText = "CASH OUT (利確)"; btn.classList.add("btn-green");
-    } else {
-      if (openCnt === 0) { msg.innerText = "1マス以上開けてください"; return; }
-      const w = Math.floor(mBet * mCur);
-      await updateCloudBalance(w);
-      endMines(`🎉 ${mCur.toFixed(2)}x 利確！ +${w.toLocaleString()} G`);
-    }
-  }
-
-  function endMines(text) {
-    mRun = false;
-    document.getElementById("b-num").disabled = false;
-    document.getElementById("m-msg").innerText = text;
-    document.querySelectorAll(".tile").forEach((t, i) => {
-      t.disabled = true;
-      if (!t.classList.contains("gem") && !t.classList.contains("bomb")) {
-        t.classList.add("dim");
-        t.innerText = bSet.has(i) ? "💣" : "💎";
-      }
-    });
-    const btn = document.getElementById("m-btn");
-    btn.innerText = "START"; btn.classList.remove("btn-green");
-  }
-
-  // 4. DICE (鬼辛回収: RTP 65% + 上限75%)
-  function updateDiceCalc() {
-    const val = Number(document.getElementById("d-slider").value);
-    const mult = ((HOUSE_RTP * 100) / val).toFixed(2);
-    document.getElementById("d-target-txt").innerText = val.toFixed(2);
-    document.getElementById("d-chance-txt").innerText = val.toFixed(1) + "%";
-    document.getElementById("d-mult-txt").innerText = mult + "x";
-  }
-
-  async function rollDice() {
-    const bet = Number(document.getElementById("d-bet").value);
-    const target = Number(document.getElementById("d-slider").value);
-    const resEl = document.getElementById("d-res");
-    const msg = document.getElementById("d-msg");
-    const btn = document.getElementById("d-btn");
-
-    await refreshBalance();
-    if (!checkBetValid(bet, msg)) return;
-    await updateCloudBalance(-bet);
-    btn.disabled = true;
-
-    const roll = Number((Math.random() * 100).toFixed(2));
-    resEl.innerText = roll.toFixed(2);
-    if (roll <= target) {
-      const mult = (HOUSE_RTP * 100) / target;
-      const win = Math.floor(bet * mult);
-      await updateCloudBalance(win);
-      resEl.className = "screen cashed";
-      msg.innerText = `🎉 WIN! (${mult.toFixed(2)}x) +${win.toLocaleString()} G`;
-    } else {
-      resEl.className = "screen crashed";
-      msg.innerText = `💥 LOSE... (-${bet.toLocaleString()} G)`;
-    }
-    btn.disabled = false;
-  }
-
-  // 5. HI-LO (鬼辛回収: RTP 65% + 2連勝縛り)
-  const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-  const suits = ["♠️","♥️","♦️","♣️"];
-  let hRun = false, hBet = 0, hVal = 7, hMult = 1.00, hWins = 0, hSkips = 1;
-
-  function renderHiloCard(val) {
-    const suit = suits[Math.floor(Math.random() * 4)];
-    const box = document.getElementById("h-card");
-    box.className = "card-box" + (suit === "♥️" || suit === "♦️" ? " red" : "");
-    document.getElementById("h-rank").innerText = ranks[val - 1];
-    document.getElementById("h-suit").innerText = suit;
-
-    const highBtn = document.getElementById("h-high-btn");
-    const lowBtn = document.getElementById("h-low-btn");
-
-    const strictlyHigher = 13 - val;
-    const strictlyLower = val - 1;
-
-    if (strictlyHigher === 0) {
-      highBtn.disabled = true;
-      highBtn.innerText = "⬆️ HIGH (選択不可)";
-    } else {
-      highBtn.disabled = false;
-      const highMult = (12 / strictlyHigher) * HOUSE_RTP;
-      highBtn.innerText = `⬆️ HIGH (${highMult.toFixed(2)}x)`;
-    }
-
-    if (strictlyLower === 0) {
-      lowBtn.disabled = true;
-      lowBtn.innerText = "⬇️ LOW (選択不可)";
-    } else {
-      lowBtn.disabled = false;
-      const lowMult = (12 / strictlyLower) * HOUSE_RTP;
-      lowBtn.innerText = `⬇️ LOW (${lowMult.toFixed(2)}x)`;
-    }
-  }
-
-  async function startHilo() {
-    const msg = document.getElementById("h-msg");
-    await refreshBalance();
-    hBet = Number(document.getElementById("h-bet").value);
-    if (!checkBetValid(hBet, msg)) return;
-    await updateCloudBalance(-hBet);
-
-    hRun = true;
-    hMult = 1.00;
-    hWins = 0;
-    hSkips = 1;
-    hVal = Math.floor(Math.random() * 13) + 1;
-    renderHiloCard(hVal);
-
-    document.getElementById("h-mult").innerText = "1.00x";
-    document.getElementById("h-start-area").classList.add("hidden");
-    document.getElementById("h-play-area").classList.remove("hidden");
-    const cashBtn = document.getElementById("h-cash-btn");
-    cashBtn.disabled = true;
-    cashBtn.innerText = "あと2勝で利確";
-    const skipBtn = document.getElementById("h-skip-btn");
-    skipBtn.disabled = false;
-    skipBtn.innerText = `⏭️ 変更 (残り${hSkips})`;
-    msg.innerText = "2連勝以上で利確できます！";
-  }
-
-  function skipHilo() {
-    if (!hRun || hSkips <= 0) return;
-    hSkips--;
-    hVal = Math.floor(Math.random() * 13) + 1;
-    renderHiloCard(hVal);
-    const skipBtn = document.getElementById("h-skip-btn");
-    skipBtn.innerText = `⏭️ 変更 (残り${hSkips})`;
-    if (hSkips <= 0) skipBtn.disabled = true;
-  }
-
-  async function guessHilo(dir) {
-    if (!hRun) return;
-    const prevVal = hVal;
-    const nextVal = Math.floor(Math.random() * 13) + 1;
-    const strictlyHigher = 13 - prevVal;
-    const strictlyLower = prevVal - 1;
-
-    const stepMult = dir === "high"
-      ? (12 / strictlyHigher) * HOUSE_RTP
-      : (12 / strictlyLower) * HOUSE_RTP;
-
-    hVal = nextVal;
-    renderHiloCard(hVal);
-
-    if (nextVal === prevVal) {
-      document.getElementById("h-msg").innerText = `🤝 引き分け（同数）！倍率そのまま続行`;
-      return;
-    }
-
-    const win = dir === "high" ? (nextVal > prevVal) : (nextVal < prevVal);
-    if (win) {
-      hWins++;
-      hMult = hMult * stepMult;
-      document.getElementById("h-mult").innerText = hMult.toFixed(2) + "x";
-      const cashBtn = document.getElementById("h-cash-btn");
-      if (hWins >= 2) {
-        cashBtn.disabled = false;
-        cashBtn.innerText = `CASH OUT (${Math.floor(hBet * hMult).toLocaleString()} G)`;
-      } else {
-        cashBtn.disabled = true;
-        cashBtn.innerText = "あと1勝で利確";
-      }
-      document.getElementById("h-msg").innerText = `🎉 ${hWins}連勝！現在 ${hMult.toFixed(2)}x`;
-    } else {
-      hRun = false;
-      document.getElementById("h-start-area").classList.remove("hidden");
-      document.getElementById("h-play-area").classList.add("hidden");
-      document.getElementById("h-msg").innerText = `💥 外れ！ -${hBet.toLocaleString()} G`;
-    }
-  }
-
-  async function cashoutHilo() {
-    if (!hRun || hWins < 2) return;
-    hRun = false;
-    const win = Math.floor(hBet * hMult);
-    await updateCloudBalance(win);
-    document.getElementById("h-start-area").classList.remove("hidden");
-    document.getElementById("h-play-area").classList.add("hidden");
-    document.getElementById("h-msg").innerText = `🎉 ${hMult.toFixed(2)}x 利確！ +${win.toLocaleString()} G`;
   }
 
   if (me) startApp();
