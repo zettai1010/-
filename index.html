@@ -646,18 +646,6 @@
   // ★ マイクラRPGガチャ景品設定（名前・絵文字・確率%を自由に編集可能） ★
   // ==========================================
   const GACHA_UNIT = 1000;
-  const GACHA_ITEMS = [
-    { rarity: "UR",   emoji: "🗡️", name: "神話の聖剣エクスカリバー", rate: 0.3,  isMiss: false },
-    { rarity: "SSR",  emoji: "📕", name: "竜王の魔導書",             rate: 0.8,  isMiss: false },
-    { rarity: "SSR",  emoji: "🛡️", name: "賢者のミスリル防具箱",     rate: 0.9,  isMiss: false },
-    { rarity: "SR",   emoji: "💎", name: "上級強化クリスタル ×3",    rate: 3.0,  isMiss: false },
-    { rarity: "SR",   emoji: "🧪", name: "英雄の経験値ボトル ×16",   rate: 3.0,  isMiss: false },
-    { rarity: "R",    emoji: "🍷", name: "回復ポーションII ×5",      rate: 8.5,  isMiss: false },
-    { rarity: "R",    emoji: "🪨", name: "武器強化石 ×5",            rate: 8.5,  isMiss: false },
-    { rarity: "N",    emoji: "🥩", name: "焼き牛肉 ×16",             rate: 15.0, isMiss: false },
-    { rarity: "N",    emoji: "🪙", name: "冒険者の銅貨袋",           rate: 15.0, isMiss: false },
-    { rarity: "MISS", emoji: "🧟", name: "腐った肉（ハズレ）",       rate: 45.0, isMiss: true }
-  ];
 
   // 排出率表を自動表示
   document.getElementById("gacha-rate-box").innerHTML = GACHA_ITEMS.map(it =>
