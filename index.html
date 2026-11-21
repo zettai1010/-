@@ -13,7 +13,7 @@
     --border: #282c3f;
     --gold: #f5b942;
     --green: #10b981;
-    --red: #ef4444;
+    --red: #dc2626;
     --text: #f8fafc;
     --muted: #8b92a5;
   }
@@ -27,7 +27,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 14px;
+    padding: 16px 10px;
   }
   .hidden { display: none !important; }
 
@@ -83,7 +83,7 @@
   }
   .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
 
-  .app-wrap { width: 100%; max-width: 520px; }
+  .app-wrap { width: 100%; max-width: 560px; }
   .header {
     display: flex;
     justify-content: space-between;
@@ -109,7 +109,7 @@
   .tabs {
     display: flex;
     gap: 6px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .tab {
     flex: 1;
@@ -129,43 +129,72 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 20px;
+    padding: 16px 12px;
     text-align: center;
   }
-  .msg { margin-top: 12px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
+  .msg { margin-top: 10px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
 
-  /* ルーレット用スタイル */
-  .wheel-box {
-    width: 120px;
-    height: 120px;
-    margin: 8px auto 14px;
+  /* ==========================================
+     🎡 ホイールアニメーション
+     ========================================== */
+  .wheel-stage {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 6px auto 12px;
+  }
+  .wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 11px solid transparent;
+    border-right: 11px solid transparent;
+    border-top: 20px solid var(--gold);
+    z-index: 10;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+  }
+  #wheel-canvas {
+    width: 220px;
+    height: 220px;
     border-radius: 50%;
     border: 5px solid var(--gold);
+    box-shadow: 0 0 24px rgba(245, 185, 66, 0.3);
+    transition: transform 4.2s cubic-bezier(0.12, 0.85, 0.18, 1);
+  }
+  .wheel-center-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
     background: var(--dark);
+    border: 3px solid var(--gold);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    font-size: 1.4rem;
     font-weight: 900;
-    box-shadow: 0 0 20px rgba(245, 185, 66, 0.25);
-    transition: background 0.2s, transform 0.2s;
+    color: #fff;
+    z-index: 5;
   }
-  .wheel-red { background: #dc2626; color: #fff; }
-  .wheel-black { background: #18181b; color: #fff; }
-  .wheel-green { background: #059669; color: #fff; }
 
   .history-bar {
     display: flex;
     justify-content: center;
     gap: 5px;
-    margin-bottom: 14px;
-    min-height: 26px;
+    margin-bottom: 12px;
+    min-height: 24px;
   }
   .hist-dot {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 800;
     display: flex;
     align-items: center;
@@ -173,41 +202,114 @@
     color: #fff;
   }
 
-  .rl-choices {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  /* ==========================================
+     🃏 チップ選択 & ベットテーブル
+     ========================================== */
+  .chip-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 8px;
     margin-bottom: 10px;
+    flex-wrap: wrap;
   }
-  .rl-btn {
-    padding: 12px 8px;
-    border-radius: 8px;
-    border: 2px solid var(--border);
-    background: var(--dark);
+  .chip {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 3px dashed #fff;
+    font-weight: 900;
+    font-size: 0.72rem;
     color: #fff;
-    font-weight: 800;
-    font-size: 0.88rem;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    transition: transform 0.12s;
   }
-  .rl-btn.selected {
-    border-color: var(--gold);
-    box-shadow: 0 0 10px rgba(245, 185, 66, 0.4);
+  .chip.active {
+    transform: scale(1.15);
+    outline: 3px solid var(--gold);
   }
-  .rl-btn.red { background: rgba(220, 38, 38, 0.25); }
-  .rl-btn.black { background: rgba(39, 39, 42, 0.7); }
-  .rl-btn.green { grid-column: span 2; background: rgba(16, 185, 129, 0.2); }
+  .chip-100 { background: #2563eb; }
+  .chip-500 { background: #059669; }
+  .chip-1000 { background: #d97706; }
+  .chip-5000 { background: #dc2626; }
 
-  .bet-row { display: flex; justify-content: center; gap: 6px; margin: 12px 0; }
-  .bet-input {
-    width: 130px;
-    padding: 9px;
-    background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 7px;
+  .table-felt {
+    background: #0d3b26;
+    border: 2px solid #1f6b47;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+    user-select: none;
+  }
+  .grid-zero {
+    margin-bottom: 4px;
+  }
+  .grid-nums {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .grid-dozens {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .grid-outside {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+  }
+  .bet-cell {
+    position: relative;
+    padding: 9px 2px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.22);
+    font-weight: 800;
+    font-size: 0.82rem;
     color: #fff;
-    font-size: 1rem;
-    font-weight: 700;
-    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bet-cell:active { transform: scale(0.96); }
+  .cell-red { background: #b91c1c; }
+  .cell-black { background: #18181b; }
+  .cell-green { background: #047857; }
+  .cell-out { background: rgba(0,0,0,0.35); font-size: 0.72rem; }
+
+  .placed-chip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--gold);
+    color: #111;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    padding: 1px 6px;
+    font-size: 0.68rem;
+    font-weight: 900;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .bet-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--dark);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
   }
 
   /* ランキング用スタイル */
@@ -304,26 +406,50 @@
     <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
   </div>
 
-  <!-- 1. ルーレット（お試し版） -->
+  <!-- 1. 本格ルーレットテーブル -->
   <div id="roulette" class="panel">
-    <div style="font-size:0.75rem; color:var(--muted); margin-bottom:4px;">最大ベット上限: <strong>5,000 G</strong></div>
-
-    <div class="wheel-box" id="rl-wheel">?</div>
-    <div class="history-bar" id="rl-hist"></div>
-
-    <div class="rl-choices">
-      <button class="rl-btn red selected" onclick="selectBetType('red', this)">🔴 RED (2.0x)</button>
-      <button class="rl-btn black" onclick="selectBetType('black', this)">⚫ BLACK (2.0x)</button>
-      <button class="rl-btn" onclick="selectBetType('even', this)">🔢 EVEN 偶数 (2.0x)</button>
-      <button class="rl-btn" onclick="selectBetType('odd', this)">🔢 ODD 奇数 (2.0x)</button>
-      <button class="rl-btn green" onclick="selectBetType('zero', this)">🟢 0 一点狙い (30.0x)</button>
+    <div class="wheel-stage">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheel-canvas" width="440" height="440"></canvas>
+      <div class="wheel-center-badge" id="wheel-res">?</div>
     </div>
 
-    <div class="bet-row">
-      <input id="rl-bet" type="number" class="bet-input" value="500" min="10">
-      <button class="mini-btn" onclick="scaleBet(0.5)">1/2</button>
-      <button class="mini-btn" onclick="scaleBet(2)">2x</button>
-      <button class="mini-btn" onclick="maxBet()">MAX</button>
+    <div class="history-bar" id="rl-hist"></div>
+
+    <!-- チップ選択バー -->
+    <div class="chip-bar">
+      <button class="chip chip-100 active" onclick="selectChip(100, this)">100</button>
+      <button class="chip chip-500" onclick="selectChip(500, this)">500</button>
+      <button class="chip chip-1000" onclick="selectChip(1000, this)">1K</button>
+      <button class="chip chip-5000" onclick="selectChip(5000, this)">5K</button>
+      <button class="mini-btn" onclick="clearBets()">🗑️ クリア</button>
+      <button class="mini-btn" onclick="rebet()">🔁 前回と同じ</button>
+    </div>
+
+    <!-- ベットテーブル -->
+    <div class="table-felt">
+      <div class="grid-zero">
+        <div class="bet-cell cell-green" data-bet="n:0" onclick="placeBet('n:0')">0 (36x)</div>
+      </div>
+      <div class="grid-nums" id="num-grid"></div>
+      <div class="grid-dozens">
+        <div class="bet-cell cell-out" data-bet="d:1" onclick="placeBet('d:1')">1st 12 (3x)</div>
+        <div class="bet-cell cell-out" data-bet="d:2" onclick="placeBet('d:2')">2nd 12 (3x)</div>
+        <div class="bet-cell cell-out" data-bet="d:3" onclick="placeBet('d:3')">3rd 12 (3x)</div>
+      </div>
+      <div class="grid-outside">
+        <div class="bet-cell cell-out" data-bet="o:low" onclick="placeBet('o:low')">1-18</div>
+        <div class="bet-cell cell-out" data-bet="o:even" onclick="placeBet('o:even')">EVEN</div>
+        <div class="bet-cell cell-red" data-bet="o:red" onclick="placeBet('o:red')">RED</div>
+        <div class="bet-cell cell-black" data-bet="o:black" onclick="placeBet('o:black')">BLACK</div>
+        <div class="bet-cell cell-out" data-bet="o:odd" onclick="placeBet('o:odd')">ODD</div>
+        <div class="bet-cell cell-out" data-bet="o:high" onclick="placeBet('o:high')">19-36</div>
+      </div>
+    </div>
+
+    <div class="bet-summary">
+      <span>合計ベット: <strong id="total-bet-txt" style="color:var(--gold);">0</strong> G</span>
+      <span style="color:var(--muted);">上限: 5,000 G</span>
     </div>
 
     <button class="btn-main" id="rl-spin-btn" onclick="spinRoulette()">🎡 SPIN ROULETTE</button>
@@ -472,96 +598,218 @@
   }
 
   // ==========================================
-  // 🎡 ルーレットロジック（0〜36のヨーロピアン形式）
+  // 🎡 ヨーロピアンルーレット円盤描画 & テーブル初期化
   // ==========================================
+  const WHEEL_ORDER = [
+    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10,
+    5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
+  ];
   const RED_NUMS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
-  let selectedBetType = "red";
-  let rlHistory = [];
 
   function getNumColor(n) {
     if (n === 0) return "green";
     return RED_NUMS.has(n) ? "red" : "black";
   }
 
-  function selectBetType(type, btn) {
-    selectedBetType = type;
-    document.querySelectorAll(".rl-btn").forEach(b => b.classList.remove("selected"));
-    btn.classList.add("selected");
+  // 1〜36の数字グリッド生成
+  const numGrid = document.getElementById("num-grid");
+  for (let n = 1; n <= 36; n++) {
+    const col = getNumColor(n);
+    const cell = document.createElement("div");
+    cell.className = `bet-cell cell-${col}`;
+    cell.dataset.bet = `n:${n}`;
+    cell.innerText = n;
+    cell.onclick = () => placeBet(`n:${n}`);
+    numGrid.appendChild(cell);
   }
 
-  function scaleBet(factor) {
-    const el = document.getElementById("rl-bet");
-    el.value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(el.value * factor)));
+  // Canvas円盤描画
+  function drawWheelCanvas() {
+    const canvas = document.getElementById("wheel-canvas");
+    const ctx = canvas.getContext("2d");
+    const cx = 220, cy = 220, radius = 215;
+    const sliceAngle = (2 * Math.PI) / 37;
+
+    WHEEL_ORDER.forEach((num, idx) => {
+      // 0番が真上（-90度）の中心に来るようにオフセット
+      const startAngle = -Math.PI / 2 - sliceAngle / 2 + idx * sliceAngle;
+      const endAngle = startAngle + sliceAngle;
+      const col = getNumColor(num);
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radius, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = col === "green" ? "#059669" : col === "red" ? "#dc2626" : "#18181b";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#f5b942";
+      ctx.stroke();
+
+      // 数字テキスト描画
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(startAngle + sliceAngle / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 20px sans-serif";
+      ctx.fillText(num.toString(), radius - 14, 7);
+      ctx.restore();
+    });
+  }
+  drawWheelCanvas();
+
+  // ==========================================
+  // 🃏 マルチベット操作ロジック
+  // ==========================================
+  let currentChip = 100;
+  let bets = {}; // 例: { "n:7": 500, "o:red": 1000 }
+  let lastBets = {};
+  let isSpinning = false;
+  let currentRotation = 0;
+  let rlHistory = [];
+
+  function selectChip(val, btn) {
+    currentChip = val;
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    btn.classList.add("active");
   }
 
-  function maxBet() {
-    document.getElementById("rl-bet").value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(myBalance)));
+  function getTotalBet() {
+    return Object.values(bets).reduce((a, b) => a + b, 0);
+  }
+
+  function placeBet(key) {
+    if (isSpinning) return;
+    const total = getTotalBet();
+    const msg = document.getElementById("rl-msg");
+    if (total + currentChip > MAX_BET_LIMIT) {
+      msg.style.color = "var(--red)";
+      msg.innerText = `合計ベット上限は ${MAX_BET_LIMIT.toLocaleString()} G です`;
+      return;
+    }
+    msg.innerText = "";
+    bets[key] = (bets[key] || 0) + currentChip;
+    renderBets();
+  }
+
+  function clearBets() {
+    if (isSpinning) return;
+    bets = {};
+    document.getElementById("rl-msg").innerText = "";
+    renderBets();
+  }
+
+  function rebet() {
+    if (isSpinning || Object.keys(lastBets).length === 0) return;
+    bets = { ...lastBets };
+    renderBets();
+  }
+
+  function renderBets() {
+    document.querySelectorAll(".placed-chip").forEach(el => el.remove());
+    for (const [key, amount] of Object.entries(bets)) {
+      const cell = document.querySelector(`.bet-cell[data-bet="${key}"]`);
+      if (cell) {
+        const badge = document.createElement("div");
+        badge.className = "placed-chip";
+        badge.innerText = amount >= 1000 ? (amount / 1000) + "K" : amount;
+        cell.appendChild(badge);
+      }
+    }
+    document.getElementById("total-bet-txt").innerText = getTotalBet().toLocaleString();
   }
 
   async function spinRoulette() {
-    const bet = Number(document.getElementById("rl-bet").value);
+    if (isSpinning) return;
+    const totalBet = getTotalBet();
     const msg = document.getElementById("rl-msg");
     const btn = document.getElementById("rl-spin-btn");
-    const wheel = document.getElementById("rl-wheel");
+
+    if (totalBet <= 0) {
+      msg.style.color = "var(--gold)";
+      msg.innerText = "テーブルをタップしてチップを置いてください";
+      return;
+    }
 
     await refreshBalance();
-    if (bet <= 0 || bet > myBalance) {
+    if (totalBet > myBalance) {
       msg.style.color = "var(--red)";
       msg.innerText = "残高不足です";
       return;
     }
-    if (bet > MAX_BET_LIMIT) {
-      msg.style.color = "var(--red)";
-      msg.innerText = `最大ベット上限は ${MAX_BET_LIMIT.toLocaleString()} G です`;
-      return;
-    }
 
-    await updateCloudBalance(-bet);
+    await updateCloudBalance(-totalBet);
+    lastBets = { ...bets };
+    isSpinning = true;
     btn.disabled = true;
     msg.style.color = "var(--muted)";
-    msg.innerText = "回転中...";
+    msg.innerText = "ルーレット回転中...";
 
-    let ticks = 0;
-    const iv = setInterval(async () => {
-      const tempNum = Math.floor(Math.random() * 37);
-      const tempCol = getNumColor(tempNum);
-      wheel.innerText = tempNum;
-      wheel.className = "wheel-box wheel-" + tempCol;
+    const resBadge = document.getElementById("wheel-res");
+    resBadge.innerText = "?";
+    resBadge.style.background = "var(--dark)";
 
-      if (++ticks > 16) {
-        clearInterval(iv);
-        const resultNum = Math.floor(Math.random() * 37);
-        const resultCol = getNumColor(resultNum);
-        wheel.innerText = resultNum;
-        wheel.className = "wheel-box wheel-" + resultCol;
+    // 当選インデックス（0〜36）を決定
+    const winIndex = Math.floor(Math.random() * 37);
+    const winNum = WHEEL_ORDER[winIndex];
+    const winCol = getNumColor(winNum);
 
-        // 履歴追加（最新8件）
-        rlHistory.unshift({ num: resultNum, col: resultCol });
-        if (rlHistory.length > 8) rlHistory.pop();
-        document.getElementById("rl-hist").innerHTML = rlHistory.map(h => {
-          const bg = h.col === "red" ? "#dc2626" : h.col === "black" ? "#27272a" : "#059669";
-          return `<div class="hist-dot" style="background:${bg};">${h.num}</div>`;
-        }).join("");
+    // ターゲット角度を計算（最低6回転＋対象インデックスが真上に来る角度）
+    const sliceDeg = 360 / 37;
+    const targetMod = (360 - (winIndex * sliceDeg)) % 360;
+    const currentMod = ((currentRotation % 360) + 360) % 360;
+    const delta = (targetMod - currentMod + 360) % 360;
+    currentRotation += 360 * 6 + delta;
 
-        let mult = 0;
-        if (selectedBetType === "red" && resultCol === "red") mult = 2.0;
-        else if (selectedBetType === "black" && resultCol === "black") mult = 2.0;
-        else if (selectedBetType === "even" && resultNum !== 0 && resultNum % 2 === 0) mult = 2.0;
-        else if (selectedBetType === "odd" && resultNum % 2 === 1) mult = 2.0;
-        else if (selectedBetType === "zero" && resultNum === 0) mult = 30.0;
+    const canvas = document.getElementById("wheel-canvas");
+    canvas.style.transform = `rotate(${currentRotation}deg)`;
 
-        if (mult > 0) {
-          const win = Math.floor(bet * mult);
-          await updateCloudBalance(win);
-          msg.style.color = "var(--green)";
-          msg.innerText = `🎉 出目「${resultNum}」的中 (${mult.toFixed(1)}x)！ +${win.toLocaleString()} G`;
-        } else {
-          msg.style.color = "var(--red)";
-          msg.innerText = `💥 出目「${resultNum}」ハズレ... (-${bet.toLocaleString()} G)`;
+    setTimeout(async () => {
+      // 中央バッジ更新
+      resBadge.innerText = winNum;
+      resBadge.style.background = winCol === "green" ? "#059669" : winCol === "red" ? "#dc2626" : "#18181b";
+
+      // 履歴更新
+      rlHistory.unshift({ num: winNum, col: winCol });
+      if (rlHistory.length > 10) rlHistory.pop();
+      document.getElementById("rl-hist").innerHTML = rlHistory.map(h => {
+        const bg = h.col === "red" ? "#dc2626" : h.col === "black" ? "#27272a" : "#059669";
+        return `<div class="hist-dot" style="background:${bg};">${h.num}</div>`;
+      }).join("");
+
+      // 配当計算
+      let totalPayout = 0;
+      for (const [key, amt] of Object.entries(bets)) {
+        const [type, val] = key.split(":");
+        if (type === "n" && Number(val) === winNum) {
+          totalPayout += amt * 36;
+        } else if (type === "d" && winNum !== 0) {
+          if (val === "1" && winNum >= 1 && winNum <= 12) totalPayout += amt * 3;
+          if (val === "2" && winNum >= 13 && winNum <= 24) totalPayout += amt * 3;
+          if (val === "3" && winNum >= 25 && winNum <= 36) totalPayout += amt * 3;
+        } else if (type === "o" && winNum !== 0) {
+          if (val === "red" && winCol === "red") totalPayout += amt * 2;
+          if (val === "black" && winCol === "black") totalPayout += amt * 2;
+          if (val === "even" && winNum % 2 === 0) totalPayout += amt * 2;
+          if (val === "odd" && winNum % 2 === 1) totalPayout += amt * 2;
+          if (val === "low" && winNum >= 1 && winNum <= 18) totalPayout += amt * 2;
+          if (val === "high" && winNum >= 19 && winNum <= 36) totalPayout += amt * 2;
         }
-        btn.disabled = false;
       }
-    }, 65);
+
+      if (totalPayout > 0) {
+        await updateCloudBalance(totalPayout);
+        msg.style.color = "var(--green)";
+        msg.innerText = `🎉 出目「${winNum}」的中！ +${totalPayout.toLocaleString()} G 獲得！`;
+      } else {
+        msg.style.color = "var(--red)";
+        msg.innerText = `💥 出目「${winNum}」ハズレ... (-${totalBet.toLocaleString()} G)`;
+      }
+
+      isSpinning = false;
+      btn.disabled = false;
+    }, 4300);
   }
 
   // 🏆 ランキング読み込み
