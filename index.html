@@ -137,6 +137,11 @@
     padding: 20px;
     text-align: center;
   }
+  .limit-badge {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
   .screen {
     height: 140px;
     background: var(--dark);
@@ -355,6 +360,7 @@
 
   <!-- 1. CRASH -->
   <div id="crash" class="panel">
+    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
     <div class="screen" id="mult">1.00x</div>
     <div class="bet-row">
       <input id="c-bet" type="number" class="bet-input" value="500" min="10">
@@ -368,13 +374,14 @@
 
   <!-- 2. SLOTS -->
   <div id="slot" class="panel hidden">
+    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
     <div class="reels">
       <div class="reel" id="r1">7️⃣</div>
       <div class="reel" id="r2">7️⃣</div>
       <div class="reel" id="r3">7️⃣</div>
     </div>
     <div style="font-size:0.76rem; color:var(--muted); margin-bottom:12px;">
-      🍒 2.5x | 🍋 4x | 🍇 8x | 🔔 15x | 💎 40x | 7️⃣ 100x
+      🍒 2x | 🍋 3.5x | 🍇 7x | 🔔 15x | 💎 35x | 7️⃣ 80x
     </div>
     <div class="bet-row">
       <input id="s-bet" type="number" class="bet-input" value="500" min="10">
@@ -388,13 +395,14 @@
 
   <!-- 3. MINES -->
   <div id="mines" class="panel hidden">
+    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
     <div class="mines-top">
       <div>爆弾数:
         <select id="b-num">
-          <option value="1">1個</option>
           <option value="3" selected>3個</option>
           <option value="5">5個</option>
-          <option value="10">10個</option>
+          <option value="8">8個</option>
+          <option value="12">12個</option>
         </select>
       </div>
       <div>現在倍率: <strong id="m-mult" style="color:var(--green);">1.00x</strong></div>
@@ -412,13 +420,14 @@
 
   <!-- 4. DICE（サイコロ） -->
   <div id="dice" class="panel hidden">
+    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G</div>
     <div class="screen" id="d-res" style="height:110px; font-size:2.8rem;">50.00</div>
     <div class="dice-stats">
       <div>目標（以下で勝ち）<strong id="d-target-txt">50.00</strong></div>
       <div>勝率<strong id="d-chance-txt">50.0%</strong></div>
-      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.56x</strong></div>
+      <div>配当倍率<strong id="d-mult-txt" style="color:var(--green);">1.30x</strong></div>
     </div>
-    <input type="range" id="d-slider" class="dice-slider" min="2" max="90" value="50" oninput="updateDiceCalc()">
+    <input type="range" id="d-slider" class="dice-slider" min="5" max="75" value="50" oninput="updateDiceCalc()">
     <div class="bet-row">
       <input id="d-bet" type="number" class="bet-input" value="500" min="10">
       <button class="mini-btn" onclick="scale('d-bet', 0.5)">1/2</button>
@@ -431,6 +440,7 @@
 
   <!-- 5. HI-LO（ハイ＆ロー） -->
   <div id="hilo" class="panel hidden">
+    <div class="limit-badge">最大ベット上限: <strong class="max-bet-lbl">5,000</strong> G（2連勝以上で利確可能）</div>
     <div style="font-size:0.85rem; margin-bottom:10px;">
       現在倍率: <strong id="h-mult" style="color:var(--green); font-size:1.1rem;">1.00x</strong>
     </div>
@@ -454,7 +464,7 @@
       </div>
       <div style="display:flex; gap:8px;">
         <button class="mini-btn" id="h-skip-btn" style="flex:1; padding:10px;" onclick="skipHilo()">⏭️ 変更 (残り1)</button>
-        <button class="btn-main btn-green" style="flex:2;" id="h-cash-btn" onclick="cashoutHilo()" disabled>CASH OUT</button>
+        <button class="btn-main btn-green" style="flex:2;" id="h-cash-btn" onclick="cashoutHilo()" disabled>あと2勝で利確</button>
       </div>
     </div>
     <div class="msg" id="h-msg"></div>
@@ -490,12 +500,19 @@
     <div class="admin-box">
       <div style="font-size:0.82rem; font-weight:bold; color:var(--gold);">⚙️ 難易度（勝ちやすさ）切り替え</div>
       <div style="font-size:0.78rem; color:var(--muted); margin-top:4px;">
-        現在設定: <strong id="cur-rtp-txt" style="color:#fff;">回収モード (RTP 78% / 即爆 12%)</strong>
+        現在: <strong id="cur-rtp-txt" style="color:#fff;">💀 鬼辛回収 (RTP 65% / 即爆 20%)</strong>
       </div>
       <div class="preset-row">
-        <button class="mini-btn" style="border-color:var(--red); color:var(--red);" onclick="setHouseMode(0.78, 0.12, '回収モード (RTP 78% / 即爆 12%)')">🔥 回収(78%)</button>
-        <button class="mini-btn" onclick="setHouseMode(0.85, 0.08, '通常モード (RTP 85% / 即爆 8%)')">⚖️ 通常(85%)</button>
-        <button class="mini-btn" style="border-color:var(--green); color:var(--green);" onclick="setHouseMode(0.93, 0.05, 'イベント甘め (RTP 93% / 即爆 5%)')">🎉 甘め(93%)</button>
+        <button class="mini-btn" style="border-color:var(--red); color:var(--red);" onclick="setHouseMode(0.65, 0.20, '💀 鬼辛回収 (RTP 65% / 即爆 20%)')">💀 鬼辛(65%)</button>
+        <button class="mini-btn" onclick="setHouseMode(0.78, 0.12, '🔥 回収モード (RTP 78% / 即爆 12%)')">🔥 回収(78%)</button>
+        <button class="mini-btn" style="border-color:var(--green); color:var(--green);" onclick="setHouseMode(0.88, 0.06, '🎉 イベント甘め (RTP 88% / 即爆 6%)')">🎉 甘め(88%)</button>
+      </div>
+
+      <div style="font-size:0.82rem; font-weight:bold; color:var(--gold); margin-top:12px;">🛑 1回の最大ベット上限（倍賭け対策）</div>
+      <div class="preset-row">
+        <button class="mini-btn" onclick="setMaxBet(1000)">1,000 G</button>
+        <button class="mini-btn" onclick="setMaxBet(5000)">5,000 G</button>
+        <button class="mini-btn" onclick="setMaxBet(50000)">50,000 G</button>
       </div>
     </div>
 
@@ -516,11 +533,12 @@
   const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
-  const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
+  const DISCORD_WEBHOOK_URL = "";
 
-  // デフォルト：激辛回収モード（RTP 78% / CRASH即爆発 12%）
-  let HOUSE_RTP = 0.78;
-  let CRASH_INSTANT_BUST = 0.12;
+  // デフォルト：鬼辛回収モード（RTP 65% / CRASH即爆 20% / 最大ベット 5,000G）
+  let HOUSE_RTP = 0.65;
+  let CRASH_INSTANT_BUST = 0.20;
+  let MAX_BET_LIMIT = 5000;
 
   function setHouseMode(rtp, bust, label) {
     HOUSE_RTP = rtp;
@@ -530,6 +548,14 @@
     const msg = document.getElementById("adm-msg");
     msg.style.color = "var(--gold)";
     msg.innerText = `⚙️ ${label} に切り替えました`;
+  }
+
+  function setMaxBet(limit) {
+    MAX_BET_LIMIT = limit;
+    document.querySelectorAll(".max-bet-lbl").forEach(el => el.innerText = limit.toLocaleString());
+    const msg = document.getElementById("adm-msg");
+    msg.style.color = "var(--gold)";
+    msg.innerText = `🛑 最大ベット上限を ${limit.toLocaleString()} G に設定しました`;
   }
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -732,17 +758,27 @@
     btn.disabled = false;
   }
 
-  function scale(id, f) { const e = document.getElementById(id); e.value = Math.max(10, Math.floor(e.value * f)); }
-  function maxB(id) { document.getElementById(id).value = Math.max(10, Math.floor(myBalance)); }
+  function scale(id, f) {
+    const e = document.getElementById(id);
+    e.value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(e.value * f)));
+  }
+  function maxB(id) {
+    document.getElementById(id).value = Math.min(MAX_BET_LIMIT, Math.max(10, Math.floor(myBalance)));
+  }
+  function checkBetValid(bet, msgEl) {
+    if (bet <= 0 || bet > myBalance) { msgEl.innerText = "残高不足です"; return false; }
+    if (bet > MAX_BET_LIMIT) { msgEl.innerText = `最大ベット上限は ${MAX_BET_LIMIT.toLocaleString()} G です`; return false; }
+    return true;
+  }
 
-  // 1. CRASH (回収モード: RTP 78% + 即爆 12%)
+  // 1. CRASH (鬼辛回収: RTP 65% + 即爆 20%)
   let cRun = false, cMult = 1, cTarget = 1, cBet = 0, cIv = null;
   async function toggleCrash() {
     const btn = document.getElementById("c-btn"), el = document.getElementById("mult"), msg = document.getElementById("c-msg");
     if (!cRun) {
       await refreshBalance();
       cBet = Number(document.getElementById("c-bet").value);
-      if (cBet <= 0 || cBet > myBalance) { msg.innerText = "残高不足です"; return; }
+      if (!checkBetValid(cBet, msg)) return;
       await updateCloudBalance(-cBet);
       const r = Math.random();
       cTarget = r < CRASH_INSTANT_BUST ? 1.00 : Math.max(1.01, HOUSE_RTP / (1 - r));
@@ -754,7 +790,7 @@
       cRun = true; cMult = 1.00; el.className = "screen"; msg.innerText = "";
       btn.innerText = "CASH OUT (利確)"; btn.classList.add("btn-green");
       cIv = setInterval(() => {
-        cMult += 0.01 * (cMult * 0.65);
+        cMult += 0.01 * (cMult * 0.72);
         if (cMult >= cTarget) {
           clearInterval(cIv); cRun = false;
           el.innerText = cTarget.toFixed(2) + "x"; el.className = "screen crashed";
@@ -772,13 +808,13 @@
     }
   }
 
-  // 2. SLOTS (回収モード: 全体当選率 約18%)
+  // 2. SLOTS (鬼辛回収: 全体当選率 約15%)
   const syms = ["🍒","🍋","🍇","🔔","💎","7️⃣"];
-  const pays = {"🍒":2.5,"🍋":4,"🍇":8,"🔔":15,"💎":40,"7️⃣":100};
+  const pays = {"🍒":2,"🍋":3.5,"🍇":7,"🔔":15,"💎":35,"7️⃣":80};
   async function spinSlot() {
     const bet = Number(document.getElementById("s-bet").value), msg = document.getElementById("s-msg"), btn = document.getElementById("s-btn");
     await refreshBalance();
-    if (bet <= 0 || bet > myBalance) { msg.innerText = "残高不足です"; return; }
+    if (!checkBetValid(bet, msg)) return;
     await updateCloudBalance(-bet);
     btn.disabled = true; msg.innerText = "回転中...";
     let t = 0;
@@ -786,15 +822,15 @@
       ["r1","r2","r3"].forEach(id => document.getElementById(id).innerText = syms[Math.floor(Math.random()*6)]);
       if (++t > 12) {
         clearInterval(iv);
-        const scaleRate = HOUSE_RTP / 0.78;
+        const scaleRate = HOUSE_RTP / 0.65;
         const r = Math.random() * 100;
         let res;
-        if (r < 12.0 * scaleRate) res = ["🍒","🍒","🍒"];
-        else if (r < 16.5 * scaleRate) res = ["🍋","🍋","🍋"];
-        else if (r < 17.8 * scaleRate) res = ["🍇","🍇","🍇"];
-        else if (r < 18.05 * scaleRate) res = ["🔔","🔔","🔔"];
-        else if (r < 18.10 * scaleRate) res = ["💎","💎","💎"];
-        else if (r < 18.11 * scaleRate) res = ["7️⃣","7️⃣","7️⃣"];
+        if (r < 10.5 * scaleRate) res = ["🍒","🍒","🍒"];
+        else if (r < 14.0 * scaleRate) res = ["🍋","🍋","🍋"];
+        else if (r < 15.0 * scaleRate) res = ["🍇","🍇","🍇"];
+        else if (r < 15.2 * scaleRate) res = ["🔔","🔔","🔔"];
+        else if (r < 15.24 * scaleRate) res = ["💎","💎","💎"];
+        else if (r < 15.25 * scaleRate) res = ["7️⃣","7️⃣","7️⃣"];
         else {
           res = [syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)], syms[Math.floor(Math.random()*6)]];
           while (res[0] === res[1] && res[1] === res[2]) res[2] = syms[Math.floor(Math.random()*6)];
@@ -810,7 +846,7 @@
     }, 55);
   }
 
-  // 3. MINES (回収モード: RTP 78%)
+  // 3. MINES (鬼辛回収: RTP 65% + 最小爆弾3個)
   let mRun = false, mBet = 0, bSet = new Set(), openCnt = 0, mCur = 1;
   const grid = document.getElementById("m-grid");
   for (let i = 0; i < 25; i++) {
@@ -844,7 +880,7 @@
     if (!mRun) {
       await refreshBalance();
       mBet = Number(document.getElementById("m-bet").value);
-      if (mBet <= 0 || mBet > myBalance) { msg.innerText = "残高不足です"; return; }
+      if (!checkBetValid(mBet, msg)) return;
       await updateCloudBalance(-mBet);
       const bNum = Number(document.getElementById("b-num").value);
       bSet.clear();
@@ -878,7 +914,7 @@
     btn.innerText = "START"; btn.classList.remove("btn-green");
   }
 
-  // 4. DICE (回収モード: RTP 78%)
+  // 4. DICE (鬼辛回収: RTP 65% + 上限75%)
   function updateDiceCalc() {
     const val = Number(document.getElementById("d-slider").value);
     const mult = ((HOUSE_RTP * 100) / val).toFixed(2);
@@ -895,7 +931,7 @@
     const btn = document.getElementById("d-btn");
 
     await refreshBalance();
-    if (bet <= 0 || bet > myBalance) { msg.innerText = "残高不足です"; return; }
+    if (!checkBetValid(bet, msg)) return;
     await updateCloudBalance(-bet);
     btn.disabled = true;
 
@@ -914,7 +950,7 @@
     btn.disabled = false;
   }
 
-  // 5. HI-LO (回収モード: RTP 78% + 変更1回制限)
+  // 5. HI-LO (鬼辛回収: RTP 65% + 2連勝縛り)
   const ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
   const suits = ["♠️","♥️","♦️","♣️"];
   let hRun = false, hBet = 0, hVal = 7, hMult = 1.00, hWins = 0, hSkips = 1;
@@ -955,7 +991,7 @@
     const msg = document.getElementById("h-msg");
     await refreshBalance();
     hBet = Number(document.getElementById("h-bet").value);
-    if (hBet <= 0 || hBet > myBalance) { msg.innerText = "残高不足です"; return; }
+    if (!checkBetValid(hBet, msg)) return;
     await updateCloudBalance(-hBet);
 
     hRun = true;
@@ -968,12 +1004,13 @@
     document.getElementById("h-mult").innerText = "1.00x";
     document.getElementById("h-start-area").classList.add("hidden");
     document.getElementById("h-play-area").classList.remove("hidden");
-    document.getElementById("h-cash-btn").disabled = true;
-    document.getElementById("h-cash-btn").innerText = "CASH OUT";
+    const cashBtn = document.getElementById("h-cash-btn");
+    cashBtn.disabled = true;
+    cashBtn.innerText = "あと2勝で利確";
     const skipBtn = document.getElementById("h-skip-btn");
     skipBtn.disabled = false;
     skipBtn.innerText = `⏭️ 変更 (残り${hSkips})`;
-    msg.innerText = "HIGH か LOW を選んでください";
+    msg.innerText = "2連勝以上で利確できます！";
   }
 
   function skipHilo() {
@@ -1010,8 +1047,14 @@
       hWins++;
       hMult = hMult * stepMult;
       document.getElementById("h-mult").innerText = hMult.toFixed(2) + "x";
-      document.getElementById("h-cash-btn").disabled = false;
-      document.getElementById("h-cash-btn").innerText = `CASH OUT (${Math.floor(hBet * hMult).toLocaleString()} G)`;
+      const cashBtn = document.getElementById("h-cash-btn");
+      if (hWins >= 2) {
+        cashBtn.disabled = false;
+        cashBtn.innerText = `CASH OUT (${Math.floor(hBet * hMult).toLocaleString()} G)`;
+      } else {
+        cashBtn.disabled = true;
+        cashBtn.innerText = "あと1勝で利確";
+      }
       document.getElementById("h-msg").innerText = `🎉 ${hWins}連勝！現在 ${hMult.toFixed(2)}x`;
     } else {
       hRun = false;
@@ -1022,7 +1065,7 @@
   }
 
   async function cashoutHilo() {
-    if (!hRun || hWins === 0) return;
+    if (!hRun || hWins < 2) return;
     hRun = false;
     const win = Math.floor(hBet * hMult);
     await updateCloudBalance(win);
