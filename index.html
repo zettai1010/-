@@ -85,7 +85,6 @@
   }
   .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
   .btn-purple { background: var(--purple) !important; color: #fff !important; }
-  .btn-green { background: var(--green) !important; color: #052e16 !important; }
 
   .app-wrap { width: 100%; max-width: 560px; }
   .header {
@@ -218,12 +217,12 @@
     flex-wrap: wrap;
   }
   .chip {
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     border: 3px dashed #fff;
     font-weight: 900;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: #fff;
     cursor: pointer;
     display: flex;
@@ -236,10 +235,10 @@
     transform: scale(1.15);
     outline: 3px solid var(--gold);
   }
-  .chip-100 { background: #2563eb; }
-  .chip-500 { background: #059669; }
-  .chip-1000 { background: #d97706; }
-  .chip-5000 { background: #dc2626; }
+  .chip-1 { background: #2563eb; }
+  .chip-2 { background: #059669; }
+  .chip-3 { background: #d97706; }
+  .chip-4 { background: #dc2626; }
 
   .table-felt {
     background: #0d3b26;
@@ -360,26 +359,24 @@
   }
   .gacha-card .emoji { font-size: 1.5rem; flex-shrink: 0; }
   .rarity-MISS { border-color: #334155; color: var(--muted); }
-  .rarity-N { border-color: #94a3b8; color: #e2e8f0; }
-  .rarity-R { border-color: var(--blue); color: #60a5fa; }
-  .rarity-SR { border-color: var(--purple); color: #c084fc; box-shadow: 0 0 10px rgba(168,85,247,0.3); }
-  .rarity-SSR { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 14px rgba(245,185,66,0.5); }
-  .rarity-UR {
-    border-color: #f43f5e;
-    background: linear-gradient(135deg, rgba(244,63,94,0.25), rgba(245,185,66,0.25));
+  .rarity-3等 { border-color: var(--blue); color: #60a5fa; box-shadow: 0 0 8px rgba(59,130,246,0.25); }
+  .rarity-2等 { border-color: var(--purple); color: #c084fc; box-shadow: 0 0 12px rgba(168,85,247,0.4); }
+  .rarity-1等 {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(245,185,66,0.28), rgba(244,63,94,0.25));
     color: #fde047;
-    box-shadow: 0 0 18px rgba(244,63,94,0.7);
+    box-shadow: 0 0 18px rgba(245,185,66,0.7);
   }
 
   .gacha-rates {
     background: var(--dark);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 8px 10px;
+    padding: 10px 12px;
     margin-bottom: 12px;
-    font-size: 0.73rem;
+    font-size: 0.78rem;
     color: var(--muted);
-    line-height: 1.55;
+    line-height: 1.7;
     text-align: left;
   }
   .gacha-btns {
@@ -504,7 +501,7 @@
   <div class="header">
     <div>
       <div style="font-weight:800; color:var(--gold); font-size:0.9rem;" id="u-name"></div>
-      <div class="bal"><span id="bal">0</span> G <button class="mini-btn" style="padding:2px 6px; margin-left:4px;" onclick="refreshBalance()">🔄</button></div>
+      <div class="bal"><span id="bal">0</span> n <button class="mini-btn" style="padding:2px 6px; margin-left:4px;" onclick="refreshBalance()">🔄</button></div>
     </div>
     <div style="display:flex; gap:6px;">
       <button class="mini-btn" onclick="logout()">ログアウト</button>
@@ -530,10 +527,10 @@
     <div class="history-bar" id="rl-hist"></div>
 
     <div class="chip-bar">
-      <button class="chip chip-100 active" onclick="selectChip(100, this)">100</button>
-      <button class="chip chip-500" onclick="selectChip(500, this)">500</button>
-      <button class="chip chip-1000" onclick="selectChip(1000, this)">1K</button>
-      <button class="chip chip-5000" onclick="selectChip(5000, this)">5K</button>
+      <button class="chip chip-1 active" onclick="selectChip(10000, this)">1万</button>
+      <button class="chip chip-2" onclick="selectChip(50000, this)">5万</button>
+      <button class="chip chip-3" onclick="selectChip(100000, this)">10万</button>
+      <button class="chip chip-4" onclick="selectChip(500000, this)">50万</button>
       <button class="mini-btn" onclick="clearBets()">🗑️ クリア</button>
       <button class="mini-btn" onclick="rebet()">🔁 前回と同じ</button>
     </div>
@@ -559,8 +556,8 @@
     </div>
 
     <div class="bet-summary">
-      <span>合計ベット: <strong id="total-bet-txt" style="color:var(--gold);">0</strong> G</span>
-      <span style="color:var(--muted);">上限: 5,000 G</span>
+      <span>合計ベット: <strong id="total-bet-txt" style="color:var(--gold);">0</strong> n</span>
+      <span style="color:var(--muted);">上限: 500,000 n</span>
     </div>
 
     <button class="btn-main" id="rl-spin-btn" onclick="spinRoulette()">🎡 SPIN ROULETTE</button>
@@ -569,18 +566,18 @@
 
   <!-- 2. マイクラRPGアイテムガチャ -->
   <div id="gacha" class="panel hidden">
-    <h3 style="margin:0 0 10px; color:var(--gold);">⚔️ マイクラRPG 装備＆素材ガチャ</h3>
+    <h3 style="margin:0 0 10px; color:var(--gold);">💍 RPGプレミアムガチャ</h3>
 
     <div class="gacha-stage" id="gacha-stage">
       <div class="gacha-box-icon">🎁</div>
-      <div style="font-size:0.82rem; color:var(--muted); margin-top:6px;">1回 1,000 G / 10連 10,000 G</div>
+      <div style="font-size:0.84rem; color:var(--muted); margin-top:6px;">1回 100,000 n / 10連 1,000,000 n</div>
     </div>
 
     <div class="gacha-rates" id="gacha-rate-box"></div>
 
     <div class="gacha-btns">
-      <button class="btn-main" id="gacha-btn-1" onclick="pullGacha(1)">🎲 1回引く (1,000 G)</button>
-      <button class="btn-main btn-purple" id="gacha-btn-10" onclick="pullGacha(10)">✨ 10連引く (10,000 G)</button>
+      <button class="btn-main" id="gacha-btn-1" onclick="pullGacha(1)">🎲 1回引く (10万 n)</button>
+      <button class="btn-main btn-purple" id="gacha-btn-10" onclick="pullGacha(10)">✨ 10連引く (100万 n)</button>
     </div>
     <div class="msg" id="gacha-msg"></div>
 
@@ -613,8 +610,8 @@
       <option value="💰 入金申請">💰 入金（マイクラ → カジノ）</option>
       <option value="💸 出金申請">💸 出金（カジノ → マイクラ）</option>
     </select>
-    <label class="label" style="text-align:left;">金額 (G)</label>
-    <input id="req-amount" type="number" class="input" value="10000" min="100">
+    <label class="label" style="text-align:left;">金額 (n)</label>
+    <input id="req-amount" type="number" class="input" value="100000" min="1000">
     <button class="btn-main" id="req-btn" onclick="sendDepositNotice()">📩 運営に通知を送る</button>
     <div class="msg" id="req-msg"></div>
   </div>
@@ -624,8 +621,8 @@
     <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高操作</h3>
     <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
     <input id="adm-target" class="input" placeholder="下のリストからタップでも選択可">
-    <label class="label" style="text-align:left;">増減金額（減らす場合はマイナス -1000）</label>
-    <input id="adm-amount" type="number" class="input" value="10000">
+    <label class="label" style="text-align:left;">増減金額（減らす場合はマイナス -100000）</label>
+    <input id="adm-amount" type="number" class="input" value="100000">
     <button class="btn-main" onclick="adminAddBalance()">✅ 残高を反映する</button>
     <div class="msg" id="adm-msg"></div>
     <div class="user-list" id="adm-user-list">読み込み中...</div>
@@ -639,18 +636,24 @@
   const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
-  const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
-  const MAX_BET_LIMIT = 5000;
+  const DISCORD_WEBHOOK_URL = "";
+  const MAX_BET_LIMIT = 500000;
 
   // ==========================================
-  // ★ マイクラRPGガチャ景品設定（名前・絵文字・確率%を自由に編集可能） ★
+  // ★ ガチャ設定（1回 10万n / 相場ベースの期待値 72.5% 調整済み） ★
   // ==========================================
-  const GACHA_UNIT = 1000;
+  const GACHA_UNIT = 100000;
+  const GACHA_ITEMS = [
+    { rarity: "1等",  emoji: "💍", name: "久遠のマリッジリング", rate: 0.005,  isMiss: false },
+    { rarity: "2等",  emoji: "💎", name: "輝光石",               rate: 0.05,   isMiss: false },
+    { rarity: "3等",  emoji: "✨", name: "ファリーソウル",       rate: 1.0,    isMiss: false },
+    { rarity: "MISS", emoji: "💀", name: "ハズレ",               rate: 98.945, isMiss: true  }
+  ];
 
   // 排出率表を自動表示
   document.getElementById("gacha-rate-box").innerHTML = GACHA_ITEMS.map(it =>
-    `<span>${it.emoji} <strong>[${it.rarity}]</strong> ${it.name} (${it.rate}%)</span>`
-  ).join(" ｜ ");
+    `<div>${it.emoji} <strong>[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</strong> ${it.name} ： <strong>${it.rate}%</strong></div>`
+  ).join("");
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -806,7 +809,7 @@
   }
   drawWheelCanvas();
 
-  let currentChip = 100;
+  let currentChip = 10000;
   let bets = {};
   let lastBets = {};
   let isSpinning = false;
@@ -829,7 +832,7 @@
     const msg = document.getElementById("rl-msg");
     if (total + currentChip > MAX_BET_LIMIT) {
       msg.style.color = "var(--red)";
-      msg.innerText = `合計ベット上限は ${MAX_BET_LIMIT.toLocaleString()} G です`;
+      msg.innerText = `合計ベット上限は ${MAX_BET_LIMIT.toLocaleString()} n です`;
       return;
     }
     msg.innerText = "";
@@ -850,6 +853,12 @@
     renderBets();
   }
 
+  function formatChipText(amount) {
+    if (amount >= 10000) return (amount / 10000) + "万";
+    if (amount >= 1000) return (amount / 1000) + "K";
+    return amount;
+  }
+
   function renderBets() {
     document.querySelectorAll(".placed-chip").forEach(el => el.remove());
     for (const [key, amount] of Object.entries(bets)) {
@@ -857,7 +866,7 @@
       if (cell) {
         const badge = document.createElement("div");
         badge.className = "placed-chip";
-        badge.innerText = amount >= 1000 ? (amount / 1000) + "K" : amount;
+        badge.innerText = formatChipText(amount);
         cell.appendChild(badge);
       }
     }
@@ -940,10 +949,10 @@
       if (totalPayout > 0) {
         await updateCloudBalance(totalPayout);
         msg.style.color = "var(--green)";
-        msg.innerText = `🎉 出目「${winNum}」的中！ +${totalPayout.toLocaleString()} G 獲得！`;
+        msg.innerText = `🎉 出目「${winNum}」的中！ +${totalPayout.toLocaleString()} n 獲得！`;
       } else {
         msg.style.color = "var(--red)";
-        msg.innerText = `💥 出目「${winNum}」ハズレ... (-${totalBet.toLocaleString()} G)`;
+        msg.innerText = `💥 出目「${winNum}」ハズレ... (-${totalBet.toLocaleString()} n)`;
       }
 
       isSpinning = false;
@@ -1010,7 +1019,7 @@
     await refreshBalance();
     if (cost > myBalance) {
       msg.style.color = "var(--red)";
-      msg.innerText = `残高不足です（${cost.toLocaleString()} G 必要）`;
+      msg.innerText = `残高不足です（${cost.toLocaleString()} n 必要）`;
       return;
     }
 
@@ -1019,9 +1028,9 @@
     btn1.disabled = true;
     btn10.disabled = true;
     msg.style.color = "var(--muted)";
-    msg.innerText = "宝箱を開封中...";
+    msg.innerText = "抽選中...";
 
-    stage.innerHTML = `<div class="gacha-box-icon shaking">🎁</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">抽選中...</div>`;
+    stage.innerHTML = `<div class="gacha-box-icon shaking">🎁</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">開封中...</div>`;
 
     setTimeout(() => {
       const results = [];
@@ -1042,11 +1051,11 @@
       if (times === 1) {
         const it = results[0];
         stage.innerHTML = `
-          <div class="gacha-card rarity-${it.rarity}" style="width:240px; padding:14px; justify-content:center;">
+          <div class="gacha-card rarity-${it.rarity}" style="width:250px; padding:14px; justify-content:center;">
             <div class="emoji" style="font-size:2.4rem;">${it.emoji}</div>
             <div>
-              <div style="font-size:0.75rem;">[${it.rarity}]</div>
-              <div style="font-size:0.92rem; margin-top:2px;">${it.name}</div>
+              <div style="font-size:0.75rem;">[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</div>
+              <div style="font-size:0.95rem; margin-top:2px;">${it.name}</div>
             </div>
           </div>
         `;
@@ -1055,7 +1064,7 @@
           <div class="gacha-card rarity-${it.rarity}">
             <div class="emoji">${it.emoji}</div>
             <div>
-              <div style="font-size:0.65rem;">[${it.rarity}]</div>
+              <div style="font-size:0.65rem;">[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</div>
               <div>${it.name}</div>
             </div>
           </div>
@@ -1064,10 +1073,10 @@
 
       if (hitCount > 0) {
         msg.style.color = "var(--green)";
-        msg.innerText = `🎉 ${hitCount}個のRPGアイテムを獲得！下の持ち物から受取申請できます`;
+        msg.innerText = `🎉 ${hitCount}個当選！下の持ち物から受取申請できます`;
       } else {
         msg.style.color = "var(--red)";
-        msg.innerText = `💀 ハズレ（腐った肉）のみでした...`;
+        msg.innerText = `💀 すべてハズレでした...`;
       }
 
       isPullingGacha = false;
@@ -1148,7 +1157,7 @@
             <span class="${cls}">${badge}</span>
             <span>${u.mcid}${u.mcid === me ? " <small style='color:var(--gold);'>(あなた)</small>" : ""}</span>
           </div>
-          <div class="rank-bal">${Number(u.balance).toLocaleString()} G</div>
+          <div class="rank-bal">${Number(u.balance).toLocaleString()} n</div>
         </div>
       `;
     }).join("");
@@ -1161,7 +1170,7 @@
     box.innerHTML = data.map(u => `
       <div class="user-row" onclick="document.getElementById('adm-target').value='${u.mcid}'">
         <span>👤 <strong>${u.mcid}</strong></span>
-        <span style="color:var(--green);">${Number(u.balance).toLocaleString()} G</span>
+        <span style="color:var(--green);">${Number(u.balance).toLocaleString()} n</span>
       </div>
     `).join("");
   }
@@ -1178,7 +1187,7 @@
     const next = Math.max(0, Number(u.balance) + diff);
     await sb.from("casino_users").update({ balance: next }).eq("mcid", target);
     msg.style.color = "var(--green)";
-    msg.innerText = `✅ ${target} の残高を ${next.toLocaleString()} G に更新しました`;
+    msg.innerText = `✅ ${target} の残高を ${next.toLocaleString()} n に更新しました`;
     if (target === me) await refreshBalance();
     await loadAllUsers();
   }
@@ -1210,7 +1219,7 @@
     }
 
     btn.disabled = true;
-    const payload = `━━━━━━━━━━━━━━\n**${type}**\n👤 MCID: \`${me}\`\n💵 金額: **${amount.toLocaleString()} G**\n━━━━━━━━━━━━━━`;
+    const payload = `━━━━━━━━━━━━━━\n**${type}**\n👤 MCID: \`${me}\`\n💵 金額: **${amount.toLocaleString()} n**\n━━━━━━━━━━━━━━`;
     const ok = await notifyDiscord(payload);
     if (ok) {
       if (type.includes("出金")) await updateCloudBalance(-amount);
