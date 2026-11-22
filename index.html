@@ -16,6 +16,7 @@
     --red: #dc2626;
     --blue: #3b82f6;
     --purple: #a855f7;
+    --pink: #ec4899;
     --text: #f8fafc;
     --muted: #8b92a5;
   }
@@ -74,17 +75,19 @@
   }
   .btn-main {
     width: 100%;
-    padding: 12px;
+    padding: 12px 8px;
     border: none;
     border-radius: 8px;
     background: var(--gold);
     color: #111;
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     cursor: pointer;
   }
-  .btn-main:disabled { background: #2c3146; color: var(--muted); cursor: not-allowed; }
+  .btn-main:disabled { background: #2c3146 !important; color: var(--muted) !important; cursor: not-allowed; }
   .btn-purple { background: var(--purple) !important; color: #fff !important; }
+  .btn-pink { background: var(--pink) !important; color: #fff !important; }
+  .btn-red { background: var(--red) !important; color: #fff !important; }
 
   .app-wrap { width: 100%; max-width: 560px; }
   .header {
@@ -371,16 +374,22 @@
     gap: 6px;
     width: 100%;
   }
+  .gacha-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+  }
   .gacha-card {
     background: #171a26;
     border: 2px solid var(--border);
     border-radius: 8px;
-    padding: 7px 6px;
+    padding: 7px 8px;
     display: flex;
     align-items: center;
     gap: 8px;
     text-align: left;
-    font-size: 0.76rem;
+    font-size: 0.78rem;
     font-weight: 800;
   }
   .gacha-card .emoji { font-size: 1.5rem; flex-shrink: 0; }
@@ -407,7 +416,7 @@
   }
   .gacha-btns {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
 
@@ -592,21 +601,19 @@
 
   <!-- 2. 複数対応ガチャ画面 -->
   <div id="gacha" class="panel hidden">
-    <!-- ガチャ種類切り替えバー -->
     <div class="gacha-selector" id="gacha-selector"></div>
 
     <h3 id="gacha-title" style="margin:0 0 10px; color:var(--gold);"></h3>
 
-    <div class="gacha-stage" id="gacha-stage">
-      <div class="gacha-box-icon" id="gacha-default-icon">💍</div>
-      <div id="gacha-price-desc" style="font-size:0.84rem; color:var(--muted); margin-top:6px;"></div>
-    </div>
+    <div class="gacha-stage" id="gacha-stage"></div>
 
     <div class="gacha-rates" id="gacha-rate-box"></div>
 
     <div class="gacha-btns">
-      <button class="btn-main" id="gacha-btn-1" onclick="pullGacha(1)"></button>
-      <button class="btn-main btn-purple" id="gacha-btn-10" onclick="pullGacha(10)"></button>
+      <button class="btn-main gacha-pull-btn" id="gacha-btn-1" onclick="pullGacha(1)"></button>
+      <button class="btn-main btn-purple gacha-pull-btn" id="gacha-btn-10" onclick="pullGacha(10)"></button>
+      <button class="btn-main btn-pink gacha-pull-btn" id="gacha-btn-100" onclick="pullGacha(100)"></button>
+      <button class="btn-main btn-red gacha-pull-btn" id="gacha-btn-1000" onclick="pullGacha(1000)"></button>
     </div>
     <div class="msg" id="gacha-msg"></div>
 
@@ -665,7 +672,7 @@
   const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
-  const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
+  const DISCORD_WEBHOOK_URL = "";
   const MAX_BET_LIMIT = 500000;
 
   // ==========================================
@@ -684,10 +691,15 @@
         { rarity: "MISS", emoji: "💀", name: "ハズレ",               rate: 98.945, isMiss: true  }
       ]
     }
-    // ← 2つ目以降のガチャを追加したいときは、ここに同じ形式で追加できます！
   ];
 
   let currentPoolIndex = 0;
+
+  function formatJpUnit(num) {
+    if (num >= 100000000) return (num / 100000000) + "億";
+    if (num >= 10000) return (num / 10000) + "万";
+    return num.toLocaleString();
+  }
 
   function renderGachaSelector() {
     const selBox = document.getElementById("gacha-selector");
@@ -711,17 +723,17 @@
     document.getElementById("gacha-stage").innerHTML = `
       <div class="gacha-box-icon">${pool.icon}</div>
       <div style="font-size:0.84rem; color:var(--muted); margin-top:6px;">
-        1回 ${pool.unitCost.toLocaleString()} n / 10連 ${(pool.unitCost * 10).toLocaleString()} n
+        1回 ${formatJpUnit(pool.unitCost)} n
       </div>
     `;
     document.getElementById("gacha-rate-box").innerHTML = pool.items.map(it =>
       `<div>${it.emoji} <strong>[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</strong> ${it.name} ： <strong>${it.rate}%</strong></div>`
     ).join("");
 
-    const unitLabel = pool.unitCost >= 10000 ? (pool.unitCost / 10000) + "万" : pool.unitCost.toLocaleString();
-    const tenLabel = (pool.unitCost * 10) >= 10000 ? ((pool.unitCost * 10) / 10000) + "万" : (pool.unitCost * 10).toLocaleString();
-    document.getElementById("gacha-btn-1").innerText = `🎲 1回引く (${unitLabel} n)`;
-    document.getElementById("gacha-btn-10").innerText = `✨ 10連引く (${tenLabel} n)`;
+    document.getElementById("gacha-btn-1").innerText = `🎲 1回 (${formatJpUnit(pool.unitCost)} n)`;
+    document.getElementById("gacha-btn-10").innerText = `✨ 10連 (${formatJpUnit(pool.unitCost * 10)} n)`;
+    document.getElementById("gacha-btn-100").innerText = `🔥 100連 (${formatJpUnit(pool.unitCost * 100)} n)`;
+    document.getElementById("gacha-btn-1000").innerText = `👑 1000連 (${formatJpUnit(pool.unitCost * 1000)} n)`;
     document.getElementById("gacha-msg").innerText = "";
   }
 
@@ -1081,14 +1093,16 @@
     return pool.items[pool.items.length - 1];
   }
 
+  function setPullButtonsDisabled(disabled) {
+    document.querySelectorAll(".gacha-pull-btn").forEach(b => b.disabled = disabled);
+  }
+
   async function pullGacha(times) {
     if (isPullingGacha) return;
     const pool = GACHA_POOLS[currentPoolIndex];
     const cost = pool.unitCost * times;
     const msg = document.getElementById("gacha-msg");
     const stage = document.getElementById("gacha-stage");
-    const btn1 = document.getElementById("gacha-btn-1");
-    const btn10 = document.getElementById("gacha-btn-10");
 
     await refreshBalance();
     if (cost > myBalance) {
@@ -1099,21 +1113,24 @@
 
     await updateCloudBalance(-cost);
     isPullingGacha = true;
-    btn1.disabled = true;
-    btn10.disabled = true;
+    setPullButtonsDisabled(true);
     msg.style.color = "var(--muted)";
-    msg.innerText = "抽選中...";
+    msg.innerText = `${times}連抽選中...`;
 
-    stage.innerHTML = `<div class="gacha-box-icon shaking">${pool.icon}</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">開封中...</div>`;
+    stage.innerHTML = `<div class="gacha-box-icon shaking">${pool.icon}</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">${times}連 開封中...</div>`;
 
     setTimeout(() => {
       const results = [];
       const inv = loadInventory();
       let hitCount = 0;
+      const summaryMap = {};
 
       for (let i = 0; i < times; i++) {
         const item = rollSingleGacha(pool);
         results.push(item);
+        const key = `${item.rarity}|${item.emoji}|${item.name}|${item.isMiss}`;
+        summaryMap[key] = (summaryMap[key] || 0) + 1;
+
         if (!item.isMiss) {
           hitCount++;
           const label = `${item.emoji} [${item.rarity}] ${item.name}`;
@@ -1133,7 +1150,7 @@
             </div>
           </div>
         `;
-      } else {
+      } else if (times === 10) {
         stage.innerHTML = `<div class="gacha-grid">` + results.map(it => `
           <div class="gacha-card rarity-${it.rarity}">
             <div class="emoji">${it.emoji}</div>
@@ -1143,19 +1160,35 @@
             </div>
           </div>
         `).join("") + `</div>`;
+      } else {
+        // 100連・1000連はレアリティ別の集計リストで見やすく表示
+        const rows = pool.items.map(it => {
+          const key = `${it.rarity}|${it.emoji}|${it.name}|${it.isMiss}`;
+          const cnt = summaryMap[key] || 0;
+          if (cnt === 0) return "";
+          return `
+            <div class="gacha-card rarity-${it.rarity}" style="justify-content:space-between; padding:9px 12px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="emoji">${it.emoji}</span>
+                <span>[${it.rarity === "MISS" ? "ハズレ" : it.rarity}] ${it.name}</span>
+              </div>
+              <span style="font-size:0.95rem;">× ${cnt.toLocaleString()}</span>
+            </div>
+          `;
+        }).join("");
+        stage.innerHTML = `<div class="gacha-summary-list">${rows}</div>`;
       }
 
       if (hitCount > 0) {
         msg.style.color = "var(--green)";
-        msg.innerText = `🎉 ${hitCount}個当選！下の持ち物から受取申請できます`;
+        msg.innerText = `🎉 ${times}連中 ${hitCount}個当選！下の持ち物から受取申請できます`;
       } else {
         msg.style.color = "var(--red)";
-        msg.innerText = `💀 すべてハズレでした...`;
+        msg.innerText = `💀 ${times}連すべてハズレでした...`;
       }
 
       isPullingGacha = false;
-      btn1.disabled = false;
-      btn10.disabled = false;
+      setPullButtonsDisabled(false);
     }, 850);
   }
 
