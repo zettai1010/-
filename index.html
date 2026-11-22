@@ -314,8 +314,34 @@
   }
 
   /* ==========================================
-     🎁 マイクラRPGアイテムガチャ用スタイル
+     🎁 複数ガチャ切り替え＆アイテムガチャ用スタイル
      ========================================== */
+  .gacha-selector {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .gacha-sel-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--dark);
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 0.8rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .gacha-sel-btn.active {
+    background: rgba(245, 185, 66, 0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
   .gacha-stage {
     min-height: 155px;
     background: var(--dark);
@@ -510,7 +536,7 @@
 
   <div class="tabs">
     <button class="tab active" onclick="tab('roulette', this)">🎡 ルーレット</button>
-    <button class="tab" onclick="tab('gacha', this)">🎁 RPGガチャ</button>
+    <button class="tab" onclick="tab('gacha', this)">🎁 ガチャ</button>
     <button class="tab" onclick="tab('ranking', this)">🏆 順位</button>
     <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
     <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
@@ -564,20 +590,23 @@
     <div class="msg" id="rl-msg"></div>
   </div>
 
-  <!-- 2. マイクラRPGアイテムガチャ -->
+  <!-- 2. 複数対応ガチャ画面 -->
   <div id="gacha" class="panel hidden">
-    <h3 style="margin:0 0 10px; color:var(--gold);">💍 RPGプレミアムガチャ</h3>
+    <!-- ガチャ種類切り替えバー -->
+    <div class="gacha-selector" id="gacha-selector"></div>
+
+    <h3 id="gacha-title" style="margin:0 0 10px; color:var(--gold);"></h3>
 
     <div class="gacha-stage" id="gacha-stage">
-      <div class="gacha-box-icon">🎁</div>
-      <div style="font-size:0.84rem; color:var(--muted); margin-top:6px;">1回 100,000 n / 10連 1,000,000 n</div>
+      <div class="gacha-box-icon" id="gacha-default-icon">💍</div>
+      <div id="gacha-price-desc" style="font-size:0.84rem; color:var(--muted); margin-top:6px;"></div>
     </div>
 
     <div class="gacha-rates" id="gacha-rate-box"></div>
 
     <div class="gacha-btns">
-      <button class="btn-main" id="gacha-btn-1" onclick="pullGacha(1)">🎲 1回引く (10万 n)</button>
-      <button class="btn-main btn-purple" id="gacha-btn-10" onclick="pullGacha(10)">✨ 10連引く (100万 n)</button>
+      <button class="btn-main" id="gacha-btn-1" onclick="pullGacha(1)"></button>
+      <button class="btn-main btn-purple" id="gacha-btn-10" onclick="pullGacha(10)"></button>
     </div>
     <div class="msg" id="gacha-msg"></div>
 
@@ -640,20 +669,64 @@
   const MAX_BET_LIMIT = 500000;
 
   // ==========================================
-  // ★ ガチャ設定（1回 10万n / 相場ベースの期待値 72.5% 調整済み） ★
+  // ★ ガチャラインナップ定義（ここに新しいガチャを追加できます） ★
   // ==========================================
-  const GACHA_UNIT = 100000;
-  const GACHA_ITEMS = [
-    { rarity: "1等",  emoji: "💍", name: "久遠のマリッジリング", rate: 0.005,  isMiss: false },
-    { rarity: "2等",  emoji: "💎", name: "輝光石",               rate: 0.05,   isMiss: false },
-    { rarity: "3等",  emoji: "✨", name: "ファリーソウル",       rate: 1.0,    isMiss: false },
-    { rarity: "MISS", emoji: "💀", name: "ハズレ",               rate: 98.945, isMiss: true  }
+  const GACHA_POOLS = [
+    {
+      id: "ring",
+      title: "💍 久遠のマリッジリングガチャ",
+      icon: "💍",
+      unitCost: 100000,
+      items: [
+        { rarity: "1等",  emoji: "💍", name: "久遠のマリッジリング", rate: 0.005,  isMiss: false },
+        { rarity: "2等",  emoji: "💎", name: "輝光石",               rate: 0.05,   isMiss: false },
+        { rarity: "3等",  emoji: "✨", name: "ファリーソウル",       rate: 1.0,    isMiss: false },
+        { rarity: "MISS", emoji: "💀", name: "ハズレ",               rate: 98.945, isMiss: true  }
+      ]
+    }
+    // ← 2つ目以降のガチャを追加したいときは、ここに同じ形式で追加できます！
   ];
 
-  // 排出率表を自動表示
-  document.getElementById("gacha-rate-box").innerHTML = GACHA_ITEMS.map(it =>
-    `<div>${it.emoji} <strong>[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</strong> ${it.name} ： <strong>${it.rate}%</strong></div>`
-  ).join("");
+  let currentPoolIndex = 0;
+
+  function renderGachaSelector() {
+    const selBox = document.getElementById("gacha-selector");
+    selBox.innerHTML = GACHA_POOLS.map((p, idx) => `
+      <button class="gacha-sel-btn ${idx === currentPoolIndex ? "active" : ""}" onclick="selectGachaPool(${idx})">
+        ${p.title}
+      </button>
+    `).join("");
+  }
+
+  function selectGachaPool(idx) {
+    if (isPullingGacha) return;
+    currentPoolIndex = idx;
+    renderGachaSelector();
+    updateGachaPoolUI();
+  }
+
+  function updateGachaPoolUI() {
+    const pool = GACHA_POOLS[currentPoolIndex];
+    document.getElementById("gacha-title").innerText = pool.title;
+    document.getElementById("gacha-stage").innerHTML = `
+      <div class="gacha-box-icon">${pool.icon}</div>
+      <div style="font-size:0.84rem; color:var(--muted); margin-top:6px;">
+        1回 ${pool.unitCost.toLocaleString()} n / 10連 ${(pool.unitCost * 10).toLocaleString()} n
+      </div>
+    `;
+    document.getElementById("gacha-rate-box").innerHTML = pool.items.map(it =>
+      `<div>${it.emoji} <strong>[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</strong> ${it.name} ： <strong>${it.rate}%</strong></div>`
+    ).join("");
+
+    const unitLabel = pool.unitCost >= 10000 ? (pool.unitCost / 10000) + "万" : pool.unitCost.toLocaleString();
+    const tenLabel = (pool.unitCost * 10) >= 10000 ? ((pool.unitCost * 10) / 10000) + "万" : (pool.unitCost * 10).toLocaleString();
+    document.getElementById("gacha-btn-1").innerText = `🎲 1回引く (${unitLabel} n)`;
+    document.getElementById("gacha-btn-10").innerText = `✨ 10連引く (${tenLabel} n)`;
+    document.getElementById("gacha-msg").innerText = "";
+  }
+
+  renderGachaSelector();
+  updateGachaPoolUI();
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const ME_KEY = "rpg_casino_cloud_mcid";
@@ -998,19 +1071,20 @@
     `).join("");
   }
 
-  function rollSingleGacha() {
+  function rollSingleGacha(pool) {
     const r = Math.random() * 100;
     let acc = 0;
-    for (const item of GACHA_ITEMS) {
+    for (const item of pool.items) {
       acc += item.rate;
       if (r < acc) return item;
     }
-    return GACHA_ITEMS[GACHA_ITEMS.length - 1];
+    return pool.items[pool.items.length - 1];
   }
 
   async function pullGacha(times) {
     if (isPullingGacha) return;
-    const cost = GACHA_UNIT * times;
+    const pool = GACHA_POOLS[currentPoolIndex];
+    const cost = pool.unitCost * times;
     const msg = document.getElementById("gacha-msg");
     const stage = document.getElementById("gacha-stage");
     const btn1 = document.getElementById("gacha-btn-1");
@@ -1030,7 +1104,7 @@
     msg.style.color = "var(--muted)";
     msg.innerText = "抽選中...";
 
-    stage.innerHTML = `<div class="gacha-box-icon shaking">🎁</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">開封中...</div>`;
+    stage.innerHTML = `<div class="gacha-box-icon shaking">${pool.icon}</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">開封中...</div>`;
 
     setTimeout(() => {
       const results = [];
@@ -1038,7 +1112,7 @@
       let hitCount = 0;
 
       for (let i = 0; i < times; i++) {
-        const item = rollSingleGacha();
+        const item = rollSingleGacha(pool);
         results.push(item);
         if (!item.isMiss) {
           hitCount++;
