@@ -81,13 +81,14 @@
     background: var(--gold);
     color: #111;
     font-weight: 800;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     cursor: pointer;
   }
   .btn-main:disabled { background: #2c3146 !important; color: var(--muted) !important; cursor: not-allowed; }
   .btn-purple { background: var(--purple) !important; color: #fff !important; }
   .btn-pink { background: var(--pink) !important; color: #fff !important; }
   .btn-red { background: var(--red) !important; color: #fff !important; }
+  .btn-green { background: var(--green) !important; color: #052e16 !important; }
 
   .app-wrap { width: 100%; max-width: 560px; }
   .header {
@@ -112,6 +113,7 @@
     font-weight: 700;
     cursor: pointer;
   }
+  .mini-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .tabs {
     display: flex;
     gap: 5px;
@@ -143,177 +145,121 @@
   .msg { margin-top: 10px; font-size: 0.88rem; font-weight: 700; min-height: 22px; }
 
   /* ==========================================
-     🎡 ホイールアニメーション
+     🎰 オリジナル 1/500 RUSH スロット用スタイル
      ========================================== */
-  .wheel-stage {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    margin: 6px auto 12px;
-  }
-  .wheel-pointer {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 11px solid transparent;
-    border-right: 11px solid transparent;
-    border-top: 20px solid var(--gold);
-    z-index: 10;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
-  }
-  #wheel-canvas {
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    border: 5px solid var(--gold);
-    box-shadow: 0 0 24px rgba(245, 185, 66, 0.3);
-    transition: transform 4.2s cubic-bezier(0.12, 0.85, 0.18, 1);
-  }
-  .wheel-center-badge {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    background: var(--dark);
-    border: 3px solid var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    font-weight: 900;
-    color: #fff;
-    z-index: 5;
-  }
-
-  .history-bar {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
+  .slot-machine {
+    background: linear-gradient(180deg, #131624 0%, #090b12 100%);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 14px 10px;
     margin-bottom: 12px;
-    min-height: 24px;
+    box-shadow: 0 0 24px rgba(245, 185, 66, 0.15);
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
   }
-  .hist-dot {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    font-size: 0.72rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
+  .slot-machine.rush-mode {
+    background: linear-gradient(180deg, #3b0712 0%, #140509 100%);
+    border-color: #f43f5e;
+    box-shadow: 0 0 32px rgba(244, 63, 94, 0.55);
   }
-
-  /* チップ選択 & ベットテーブル */
-  .chip-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-  .chip {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 3px dashed #fff;
-    font-weight: 900;
-    font-size: 0.7rem;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-    transition: transform 0.12s;
-  }
-  .chip.active {
-    transform: scale(1.15);
-    outline: 3px solid var(--gold);
-  }
-  .chip-1 { background: #2563eb; }
-  .chip-2 { background: #059669; }
-  .chip-3 { background: #d97706; }
-  .chip-4 { background: #dc2626; }
-
-  .table-felt {
-    background: #0d3b26;
-    border: 2px solid #1f6b47;
-    border-radius: 10px;
-    padding: 8px;
-    margin-bottom: 10px;
-    user-select: none;
-  }
-  .grid-zero { margin-bottom: 4px; }
-  .grid-nums {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-    margin-bottom: 6px;
-  }
-  .grid-dozens {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-    margin-bottom: 4px;
-  }
-  .grid-outside {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
-  }
-  .bet-cell {
-    position: relative;
-    padding: 9px 2px;
-    border-radius: 5px;
-    border: 1px solid rgba(255,255,255,0.22);
-    font-weight: 800;
-    font-size: 0.82rem;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .bet-cell:active { transform: scale(0.96); }
-  .cell-red { background: #b91c1c; }
-  .cell-black { background: #18181b; }
-  .cell-green { background: #047857; }
-  .cell-out { background: rgba(0,0,0,0.35); font-size: 0.72rem; }
-
-  .placed-chip {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--gold);
-    color: #111;
-    border: 2px solid #fff;
-    border-radius: 999px;
-    padding: 1px 6px;
-    font-size: 0.68rem;
-    font-weight: 900;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.7);
-    pointer-events: none;
-    white-space: nowrap;
+  .slot-machine.chance-mode {
+    background: linear-gradient(180deg, #2e1065 0%, #0f0722 100%);
+    border-color: var(--purple);
+    box-shadow: 0 0 28px rgba(168, 85, 247, 0.5);
   }
 
-  .bet-summary {
+  .slot-top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--dark);
-    padding: 8px 12px;
+    background: rgba(0,0,0,0.45);
+    padding: 6px 12px;
     border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 800;
     margin-bottom: 10px;
+  }
+  .mode-badge {
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    background: #222638;
+    color: var(--gold);
+  }
+  .rush-mode .mode-badge {
+    background: #f43f5e;
+    color: #fff;
+    animation: pulseBadge 0.8s infinite alternate;
+  }
+  @keyframes pulseBadge {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+
+  .slot-lcd {
+    background: #05070c;
+    border: 2px solid #2c3146;
+    border-radius: 10px;
+    padding: 12px 8px;
+    margin-bottom: 12px;
+  }
+  .lcd-banner {
     font-size: 0.82rem;
+    font-weight: 900;
+    color: var(--gold);
+    min-height: 20px;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+  .slot-reels {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 6px 0;
+  }
+  .s-reel {
+    width: 88px;
+    height: 104px;
+    background: linear-gradient(180deg, #1b1f30 0%, #0e101a 50%, #1b1f30 100%);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    font-size: 3.1rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.8);
+  }
+  .rush-mode .s-reel {
+    border-color: #fb7185;
+    box-shadow: 0 0 14px rgba(244, 63, 94, 0.45);
+  }
+  .rush-stats-row {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(244, 63, 94, 0.15);
+    border: 1px solid rgba(244, 63, 94, 0.4);
+    border-radius: 8px;
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 0.8rem;
+  }
+
+  .auto-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .spec-box {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 10px;
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.65;
+    text-align: left;
   }
 
   /* ==========================================
@@ -544,59 +490,67 @@
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="tab('roulette', this)">🎡 ルーレット</button>
+    <button class="tab active" onclick="tab('slot', this)">🎰 スロット</button>
     <button class="tab" onclick="tab('gacha', this)">🎁 ガチャ</button>
     <button class="tab" onclick="tab('ranking', this)">🏆 順位</button>
     <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
     <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
   </div>
 
-  <!-- 1. 本格ルーレットテーブル -->
-  <div id="roulette" class="panel">
-    <div class="wheel-stage">
-      <div class="wheel-pointer"></div>
-      <canvas id="wheel-canvas" width="440" height="440"></canvas>
-      <div class="wheel-center-badge" id="wheel-res">?</div>
-    </div>
-
-    <div class="history-bar" id="rl-hist"></div>
-
-    <div class="chip-bar">
-      <button class="chip chip-1 active" onclick="selectChip(10000, this)">1万</button>
-      <button class="chip chip-2" onclick="selectChip(50000, this)">5万</button>
-      <button class="chip chip-3" onclick="selectChip(100000, this)">10万</button>
-      <button class="chip chip-4" onclick="selectChip(500000, this)">50万</button>
-      <button class="mini-btn" onclick="clearBets()">🗑️ クリア</button>
-      <button class="mini-btn" onclick="rebet()">🔁 前回と同じ</button>
-    </div>
-
-    <div class="table-felt">
-      <div class="grid-zero">
-        <div class="bet-cell cell-green" data-bet="n:0" onclick="placeBet('n:0')">0 (36x)</div>
+  <!-- 1. オリジナル 1/500 RUSH スロット -->
+  <div id="slot" class="panel">
+    <div class="slot-machine" id="slot-machine">
+      <div class="slot-top-bar">
+        <span class="mode-badge" id="slot-mode-badge">通常モード (1/500)</span>
+        <span>総回転: <strong id="slot-spins" style="color:#fff;">0</strong> 回転</span>
       </div>
-      <div class="grid-nums" id="num-grid"></div>
-      <div class="grid-dozens">
-        <div class="bet-cell cell-out" data-bet="d:1" onclick="placeBet('d:1')">1st 12 (3x)</div>
-        <div class="bet-cell cell-out" data-bet="d:2" onclick="placeBet('d:2')">2nd 12 (3x)</div>
-        <div class="bet-cell cell-out" data-bet="d:3" onclick="placeBet('d:3')">3rd 12 (3x)</div>
+
+      <div class="slot-lcd">
+        <div class="lcd-banner" id="slot-banner">1回転 10万n ｜ 大当たり確率 1/500</div>
+        <div class="slot-reels">
+          <div class="s-reel" id="sr1">⚔️</div>
+          <div class="s-reel" id="sr2">7️⃣</div>
+          <div class="s-reel" id="sr3">⚔️</div>
+        </div>
+        <div class="rush-stats-row hidden" id="rush-stats">
+          <span>🔥 継続数: <strong id="rush-chain" style="color:#fda4af;">1連</strong></span>
+          <span>💰 累計獲得: <strong id="rush-total-win" style="color:var(--gold);">0 n</strong></span>
+        </div>
       </div>
-      <div class="grid-outside">
-        <div class="bet-cell cell-out" data-bet="o:low" onclick="placeBet('o:low')">1-18</div>
-        <div class="bet-cell cell-out" data-bet="o:even" onclick="placeBet('o:even')">EVEN</div>
-        <div class="bet-cell cell-red" data-bet="o:red" onclick="placeBet('o:red')">RED</div>
-        <div class="bet-cell cell-black" data-bet="o:black" onclick="placeBet('o:black')">BLACK</div>
-        <div class="bet-cell cell-out" data-bet="o:odd" onclick="placeBet('o:odd')">ODD</div>
-        <div class="bet-cell cell-out" data-bet="o:high" onclick="placeBet('o:high')">19-36</div>
+
+      <!-- 通常時操作エリア -->
+      <div id="slot-normal-ctrl">
+        <button class="btn-main" id="slot-spin-btn" onclick="spinNormalSlot()">🎰 1回転回す (10万 n)</button>
+        <div class="auto-row">
+          <button class="mini-btn auto-btn" onclick="startAutoSpin(10)">⚡ オート10回</button>
+          <button class="mini-btn auto-btn" onclick="startAutoSpin(50)">⚡ オート50回</button>
+          <button class="mini-btn auto-btn" id="auto-stop-btn" onclick="startAutoSpin(100)">⚡ オート100回</button>
+        </div>
+      </div>
+
+      <!-- 50% RUSH突入ジャッジボタン -->
+      <div id="slot-judge-ctrl" class="hidden">
+        <button class="btn-main btn-purple" id="slot-judge-btn" onclick="judgeRushEntry()" style="font-size:1rem; padding:14px;">
+          ⚔️ RUSH突入チャレンジ (突破率 50%)
+        </button>
+      </div>
+
+      <!-- 80%継続 RUSH消化ボタン -->
+      <div id="slot-rush-ctrl" class="hidden">
+        <button class="btn-main btn-red" id="slot-rush-btn" onclick="spinRushMode()" style="font-size:1rem; padding:14px;">
+          🔥 RUSH継続ジャッジ (継続率 80% / 無料)
+        </button>
       </div>
     </div>
 
-    <div class="bet-summary">
-      <span>合計ベット: <strong id="total-bet-txt" style="color:var(--gold);">0</strong> n</span>
-      <span style="color:var(--muted);">上限: 500,000 n</span>
+    <div class="spec-box">
+      <div>🎰 <strong>機種スペック（1回転 100,000 n）</strong></div>
+      <div>・初当たり確率：<strong>1 / 500</strong>（初当たり出玉：<strong>500万 n</strong>）</div>
+      <div>・RUSH突入率：<strong>50%</strong>（初当たり消化後に突入ジャッジ）</div>
+      <div>・RUSH継続率：<strong>80%</strong>（継続ごとに <strong>1,250万 n</strong> 獲得 / 回転無料）</div>
     </div>
 
-    <button class="btn-main" id="rl-spin-btn" onclick="spinRoulette()">🎡 SPIN ROULETTE</button>
-    <div class="msg" id="rl-msg"></div>
+    <div class="msg" id="slot-msg"></div>
   </div>
 
   <!-- 2. 複数対応ガチャ画面 -->
@@ -672,11 +626,20 @@
   const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
   const ADMIN_MCID = "Smile2525";
-  const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1572943820801187894/HYVqA-1kalJ8pH0WCglX-y4Zrch2GKgpdsuNTxHJjZ_x339j_cWXUu9t6Ep__97kQuPU";
-  const MAX_BET_LIMIT = 100000000;
+  const DISCORD_WEBHOOK_URL = "";
 
   // ==========================================
-  // ★ ガチャラインナップ定義（ここに新しいガチャを追加できます） ★
+  // ★ オリジナルスロット設定（1回転 10万n / 1/500 / 50%突入 / 80%継続） ★
+  // ==========================================
+  const SLOT_SPIN_COST     = 100000;    // 1回転 10万n
+  const SLOT_HIT_PROB      = 1 / 500;   // 初当たり確率 1/500 (0.2%)
+  const SLOT_FIRST_PAYOUT  = 5000000;   // 初当たり出玉 500万n (50倍)
+  const SLOT_RUSH_ENTRY    = 0.50;      // RUSH突入率 50%
+  const SLOT_RUSH_KEEP     = 0.80;      // RUSH継続率 80%
+  const SLOT_RUSH_PAYOUT   = 12500000;  // RUSH継続ごとの出玉 1,250万n (125倍)
+
+  // ==========================================
+  // ★ ガチャラインナップ定義 ★
   // ==========================================
   const GACHA_POOLS = [
     {
@@ -831,218 +794,248 @@
   function tab(name, btn) {
     document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
-    ["roulette", "gacha", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    ["slot", "gacha", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
     if (name === "ranking") loadRanking();
     if (name === "admin") loadAllUsers();
   }
 
   // ==========================================
-  // 🎡 ヨーロピアンルーレット円盤描画 & テーブル初期化
+  // 🎰 オリジナル 1/500 RUSH スロットロジック
   // ==========================================
-  const WHEEL_ORDER = [
-    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10,
-    5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
-  ];
-  const RED_NUMS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+  const SLOT_SYMS = ["⚔️", "🛡️", "💎", "🔮", "👑", "7️⃣"];
+  let slotState = "normal"; // "normal" | "spinning" | "judge" | "rush"
+  let totalSpins = 0;
+  let autoRemaining = 0;
+  let rushChain = 0;
+  let rushTotalWin = 0;
 
-  function getNumColor(n) {
-    if (n === 0) return "green";
-    return RED_NUMS.has(n) ? "red" : "black";
+  function setSlotUIState(state) {
+    slotState = state;
+    const machine = document.getElementById("slot-machine");
+    const badge = document.getElementById("slot-mode-badge");
+    const normCtrl = document.getElementById("slot-normal-ctrl");
+    const judgeCtrl = document.getElementById("slot-judge-ctrl");
+    const rushCtrl = document.getElementById("slot-rush-ctrl");
+    const rushStats = document.getElementById("rush-stats");
+
+    machine.classList.remove("rush-mode", "chance-mode");
+    normCtrl.classList.add("hidden");
+    judgeCtrl.classList.add("hidden");
+    rushCtrl.classList.add("hidden");
+    rushStats.classList.add("hidden");
+
+    if (state === "normal" || state === "spinning") {
+      badge.innerText = "通常モード (1/500)";
+      normCtrl.classList.remove("hidden");
+      const busy = state === "spinning" || autoRemaining > 0;
+      document.getElementById("slot-spin-btn").disabled = busy;
+      document.querySelectorAll(".auto-btn").forEach(b => b.disabled = state === "spinning" && autoRemaining === 0);
+    } else if (state === "judge") {
+      machine.classList.add("chance-mode");
+      badge.innerText = "⚔️ RUSH突入ジャッジ (50%)";
+      judgeCtrl.classList.remove("hidden");
+      document.getElementById("slot-judge-btn").disabled = false;
+    } else if (state === "rush") {
+      machine.classList.add("rush-mode");
+      badge.innerText = "🔥 RUSH MODE (80%継続)";
+      rushCtrl.classList.remove("hidden");
+      rushStats.classList.remove("hidden");
+      document.getElementById("slot-rush-btn").disabled = false;
+      document.getElementById("rush-chain").innerText = `${rushChain}連`;
+      document.getElementById("rush-total-win").innerText = `${rushTotalWin.toLocaleString()} n`;
+    }
   }
 
-  const numGrid = document.getElementById("num-grid");
-  for (let n = 1; n <= 36; n++) {
-    const col = getNumColor(n);
-    const cell = document.createElement("div");
-    cell.className = `bet-cell cell-${col}`;
-    cell.dataset.bet = `n:${n}`;
-    cell.innerText = n;
-    cell.onclick = () => placeBet(`n:${n}`);
-    numGrid.appendChild(cell);
-  }
-
-  function drawWheelCanvas() {
-    const canvas = document.getElementById("wheel-canvas");
-    const ctx = canvas.getContext("2d");
-    const cx = 220, cy = 220, radius = 215;
-    const sliceAngle = (2 * Math.PI) / 37;
-
-    WHEEL_ORDER.forEach((num, idx) => {
-      const startAngle = -Math.PI / 2 - sliceAngle / 2 + idx * sliceAngle;
-      const endAngle = startAngle + sliceAngle;
-      const col = getNumColor(num);
-
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, radius, startAngle, endAngle);
-      ctx.closePath();
-      ctx.fillStyle = col === "green" ? "#059669" : col === "red" ? "#dc2626" : "#18181b";
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "#f5b942";
-      ctx.stroke();
-
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(startAngle + sliceAngle / 2);
-      ctx.textAlign = "right";
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 20px sans-serif";
-      ctx.fillText(num.toString(), radius - 14, 7);
-      ctx.restore();
-    });
-  }
-  drawWheelCanvas();
-
-  let currentChip = 10000;
-  let bets = {};
-  let lastBets = {};
-  let isSpinning = false;
-  let currentRotation = 0;
-  let rlHistory = [];
-
-  function selectChip(val, btn) {
-    currentChip = val;
-    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    btn.classList.add("active");
-  }
-
-  function getTotalBet() {
-    return Object.values(bets).reduce((a, b) => a + b, 0);
-  }
-
-  function placeBet(key) {
-    if (isSpinning) return;
-    const total = getTotalBet();
-    const msg = document.getElementById("rl-msg");
-    if (total + currentChip > MAX_BET_LIMIT) {
-      msg.style.color = "var(--red)";
-      msg.innerText = `合計ベット上限は ${MAX_BET_LIMIT.toLocaleString()} n です`;
+  function startAutoSpin(count) {
+    if (autoRemaining > 0) {
+      autoRemaining = 0;
+      updateAutoButtons();
       return;
     }
-    msg.innerText = "";
-    bets[key] = (bets[key] || 0) + currentChip;
-    renderBets();
+    if (slotState !== "normal") return;
+    autoRemaining = count;
+    updateAutoButtons();
+    spinNormalSlot(true);
   }
 
-  function clearBets() {
-    if (isSpinning) return;
-    bets = {};
-    document.getElementById("rl-msg").innerText = "";
-    renderBets();
-  }
-
-  function rebet() {
-    if (isSpinning || Object.keys(lastBets).length === 0) return;
-    bets = { ...lastBets };
-    renderBets();
-  }
-
-  function formatChipText(amount) {
-    if (amount >= 10000) return (amount / 10000) + "万";
-    if (amount >= 1000) return (amount / 1000) + "K";
-    return amount;
-  }
-
-  function renderBets() {
-    document.querySelectorAll(".placed-chip").forEach(el => el.remove());
-    for (const [key, amount] of Object.entries(bets)) {
-      const cell = document.querySelector(`.bet-cell[data-bet="${key}"]`);
-      if (cell) {
-        const badge = document.createElement("div");
-        badge.className = "placed-chip";
-        badge.innerText = formatChipText(amount);
-        cell.appendChild(badge);
-      }
+  function updateAutoButtons() {
+    const btns = document.querySelectorAll(".auto-btn");
+    if (autoRemaining > 0) {
+      btns[0].innerText = `残り ${autoRemaining}回`;
+      btns[1].innerText = "オート回転中...";
+      btns[2].innerText = "⏹️ 停止する";
+      btns[0].disabled = true;
+      btns[1].disabled = true;
+      btns[2].disabled = false;
+    } else {
+      btns[0].innerText = "⚡ オート10回";
+      btns[1].innerText = "⚡ オート50回";
+      btns[2].innerText = "⚡ オート100回";
+      btns.forEach(b => b.disabled = false);
     }
-    document.getElementById("total-bet-txt").innerText = getTotalBet().toLocaleString();
   }
 
-  async function spinRoulette() {
-    if (isSpinning) return;
-    const totalBet = getTotalBet();
-    const msg = document.getElementById("rl-msg");
-    const btn = document.getElementById("rl-spin-btn");
-
-    if (totalBet <= 0) {
-      msg.style.color = "var(--gold)";
-      msg.innerText = "テーブルをタップしてチップを置いてください";
-      return;
-    }
+  async function spinNormalSlot(isAuto = false) {
+    if (slotState !== "normal") return;
+    const msg = document.getElementById("slot-msg");
+    const banner = document.getElementById("slot-banner");
 
     await refreshBalance();
-    if (totalBet > myBalance) {
+    if (myBalance < SLOT_SPIN_COST) {
+      autoRemaining = 0;
+      updateAutoButtons();
       msg.style.color = "var(--red)";
-      msg.innerText = "残高不足です";
+      msg.innerText = `残高不足です（1回転 ${SLOT_SPIN_COST.toLocaleString()} n 必要）`;
       return;
     }
 
-    await updateCloudBalance(-totalBet);
-    lastBets = { ...bets };
-    isSpinning = true;
-    btn.disabled = true;
-    msg.style.color = "var(--muted)";
-    msg.innerText = "ルーレット回転中...";
+    await updateCloudBalance(-SLOT_SPIN_COST);
+    totalSpins++;
+    document.getElementById("slot-spins").innerText = totalSpins.toLocaleString();
+    if (isAuto && autoRemaining > 0) {
+      autoRemaining--;
+      updateAutoButtons();
+    }
 
-    const resBadge = document.getElementById("wheel-res");
-    resBadge.innerText = "?";
-    resBadge.style.background = "var(--dark)";
+    setSlotUIState("spinning");
+    msg.innerText = "";
+    banner.style.color = "var(--gold)";
+    banner.innerText = "回転中...";
 
-    const winIndex = Math.floor(Math.random() * 37);
-    const winNum = WHEEL_ORDER[winIndex];
-    const winCol = getNumColor(winNum);
+    const isHit = Math.random() < SLOT_HIT_PROB;
+    const isReach = !isHit && Math.random() < 0.04; // 4%でリーチ演出
 
-    const sliceDeg = 360 / 37;
-    const targetMod = (360 - (winIndex * sliceDeg)) % 360;
-    const currentMod = ((currentRotation % 360) + 360) % 360;
-    const delta = (targetMod - currentMod + 360) % 360;
-    currentRotation += 360 * 6 + delta;
-
-    const canvas = document.getElementById("wheel-canvas");
-    canvas.style.transform = `rotate(${currentRotation}deg)`;
+    const fast = isAuto;
+    const duration = fast ? 140 : 650;
+    let ticks = 0;
+    const iv = setInterval(() => {
+      ["sr1", "sr2", "sr3"].forEach(id => {
+        document.getElementById(id).innerText = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+      });
+      ticks++;
+    }, 45);
 
     setTimeout(async () => {
-      resBadge.innerText = winNum;
-      resBadge.style.background = winCol === "green" ? "#059669" : winCol === "red" ? "#dc2626" : "#18181b";
+      clearInterval(iv);
 
-      rlHistory.unshift({ num: winNum, col: winCol });
-      if (rlHistory.length > 10) rlHistory.pop();
-      document.getElementById("rl-hist").innerHTML = rlHistory.map(h => {
-        const bg = h.col === "red" ? "#dc2626" : h.col === "black" ? "#27272a" : "#059669";
-        return `<div class="hist-dot" style="background:${bg};">${h.num}</div>`;
-      }).join("");
+      if (isHit) {
+        // 大当たり！オート停止
+        autoRemaining = 0;
+        updateAutoButtons();
 
-      let totalPayout = 0;
-      for (const [key, amt] of Object.entries(bets)) {
-        const [type, val] = key.split(":");
-        if (type === "n" && Number(val) === winNum) {
-          totalPayout += amt * 36;
-        } else if (type === "d" && winNum !== 0) {
-          if (val === "1" && winNum >= 1 && winNum <= 12) totalPayout += amt * 3;
-          if (val === "2" && winNum >= 13 && winNum <= 24) totalPayout += amt * 3;
-          if (val === "3" && winNum >= 25 && winNum <= 36) totalPayout += amt * 3;
-        } else if (type === "o" && winNum !== 0) {
-          if (val === "red" && winCol === "red") totalPayout += amt * 2;
-          if (val === "black" && winCol === "black") totalPayout += amt * 2;
-          if (val === "even" && winNum % 2 === 0) totalPayout += amt * 2;
-          if (val === "odd" && winNum % 2 === 1) totalPayout += amt * 2;
-          if (val === "low" && winNum >= 1 && winNum <= 18) totalPayout += amt * 2;
-          if (val === "high" && winNum >= 19 && winNum <= 36) totalPayout += amt * 2;
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "7️⃣");
+        await updateCloudBalance(SLOT_FIRST_PAYOUT);
+        rushChain = 1;
+        rushTotalWin = SLOT_FIRST_PAYOUT;
+
+        banner.style.color = "#fde047";
+        banner.innerText = `🎊 大当たり！！ +${SLOT_FIRST_PAYOUT.toLocaleString()} n 獲得！`;
+        msg.style.color = "var(--green)";
+        msg.innerText = `🎉 1/500 突破！初当たり ${SLOT_FIRST_PAYOUT.toLocaleString()} n 獲得！続いて50% RUSH突入ジャッジ！`;
+        setSlotUIState("judge");
+      } else {
+        // ハズレ出目生成
+        let s1 = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        let s2 = isReach ? s1 : SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        let s3 = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        while (s1 === s2 && s2 === s3) {
+          s3 = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        }
+        document.getElementById("sr1").innerText = s1;
+        document.getElementById("sr2").innerText = s2;
+        document.getElementById("sr3").innerText = s3;
+
+        banner.style.color = isReach ? "#c084fc" : "var(--muted)";
+        banner.innerText = isReach ? "⚡ リーチ...！惜しくもハズレ" : "ハズレ（1回転 10万n）";
+        setSlotUIState("normal");
+
+        if (autoRemaining > 0) {
+          setTimeout(() => spinNormalSlot(true), 90);
         }
       }
+    }, duration);
+  }
 
-      if (totalPayout > 0) {
-        await updateCloudBalance(totalPayout);
-        msg.style.color = "var(--green)";
-        msg.innerText = `🎉 出目「${winNum}」的中！ +${totalPayout.toLocaleString()} n 獲得！`;
+  // 初当たり後の50% RUSH突入ジャッジ
+  function judgeRushEntry() {
+    if (slotState !== "judge") return;
+    const btn = document.getElementById("slot-judge-btn");
+    const banner = document.getElementById("slot-banner");
+    const msg = document.getElementById("slot-msg");
+    btn.disabled = true;
+    banner.style.color = "#e879f9";
+    banner.innerText = "⚔️ 運命の50%ジャッジ中...";
+
+    let t = 0;
+    const iv = setInterval(() => {
+      ["sr1", "sr2", "sr3"].forEach(id => {
+        document.getElementById(id).innerText = t % 2 === 0 ? "🔥" : "💀";
+      });
+      t++;
+    }, 70);
+
+    setTimeout(() => {
+      clearInterval(iv);
+      const enterRush = Math.random() < SLOT_RUSH_ENTRY;
+      if (enterRush) {
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "🔥");
+        banner.style.color = "#fda4af";
+        banner.innerText = "🔥 50%突破！！ RUSH MODE 突入！！";
+        msg.style.color = "var(--gold)";
+        msg.innerText = "🔥 RUSH突入おめでとう！ここから80%継続で1回ごとに1,250万n獲得！";
+        setSlotUIState("rush");
       } else {
-        msg.style.color = "var(--red)";
-        msg.innerText = `💥 出目「${winNum}」ハズレ... (-${totalBet.toLocaleString()} n)`;
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "🛡️");
+        banner.style.color = "var(--muted)";
+        banner.innerText = "通常モードへ戻りました（初当たり 500万n 獲得済み）";
+        msg.style.color = "var(--muted)";
+        msg.innerText = "💥 50%失敗... 通常モードに戻ります（500万n獲得）";
+        setSlotUIState("normal");
       }
+    }, 900);
+  }
 
-      isSpinning = false;
-      btn.disabled = false;
-    }, 4300);
+  // 80%継続 RUSHモード回転
+  function spinRushMode() {
+    if (slotState !== "rush") return;
+    const btn = document.getElementById("slot-rush-btn");
+    const banner = document.getElementById("slot-banner");
+    const msg = document.getElementById("slot-msg");
+    btn.disabled = true;
+    banner.style.color = "#fda4af";
+    banner.innerText = "🔥 80%継続ジャッジ中...";
+
+    let t = 0;
+    const iv = setInterval(() => {
+      ["sr1", "sr2", "sr3"].forEach(id => {
+        document.getElementById(id).innerText = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+      });
+      t++;
+    }, 50);
+
+    setTimeout(async () => {
+      clearInterval(iv);
+      const keep = Math.random() < SLOT_RUSH_KEEP;
+      if (keep) {
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "7️⃣");
+        rushChain++;
+        rushTotalWin += SLOT_RUSH_PAYOUT;
+        await updateCloudBalance(SLOT_RUSH_PAYOUT);
+
+        banner.style.color = "#fde047";
+        banner.innerText = `🎊 ${rushChain}連チャン達成！！ +${SLOT_RUSH_PAYOUT.toLocaleString()} n！！`;
+        msg.style.color = "var(--green)";
+        msg.innerText = `🔥 RUSH継続（${rushChain}連）！ +${SLOT_RUSH_PAYOUT.toLocaleString()} n 獲得！`;
+        setSlotUIState("rush");
+      } else {
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "💀");
+        banner.style.color = "var(--gold)";
+        banner.innerText = `RUSH終了！最終 ${rushChain}連 / 合計 ${rushTotalWin.toLocaleString()} n 獲得！`;
+        msg.style.color = "var(--gold)";
+        msg.innerText = `🏁 RUSH終了（計 ${rushChain}連チャン・総獲得 ${rushTotalWin.toLocaleString()} n）！通常モードに戻ります`;
+        setSlotUIState("normal");
+      }
+    }, 750);
   }
 
   // ==========================================
@@ -1161,9 +1154,8 @@
           </div>
         `).join("") + `</div>`;
       } else {
-        // 100連・1000連はレアリティ別の集計リストで見やすく表示
         const rows = pool.items.map(it => {
-          const key = `${it.rarity}|${it.emoji}|${it.name}|${it.isMiss}`;
+          const key = `${it.rarity}|${it.emoji}|${it.name}|it.isMiss}`;
           const cnt = summaryMap[key] || 0;
           if (cnt === 0) return "";
           return `
