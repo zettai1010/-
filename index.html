@@ -387,4 +387,956 @@
   .inv-list {
     display: flex;
     flex-direction: column;
-    gap: 6px
+    gap: 6px;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  .inv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #171a26;
+    border: 1px solid var(--border);
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+  }
+
+  /* ランキング用スタイル */
+  .rank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+    text-align: left;
+  }
+  .rank-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 9px;
+    font-size: 0.9rem;
+  }
+  .rank-item.me {
+    border-color: var(--gold);
+    background: rgba(245, 185, 66, 0.08);
+  }
+  .rank-left { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .rank-badge { width: 28px; text-align: center; font-weight: 900; color: var(--muted); }
+  .rank-1 { color: #ffd700; font-size: 1.15rem; }
+  .rank-2 { color: #c0c0c0; font-size: 1.1rem; }
+  .rank-3 { color: #cd7f32; font-size: 1.05rem; }
+  .rank-bal { font-weight: 800; color: var(--green); }
+
+  .user-list {
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: left;
+    margin-top: 14px;
+    font-size: 0.82rem;
+  }
+  .user-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-bottom: 1px solid #1a1e2e;
+    cursor: pointer;
+  }
+  .user-row:hover { background: #171a26; }
+</style>
+</head>
+<body>
+
+<!-- ログイン / 新規登録画面 -->
+<div class="auth-card" id="login-view">
+  <h2 style="margin:0 0 14px; color:var(--gold); text-align:center;">⚔️ RPG CASINO</h2>
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="tab-log" onclick="switchAuth('login')">ログイン</button>
+    <button class="auth-tab" id="tab-reg" onclick="switchAuth('register')">新規登録</button>
+  </div>
+
+  <label class="label">MCID（統合版は先頭に BE_ ）</label>
+  <input id="mcid" class="input" placeholder="例: Steve / BE_Steve">
+
+  <label class="label">パスワード</label>
+  <input id="pass" type="password" class="input" placeholder="••••••••">
+
+  <div id="reg-extra" class="hidden">
+    <label class="label">パスワード（確認用）</label>
+    <input id="pass2" type="password" class="input" placeholder="もう一度入力">
+  </div>
+
+  <button class="btn-main" id="auth-submit" onclick="submitAuth()">ログイン</button>
+  <div id="err" style="color:var(--red); font-size:0.8rem; text-align:center; margin-top:10px;"></div>
+</div>
+
+<!-- メイン画面 -->
+<div class="app-wrap hidden" id="game-view">
+  <div class="header">
+    <div>
+      <div style="font-weight:800; color:var(--gold); font-size:0.9rem;" id="u-name"></div>
+      <div class="bal"><span id="bal">0</span> n <button class="mini-btn" style="padding:2px 6px; margin-left:4px;" onclick="refreshBalance()">🔄</button></div>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <button class="mini-btn" onclick="logout()">ログアウト</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="tab('slot', this)">🎰 スロット</button>
+    <button class="tab" onclick="tab('gacha', this)">🎁 ガチャ</button>
+    <button class="tab" onclick="tab('ranking', this)">🏆 順位</button>
+    <button class="tab" id="dep-tab-btn" onclick="tab('deposit', this)">💰 入出金</button>
+    <button class="tab hidden" id="admin-tab-btn" style="color:var(--gold);" onclick="tab('admin', this)">👑 管理</button>
+  </div>
+
+  <!-- 1. オリジナル 1/500 RUSH スロット -->
+  <div id="slot" class="panel">
+    <div class="slot-machine" id="slot-machine">
+      <div class="slot-top-bar">
+        <span class="mode-badge" id="slot-mode-badge">通常モード (1/500)</span>
+        <span>総回転: <strong id="slot-spins" style="color:#fff;">0</strong> 回転</span>
+      </div>
+
+      <div class="slot-lcd">
+        <div class="lcd-banner" id="slot-banner">1回転 10万n ｜ 大当たり確率 1/500</div>
+        <div class="slot-reels">
+          <div class="s-reel" id="sr1">⚔️</div>
+          <div class="s-reel" id="sr2">7️⃣</div>
+          <div class="s-reel" id="sr3">⚔️</div>
+        </div>
+        <div class="rush-stats-row hidden" id="rush-stats">
+          <span>🔥 継続数: <strong id="rush-chain" style="color:#fda4af;">1連</strong></span>
+          <span>💰 累計獲得: <strong id="rush-total-win" style="color:var(--gold);">0 n</strong></span>
+        </div>
+      </div>
+
+      <!-- 通常時操作エリア -->
+      <div id="slot-normal-ctrl">
+        <button class="btn-main" id="slot-spin-btn" onclick="spinNormalSlot()">🎰 1回転回す (10万 n)</button>
+        <div class="auto-row">
+          <button class="mini-btn auto-btn" onclick="startAutoSpin(10)">⚡ オート10回</button>
+          <button class="mini-btn auto-btn" onclick="startAutoSpin(50)">⚡ オート50回</button>
+          <button class="mini-btn auto-btn" id="auto-stop-btn" onclick="startAutoSpin(100)">⚡ オート100回</button>
+        </div>
+      </div>
+
+      <!-- 50% RUSH突入ジャッジボタン -->
+      <div id="slot-judge-ctrl" class="hidden">
+        <button class="btn-main btn-purple" id="slot-judge-btn" onclick="judgeRushEntry()" style="font-size:1rem; padding:14px;">
+          ⚔️ RUSH突入チャレンジ (突破率 50%)
+        </button>
+      </div>
+
+      <!-- 80%継続 RUSH消化ボタン -->
+      <div id="slot-rush-ctrl" class="hidden">
+        <button class="btn-main btn-red" id="slot-rush-btn" onclick="spinRushMode()" style="font-size:1rem; padding:14px;">
+          🔥 RUSH継続ジャッジ (継続率 80% / 無料)
+        </button>
+      </div>
+    </div>
+
+    <div class="spec-box">
+      <div>🎰 <strong>機種スペック（1回転 100,000 n）</strong></div>
+      <div>・初当たり確率：<strong>1 / 500</strong>（初当たり出玉：<strong>1,500万 n</strong>）</div>
+      <div>・RUSH突入率：<strong>50%</strong>（初当たり消化後に突入ジャッジ）</div>
+      <div>・RUSH継続率：<strong>80%</strong>（継続ごとに <strong>2,000万 n</strong> 獲得 / 回転無料）</div>
+    </div>
+
+    <div class="msg" id="slot-msg"></div>
+  </div>
+
+  <!-- 2. 複数対応ガチャ画面 -->
+  <div id="gacha" class="panel hidden">
+    <div class="gacha-selector" id="gacha-selector"></div>
+
+    <h3 id="gacha-title" style="margin:0 0 10px; color:var(--gold);"></h3>
+
+    <div class="gacha-stage" id="gacha-stage"></div>
+
+    <div class="gacha-rates" id="gacha-rate-box"></div>
+
+    <div class="gacha-btns">
+      <button class="btn-main gacha-pull-btn" id="gacha-btn-1" onclick="pullGacha(1)"></button>
+      <button class="btn-main btn-purple gacha-pull-btn" id="gacha-btn-10" onclick="pullGacha(10)"></button>
+      <button class="btn-main btn-pink gacha-pull-btn" id="gacha-btn-100" onclick="pullGacha(100)"></button>
+      <button class="btn-main btn-red gacha-pull-btn" id="gacha-btn-1000" onclick="pullGacha(1000)"></button>
+    </div>
+    <div class="msg" id="gacha-msg"></div>
+
+    <!-- 獲得済みアイテムインベントリ -->
+    <div class="inv-box">
+      <div class="inv-header">
+        <span>🎒 当選アイテム（未受取）</span>
+        <button class="mini-btn" style="border-color:var(--green); color:var(--green);" onclick="claimAllItems()">📦 まとめて受取申請</button>
+      </div>
+      <div class="inv-list" id="inv-list">
+        <div style="color:var(--muted); font-size:0.78rem; text-align:center; padding:10px;">まだアイテムがありません</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 所持金ランキング -->
+  <div id="ranking" class="panel hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h3 style="margin:0; color:var(--gold);">🏆 所持金ランキング TOP20</h3>
+      <button class="mini-btn" onclick="loadRanking()">🔄 更新</button>
+    </div>
+    <div class="rank-list" id="rank-list">読み込み中...</div>
+  </div>
+
+  <!-- 4. 入出金申請 -->
+  <div id="deposit" class="panel hidden">
+    <h3 style="margin-top:0; color:var(--gold);">💰 入金・出金申請</h3>
+    <label class="label" style="text-align:left;">申請タイプ</label>
+    <select id="req-type" class="input">
+      <option value="💰 入金申請">💰 入金（マイクラ → カジノ）</option>
+      <option value="💸 出金申請">💸 出金（カジノ → マイクラ）</option>
+    </select>
+    <label class="label" style="text-align:left;">金額 (n)</label>
+    <input id="req-amount" type="number" class="input" value="100000" min="1000">
+    <button class="btn-main" id="req-btn" onclick="sendDepositNotice()">📩 運営に通知を送る</button>
+    <div class="msg" id="req-msg"></div>
+  </div>
+
+  <!-- 5. 運営専用管理パネル -->
+  <div id="admin" class="panel hidden">
+    <h3 style="margin-top:0; color:var(--gold);">👑 運営用：残高操作</h3>
+    <label class="label" style="text-align:left;">対象プレイヤーのMCID</label>
+    <input id="adm-target" class="input" placeholder="下のリストからタップでも選択可">
+    <label class="label" style="text-align:left;">増減金額（減らす場合はマイナス -100000）</label>
+    <input id="adm-amount" type="number" class="input" value="100000">
+    <button class="btn-main" onclick="adminAddBalance()">✅ 残高を反映する</button>
+    <div class="msg" id="adm-msg"></div>
+    <div class="user-list" id="adm-user-list">読み込み中...</div>
+  </div>
+</div>
+
+<script>
+  // ==========================================
+  // ★ 設定（新しいDiscord Webhook URLを貼ってください） ★
+  // ==========================================
+  const SUPABASE_URL = "https://vjbejlzlddraniyqmbvr.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYmVqbHpsZGRyYW5peXFtYnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTg1OTYsImV4cCI6MjExMDY5NDU5Nn0.ZQdt16PuI-aQiPEx0A2_a8GXO6SgNlOZ-7l-Bzp8dpM";
+  const ADMIN_MCID = "Smile2525";
+  const DISCORD_WEBHOOK_URL = "";
+
+  // ==========================================
+  // ★ オリジナルスロット設定（初当たり1,500万n / RUSH中2,000万n） ★
+  // ==========================================
+  const SLOT_SPIN_COST     = 100000;    // 1回転 10万n
+  const SLOT_HIT_PROB      = 1 / 500;   // 初当たり確率 1/500 (0.2%)
+  const SLOT_FIRST_PAYOUT  = 15000000;  // 初当たり出玉 1,500万n
+  const SLOT_RUSH_ENTRY    = 0.50;      // RUSH突入率 50%
+  const SLOT_RUSH_KEEP     = 0.80;      // RUSH継続率 80%
+  const SLOT_RUSH_PAYOUT   = 20000000;  // RUSH継続ごとの出玉 2,000万n
+
+  // ==========================================
+  // ★ ガチャラインナップ定義 ★
+  // ==========================================
+  const GACHA_POOLS = [
+    {
+      id: "ring",
+      title: "💍 久遠のマリッジリングガチャ",
+      icon: "💍",
+      unitCost: 100000,
+      items: [
+        { rarity: "1等",  emoji: "💍", name: "久遠のマリッジリング", rate: 0.005,  isMiss: false },
+        { rarity: "2等",  emoji: "💎", name: "輝光石",               rate: 0.05,   isMiss: false },
+        { rarity: "3等",  emoji: "✨", name: "ファリーソウル",       rate: 1.0,    isMiss: false },
+        { rarity: "MISS", emoji: "💀", name: "ハズレ",               rate: 98.945, isMiss: true  }
+      ]
+    }
+  ];
+
+  let currentPoolIndex = 0;
+
+  function formatJpUnit(num) {
+    if (num >= 100000000) return (num / 100000000) + "億";
+    if (num >= 10000) return (num / 10000) + "万";
+    return num.toLocaleString();
+  }
+
+  function renderGachaSelector() {
+    const selBox = document.getElementById("gacha-selector");
+    selBox.innerHTML = GACHA_POOLS.map((p, idx) => `
+      <button class="gacha-sel-btn ${idx === currentPoolIndex ? "active" : ""}" onclick="selectGachaPool(${idx})">
+        ${p.title}
+      </button>
+    `).join("");
+  }
+
+  function selectGachaPool(idx) {
+    if (isPullingGacha) return;
+    currentPoolIndex = idx;
+    renderGachaSelector();
+    updateGachaPoolUI();
+  }
+
+  function updateGachaPoolUI() {
+    const pool = GACHA_POOLS[currentPoolIndex];
+    document.getElementById("gacha-title").innerText = pool.title;
+    document.getElementById("gacha-stage").innerHTML = `
+      <div class="gacha-box-icon">${pool.icon}</div>
+      <div style="font-size:0.84rem; color:var(--muted); margin-top:6px;">
+        1回 ${formatJpUnit(pool.unitCost)} n
+      </div>
+    `;
+    document.getElementById("gacha-rate-box").innerHTML = pool.items.map(it =>
+      `<div>${it.emoji} <strong>[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</strong> ${it.name} ： <strong>${it.rate}%</strong></div>`
+    ).join("");
+
+    document.getElementById("gacha-btn-1").innerText = `🎲 1回 (${formatJpUnit(pool.unitCost)} n)`;
+    document.getElementById("gacha-btn-10").innerText = `✨ 10連 (${formatJpUnit(pool.unitCost * 10)} n)`;
+    document.getElementById("gacha-btn-100").innerText = `🔥 100連 (${formatJpUnit(pool.unitCost * 100)} n)`;
+    document.getElementById("gacha-btn-1000").innerText = `👑 1000連 (${formatJpUnit(pool.unitCost * 1000)} n)`;
+    document.getElementById("gacha-msg").innerText = "";
+  }
+
+  renderGachaSelector();
+  updateGachaPoolUI();
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const ME_KEY = "rpg_casino_cloud_mcid";
+  let authMode = "login";
+  let me = localStorage.getItem(ME_KEY);
+  let myBalance = 0;
+
+  function switchAuth(mode) {
+    authMode = mode;
+    document.getElementById("err").innerText = "";
+    document.getElementById("tab-log").classList.toggle("active", mode === "login");
+    document.getElementById("tab-reg").classList.toggle("active", mode === "register");
+    document.getElementById("reg-extra").classList.toggle("hidden", mode === "login");
+    document.getElementById("auth-submit").innerText = mode === "login" ? "ログイン" : "アカウントを新規作成";
+  }
+
+  async function submitAuth() {
+    const id = document.getElementById("mcid").value.trim();
+    const pw = document.getElementById("pass").value.trim();
+    const pw2 = document.getElementById("pass2").value.trim();
+    const err = document.getElementById("err");
+    const btn = document.getElementById("auth-submit");
+
+    if (!id || !pw) { err.innerText = "MCIDとパスワードを入力してください"; return; }
+    btn.disabled = true;
+    err.innerText = "通信中...";
+
+    try {
+      if (authMode === "register") {
+        if (pw !== pw2) { err.innerText = "確認用パスワードが一致しません"; btn.disabled = false; return; }
+        const { data: existing, error: selErr } = await sb.from("casino_users").select("mcid").eq("mcid", id).maybeSingle();
+        if (selErr) { err.innerText = "通信エラー: " + selErr.message; btn.disabled = false; return; }
+        if (existing) { err.innerText = "このMCIDはすでに登録されています"; btn.disabled = false; return; }
+
+        const { error: insErr } = await sb.from("casino_users").insert({ mcid: id, password: pw, balance: 0 });
+        if (insErr) { err.innerText = "登録エラー: " + insErr.message; btn.disabled = false; return; }
+        notifyDiscord(`🆕 **新規登録**\nMCID: \`${id}\``);
+      } else {
+        const { data: user, error: logErr } = await sb.from("casino_users").select("*").eq("mcid", id).maybeSingle();
+        if (logErr) { err.innerText = "通信エラー: " + logErr.message; btn.disabled = false; return; }
+        if (!user) { err.innerText = "MCIDが見つかりません"; btn.disabled = false; return; }
+        if (user.password !== pw) { err.innerText = "パスワードが違います"; btn.disabled = false; return; }
+      }
+
+      me = id;
+      localStorage.setItem(ME_KEY, me);
+      btn.disabled = false;
+      err.innerText = "";
+      await startApp();
+    } catch (e) {
+      err.innerText = "エラー: " + e.message;
+      btn.disabled = false;
+    }
+  }
+
+  async function startApp() {
+    document.getElementById("login-view").classList.add("hidden");
+    document.getElementById("game-view").classList.remove("hidden");
+    document.getElementById("u-name").innerText = "MCID: " + me;
+    if (me === ADMIN_MCID) {
+      document.getElementById("admin-tab-btn").classList.remove("hidden");
+    }
+    renderInventory();
+    await refreshBalance();
+  }
+
+  async function refreshBalance() {
+    const { data } = await sb.from("casino_users").select("balance").eq("mcid", me).single();
+    if (data) {
+      myBalance = Number(data.balance);
+      document.getElementById("bal").innerText = Math.floor(myBalance).toLocaleString();
+    }
+  }
+
+  async function updateCloudBalance(diff) {
+    await refreshBalance();
+    const nextBal = Math.max(0, Math.floor(myBalance + diff));
+    const { error } = await sb.from("casino_users").update({ balance: nextBal }).eq("mcid", me);
+    if (!error) {
+      myBalance = nextBal;
+      document.getElementById("bal").innerText = myBalance.toLocaleString();
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem(ME_KEY);
+    location.reload();
+  }
+
+  function tab(name, btn) {
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+    ["slot", "gacha", "ranking", "deposit", "admin"].forEach(t => document.getElementById(t).classList.toggle("hidden", t !== name));
+    if (name === "ranking") loadRanking();
+    if (name === "admin") loadAllUsers();
+  }
+
+  // ==========================================
+  // 🎰 オリジナル 1/500 RUSH スロットロジック
+  // ==========================================
+  const SLOT_SYMS = ["⚔️", "🛡️", "💎", "🔮", "👑", "7️⃣"];
+  let slotState = "normal"; // "normal" | "spinning" | "judge" | "rush"
+  let totalSpins = 0;
+  let autoRemaining = 0;
+  let rushChain = 0;
+  let rushTotalWin = 0;
+
+  function setSlotUIState(state) {
+    slotState = state;
+    const machine = document.getElementById("slot-machine");
+    const badge = document.getElementById("slot-mode-badge");
+    const normCtrl = document.getElementById("slot-normal-ctrl");
+    const judgeCtrl = document.getElementById("slot-judge-ctrl");
+    const rushCtrl = document.getElementById("slot-rush-ctrl");
+    const rushStats = document.getElementById("rush-stats");
+
+    machine.classList.remove("rush-mode", "chance-mode");
+    normCtrl.classList.add("hidden");
+    judgeCtrl.classList.add("hidden");
+    rushCtrl.classList.add("hidden");
+    rushStats.classList.add("hidden");
+
+    if (state === "normal" || state === "spinning") {
+      badge.innerText = "通常モード (1/500)";
+      normCtrl.classList.remove("hidden");
+      const busy = state === "spinning" || autoRemaining > 0;
+      document.getElementById("slot-spin-btn").disabled = busy;
+      document.querySelectorAll(".auto-btn").forEach(b => b.disabled = state === "spinning" && autoRemaining === 0);
+    } else if (state === "judge") {
+      machine.classList.add("chance-mode");
+      badge.innerText = "⚔️ RUSH突入ジャッジ (50%)";
+      judgeCtrl.classList.remove("hidden");
+      document.getElementById("slot-judge-btn").disabled = false;
+    } else if (state === "rush") {
+      machine.classList.add("rush-mode");
+      badge.innerText = "🔥 RUSH MODE (80%継続)";
+      rushCtrl.classList.remove("hidden");
+      rushStats.classList.remove("hidden");
+      document.getElementById("slot-rush-btn").disabled = false;
+      document.getElementById("rush-chain").innerText = `${rushChain}連`;
+      document.getElementById("rush-total-win").innerText = `${rushTotalWin.toLocaleString()} n`;
+    }
+  }
+
+  function startAutoSpin(count) {
+    if (autoRemaining > 0) {
+      autoRemaining = 0;
+      updateAutoButtons();
+      return;
+    }
+    if (slotState !== "normal") return;
+    autoRemaining = count;
+    updateAutoButtons();
+    spinNormalSlot(true);
+  }
+
+  function updateAutoButtons() {
+    const btns = document.querySelectorAll(".auto-btn");
+    if (autoRemaining > 0) {
+      btns[0].innerText = `残り ${autoRemaining}回`;
+      btns[1].innerText = "オート回転中...";
+      btns[2].innerText = "⏹️ 停止する";
+      btns[0].disabled = true;
+      btns[1].disabled = true;
+      btns[2].disabled = false;
+    } else {
+      btns[0].innerText = "⚡ オート10回";
+      btns[1].innerText = "⚡ オート50回";
+      btns[2].innerText = "⚡ オート100回";
+      btns.forEach(b => b.disabled = false);
+    }
+  }
+
+  async function spinNormalSlot(isAuto = false) {
+    if (slotState !== "normal") return;
+    const msg = document.getElementById("slot-msg");
+    const banner = document.getElementById("slot-banner");
+
+    await refreshBalance();
+    if (myBalance < SLOT_SPIN_COST) {
+      autoRemaining = 0;
+      updateAutoButtons();
+      msg.style.color = "var(--red)";
+      msg.innerText = `残高不足です（1回転 ${SLOT_SPIN_COST.toLocaleString()} n 必要）`;
+      return;
+    }
+
+    await updateCloudBalance(-SLOT_SPIN_COST);
+    totalSpins++;
+    document.getElementById("slot-spins").innerText = totalSpins.toLocaleString();
+    if (isAuto && autoRemaining > 0) {
+      autoRemaining--;
+      updateAutoButtons();
+    }
+
+    setSlotUIState("spinning");
+    msg.innerText = "";
+    banner.style.color = "var(--gold)";
+    banner.innerText = "回転中...";
+
+    const isHit = Math.random() < SLOT_HIT_PROB;
+    const isReach = !isHit && Math.random() < 0.04;
+
+    const fast = isAuto;
+    const duration = fast ? 140 : 650;
+    const iv = setInterval(() => {
+      ["sr1", "sr2", "sr3"].forEach(id => {
+        document.getElementById(id).innerText = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+      });
+    }, 45);
+
+    setTimeout(async () => {
+      clearInterval(iv);
+
+      if (isHit) {
+        autoRemaining = 0;
+        updateAutoButtons();
+
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "7️⃣");
+        await updateCloudBalance(SLOT_FIRST_PAYOUT);
+        rushChain = 1;
+        rushTotalWin = SLOT_FIRST_PAYOUT;
+
+        banner.style.color = "#fde047";
+        banner.innerText = `🎊 大当たり！！ +${SLOT_FIRST_PAYOUT.toLocaleString()} n 獲得！`;
+        msg.style.color = "var(--green)";
+        msg.innerText = `🎉 1/500 突破！初当たり ${SLOT_FIRST_PAYOUT.toLocaleString()} n 獲得！続いて50% RUSH突入ジャッジ！`;
+        setSlotUIState("judge");
+      } else {
+        let s1 = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        let s2 = isReach ? s1 : SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        let s3 = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        while (s1 === s2 && s2 === s3) {
+          s3 = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+        }
+        document.getElementById("sr1").innerText = s1;
+        document.getElementById("sr2").innerText = s2;
+        document.getElementById("sr3").innerText = s3;
+
+        banner.style.color = isReach ? "#c084fc" : "var(--muted)";
+        banner.innerText = isReach ? "⚡ リーチ...！惜しくもハズレ" : "ハズレ（1回転 10万n）";
+        setSlotUIState("normal");
+
+        if (autoRemaining > 0) {
+          setTimeout(() => spinNormalSlot(true), 90);
+        }
+      }
+    }, duration);
+  }
+
+  // 初当たり後の50% RUSH突入ジャッジ
+  function judgeRushEntry() {
+    if (slotState !== "judge") return;
+    const btn = document.getElementById("slot-judge-btn");
+    const banner = document.getElementById("slot-banner");
+    const msg = document.getElementById("slot-msg");
+    btn.disabled = true;
+    banner.style.color = "#e879f9";
+    banner.innerText = "⚔️ 運命の50%ジャッジ中...";
+
+    let t = 0;
+    const iv = setInterval(() => {
+      ["sr1", "sr2", "sr3"].forEach(id => {
+        document.getElementById(id).innerText = t % 2 === 0 ? "🔥" : "💀";
+      });
+      t++;
+    }, 70);
+
+    setTimeout(() => {
+      clearInterval(iv);
+      const enterRush = Math.random() < SLOT_RUSH_ENTRY;
+      if (enterRush) {
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "🔥");
+        banner.style.color = "#fda4af";
+        banner.innerText = "🔥 50%突破！！ RUSH MODE 突入！！";
+        msg.style.color = "var(--gold)";
+        msg.innerText = "🔥 RUSH突入おめでとう！80%継続で1回ごとに2,000万n獲得！";
+        setSlotUIState("rush");
+      } else {
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "🛡️");
+        banner.style.color = "var(--muted)";
+        banner.innerText = "通常モードへ戻りました（初当たり 1,500万n 獲得済み）";
+        msg.style.color = "var(--muted)";
+        msg.innerText = "💥 50%失敗... 通常モードに戻ります（1,500万n獲得）";
+        setSlotUIState("normal");
+      }
+    }, 900);
+  }
+
+  // 80%継続 RUSHモード回転
+  function spinRushMode() {
+    if (slotState !== "rush") return;
+    const btn = document.getElementById("slot-rush-btn");
+    const banner = document.getElementById("slot-banner");
+    const msg = document.getElementById("slot-msg");
+    btn.disabled = true;
+    banner.style.color = "#fda4af";
+    banner.innerText = "🔥 80%継続ジャッジ中...";
+
+    const iv = setInterval(() => {
+      ["sr1", "sr2", "sr3"].forEach(id => {
+        document.getElementById(id).innerText = SLOT_SYMS[Math.floor(Math.random() * SLOT_SYMS.length)];
+      });
+    }, 50);
+
+    setTimeout(async () => {
+      clearInterval(iv);
+      const keep = Math.random() < SLOT_RUSH_KEEP;
+      if (keep) {
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "7️⃣");
+        rushChain++;
+        rushTotalWin += SLOT_RUSH_PAYOUT;
+        await updateCloudBalance(SLOT_RUSH_PAYOUT);
+
+        banner.style.color = "#fde047";
+        banner.innerText = `🎊 ${rushChain}連チャン達成！！ +${SLOT_RUSH_PAYOUT.toLocaleString()} n！！`;
+        msg.style.color = "var(--green)";
+        msg.innerText = `🔥 RUSH継続（${rushChain}連）！ +${SLOT_RUSH_PAYOUT.toLocaleString()} n 獲得！`;
+        setSlotUIState("rush");
+      } else {
+        ["sr1", "sr2", "sr3"].forEach(id => document.getElementById(id).innerText = "💀");
+        banner.style.color = "var(--gold)";
+        banner.innerText = `RUSH終了！最終 ${rushChain}連 / 合計 ${rushTotalWin.toLocaleString()} n 獲得！`;
+        msg.style.color = "var(--gold)";
+        msg.innerText = `🏁 RUSH終了（計 ${rushChain}連チャン・総獲得 ${rushTotalWin.toLocaleString()} n）！通常モードに戻ります`;
+        setSlotUIState("normal");
+      }
+    }, 750);
+  }
+
+  // ==========================================
+  // 🎁 マイクラRPGアイテムガチャ＆インベントリロジック（3等以上自動通知付き）
+  // ==========================================
+  let isPullingGacha = false;
+
+  function getInvKey() {
+    return "rpg_casino_inv_" + me;
+  }
+
+  function loadInventory() {
+    try {
+      return JSON.parse(localStorage.getItem(getInvKey()) || "{}");
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveInventory(inv) {
+    localStorage.setItem(getInvKey(), JSON.stringify(inv));
+    renderInventory();
+  }
+
+  function renderInventory() {
+    const inv = loadInventory();
+    const box = document.getElementById("inv-list");
+    const entries = Object.entries(inv).filter(([, count]) => count > 0);
+    if (entries.length === 0) {
+      box.innerHTML = `<div style="color:var(--muted); font-size:0.78rem; text-align:center; padding:10px;">まだ未受取のアイテムがありません</div>`;
+      return;
+    }
+    box.innerHTML = entries.map(([label, count]) => `
+      <div class="inv-row">
+        <span><strong>${label}</strong> × ${count}</span>
+        <button class="mini-btn" style="border-color:var(--gold); color:var(--gold);" onclick="claimSingleItem('${label}')">📩 受取申請</button>
+      </div>
+    `).join("");
+  }
+
+  function rollSingleGacha(pool) {
+    const r = Math.random() * 100;
+    let acc = 0;
+    for (const item of pool.items) {
+      acc += item.rate;
+      if (r < acc) return item;
+    }
+    return pool.items[pool.items.length - 1];
+  }
+
+  function setPullButtonsDisabled(disabled) {
+    document.querySelectorAll(".gacha-pull-btn").forEach(b => b.disabled = disabled);
+  }
+
+  async function pullGacha(times) {
+    if (isPullingGacha) return;
+    const pool = GACHA_POOLS[currentPoolIndex];
+    const cost = pool.unitCost * times;
+    const msg = document.getElementById("gacha-msg");
+    const stage = document.getElementById("gacha-stage");
+
+    await refreshBalance();
+    if (cost > myBalance) {
+      msg.style.color = "var(--red)";
+      msg.innerText = `残高不足です（${cost.toLocaleString()} n 必要）`;
+      return;
+    }
+
+    await updateCloudBalance(-cost);
+    isPullingGacha = true;
+    setPullButtonsDisabled(true);
+    msg.style.color = "var(--muted)";
+    msg.innerText = `${times}連抽選中...`;
+
+    stage.innerHTML = `<div class="gacha-box-icon shaking">${pool.icon}</div><div style="font-size:0.85rem; color:var(--gold); margin-top:6px;">${times}連 開封中...</div>`;
+
+    setTimeout(async () => {
+      const results = [];
+      const inv = loadInventory();
+      let hitCount = 0;
+      const summaryMap = {};
+      const wonItemsMap = {};
+
+      for (let i = 0; i < times; i++) {
+        const item = rollSingleGacha(pool);
+        results.push(item);
+        const key = `${item.rarity}|${item.emoji}|${item.name}|${item.isMiss}`;
+        summaryMap[key] = (summaryMap[key] || 0) + 1;
+
+        if (!item.isMiss) {
+          hitCount++;
+          const label = `${item.emoji} [${item.rarity}] ${item.name}`;
+          inv[label] = (inv[label] || 0) + 1;
+          wonItemsMap[label] = (wonItemsMap[label] || 0) + 1;
+        }
+      }
+      saveInventory(inv);
+
+      // 🎉 3等以上（isMiss: false）が1個でも当選したら自動でDiscordに通知
+      if (hitCount > 0) {
+        const wonLines = Object.entries(wonItemsMap)
+          .map(([label, cnt]) => `・**${label}** × ${cnt}`)
+          .join("\n");
+        const winNotice = `━━━━━━━━━━━━━━\n**🎊 ガチャ当選通知（3等以上）**\n👤 MCID: \`${me}\`\n🎰 ガチャ: ${pool.title}（${times}連）\n${wonLines}\n━━━━━━━━━━━━━━`;
+        notifyDiscord(winNotice);
+      }
+
+      if (times === 1) {
+        const it = results[0];
+        stage.innerHTML = `
+          <div class="gacha-card rarity-${it.rarity}" style="width:250px; padding:14px; justify-content:center;">
+            <div class="emoji" style="font-size:2.4rem;">${it.emoji}</div>
+            <div>
+              <div style="font-size:0.75rem;">[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</div>
+              <div style="font-size:0.95rem; margin-top:2px;">${it.name}</div>
+            </div>
+          </div>
+        `;
+      } else if (times === 10) {
+        stage.innerHTML = `<div class="gacha-grid">` + results.map(it => `
+          <div class="gacha-card rarity-${it.rarity}">
+            <div class="emoji">${it.emoji}</div>
+            <div>
+              <div style="font-size:0.65rem;">[${it.rarity === "MISS" ? "ハズレ" : it.rarity}]</div>
+              <div>${it.name}</div>
+            </div>
+          </div>
+        `).join("") + `</div>`;
+      } else {
+        const rows = pool.items.map(it => {
+          const key = `${it.rarity}|${it.emoji}|${it.name}|it.isMiss}`;
+          const cnt = summaryMap[key] || 0;
+          if (cnt === 0) return "";
+          return `
+            <div class="gacha-card rarity-${it.rarity}" style="justify-content:space-between; padding:9px 12px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="emoji">${it.emoji}</span>
+                <span>[${it.rarity === "MISS" ? "ハズレ" : it.rarity}] ${it.name}</span>
+              </div>
+              <span style="font-size:0.95rem;">× ${cnt.toLocaleString()}</span>
+            </div>
+          `;
+        }).join("");
+        stage.innerHTML = `<div class="gacha-summary-list">${rows}</div>`;
+      }
+
+      if (hitCount > 0) {
+        msg.style.color = "var(--green)";
+        msg.innerText = `🎉 ${times}連中 ${hitCount}個当選！（運営へ自動通知済み・持ち物からも申請可）`;
+      } else {
+        msg.style.color = "var(--red)";
+        msg.innerText = `💀 ${times}連すべてハズレでした...`;
+      }
+
+      isPullingGacha = false;
+      setPullButtonsDisabled(false);
+    }, 850);
+  }
+
+  async function claimSingleItem(label) {
+    const inv = loadInventory();
+    const count = inv[label] || 0;
+    if (count <= 0) return;
+
+    const msg = document.getElementById("gacha-msg");
+    const payload = `━━━━━━━━━━━━━━\n**🎁 RPGガチャ景品 受取申請**\n👤 MCID: \`${me}\`\n🎒 アイテム: **${label} × ${count}**\n━━━━━━━━━━━━━━`;
+    const ok = await notifyDiscord(payload);
+    if (ok) {
+      delete inv[label];
+      saveInventory(inv);
+      msg.style.color = "var(--green)";
+      msg.innerText = `✅ 「${label} × ${count}」の受取申請を運営に送信しました！`;
+    } else {
+      msg.style.color = "var(--gold)";
+      msg.innerText = "⚠️ Webhook URLが未設定か送信に失敗しました";
+    }
+  }
+
+  async function claimAllItems() {
+    const inv = loadInventory();
+    const entries = Object.entries(inv).filter(([, count]) => count > 0);
+    const msg = document.getElementById("gacha-msg");
+    if (entries.length === 0) {
+      msg.style.color = "var(--muted)";
+      msg.innerText = "申請できるアイテムがありません";
+      return;
+    }
+
+    const listText = entries.map(([label, count]) => `・**${label}** × ${count}`).join("\n");
+    const payload = `━━━━━━━━━━━━━━\n**🎁 RPGガチャ景品 一括受取申請**\n👤 MCID: \`${me}\`\n${listText}\n━━━━━━━━━━━━━━`;
+    const ok = await notifyDiscord(payload);
+    if (ok) {
+      saveInventory({});
+      msg.style.color = "var(--green)";
+      msg.innerText = "✅ すべての獲得アイテムの受取申請を運営に送信しました！";
+    } else {
+      msg.style.color = "var(--gold)";
+      msg.innerText = "⚠️ Webhook URLが未設定か送信に失敗しました";
+    }
+  }
+
+  // 🏆 ランキング読み込み
+  async function loadRanking() {
+    const box = document.getElementById("rank-list");
+    box.innerHTML = "<div style='text-align:center; color:var(--muted); padding:16px;'>読み込み中...</div>";
+    const { data, error } = await sb
+      .from("casino_users")
+      .select("mcid, balance")
+      .order("balance", { ascending: false })
+      .limit(20);
+
+    if (error || !data) {
+      box.innerHTML = "<div style='color:var(--red); text-align:center;'>読み込みに失敗しました</div>";
+      return;
+    }
+
+    box.innerHTML = data.map((u, idx) => {
+      const rank = idx + 1;
+      let badge = `${rank}位`;
+      let cls = "rank-badge";
+      if (rank === 1) { badge = "🥇"; cls += " rank-1"; }
+      else if (rank === 2) { badge = "🥈"; cls += " rank-2"; }
+      else if (rank === 3) { badge = "🥉"; cls += " rank-3"; }
+
+      const isMe = u.mcid === me ? " me" : "";
+      return `
+        <div class="rank-item${isMe}">
+          <div class="rank-left">
+            <span class="${cls}">${badge}</span>
+            <span>${u.mcid}${u.mcid === me ? " <small style='color:var(--gold);'>(あなた)</small>" : ""}</span>
+          </div>
+          <div class="rank-bal">${Number(u.balance).toLocaleString()} n</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function loadAllUsers() {
+    const box = document.getElementById("adm-user-list");
+    const { data } = await sb.from("casino_users").select("mcid, balance").order("balance", { ascending: false });
+    if (!data) return;
+    box.innerHTML = data.map(u => `
+      <div class="user-row" onclick="document.getElementById('adm-target').value='${u.mcid}'">
+        <span>👤 <strong>${u.mcid}</strong></span>
+        <span style="color:var(--green);">${Number(u.balance).toLocaleString()} n</span>
+      </div>
+    `).join("");
+  }
+
+  async function adminAddBalance() {
+    const target = document.getElementById("adm-target").value.trim();
+    const diff = Number(document.getElementById("adm-amount").value);
+    const msg = document.getElementById("adm-msg");
+    if (!target || !diff) return;
+
+    const { data: u } = await sb.from("casino_users").select("balance").eq("mcid", target).maybeSingle();
+    if (!u) { msg.style.color = "var(--red)"; msg.innerText = "そのMCIDは見つかりません"; return; }
+
+    const next = Math.max(0, Number(u.balance) + diff);
+    await sb.from("casino_users").update({ balance: next }).eq("mcid", target);
+    msg.style.color = "var(--green)";
+    msg.innerText = `✅ ${target} の残高を ${next.toLocaleString()} n に更新しました`;
+    if (target === me) await refreshBalance();
+    await loadAllUsers();
+  }
+
+  async function notifyDiscord(text) {
+    if (!DISCORD_WEBHOOK_URL) return false;
+    try {
+      await fetch(DISCORD_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: text })
+      });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  async function sendDepositNotice() {
+    const type = document.getElementById("req-type").value;
+    const amount = Number(document.getElementById("req-amount").value);
+    const msg = document.getElementById("req-msg");
+    const btn = document.getElementById("req-btn");
+
+    if (amount <= 0) return;
+    await refreshBalance();
+    if (type.includes("出金") && amount > myBalance) {
+      msg.style.color = "var(--red)";
+      msg.innerText = "残高不足です";
+      return;
+    }
+
+    btn.disabled = true;
+    const payload = `━━━━━━━━━━━━━━\n**${type}**\n👤 MCID: \`${me}\`\n💵 金額: **${amount.toLocaleString()} n**\n━━━━━━━━━━━━━━`;
+    const ok = await notifyDiscord(payload);
+    if (ok) {
+      if (type.includes("出金")) await updateCloudBalance(-amount);
+      msg.style.color = "var(--green)";
+      msg.innerText = "✅ 運営のDiscordに通知しました！";
+    } else {
+      msg.style.color = "var(--gold)";
+      msg.innerText = "⚠️ Webhook URLが未設定か送信に失敗しました";
+    }
+    btn.disabled = false;
+  }
+
+  if (me) startApp();
+</script>
+</body>
+</html>
